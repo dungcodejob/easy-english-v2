@@ -108,6 +108,50 @@ server/src/modules/[feature]/
 - Queries MUST NOT cause state changes
 - All data access MUST be tenant-scoped
 
+### Backend: `server/src/core/` (System Infrastructure)
+
+```text
+server/src/core/
+├── background/          # Background jobs, schedulers
+├── configs/             # App configurations
+├── database/            # Database setup, migrations, base entities
+├── decorators/          # Custom decorators (system-level)
+├── domain/              # Base domain classes (AggregateRoot, Entity, ValueObject)
+├── infrastructure/      # Base infrastructure (BaseRepository, etc.)
+├── interceptors/        # Global interceptors
+├── request/             # Request handling (context, correlation)
+└── tests/               # Test utilities
+```
+
+> **CORE CONSTRAINTS**:
+> - Contains ONLY system-level infrastructure
+> - NO domain logic, NO feature-specific behavior
+> - MUST be dependency-free from `modules/`
+> - If code has domain ownership → it belongs in a feature module
+
+### Backend: `server/src/shared/` (Stateless Utilities)
+
+```text
+server/src/shared/
+├── constants/           # App constants
+├── decorators/          # Shared decorators
+├── domain/              # Shared domain models (cross-cutting)
+├── errors/              # Error definitions
+├── filters/             # Exception filters
+├── interceptors/        # Shared interceptors
+├── middlewares/         # HTTP middlewares
+├── models/              # Shared models/DTOs
+├── services/            # Shared services (stateless)
+├── tests/               # Shared test utilities
+└── utils/               # Utility functions
+```
+
+> **SHARED CONSTRAINTS**:
+> - Contains ONLY stateless, behavior-agnostic utilities
+> - NO business rules, NO lifecycle, NO ownership
+> - MUST NOT become a "dumping ground"
+> - If code has clear domain ownership → it belongs in a feature module
+
 ### Frontend: `client/src/modules/<feature>/`
 
 ```text
@@ -137,6 +181,27 @@ client/src/modules/[feature]/
 - Zustand for UI state ONLY (modals, filters, selections)
 - NO backend business rules duplicated on frontend
 - Components extend Shadcn UI primitives
+
+### Frontend: `client/src/shared/` (Shared Utilities)
+
+```text
+client/src/shared/
+├── api/                 # API client setup (axios instance, interceptors)
+├── constants/           # App constants
+├── contexts/            # React contexts (global providers)
+├── hooks/               # Shared custom hooks
+├── lib/                 # Third-party library configs
+├── types/               # Shared TypeScript types
+├── ui/                  # UI components
+│   ├── common/          # Custom reusable components
+│   └── shadcn/          # shadcn/ui components
+└── utils/               # Utility functions
+```
+
+> **FRONTEND SHARED CONSTRAINTS**:
+> - Contains ONLY stateless, reusable utilities
+> - NO feature-specific business logic
+> - If code has clear feature ownership → it belongs in `modules/<feature>/`
 
 ---
 
@@ -216,6 +281,26 @@ client/src/modules/[feature]/
 
 ### Manual Verification
 - [ ] [Describe manual testing steps if applicable]
+
+---
+
+## Core/Shared Usage Justification
+
+> **REQUIRED**: If this feature adds or modifies code in `core/` or `shared/`, document justification below.
+> If no core/shared usage, write "N/A - All code resides in feature module."
+
+### Backend Core/Shared
+
+| Location | Code Added/Modified | Justification | Why Not in Feature Module? |
+|----------|---------------------|---------------|----------------------------|
+| `server/src/core/[path]` | [Description] | [Why system-level] | [Why not domain-specific] |
+| `server/src/shared/[path]` | [Description] | [Why cross-cutting] | [Why not feature-owned] |
+
+### Frontend Shared
+
+| Location | Code Added/Modified | Justification | Why Not in Feature Module? |
+|----------|---------------------|---------------|----------------------------|
+| `client/src/shared/[path]` | [Description] | [Why cross-cutting] | [Why not feature-owned] |
 
 ---
 
