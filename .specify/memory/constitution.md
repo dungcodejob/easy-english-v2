@@ -1,50 +1,122 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 2.0.0 → 2.1.0
+- List of modified principles: Enhanced §7, §9, §12; Added §15, §16, §17.
+- Added sections: 15. Testing Requirements, 16. CI/CD & Quality Gates, 17. Documentation Standards.
+- Modified sections: §7 (added SLA/SLO), §9 (added Rate Limiting), §12 (added State Management specifics).
+- Removed sections: Old Core Principles, Architectural Patterns, Development Workflow, and Governance sections.
+- Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md
+- Follow-up TODOs: None
+-->
+# System Constitution – easy-english-v2
 
-## Core Principles
+## 1. Purpose & Vision
+The long-term goal of the easy-english-v2 system is to provide a highly effective, scalable, and adaptable Vocabulary Learning Platform. All design and implementation decisions MUST prioritize correctness, robust tenant safety, and the long-term evolution of the system. The architecture MUST be optimized for efficient learning experiences and extensibility.
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## 2. Architectural Principles
+- The backend architecture MUST adhere to the Command Query Responsibility Segregation (CQRS) pattern.
+- A strict separation between Command (write/state change) and Query (read) responsibilities MUST be enforced at all layers.
+- Business logic is forbidden in controllers or UI components. Logic MUST reside in domain entities, services, and command/query handlers.
+- The system MUST be composed of clearly defined modules, representing distinct Bounded Contexts as per Domain-Driven Design.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+## 3. Multi-Tenancy Principles
+- Tenant data isolation is a non-negotiable, mandatory requirement.
+- All data access, whether read or write, MUST be scoped by a tenant identifier. There are no exceptions.
+- Cross-tenant data access is strictly forbidden by default. Any exception requires explicit, documented approval and a separate security review.
+- The tenant context MUST be explicit, propagated through all layers of the application, and traceable in all logs and audit trails.
+- Shared infrastructure MUST NOT imply shared data. Physical or logical resource sharing must never compromise tenant data boundaries.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## 4. Security Principles
+- Authentication and Authorization are mandatory for all protected resources. No endpoint is public unless explicitly marked as such.
+- All authorization policies MUST be tenant-aware. A user's access rights are only valid within their designated tenant context.
+- All sensitive data, including but not limited to user PII and credentials, MUST be encrypted both at rest and in transit.
+- The principle of least-privilege access MUST be applied to all system accounts, user roles, and API clients.
+- Security and data privacy rules override convenience and performance considerations.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## 5. CQRS Rules
+- Commands are solely responsible for state mutation. They MUST NOT return data, except for simple acknowledgments or identifiers for asynchronous operations.
+- Queries are strictly read-only and MUST NOT cause any state changes. They should be optimized for read performance.
+- The mixing of Command and Query responsibilities within a single class, method, or endpoint is forbidden.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## 6. Error Handling & Resilience
+- All runtime errors MUST be classified into one of three categories: Client Errors (e.g., bad input), Domain Errors (e.g., business rule violation), or System Errors (e.g., infrastructure failure).
+- Internal system error details MUST NEVER be leaked to clients. Generic error messages should be returned while details are logged.
+- A centralized exception handling mechanism is required for both backend and frontend to ensure consistent error responses.
+- All errors MUST be traceable via correlation IDs linking client requests to server-side logs.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## 7. Performance & Scalability
+- Read-heavy workloads are expected and MUST be optimized. The query stack should be designed for high performance and potential caching.
+- Caching strategies are permitted only on the read (Query) side of the system. The write (Command) side must always operate on the source of truth.
+- The performance of critical queries MUST be monitored.
+- Premature optimization is discouraged. Blind optimization without measurement is forbidden. Performance work must be driven by data and explicit requirements.
+- **SLA/SLO**: Critical API endpoints MUST meet defined response time thresholds. Performance budgets should be established and monitored for key user flows.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## 8. Observability & Monitoring
+- Structured logging (e.g., JSON) is mandatory for all services.
+- All log entries MUST include contextual information, such as tenant ID, user ID (if applicable), correlation ID, and application area.
+- The use of metrics and distributed tracing to monitor system health and request lifecycles is strongly encouraged.
+- Production behavior must be observable through telemetry, not inferred by debugging or guesswork.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## 9. API Design & Versioning
+- All APIs MUST be explicitly versioned (e.g., `/api/v1/...`).
+- Backward compatibility for existing API versions is the preferred method of evolution.
+- Any breaking change to an API contract requires the introduction of a new API version. The old version should be deprecated according to a defined policy.
+- API contracts MUST NOT expose internal domain models directly. Data Transfer Objects (DTOs) MUST be used for all API communication.
+- **Rate Limiting**: Rate limiting MUST be enforced on all public APIs to prevent abuse and ensure fair resource usage across tenants.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## 10. Database & Migration Policy
+- The database schema is considered an implementation detail of the persistence layer and MUST NOT be directly coupled to the domain model.
+- All schema changes MUST be versioned and applied via an automated migration tool.
+- Destructive migrations (e.g., dropping columns/tables) require explicit approval and a data backup or migration plan.
+- Data safety and integrity are prioritized over developer convenience.
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+## 11. Dependency Management
+- The introduction of any new external dependency (library, framework, or service) MUST be justified and documented.
+- All dependency versions MUST be pinned and controlled via a lock file.
+- Avoid introducing new dependencies that provide overlapping functionality with existing ones.
+- Dependencies MUST be reviewed for security vulnerabilities and maintenance status before being adopted.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+## 12. Frontend Architecture Principles
+- The frontend application MUST follow a modular architecture, with clear separation of concerns between UI components, state management, and API services.
+- Business rules and validation logic MUST NOT be duplicated from the backend. The backend is the single source of truth.
+- API contracts are the source of truth for all data structures. Frontend models should be generated or derived from these contracts where possible.
+- UI optimizations and client-side state management MUST NOT break or subvert the domain rules enforced by the backend.
+- **State Management**: 
+  - **Zustand** MUST be used for client-side state (UI state, user preferences, local app state).
+  - **TanStack Query (React Query)** MUST be used for server state (API data fetching, caching, synchronization).
+  - Mixing server state into Zustand stores is forbidden; use TanStack Query for all async data.
+- **UI Component Library**: **Shadcn UI** is the designated component library. Custom components should extend Shadcn primitives rather than creating parallel implementations.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+## 13. Code Style & Conventions
+- A consistent set of coding conventions is mandatory for all codebases (backend and frontend).
+- Automated tooling (e.g., ESLint, Prettier, or equivalents) MUST be integrated into the development workflow to enforce style and catch common errors.
+- Code readability and maintainability are prioritized over "clever" or overly concise implementations.
+
+## 14. Conflict Resolution
+- This Constitution takes precedence over all other specifications, documents, or team conventions.
+- Any conflict between a proposed design and this Constitution MUST be documented explicitly in the design proposal.
+- Proposed changes that are non-compliant with this Constitution will be rejected or must be revised to achieve compliance.
+
+## 15. Testing Requirements
+- All business logic MUST have unit test coverage. Tests should be independent, repeatable, and fast.
+- Integration tests are required for all Command handlers and API endpoints to verify CQRS flow and cross-component interactions.
+- E2E tests are required for critical user flows (authentication, core learning features).
+- External dependencies MUST be mocked in unit tests. Integration tests may use test containers or in-memory implementations.
+- Test data MUST be tenant-isolated and cleaned up after test execution.
+
+## 16. CI/CD & Quality Gates
+- All code changes MUST pass automated linting, type checking, and test suites before merge.
+- Code coverage thresholds MUST be maintained for critical modules. Coverage regressions are not permitted.
+- Pull requests require at least one approval from a qualified reviewer who verifies compliance with this Constitution.
+- Automated security scanning (dependency vulnerabilities, static analysis) MUST be part of the CI pipeline.
+- Deployments to production MUST follow a defined release process with rollback capabilities.
+
+## 17. Documentation Standards
+- **API Documentation**: All backend APIs MUST be documented using **OpenAPI/Swagger** specification.
+- OpenAPI schemas MUST be kept in sync with the actual implementation. Auto-generation from code annotations is preferred.
+- **Client Generation**: API clients for frontend applications (Angular, React) MUST be auto-generated from OpenAPI specifications to ensure type safety and contract consistency.
+- Code documentation (comments, README files) MUST be maintained for complex modules and public interfaces.
+- Architecture Decision Records (ADRs) SHOULD be used to document significant architectural choices.
+
+**Version**: 2.1.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-17
