@@ -48,6 +48,8 @@
 - [ ] API is versioned (`/api/v1/...`)
 - [ ] DTOs are used; domain models are not exposed
 - [ ] Rate limiting is enforced on public endpoints
+- [ ] Responses conform to the standard schema defined in response-schema.md
+- [ ] Endpoints adhere to the API contract specification
 
 ### Frontend State (§12)
 - [ ] Server state uses TanStack Query only

@@ -1,6 +1,6 @@
 # API Contract Specification
 
-**Version**: 1.0.0 | **Status**: Draft
+**Version**: 1.1.0 | **Status**: Ratified
 
 This document defines the architecture-level rules for API design and communication between frontend and backend. All API implementations MUST conform to this specification.
 
@@ -112,42 +112,119 @@ This document defines the architecture-level rules for API design and communicat
 
 ### 4.1 Response Envelope
 
-All successful responses MUST use the following envelope:
+> **Single Source of Truth**: All response format details are defined in [API Response Schema Specification](./response-schema.md).
 
-```json
-{
-  "data": { ... },
-  "meta": {
-    "timestamp": "2026-01-17T10:00:00.000Z",
-    "correlationId": "uuid"
-  }
-}
-```
+**Key Rules**:
+- All responses MUST use the standard envelope with `success`, `data`, `correlationId`
+- Paginated responses MUST include `pagination` object with `top`, `skip`, `count`, `hasMore`
+- Error responses MUST include `error` object with `code`, `type`, `message`
 
-For paginated responses:
+See [response-schema.md](./response-schema.md) for complete structure, examples, and rules.
 
-```json
-{
-  "data": [ ... ],
-  "meta": {
-    "pagination": {
-      "page": 1,
-      "pageSize": 20,
-      "totalItems": 100,
-      "totalPages": 5
-    },
-    "timestamp": "2026-01-17T10:00:00.000Z",
-    "correlationId": "uuid"
-  }
-}
-```
+### 4.2 Pagination Contract
 
-### 4.2 Pagination Conventions
+Pagination allows clients to retrieve large datasets in manageable chunks.
+This specification follows [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines) pagination semantics.
+
+#### 4.2.1 Pagination Parameters
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `page` | integer | 1 | Page number (1-indexed) |
-| `pageSize` | integer | 20 | Items per page (max: 100) |
+| `$top` | integer | 20 | Number of items to return (max: 100) |
+| `$skip` | integer | 0 | Number of items to skip |
+| `$count` | boolean | false | Include total count in response |
+
+#### 4.2.2 Offset-Based Pagination
+
+**When to use**: Traditional page-based navigation, admin dashboards, known dataset sizes.
+
+**Request**:
+```
+GET /api/v1/words?$top=20&$skip=40&$count=true
+```
+
+**Response Structure**:
+```json
+{
+  "success": true,
+  "data": [ ... ],
+  "pagination": {
+    "top": 20,
+    "skip": 40,
+    "count": 150,
+    "hasMore": true
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `top` | integer | Items requested |
+| `skip` | integer | Items skipped |
+| `count` | integer | Total count (if `$count=true`) |
+| `hasMore` | boolean | More items available |
+
+#### 4.2.3 Cursor-Based Pagination
+
+**When to use**: Infinite scroll, real-time feeds, large or frequently changing datasets.
+
+**Request**:
+```
+GET /api/v1/words?$top=20&$skiptoken=eyJpZCI6MTAwfQ==
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$skiptoken` | string | Opaque cursor from previous response |
+
+**Response Structure**:
+```json
+{
+  "success": true,
+  "data": [ ... ],
+  "pagination": {
+    "top": 20,
+    "nextLink": "/api/v1/words?$top=20&$skiptoken=eyJpZCI6MTIwfQ==",
+    "hasMore": true
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `top` | integer | Items returned |
+| `nextLink` | string \| null | Full URL for next page |
+| `hasMore` | boolean | More items available |
+
+#### 4.2.4 Selection Criteria
+
+| Scenario | Recommended | Rationale |
+|----------|-------------|-----------|
+| Admin tables with page numbers | Offset (`$top` + `$skip`) | Users need "page X of Y" |
+| Mobile infinite scroll | Cursor (`$skiptoken`) | Consistent ordering under changes |
+| Real-time data feeds | Cursor (`$skiptoken`) | Items may be added/removed |
+| Export/batch processing | Cursor (`$skiptoken`) | Handles large datasets efficiently |
+| Small, static lists | Offset (`$top` + `$skip`) | Simpler implementation |
+
+#### 4.2.5 Rules
+
+| Rule | Description |
+|------|-------------|
+| Default behavior | If no pagination params, return first 20 items |
+| Max page size | `$top` MUST NOT exceed 100 |
+| Invalid skip | `$skip` < 0 MUST return `400 Bad Request` |
+| Invalid top | `$top` < 1 or > 100 MUST return `400 Bad Request` |
+| Count performance | `$count=true` MAY be expensive; endpoints MAY restrict |
+| Cursor opacity | Clients MUST NOT parse or construct `$skiptoken` values |
+
+#### 4.2.6 Error Handling
+
+| Error Condition | HTTP Status | Error Code |
+|-----------------|-------------|------------|
+| Invalid `$top` value | `400 Bad Request` | `PAGINATION_INVALID_TOP` |
+| Invalid `$skip` value | `400 Bad Request` | `PAGINATION_INVALID_SKIP` |
+| Invalid `$skiptoken` | `400 Bad Request` | `PAGINATION_INVALID_CURSOR` |
+| Count not supported | `400 Bad Request` | `PAGINATION_COUNT_NOT_SUPPORTED` |
 
 ### 4.3 Filter Expressions Contract
 

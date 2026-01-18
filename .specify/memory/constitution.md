@@ -1,9 +1,9 @@
 <!--
 Sync Impact Report:
-- Version change: 2.1.1 → 2.2.0
-- List of modified principles: None
-- Added sections: §18
-- Modified sections: None
+- Version change: 2.3.0 → 2.4.0
+- List of modified principles: §9
+- Added sections: None
+- Modified sections: §9 (added link to detailed API contract specification).
 - Removed sections: None
 - Templates requiring updates:
   - ✅ .specify/templates/plan-template.md
@@ -64,6 +64,8 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Backward compatibility for existing API versions is the preferred method of evolution.
 - Any breaking change to an API contract requires the introduction of a new API version. The old version should be deprecated according to a defined policy.
 - API contracts MUST NOT expose internal domain models directly. Data Transfer Objects (DTOs) MUST be used for all API communication.
+- **API Contract Standards**: All endpoints MUST adhere to the standards for HTTP methods, status codes, and endpoint patterns defined in the [API Contract Specification](./api-contract.md).
+- **Standard Response Schema**: All API responses, for both success and error cases, MUST conform to the standard response envelope defined in the [API Response Schema Specification](./response-schema.md).
 - **Rate Limiting**: Rate limiting MUST be enforced on all public APIs to prevent abuse and ensure fair resource usage across tenants.
 
 ## 10. Database & Migration Policy
@@ -125,4 +127,4 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - The goal is to create a system where adding new functionality or modifying existing behavior can be done with minimal impact on unrelated components.
 - **Rationale**: A loosely coupled architecture reduces the risk and cost of change. By relying on established design patterns, we ensure that the system remains understandable, maintainable, and extensible as new requirements emerge and the team evolves. This principle directly supports the long-term vision of an adaptable platform.
 
-**Version**: 2.2.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
+**Version**: 2.4.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
