@@ -58,6 +58,10 @@
 - [ ] Structured logging with tenant ID, user ID, correlation ID
 - [ ] Errors are traceable via correlation IDs
 
+### Design for Extensibility & Maintainability (§18)
+- [ ] Favors design patterns promoting loose coupling (Strategy, Observer, etc.)
+- [ ] Avoids tight coupling between components
+
 ---
 
 ## Project Structure

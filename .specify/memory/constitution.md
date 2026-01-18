@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report:
-- Version change: 2.0.0 → 2.1.0
-- List of modified principles: Enhanced §7, §9, §12; Added §15, §16, §17.
-- Added sections: 15. Testing Requirements, 16. CI/CD & Quality Gates, 17. Documentation Standards.
-- Modified sections: §7 (added SLA/SLO), §9 (added Rate Limiting), §12 (added State Management specifics).
-- Removed sections: Old Core Principles, Architectural Patterns, Development Workflow, and Governance sections.
+- Version change: 2.1.1 → 2.2.0
+- List of modified principles: None
+- Added sections: §18
+- Modified sections: None
+- Removed sections: None
 - Templates requiring updates:
   - ✅ .specify/templates/plan-template.md
 - Follow-up TODOs: None
@@ -44,6 +44,7 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Internal system error details MUST NEVER be leaked to clients. Generic error messages should be returned while details are logged.
 - A centralized exception handling mechanism is required for both backend and frontend to ensure consistent error responses.
 - All errors MUST be traceable via correlation IDs linking client requests to server-side logs.
+- For detailed implementation standards, error codes, and response formats, all services MUST adhere to the [Error Handling Specification](./error-handling-spec.md).
 
 ## 7. Performance & Scalability
 - Read-heavy workloads are expected and MUST be optimized. The query stack should be designed for high performance and potential caching.
@@ -119,4 +120,9 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Code documentation (comments, README files) MUST be maintained for complex modules and public interfaces.
 - Architecture Decision Records (ADRs) SHOULD be used to document significant architectural choices.
 
-**Version**: 2.1.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-17
+## 18. Design for Extensibility & Maintainability
+- The system MUST favor design patterns that promote loose coupling and high cohesion. This includes, but is not limited to, patterns like Strategy, Observer, Factory, and Decorator where appropriate.
+- The goal is to create a system where adding new functionality or modifying existing behavior can be done with minimal impact on unrelated components.
+- **Rationale**: A loosely coupled architecture reduces the risk and cost of change. By relying on established design patterns, we ensure that the system remains understandable, maintainable, and extensible as new requirements emerge and the team evolves. This principle directly supports the long-term vision of an adaptable platform.
+
+**Version**: 2.2.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
