@@ -477,7 +477,7 @@ When a query parameter represents a list of values:
 
 ## 6. Error Contract
 
-> **Reference**: For detailed error classification, response format, and logging rules, see [Error Handling Specification](./error-handling-spec.md).
+> **Reference**: For detailed error classification, response format, and logging rules, see [Error Handling Specification](./error-handling.md).
 
 This section covers only API-specific error considerations.
 

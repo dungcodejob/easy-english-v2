@@ -1,12 +1,12 @@
 <!--
 Sync Impact Report:
-- Version change: 2.3.0 → 2.4.0
-- List of modified principles: §9
-- Added sections: None
-- Modified sections: §9 (added link to detailed API contract specification).
+- Version change: 2.4.0 → 2.5.0
+- List of modified principles: None
+- Added sections: §19 Constants & Configuration
+- Modified sections: None
 - Removed sections: None
 - Templates requiring updates:
-  - ✅ .specify/templates/plan-template.md
+  - ✅ .specify/templates/plan-template.md (no changes needed)
 - Follow-up TODOs: None
 -->
 # System Constitution – easy-english-v2
@@ -44,7 +44,7 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Internal system error details MUST NEVER be leaked to clients. Generic error messages should be returned while details are logged.
 - A centralized exception handling mechanism is required for both backend and frontend to ensure consistent error responses.
 - All errors MUST be traceable via correlation IDs linking client requests to server-side logs.
-- For detailed implementation standards, error codes, and response formats, all services MUST adhere to the [Error Handling Specification](./error-handling-spec.md).
+- For detailed implementation standards, error codes, and response formats, all services MUST adhere to the [Error Handling Specification](./error-handling.md).
 
 ## 7. Performance & Scalability
 - Read-heavy workloads are expected and MUST be optimized. The query stack should be designed for high performance and potential caching.
@@ -127,4 +127,13 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - The goal is to create a system where adding new functionality or modifying existing behavior can be done with minimal impact on unrelated components.
 - **Rationale**: A loosely coupled architecture reduces the risk and cost of change. By relying on established design patterns, we ensure that the system remains understandable, maintainable, and extensible as new requirements emerge and the team evolves. This principle directly supports the long-term vision of an adaptable platform.
 
-**Version**: 2.4.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
+## 19. Constants & Configuration
+- Hardcoding literal values (magic numbers, strings, URLs, timeouts, limits, etc.) directly in business logic or UI code is **strictly forbidden**.
+- All configurable values MUST be extracted into:
+  - **Constants files** (e.g., `constants.ts`, `config.ts`) for static, compile-time values.
+  - **Environment variables** for runtime configuration that may differ across environments.
+- Constants MUST be named descriptively and grouped logically (e.g., `API_ENDPOINTS`, `VALIDATION_LIMITS`, `UI_DEFAULTS`).
+- Duplication of the same literal value across multiple files is forbidden. A single source of truth MUST be established.
+- **Rationale**: Centralizing configuration values improves maintainability, reduces bugs from inconsistent values, and makes the system easier to adapt to new requirements or environments without code changes scattered across the codebase.
+
+**Version**: 2.5.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18

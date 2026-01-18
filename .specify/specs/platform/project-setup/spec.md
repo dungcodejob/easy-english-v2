@@ -195,7 +195,7 @@ Swagger configuration MUST include:
 - Error responses MUST follow the standard error contract
 - Stack traces MUST NOT be exposed in production
 - All errors MUST include correlation ID for tracing
-- See [Error Handling Specification](../../memory/error-handling-spec.md) for detailed rules
+- See [Error Handling Specification](../../memory/error-handling.md) for detailed rules
 
 ### 7.2 Logging Expectations
 
@@ -265,7 +265,7 @@ This specification explicitly does NOT address:
 
 - [System Constitution](../../memory/constitution.md)
 - [API Contract Specification](../../memory/api-contract-spec.md)
-- [Error Handling Specification](../../memory/error-handling-spec.md)
+- [Error Handling Specification](../../memory/error-handling.md)
 
 ---
 

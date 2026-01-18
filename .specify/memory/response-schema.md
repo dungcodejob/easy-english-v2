@@ -28,7 +28,7 @@ This document defines the **standard API response schema** for all HTTP APIs in 
 ### 1.4 Related Documents
 
 - [API Contract Specification](./api-contract-spec.md)
-- [Error Handling Specification](./error-handling-spec.md)
+- [Error Handling Specification](./error-handling.md)
 
 ---
 
@@ -377,7 +377,7 @@ This document complements it by defining **response structure**.
 
 ### 8.2 Error Handling Specification
 
-The [Error Handling Specification](./error-handling-spec.md) defines:
+The [Error Handling Specification](./error-handling.md) defines:
 - Error classification logic
 - Exception handling flow
 - Correlation ID generation
