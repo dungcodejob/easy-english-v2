@@ -1,13 +1,14 @@
 <!--
 Sync Impact Report:
-- Version change: 2.4.0 → 2.5.0
-- List of modified principles: None
-- Added sections: §19 Constants & Configuration
-- Modified sections: None
-- Removed sections: None
+- Version change: 2.5.0 → 3.0.0 (MAJOR: principle removal)
+- List of modified principles: §15 Testing Requirements (REMOVED), §16 CI/CD (modified)
+- Added sections: None
+- Modified sections: §16 CI/CD & Quality Gates (removed test coverage requirements)
+- Removed sections: §15 Testing Requirements
 - Templates requiring updates:
-  - ✅ .specify/templates/plan-template.md (no changes needed)
-- Follow-up TODOs: None
+  - ⚠ .specify/templates/plan-template.md (review testing references)
+  - ⚠ .specify/templates/tasks-template.md (remove test task patterns)
+- Follow-up TODOs: Re-add testing section when ready to enforce testing discipline
 -->
 # System Constitution – easy-english-v2
 
@@ -101,33 +102,24 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Any conflict between a proposed design and this Constitution MUST be documented explicitly in the design proposal.
 - Proposed changes that are non-compliant with this Constitution will be rejected or must be revised to achieve compliance.
 
-## 15. Testing Requirements
-- All business logic MUST have unit test coverage. Tests should be independent, repeatable, and fast.
-- Integration tests are required for all Command handlers and API endpoints to verify CQRS flow and cross-component interactions.
-- E2E tests are required for critical user flows (authentication, core learning features).
-- External dependencies MUST be mocked in unit tests. Integration tests may use test containers or in-memory implementations.
-- Test data MUST be tenant-isolated and cleaned up after test execution.
-
-## 16. CI/CD & Quality Gates
-- All code changes MUST pass automated linting, type checking, and test suites before merge.
-- Code coverage thresholds MUST be maintained for critical modules. Coverage regressions are not permitted.
+## 15. CI/CD & Quality Gates
+- All code changes MUST pass automated linting and type checking before merge.
 - Pull requests require at least one approval from a qualified reviewer who verifies compliance with this Constitution.
 - Automated security scanning (dependency vulnerabilities, static analysis) MUST be part of the CI pipeline.
 - Deployments to production MUST follow a defined release process with rollback capabilities.
-
-## 17. Documentation Standards
+## 16. Documentation Standards
 - **API Documentation**: All backend APIs MUST be documented using **OpenAPI/Swagger** specification.
 - OpenAPI schemas MUST be kept in sync with the actual implementation. Auto-generation from code annotations is preferred.
 - **Client Generation**: API clients for frontend applications (Angular, React) MUST be auto-generated from OpenAPI specifications to ensure type safety and contract consistency.
 - Code documentation (comments, README files) MUST be maintained for complex modules and public interfaces.
 - Architecture Decision Records (ADRs) SHOULD be used to document significant architectural choices.
 
-## 18. Design for Extensibility & Maintainability
+## 17. Design for Extensibility & Maintainability
 - The system MUST favor design patterns that promote loose coupling and high cohesion. This includes, but is not limited to, patterns like Strategy, Observer, Factory, and Decorator where appropriate.
 - The goal is to create a system where adding new functionality or modifying existing behavior can be done with minimal impact on unrelated components.
 - **Rationale**: A loosely coupled architecture reduces the risk and cost of change. By relying on established design patterns, we ensure that the system remains understandable, maintainable, and extensible as new requirements emerge and the team evolves. This principle directly supports the long-term vision of an adaptable platform.
 
-## 19. Constants & Configuration
+## 18. Constants & Configuration
 - Hardcoding literal values (magic numbers, strings, URLs, timeouts, limits, etc.) directly in business logic or UI code is **strictly forbidden**.
 - All configurable values MUST be extracted into:
   - **Constants files** (e.g., `constants.ts`, `config.ts`) for static, compile-time values.
@@ -136,4 +128,4 @@ The long-term goal of the easy-english-v2 system is to provide a highly effectiv
 - Duplication of the same literal value across multiple files is forbidden. A single source of truth MUST be established.
 - **Rationale**: Centralizing configuration values improves maintainability, reduces bugs from inconsistent values, and makes the system easier to adapt to new requirements or environments without code changes scattered across the codebase.
 
-**Version**: 2.5.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
+**Version**: 3.0.0 | **Ratified**: 2026-01-17 | **Last Amended**: 2026-01-18
