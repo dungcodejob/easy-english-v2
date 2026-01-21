@@ -1,0 +1,603 @@
+# Auth API Contract
+
+openapi: 3.0.3
+info:
+  title: Easy English v2 - Authentication API
+  version: 1.0.0
+  description: |
+    Authentication API for the Easy English platform.
+    Supports local (email/password) and OAuth2 external provider authentication.
+
+servers:
+  - url: /api/v1
+    description: API v1
+
+tags:
+  - name: Auth
+    description: Authentication operations (login, register, logout)
+  - name: OAuth
+    description: OAuth2 external provider operations
+  - name: Sessions
+    description: Session management
+  - name: Accounts
+    description: Account linking/unlinking
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user with email and password
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Registration successful
+          headers:
+            Set-Cookie:
+              description: Refresh token in HTTP-only cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login with email/username and password
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          headers:
+            Set-Cookie:
+              description: Refresh token in HTTP-only cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout current session
+      operationId: logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          headers:
+            Set-Cookie:
+              description: Cleared refresh token cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh access token using refresh token cookie
+      operationId: refreshTokens
+      description: |
+        Uses the refresh token from HTTP-only cookie to issue a new access token.
+        Implements token rotation - each refresh issues a new refresh token.
+      responses:
+        '200':
+          description: Tokens refreshed
+          headers:
+            Set-Cookie:
+              description: New refresh token in HTTP-only cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Token reuse detected - all sessions revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/oauth/{provider}:
+    get:
+      tags: [OAuth]
+      summary: Initiate OAuth flow with external provider
+      operationId: oauthRedirect
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/OAuthProvider'
+        - name: returnUrl
+          in: query
+          required: false
+          description: URL to redirect after OAuth completion
+          schema:
+            type: string
+            format: uri
+      responses:
+        '302':
+          description: Redirect to OAuth provider
+          headers:
+            Location:
+              description: OAuth provider authorization URL
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Provider not configured or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/oauth/{provider}/callback:
+    get:
+      tags: [OAuth]
+      summary: OAuth callback handler
+      operationId: oauthCallback
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/OAuthProvider'
+        - name: code
+          in: query
+          required: true
+          description: Authorization code from provider
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State parameter for CSRF validation
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to frontend with tokens
+          headers:
+            Location:
+              description: Frontend URL
+              schema:
+                type: string
+                format: uri
+            Set-Cookie:
+              description: Refresh token in HTTP-only cookie
+              schema:
+                type: string
+        '400':
+          description: Invalid callback parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: OAuth provider unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/accounts:
+    get:
+      tags: [Accounts]
+      summary: List linked accounts
+      operationId: getAccounts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of linked accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountListResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/accounts/link/{provider}:
+    post:
+      tags: [Accounts]
+      summary: Initiate account linking with OAuth provider
+      operationId: linkAccount
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/OAuthProvider'
+      responses:
+        '302':
+          description: Redirect to OAuth provider for linking
+          headers:
+            Location:
+              description: OAuth provider authorization URL
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Provider already linked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/accounts/{accountId}:
+    delete:
+      tags: [Accounts]
+      summary: Unlink an account
+      operationId: unlinkAccount
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Account unlinked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Cannot unlink last account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/sessions:
+    get:
+      tags: [Sessions]
+      summary: List active sessions
+      operationId: getSessions
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of active sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionListResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [Sessions]
+      summary: Revoke all sessions (logout from all devices)
+      operationId: revokeAllSessions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: includeCurrent
+          in: query
+          required: false
+          description: Also revoke current session
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: All sessions revoked
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          revokedCount:
+                            type: integer
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/sessions/{sessionId}:
+    delete:
+      tags: [Sessions]
+      summary: Revoke specific session
+      operationId: revokeSession
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Session revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # Request DTOs
+    RegisterRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: John Doe
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: john.doe@example.com
+        password:
+          type: string
+          minLength: 8
+          description: Min 8 chars, at least 1 number and 1 special character
+          example: SecurePass1!
+
+    LoginRequest:
+      type: object
+      required: [identifier, password]
+      properties:
+        identifier:
+          type: string
+          description: Email or username
+          example: john.doe@example.com
+        password:
+          type: string
+          example: SecurePass1!
+
+    # Response DTOs
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: JWT access token
+            expiresIn:
+              type: integer
+              description: Access token expiration in seconds
+              example: 900
+            user:
+              $ref: '#/components/schemas/UserProfile'
+        timestamp:
+          type: string
+          format: date-time
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+
+    AccountDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/AccountType'
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+
+    AccountListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDto'
+        timestamp:
+          type: string
+          format: date-time
+
+    SessionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userAgent:
+          type: string
+          description: Browser/device info
+        ipAddress:
+          type: string
+        lastActivityAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        isCurrent:
+          type: boolean
+          description: Whether this is the current session
+
+    SessionListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionDto'
+        timestamp:
+          type: string
+          format: date-time
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: AUTH_001
+            message:
+              type: string
+              example: Invalid credentials
+            details:
+              type: object
+        timestamp:
+          type: string
+          format: date-time
+
+    # Enums
+    OAuthProvider:
+      type: string
+      enum: [google, github, facebook]
+
+    AccountType:
+      type: string
+      enum: [LOCAL, GOOGLE, GITHUB, FACEBOOK]

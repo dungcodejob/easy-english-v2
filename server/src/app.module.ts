@@ -15,6 +15,8 @@ import {
 import { HttpExceptionFilter } from '@app/filters/http-exception.filter';
 import { TransformInterceptor } from '@app/interceptors/transform.interceptor';
 import { HealthModule } from './core/health/health.module';
+import { JwtModule } from './core/jwt/jwt.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { HealthModule } from './core/health/health.module';
       isGlobal: true,
     }),
     HealthModule,
+    JwtModule,
+    AuthModule,
   ],
   providers: [
     {

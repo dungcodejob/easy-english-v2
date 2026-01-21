@@ -23,7 +23,12 @@
       "@app/modules/*": ["src/modules/*"],
       "@app/configs": ["src/core/configs"],
       "@app/filters/*": ["src/shared/filters/*"],
-      "@app/interceptors/*": ["src/shared/interceptors/*"]
+      "@app/interceptors/*": ["src/shared/interceptors/*"],
+      "@app/constants": ["src/constants"],
+      "@app/utils": ["src/shared/utils"],
+      "@app/utils/*": ["src/shared/utils/*"],
+      "@app/models": ["src/shared/models"],
+      "@app/models/*": ["src/shared/models/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
