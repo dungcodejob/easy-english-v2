@@ -24,6 +24,15 @@ export class TenantRepository implements ITenantRepository {
     return this.toDomain(entity);
   }
 
+  async create(tenant: Tenant): Promise<void> {
+    const entity = new TenantMikroEntity();
+    entity.id = tenant.id;
+    entity.name = tenant.name;
+    entity.slug = tenant.slug;
+    // Map other fields as needed
+    await this.repo.getEntityManager().persist(entity);
+  }
+
   private toDomain(entity: TenantMikroEntity): Tenant {
     return new Tenant({
       id: entity.id,

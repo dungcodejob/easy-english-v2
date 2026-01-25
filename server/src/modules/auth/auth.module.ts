@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { PassportModule } from '@nestjs/passport';
 
 import { AccountMikroEntity } from './infrastructure/persistence/account.mikro-entity';
@@ -13,6 +14,9 @@ import { TenantRepository } from './infrastructure/repositories/tenant.repositor
 import { UserRepository } from './infrastructure/repositories/user.repository';
 
 import { PasswordService } from '../../core/security/password.service';
+import { LoginHandler } from './application/commands/login.handler';
+import { RegisterHandler } from './application/commands/register.handler';
+import { AuthController } from './controllers/auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
@@ -24,10 +28,14 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       TenantMikroEntity,
     ]),
     PassportModule,
+    CqrsModule,
   ],
+  controllers: [AuthController],
   providers: [
     PasswordService,
     JwtStrategy,
+    RegisterHandler,
+    LoginHandler,
     { provide: 'IUserRepository', useClass: UserRepository },
     { provide: 'IAccountRepository', useClass: AccountRepository },
     { provide: 'ISessionRepository', useClass: SessionRepository },

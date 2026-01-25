@@ -116,15 +116,15 @@
 
 ### Commands & Handlers
 
-- [ ] T045 [P] [US1] Create `RegisterCommand` in `server/src/modules/auth/application/commands/register.command.ts`
-- [ ] T046 [P] [US1] Create `LoginCommand` in `server/src/modules/auth/application/commands/login.command.ts`
-- [ ] T047 [US1] Implement `RegisterHandler` in `server/src/modules/auth/application/commands/register.handler.ts`
+- [x] T045 [P] [US1] Create `RegisterCommand` in `server/src/modules/auth/application/commands/register.command.ts`
+- [x] T046 [P] [US1] Create `LoginCommand` in `server/src/modules/auth/application/commands/login.command.ts`
+- [x] T047 [US1] Implement `RegisterHandler` in `server/src/modules/auth/application/commands/register.handler.ts`
   - Create User with auto-generated username
   - Create LOCAL Account with hashed password
   - Assign to Tenant (default tenant for now)
   - Create Session and issue tokens
-- [ ] T044 [US1] Implement username generation logic (lowercase name, append number if collision)
-- [ ] T045 [US1] Implement `LoginHandler` in `server/src/modules/auth/application/commands/login.handler.ts`
+- [ ] T047b [US1] Implement username generation logic (lowercase name, append number if collision) (Already implemented in T047)
+- [x] T045 [US1] Implement `LoginHandler` in `server/src/modules/auth/application/commands/login.handler.ts`
   - Accept identifier (email OR username)
   - Validate against LOCAL Account password
   - Create Session and issue tokens

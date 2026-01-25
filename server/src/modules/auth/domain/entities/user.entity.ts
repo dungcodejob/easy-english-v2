@@ -21,4 +21,14 @@ export class User {
     this.sessions = this.sessions || [];
     this.tokenVersion = this.tokenVersion || 0;
   }
+
+  addAccount(account: Account) {
+    if (!this.accounts) this.accounts = [];
+    this.accounts.push(account);
+  }
+
+  addSession(session: Session) {
+    if (!this.sessions) this.sessions = [];
+    this.sessions.push(session);
+  }
 }
