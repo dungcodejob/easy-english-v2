@@ -15,21 +15,17 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@app/core": ["src/core"],
-      "@app/core/*": ["src/core/*"],
-      "@app/shared": ["src/shared"],
-      "@app/shared/*": ["src/shared/*"],
-      "@app/modules": ["src/modules"],
-      "@app/modules/*": ["src/modules/*"],
-      "@app/configs": ["src/core/configs"],
-      "@app/filters/*": ["src/shared/filters/*"],
-      "@app/interceptors/*": ["src/shared/interceptors/*"]
+      "@shared/*": ["src/shared/*"],
+      "@shared": ["src/shared"],
+      "@core/*": ["src/core/*"],
+      "@core": ["src/core"]
     },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false
-  },
-  "exclude": ["node_modules", "dist"]
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }

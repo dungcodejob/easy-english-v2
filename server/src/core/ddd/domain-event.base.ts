@@ -1,0 +1,59 @@
+import { ArgumentNotProvidedException } from '@core/exceptions';
+import { isEmpty } from '@shared/utils';
+import { v7 as uuid } from 'uuid';
+
+class RequestContextService {
+  static getRequestId(): string {
+    return '123';
+  }
+}
+
+type DomainEventMetadata = {
+  /** Timestamp when this domain event occurred */
+  readonly timestamp: number;
+
+  /** ID for correlation purposes (for Integration Events,logs correlation, etc).
+   */
+  readonly correlationId: string;
+
+  /**
+   * Causation id used to reconstruct execution order if needed
+   */
+  readonly causationId?: string;
+
+  /**
+   * User ID for debugging and logging purposes
+   */
+  readonly userId?: string;
+};
+
+export type DomainEventProps<T> = Omit<T, 'id' | 'metadata'> & {
+  aggregateId: string;
+  metadata?: DomainEventMetadata;
+};
+
+export abstract class DomainEvent {
+  public readonly id: string;
+
+  /** Aggregate ID where domain event occurred */
+  public readonly aggregateId: string;
+
+  public readonly metadata: DomainEventMetadata;
+
+  constructor(props: DomainEventProps<unknown>) {
+    if (isEmpty(props)) {
+      throw new ArgumentNotProvidedException(
+        'DomainEvent props should not be empty',
+      );
+    }
+    this.id = uuid();
+    this.aggregateId = props.aggregateId;
+    this.metadata = {
+      correlationId:
+        props?.metadata?.correlationId || RequestContextService.getRequestId(),
+      causationId: props?.metadata?.causationId,
+      timestamp: props?.metadata?.timestamp || Date.now(),
+      userId: props?.metadata?.userId,
+    };
+  }
+}

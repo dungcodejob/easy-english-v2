@@ -44,7 +44,8 @@ npm install -g @nestjs/cli
 ### Tạo project mới:
 
 ```bash
-nest new my-project
+npm i -g @nestjs/cli
+nest new <project-name> --package-manager pnpm
 ```
 
 Chọn các options:
