@@ -10,6 +10,10 @@ export class Email extends ValueObject<string> {
     return new Email(value);
   }
 
+  get value(): string {
+    return this.props.value;
+  }
+
   protected validate({ value }: { value: string }): void {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {

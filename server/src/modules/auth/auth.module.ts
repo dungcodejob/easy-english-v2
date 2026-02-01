@@ -2,7 +2,14 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RegisterHandler } from './application/commands/register.handler';
 import { AuthController } from './controllers/auth.controller';
-import { IPasswordHasher } from './domain/ports/password-hasher.interface';
+import {
+  passwordHasherProvider,
+  passwordHasherToken,
+} from './domain/ports/password-hasher.interface';
+import {
+  usernameGeneratorProvider,
+  usernameGeneratorToken,
+} from './domain/ports/username-generator.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
 import {
   AuthIdentityRepository,
@@ -20,12 +27,10 @@ const commandHandlers = [RegisterHandler];
   providers: [
     ...repositories,
     ...commandHandlers,
-    UsernameGeneratorService,
-    {
-      provide: IPasswordHasher,
-      useClass: BcryptPasswordHasher,
-    },
+
+    passwordHasherProvider(BcryptPasswordHasher),
+    usernameGeneratorProvider(UsernameGeneratorService),
   ],
-  exports: [IPasswordHasher],
+  exports: [passwordHasherToken, usernameGeneratorToken],
 })
 export class AuthModule {}

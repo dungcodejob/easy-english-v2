@@ -1,6 +1,6 @@
+import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v4 } from 'uuid';
-import { AggregateRoot } from '../../../../core/ddd/aggregate-root.base';
-import { CreateEntityProps } from '../../../../core/ddd/entity.base';
+import { TenantCreatedEvent } from '../events';
 
 export enum TenantStatus {
   ACTIVE = 'ACTIVE',
@@ -45,5 +45,20 @@ export class Tenant extends AggregateRoot {
       plan: TenantPlan.FREE,
     };
     return new Tenant(props);
+  }
+
+  /**
+   * Emit TenantCreatedEvent after successful creation
+   */
+  registerEvent(): void {
+    this.addEvent(
+      new TenantCreatedEvent({
+        aggregateId: this.id,
+        tenantId: this.id,
+        name: this.name,
+        plan: this.plan,
+        status: this.status,
+      }),
+    );
   }
 }

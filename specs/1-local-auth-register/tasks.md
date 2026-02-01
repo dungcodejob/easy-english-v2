@@ -101,6 +101,11 @@
 
 - [x] T024 [US1] Register command handler, repositories, and controller in `server/src/modules/auth/auth.module.ts`
 
+### Domain Events
+
+- [x] T024a [US1] Create UserRegisteredEvent at `server/src/modules/auth/domain/events/user-registered.event.ts`
+- [x] T024b [US1] Emit UserRegisteredEvent in RegisterHandler after successful persist
+
 ### Backend Verification
 
 - [ ] T025 [US1] Verify endpoint works: test with curl/Postman → user, tenant, auth_identity created in DB

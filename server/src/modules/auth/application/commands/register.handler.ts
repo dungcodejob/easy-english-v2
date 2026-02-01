@@ -1,5 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   AuthIdentity,
   AuthProvider,
@@ -7,8 +9,8 @@ import {
   User,
   UserRole,
 } from '../../domain/entities';
-import { IPasswordHasher } from '../../domain/ports/password-hasher.interface';
-import { UsernameGeneratorService } from '../../domain/services/username-generator.service';
+import type { IPasswordHasher } from '../../domain/ports/password-hasher.interface';
+import type { IUsernameGenerator } from '../../domain/ports/username-generator.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
 import { RegisterCommand } from './register.command';
@@ -18,10 +20,13 @@ export class RegisterHandler implements ICommandHandler<
   RegisterCommand,
   RegisterResponseDto
 > {
+  private readonly logger = new Logger(RegisterHandler.name);
+
   constructor(
     private readonly em: EntityManager,
-    private readonly usernameGenerator: UsernameGeneratorService,
+    private readonly usernameGenerator: IUsernameGenerator,
     private readonly hasher: IPasswordHasher,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async execute(command: RegisterCommand): Promise<RegisterResponseDto> {
@@ -30,17 +35,11 @@ export class RegisterHandler implements ICommandHandler<
     // TODO: Phase 4 - Check if email already exists
 
     // Generate unique username
-    const usernameStr = await this.usernameGenerator.generate({ email });
+    const usernameStr = this.usernameGenerator.generate({ email });
     const username = new Username(usernameStr);
 
     // Create Value Objects
     const emailVO = Email.create(email);
-
-    // START TRANSACTION
-    // We use global EM or create a fork. Since this is a command, we can rely on a transactional decorator or explicit transaction.
-    // Ideally, for atomicity across 3 repos, we should wrap in transaction.
-    // MikroORM allows using the same EM instance which tracks changes.
-    // If request scope is enabled, 'this.em' is unique per request.
 
     // 1. Create Tenant
     const tenant = Tenant.create({
@@ -57,7 +56,6 @@ export class RegisterHandler implements ICommandHandler<
     });
 
     // 3. Create Password (Hash)
-    // The Password.create creates a prompt promise.
     const passwordVO = await Password.create(password, this.hasher);
 
     // 4. Create AuthIdentity
@@ -68,10 +66,20 @@ export class RegisterHandler implements ICommandHandler<
       password: passwordVO,
     });
 
-    // Persist all
-    // Since we are using repositories in other places, we can use them or just persist to EM.
-    // Using EM is cleaner for multi-entity transactional save in MikroORM.
+    // Persist all entities atomically
     await this.em.persist([tenant, user, authIdentity]).flush();
+
+    // 5. Emit domain events after successful persist
+    tenant.registerEvent();
+    user.registerEvent();
+    authIdentity.registerEvent();
+
+    // Publish all events
+    await Promise.all([
+      tenant.publishEvents(this.logger, this.eventEmitter),
+      user.publishEvents(this.logger, this.eventEmitter),
+      authIdentity.publishEvents(this.logger, this.eventEmitter),
+    ]);
 
     return new RegisterResponseDto(user.id, email, tenant.id);
   }

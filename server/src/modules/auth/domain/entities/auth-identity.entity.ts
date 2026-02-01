@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
-import { AggregateRoot } from '../../../../core/ddd/aggregate-root.base';
-import { CreateEntityProps } from '../../../../core/ddd/entity.base';
+
+import { AggregateRoot, CreateEntityProps } from '@core/ddd';
+import { AuthIdentityCreatedEvent } from '../events';
 import { Password } from '../value-objects/password.vo';
 
 export enum AuthProvider {
@@ -42,5 +43,20 @@ export class AuthIdentity extends AggregateRoot {
       ...create,
     };
     return new AuthIdentity(props);
+  }
+
+  /**
+   * Emit AuthIdentityCreatedEvent after successful creation
+   */
+  registerEvent(): void {
+    this.addEvent(
+      new AuthIdentityCreatedEvent({
+        aggregateId: this.id,
+        authIdentityId: this.id,
+        userId: this.userId,
+        provider: this.provider,
+        providerUserId: this.providerUserId,
+      }),
+    );
   }
 }

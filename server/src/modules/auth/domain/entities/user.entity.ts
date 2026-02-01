@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
-import { AggregateRoot } from '../../../../core/ddd/aggregate-root.base';
-import { CreateEntityProps } from '../../../../core/ddd/entity.base';
+
+import { AggregateRoot, CreateEntityProps } from '@core/ddd';
+import { UserRegisteredEvent } from '../events';
 import { Email } from '../value-objects/email.vo';
 import { Username } from '../value-objects/username.vo';
 
@@ -47,5 +48,20 @@ export class User extends AggregateRoot {
       role: create.role || UserRole.MEMBER,
     };
     return new User(props);
+  }
+
+  /**
+   * Emit UserRegisteredEvent after successful registration
+   */
+  registerEvent(): void {
+    this.addEvent(
+      new UserRegisteredEvent({
+        aggregateId: this.id,
+        userId: this.id,
+        email: this.email.value,
+        tenantId: this.tenantId,
+        name: this.name,
+      }),
+    );
   }
 }
