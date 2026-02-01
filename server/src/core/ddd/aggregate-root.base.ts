@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RequestContextService } from '../context/request-context.service';
 import { DomainEvent } from './domain-event.base';
 import { Entity } from './entity.base';
 

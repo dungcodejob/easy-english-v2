@@ -1,5 +1,6 @@
 import { isEmpty } from '@shared/utils';
 import { randomUUID } from 'crypto';
+import { RequestContextService } from '../context/request-context.service';
 import { ArgumentNotProvidedException } from '../exceptions';
 
 export type CommandProps<T> = Omit<T, 'id' | 'metadata'> & Partial<Command>;

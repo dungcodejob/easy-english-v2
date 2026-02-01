@@ -1,12 +1,7 @@
 import { ArgumentNotProvidedException } from '@core/exceptions';
 import { isEmpty } from '@shared/utils';
 import { v7 as uuid } from 'uuid';
-
-class RequestContextService {
-  static getRequestId(): string {
-    return '123';
-  }
-}
+import { RequestContextService } from '../context/request-context.service';
 
 type DomainEventMetadata = {
   /** Timestamp when this domain event occurred */

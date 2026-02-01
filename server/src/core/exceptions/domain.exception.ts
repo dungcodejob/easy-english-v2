@@ -3,6 +3,7 @@ export enum DomainExceptionCode {
 }
 
 export class DomainException extends Error {
+  static readonly prefix = 'Domain';
   code: string;
   details?: Record<string, unknown>;
 
@@ -12,7 +13,7 @@ export class DomainException extends Error {
     details?: Record<string, unknown>,
   ) {
     super(message);
-    this.code = code;
+    this.code = `${DomainException.prefix}.${code}`;
     this.details = details;
   }
 }

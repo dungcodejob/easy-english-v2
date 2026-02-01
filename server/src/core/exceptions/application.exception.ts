@@ -1,14 +1,16 @@
 export class ApplicationException extends Error {
-  errorCode: string;
+  static readonly prefix = 'Application';
+  code: string;
   details?: Record<string, unknown>;
+  errorCode: string;
 
   constructor(
     message: string,
-    errorCode: string,
+    code: string,
     details?: Record<string, unknown>,
   ) {
     super(message);
-    this.errorCode = errorCode;
+    this.code = `${ApplicationException.prefix}.${code}`;
     this.details = details;
   }
 }
