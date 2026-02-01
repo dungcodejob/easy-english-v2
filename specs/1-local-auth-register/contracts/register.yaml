@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: Auth API - Register Endpoint
+  version: 1.0.0
+  description: User registration with automatic tenant creation
+
+servers:
+  - url: /api/v1
+
+paths:
+  /auth/register:
+    post:
+      operationId: register
+      summary: Register a new user with tenant creation
+      description: |
+        Creates a new user account with LOCAL authentication. 
+        Automatically creates a Tenant and assigns the user as ADMIN.
+        Does NOT return authentication tokens - user must login separately.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              basic:
+                summary: Basic registration
+                value:
+                  email: john.doe@example.com
+                  password: SecurePass123
+                  name: John Doe
+              withTenant:
+                summary: Registration with custom tenant name
+                value:
+                  email: john.doe@example.com
+                  password: SecurePass123
+                  name: John Doe
+                  tenantName: My Learning Workspace
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterSuccessResponse'
+              example:
+                success: true
+                data:
+                  userId: 550e8400-e29b-41d4-a716-446655440000
+                  email: john.doe@example.com
+                  tenantId: 550e8400-e29b-41d4-a716-446655440001
+                correlationId: req-abc-123
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              example:
+                success: false
+                error:
+                  code: VALIDATION_ERROR
+                  type: client
+                  message: Request validation failed
+                  details:
+                    - field: email
+                      message: Must be a valid email address
+                      code: INVALID_FORMAT
+                    - field: password
+                      message: Must contain at least one uppercase letter
+                      code: PASSWORD_POLICY
+                correlationId: req-abc-124
+        '409':
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainErrorResponse'
+              example:
+                success: false
+                error:
+                  code: EMAIL_ALREADY_EXISTS
+                  type: domain
+                  message: A user with this email already exists
+                correlationId: req-abc-125
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemErrorResponse'
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          description: User's email address (used for LOCAL auth)
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+          description: |
+            Password must meet requirements:
+            - Minimum 8 characters
+            - At least 1 uppercase letter
+            - At least 1 lowercase letter
+            - At least 1 digit
+          example: SecurePass123
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: User's display name
+          example: John Doe
+        tenantName:
+          type: string
+          maxLength: 100
+          description: Optional workspace name (defaults to "[Name]'s Workspace")
+          example: My Learning Workspace
+
+    RegisterSuccessResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          $ref: '#/components/schemas/RegisterResponseData'
+        correlationId:
+          type: string
+          description: Request correlation ID for tracing
+
+    RegisterResponseData:
+      type: object
+      required:
+        - userId
+        - email
+        - tenantId
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: Created user's unique identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        tenantId:
+          type: string
+          format: uuid
+          description: Created tenant's unique identifier
+
+    ValidationErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          required:
+            - code
+            - type
+            - message
+          properties:
+            code:
+              type: string
+              enum: [VALIDATION_ERROR]
+            type:
+              type: string
+              enum: [client]
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                $ref: '#/components/schemas/ValidationErrorDetail'
+        correlationId:
+          type: string
+
+    ValidationErrorDetail:
+      type: object
+      required:
+        - field
+        - message
+        - code
+      properties:
+        field:
+          type: string
+          description: Field that failed validation
+        message:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - REQUIRED
+            - INVALID_FORMAT
+            - TOO_SHORT
+            - TOO_LONG
+            - PASSWORD_POLICY
+
+    DomainErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          required:
+            - code
+            - type
+            - message
+          properties:
+            code:
+              type: string
+              enum: [EMAIL_ALREADY_EXISTS]
+            type:
+              type: string
+              enum: [domain]
+            message:
+              type: string
+        correlationId:
+          type: string
+
+    SystemErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          required:
+            - code
+            - type
+            - message
+          properties:
+            code:
+              type: string
+              enum: [INTERNAL_ERROR]
+            type:
+              type: string
+              enum: [system]
+            message:
+              type: string
+              default: An unexpected error occurred. Please try again later.
+        correlationId:
+          type: string

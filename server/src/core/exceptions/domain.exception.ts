@@ -1,5 +1,6 @@
 export enum DomainExceptionCode {
   ARGUMENT_NOT_PROVIDED = 'ARGUMENT_NOT_PROVIDED',
+  ARGUMENT_INVALID = 'ARGUMENT_INVALID',
 }
 
 export class DomainException extends Error {
@@ -21,5 +22,11 @@ export class DomainException extends Error {
 export class ArgumentNotProvidedException extends DomainException {
   constructor(message: string) {
     super(message, DomainExceptionCode.ARGUMENT_NOT_PROVIDED);
+  }
+}
+
+export class ArgumentInvalidException extends DomainException {
+  constructor(message: string) {
+    super(message, DomainExceptionCode.ARGUMENT_INVALID);
   }
 }
