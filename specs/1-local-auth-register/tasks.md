@@ -85,21 +85,21 @@
 
 ### DTOs
 
-- [ ] T019 [P] [US1] Create RegisterRequestDto at `server/src/modules/auth/dto/requests/register.request.dto.ts`
-- [ ] T020 [P] [US1] Create RegisterResponseDto at `server/src/modules/auth/dto/responses/register.response.dto.ts`
+- [x] T019 [P] [US1] Create RegisterRequestDto at `server/src/modules/auth/dto/requests/register.request.dto.ts`
+- [x] T020 [P] [US1] Create RegisterResponseDto at `server/src/modules/auth/dto/responses/register.response.dto.ts`
 
 ### CQRS Command
 
-- [ ] T021 [US1] Create RegisterCommand at `server/src/modules/auth/application/commands/register.command.ts`
-- [ ] T022 [US1] Implement RegisterHandler at `server/src/modules/auth/application/commands/register.handler.ts` (orchestrates User+Tenant+AuthIdentity creation)
+- [x] T021 [US1] Create RegisterCommand at `server/src/modules/auth/application/commands/register.command.ts`
+- [x] T022 [US1] Implement RegisterHandler at `server/src/modules/auth/application/commands/register.handler.ts` (orchestrates User+Tenant+AuthIdentity creation)
 
 ### Controller
 
-- [ ] T023 [US1] Create AuthController with POST /auth/register endpoint at `server/src/modules/auth/controllers/auth.controller.ts`
+- [x] T023 [US1] Create AuthController with POST /auth/register endpoint at `server/src/modules/auth/controllers/auth.controller.ts`
 
 ### Wire Up Module
 
-- [ ] T024 [US1] Register command handler, repositories, and controller in `server/src/modules/auth/auth.module.ts`
+- [x] T024 [US1] Register command handler, repositories, and controller in `server/src/modules/auth/auth.module.ts`
 
 ### Backend Verification
 
