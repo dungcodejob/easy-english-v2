@@ -47,21 +47,17 @@ export class User extends AggregateRoot {
       ...create,
       role: create.role || UserRole.MEMBER,
     };
-    return new User(props);
-  }
 
-  /**
-   * Emit UserRegisteredEvent after successful registration
-   */
-  registerEvent(): void {
-    this.addEvent(
+    const user = new User(props);
+    user.addEvent(
       new UserRegisteredEvent({
-        aggregateId: this.id,
-        userId: this.id,
-        email: this.email.value,
-        tenantId: this.tenantId,
-        name: this.name,
+        aggregateId: user.id,
+        userId: user.id,
+        email: user.email.value,
+        tenantId: user.tenantId,
+        name: user.name,
       }),
     );
+    return user;
   }
 }

@@ -42,21 +42,16 @@ export class AuthIdentity extends AggregateRoot {
       id,
       ...create,
     };
-    return new AuthIdentity(props);
-  }
-
-  /**
-   * Emit AuthIdentityCreatedEvent after successful creation
-   */
-  registerEvent(): void {
-    this.addEvent(
+    const authIdentity = new AuthIdentity(props);
+    authIdentity.addEvent(
       new AuthIdentityCreatedEvent({
-        aggregateId: this.id,
-        authIdentityId: this.id,
-        userId: this.userId,
-        provider: this.provider,
-        providerUserId: this.providerUserId,
+        aggregateId: authIdentity.id,
+        authIdentityId: authIdentity.id,
+        userId: authIdentity.userId,
+        provider: authIdentity.provider,
+        providerUserId: authIdentity.providerUserId,
       }),
     );
+    return authIdentity;
   }
 }

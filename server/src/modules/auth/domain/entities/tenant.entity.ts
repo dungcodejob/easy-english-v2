@@ -44,21 +44,22 @@ export class Tenant extends AggregateRoot {
       status: TenantStatus.ACTIVE,
       plan: TenantPlan.FREE,
     };
-    return new Tenant(props);
-  }
 
-  /**
-   * Emit TenantCreatedEvent after successful creation
-   */
-  registerEvent(): void {
-    this.addEvent(
+    const tenant = new Tenant(props);
+
+    tenant.addEvent(
       new TenantCreatedEvent({
-        aggregateId: this.id,
-        tenantId: this.id,
-        name: this.name,
-        plan: this.plan,
-        status: this.status,
+        aggregateId: tenant.id,
+        tenantId: tenant.id,
+        name: tenant.name,
+        plan: tenant.plan,
+        status: tenant.status,
       }),
     );
+    return tenant;
+  }
+
+  static rehydrate(props: CreateEntityProps<TenantProps>): Tenant {
+    return new Tenant(props);
   }
 }

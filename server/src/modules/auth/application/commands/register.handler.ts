@@ -67,13 +67,11 @@ export class RegisterHandler implements ICommandHandler<
       password: passwordVO,
     });
 
+    this.em.persist(tenant);
+    this.em.persist(user);
+    this.em.persist(authIdentity);
     // Persist all entities atomically
-    await this.em.persist([tenant, user, authIdentity]).flush();
-
-    // 5. Emit domain events after successful persist
-    tenant.registerEvent();
-    user.registerEvent();
-    authIdentity.registerEvent();
+    await this.em.flush();
 
     // Publish all events
     await Promise.all([
