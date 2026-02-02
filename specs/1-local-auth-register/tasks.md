@@ -146,9 +146,9 @@
 
 ### Implementation
 
-- [ ] T030 [US3] Add class-validator decorators to RegisterRequestDto at `server/src/modules/auth/dto/requests/register.request.dto.ts`
-- [ ] T031 [US3] Add custom password validation decorator at `server/src/modules/auth/dto/validators/password.validator.ts`
-- [ ] T032 [US3] Ensure ValidationPipe is applied globally or on AuthController
+- [x] T030 [US3] Add class-validator decorators to RegisterRequestDto at `server/src/modules/auth/dto/requests/register.request.dto.ts`
+- [x] T031 [US3] Add custom password validation decorator at `server/src/modules/auth/dto/validators/password.validator.ts`
+- [x] T032 [US3] Ensure ValidationPipe is applied globally or on AuthController
 
 ### Verification
 
