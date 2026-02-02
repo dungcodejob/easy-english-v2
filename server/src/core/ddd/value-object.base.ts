@@ -16,11 +16,8 @@ export abstract class ValueObject<T> {
 
   constructor(props: ValueObjectProps<T>) {
     this.checkIfEmpty(props);
-    this.validate(props);
     this.props = props;
   }
-
-  protected abstract validate(props: ValueObjectProps<T>): void;
 
   static isValueObject(obj: unknown): obj is ValueObject<unknown> {
     return obj instanceof ValueObject;

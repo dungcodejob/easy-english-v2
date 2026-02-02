@@ -22,6 +22,7 @@ export class Username extends ValueObject<string> {
 
   private constructor(value: string) {
     super({ value });
+    this.validate({ value });
   }
 
   get value(): string {
@@ -98,7 +99,7 @@ export class Username extends ValueObject<string> {
     return value;
   }
 
-  protected validate({ value }: { value: string }): void {
+  private validate({ value }: { value: string }): void {
     if (value.length < Username.MIN_LENGTH) {
       throw new ArgumentInvalidException(
         `Username must be at least ${Username.MIN_LENGTH} characters`,

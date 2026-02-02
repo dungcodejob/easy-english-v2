@@ -9,11 +9,22 @@ import {
   User,
   UserRole,
 } from '../../domain/entities';
-import type { IPasswordHasher } from '../../domain/ports/password-hasher.interface';
-import type { IUsernameAvailabilityService } from '../../domain/ports/username-availability.interface';
-import type { IUsernameGenerator } from '../../domain/ports/username-generator.interface';
+import { EmailAlreadyExistsException } from '../../domain/exceptions/email-already-exists.exception';
+import {
+  InjectPasswordHasher,
+  type IPasswordHasher,
+} from '../../domain/ports/password-hasher.interface';
+import {
+  InjectUsernameAvailabilityService,
+  type IUsernameAvailabilityService,
+} from '../../domain/ports/username-availability.interface';
+import {
+  InjectUsernameGenerator,
+  type IUsernameGenerator,
+} from '../../domain/ports/username-generator.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
+import { AuthIdentityRepository } from '../../infrastructure/repositories/auth-identity.repository';
 import { RegisterCommand } from './register.command';
 
 @CommandHandler(RegisterCommand)
@@ -25,8 +36,13 @@ export class RegisterHandler implements ICommandHandler<
 
   constructor(
     private readonly em: EntityManager,
+    @InjectUsernameGenerator()
     private readonly usernameGenerator: IUsernameGenerator,
+    @InjectUsernameAvailabilityService()
     private readonly usernameAvailability: IUsernameAvailabilityService,
+
+    private readonly authIdentityRepository: AuthIdentityRepository,
+    @InjectPasswordHasher()
     private readonly hasher: IPasswordHasher,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -34,7 +50,15 @@ export class RegisterHandler implements ICommandHandler<
   async execute(command: RegisterCommand): Promise<RegisterResponseDto> {
     const { email, password, name, tenantName } = command.props;
 
-    // TODO: Phase 4 - Check if email already exists
+    // Phase 4: Check if email already exists
+    const existingUser =
+      await this.authIdentityRepository.findByProviderAndProviderUserId(
+        AuthProvider.LOCAL,
+        email,
+      );
+    if (existingUser) {
+      throw new EmailAlreadyExistsException(email);
+    }
 
     // Create Value Objects
     const emailVO = Email.create(email);

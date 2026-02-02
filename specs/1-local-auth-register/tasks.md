@@ -126,9 +126,9 @@
 
 ### Implementation
 
-- [ ] T026 [US2] Add findByProviderAndProviderUserId method to AuthIdentityRepository at `server/src/modules/auth/infrastructure/repositories/auth-identity.repository.ts`
-- [ ] T027 [US2] Add duplicate email check in RegisterHandler at `server/src/modules/auth/application/commands/register.handler.ts`
-- [ ] T028 [US2] Create EmailAlreadyExistsException at `server/src/modules/auth/domain/exceptions/email-already-exists.exception.ts`
+- [x] T026 [US2] Add findByProviderAndProviderUserId method to AuthIdentityRepository at `server/src/modules/auth/infrastructure/repositories/auth-identity.repository.ts`
+- [x] T027 [US2] Add duplicate email check in RegisterHandler at `server/src/modules/auth/application/commands/register.handler.ts`
+- [x] T028 [US2] Create EmailAlreadyExistsException at `server/src/modules/auth/domain/exceptions/email-already-exists.exception.ts`
 
 ### Verification
 

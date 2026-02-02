@@ -3,8 +3,9 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import 'dotenv/config';
 
-export default defineConfig({
+const databaseConfig = defineConfig({
   driver: PostgreSqlDriver,
+
   dbName: process.env.DB_NAME || 'easy_english',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
@@ -18,3 +19,5 @@ export default defineConfig({
   },
   metadataProvider: TsMorphMetadataProvider,
 });
+
+export default databaseConfig;

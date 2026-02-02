@@ -4,6 +4,7 @@ import { ArgumentInvalidException } from '@core/exceptions';
 export class Email extends ValueObject<string> {
   private constructor(value: string) {
     super({ value });
+    this.validate({ value });
   }
 
   static create(value: string): Email {

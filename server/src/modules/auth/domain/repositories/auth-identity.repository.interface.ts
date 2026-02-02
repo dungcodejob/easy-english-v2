@@ -3,8 +3,8 @@ import { AuthIdentityOrmEntity } from '../../infrastructure/persistence/auth-ide
 export interface IAuthIdentityRepository {
   create(identity: AuthIdentityOrmEntity): AuthIdentityOrmEntity;
   persist(identity: AuthIdentityOrmEntity): void;
-  findByProviderAndUserId(
+  findByProviderAndProviderUserId(
     provider: string,
-    userId: string,
+    providerUserId: string,
   ): Promise<AuthIdentityOrmEntity | null>;
 }

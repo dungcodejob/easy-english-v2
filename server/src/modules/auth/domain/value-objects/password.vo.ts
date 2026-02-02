@@ -4,6 +4,7 @@ import { IPasswordHasher } from '../ports/password-hasher.interface';
 export class Password extends ValueObject<string> {
   private constructor(value: string) {
     super({ value });
+    this.validate({ value });
   }
 
   public getHashedValue(): string {

@@ -21,7 +21,7 @@ export class AuthIdentityRepository implements IAuthIdentityRepository {
     this.em.persist(identity);
   }
 
-  async findByProviderAndUserId(
+  async findByProviderAndProviderUserId(
     provider: string,
     providerUserId: string,
   ): Promise<AuthIdentityOrmEntity | null> {

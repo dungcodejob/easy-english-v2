@@ -1,3 +1,4 @@
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RegisterHandler } from './application/commands/register.handler';
@@ -15,6 +16,9 @@ import {
   usernameGeneratorToken,
 } from './domain/ports/username-generator.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
+import { AuthIdentityOrmEntity } from './infrastructure/persistence/auth-identity.orm-entity';
+import { TenantOrmEntity } from './infrastructure/persistence/tenant.orm-entity';
+import { UserOrmEntity } from './infrastructure/persistence/user.orm-entity';
 import {
   AuthIdentityRepository,
   TenantRepository,
@@ -27,7 +31,15 @@ const repositories = [TenantRepository, UserRepository, AuthIdentityRepository];
 const commandHandlers = [RegisterHandler];
 
 @Module({
-  imports: [CqrsModule],
+  imports: [
+    CqrsModule,
+
+    MikroOrmModule.forFeature([
+      TenantOrmEntity,
+      UserOrmEntity,
+      AuthIdentityOrmEntity,
+    ]),
+  ],
   controllers: [AuthController],
   providers: [
     ...repositories,
