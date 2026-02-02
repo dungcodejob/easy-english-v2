@@ -30,7 +30,7 @@ A new user wants to create an account using their email and password. Upon succe
 
 3. **Given** a visitor submits valid registration data, **When** the registration succeeds, **Then** they receive a success message and are redirected to the login page to authenticate.
 
-4. **Given** a visitor registers with email "john.doe@example.com", **When** the system creates the user account, **Then** a unique username is automatically generated based on the email prefix (e.g., "john.doe_a1b2").
+4. **Given** a visitor registers with email "john.doe@example.com", **When** the system creates the user account, **Then** a unique username is automatically generated based on the email prefix (e.g., "john_doe"), normalized to lowercase alphanumeric + underscore, with sequential suffix if taken (e.g., "john_doe_1").
 
 ---
 
@@ -74,7 +74,7 @@ Users must provide valid input data during registration. The system validates al
 - How does the system handle concurrent registration attempts with the same email? → First successful registration locks the email; second attempt receives duplicate error.
 - What happens if tenant name is empty? → System generates a default tenant name based on user's name (e.g., "[Name]'s Workspace").
 - What happens with very long inputs? → System enforces maximum length limits: email (255), password (128), name (100), tenantName (100), username (50).
-- What happens if the auto-generated username already exists? → System appends a random 4-character suffix to ensure uniqueness and retries.
+- What happens if the auto-generated username already exists? → System appends sequential numeric suffix (_1, _2, ...) to ensure uniqueness.
 
 ## Requirements *(mandatory)*
 
@@ -87,9 +87,10 @@ Users must provide valid input data during registration. The system validates al
 - **FR-005**: System MUST hash passwords using bcrypt algorithm with cost factor 12 before storage (password must never be stored in plain text).
 - **FR-006**: System MUST create a new Tenant with status=ACTIVE and plan=FREE upon successful registration.
 - **FR-007**: System MUST create a new User linked to the newly created Tenant with role=ADMIN.
-- **FR-007a**: System MUST automatically generate a unique username for the user based on the email prefix (part before @).
-- **FR-007b**: System MUST ensure username uniqueness by appending a random 4-character alphanumeric suffix if collision detected.
-- **FR-007c**: System MUST sanitize username by removing special characters and limiting to alphanumeric, dots, and underscores.
+- **FR-007a**: System MUST automatically generate a unique username based on the email prefix (part before @).
+- **FR-007b**: Username constraints: 3-30 chars, lowercase alphanumeric + underscore, must start with letter, no consecutive underscores.
+- **FR-007c**: System MUST normalize username: lowercase, replace dots/hyphens with underscore, remove invalid characters.
+- **FR-007d**: System MUST ensure username uniqueness by appending sequential numeric suffix (_1, _2, ...) if collision detected.
 - **FR-008**: System MUST create an AuthIdentity record with provider=LOCAL, providerUserId=email, and hashed password.
 - **FR-009**: System MUST perform user, tenant, and auth-identity creation as a single atomic transaction.
 - **FR-010**: System MUST return a success response containing: success message, userId, email, and tenantId (excluding sensitive data like password hash).

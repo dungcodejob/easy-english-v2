@@ -10,6 +10,7 @@ import {
   UserRole,
 } from '../../domain/entities';
 import type { IPasswordHasher } from '../../domain/ports/password-hasher.interface';
+import type { IUsernameAvailabilityService } from '../../domain/ports/username-availability.interface';
 import type { IUsernameGenerator } from '../../domain/ports/username-generator.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
@@ -25,6 +26,7 @@ export class RegisterHandler implements ICommandHandler<
   constructor(
     private readonly em: EntityManager,
     private readonly usernameGenerator: IUsernameGenerator,
+    private readonly usernameAvailability: IUsernameAvailabilityService,
     private readonly hasher: IPasswordHasher,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -34,12 +36,11 @@ export class RegisterHandler implements ICommandHandler<
 
     // TODO: Phase 4 - Check if email already exists
 
-    // Generate unique username
-    const usernameStr = this.usernameGenerator.generate({ email });
-    const username = new Username(usernameStr);
-
     // Create Value Objects
     const emailVO = Email.create(email);
+
+    // Resolve username (DDD flow)
+    const username = await this.resolveUsername(email);
 
     // 1. Create Tenant
     const tenant = Tenant.create({
@@ -82,5 +83,18 @@ export class RegisterHandler implements ICommandHandler<
     ]);
 
     return new RegisterResponseDto(user.id, email, tenant.id);
+  }
+
+  /**
+   * Resolve username following DDD flow:
+   * 1. Generate candidate from email
+   * 2. Ensure uniqueness with sequential suffix if needed
+   */
+  private async resolveUsername(email: string): Promise<Username> {
+    // Generate candidate using domain service
+    const candidate = this.usernameGenerator.generate({ email });
+
+    // Ensure unique using availability service
+    return this.usernameAvailability.ensureUnique(candidate);
   }
 }

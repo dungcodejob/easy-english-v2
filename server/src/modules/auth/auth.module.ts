@@ -7,6 +7,10 @@ import {
   passwordHasherToken,
 } from './domain/ports/password-hasher.interface';
 import {
+  usernameAvailabilityServiceProvider,
+  usernameAvailabilityServiceToken,
+} from './domain/ports/username-availability.interface';
+import {
   usernameGeneratorProvider,
   usernameGeneratorToken,
 } from './domain/ports/username-generator.interface';
@@ -17,6 +21,7 @@ import {
   UserRepository,
 } from './infrastructure/repositories';
 import { BcryptPasswordHasher } from './infrastructure/services/bcrypt-password-hasher.service';
+import { UsernameAvailabilityService } from './infrastructure/services/username-availability.service';
 
 const repositories = [TenantRepository, UserRepository, AuthIdentityRepository];
 const commandHandlers = [RegisterHandler];
@@ -30,7 +35,12 @@ const commandHandlers = [RegisterHandler];
 
     passwordHasherProvider(BcryptPasswordHasher),
     usernameGeneratorProvider(UsernameGeneratorService),
+    usernameAvailabilityServiceProvider(UsernameAvailabilityService),
   ],
-  exports: [passwordHasherToken, usernameGeneratorToken],
+  exports: [
+    passwordHasherToken,
+    usernameGeneratorToken,
+    usernameAvailabilityServiceToken,
+  ],
 })
 export class AuthModule {}

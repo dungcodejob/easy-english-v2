@@ -1,12 +1,20 @@
 import { createInjection } from '@shared/utils';
+import { Username } from '../value-objects/username.vo';
 
 export interface GenerateUsernameProps {
   email: string;
 }
 
+/**
+ * UsernameGenerator (Domain Service)
+ *
+ * Responsibilities:
+ * - Stateless
+ * - Does NOT call DB
+ * - Only generates candidate username from email
+ */
 export interface IUsernameGenerator {
-  generate(props: GenerateUsernameProps): string;
-  appendSuffix(username: string): string;
+  generate(props: GenerateUsernameProps): Username;
 }
 
 const { token, inject, provider } =

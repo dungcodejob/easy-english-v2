@@ -60,6 +60,10 @@
 ### Domain Services
 
 - [x] T012 Create UsernameGenerator service at `server/src/modules/auth/domain/services/username-generator.service.ts`
+- [x] T012a Create IUsernameAvailabilityService interface at `server/src/modules/auth/domain/ports/username-availability.interface.ts`
+- [x] T012b Implement UsernameAvailabilityService at `server/src/modules/auth/infrastructure/services/username-availability.service.ts`
+- [x] T012c Update Username VO with normalization, constraints (3-30 chars, lowercase alphanumeric + underscore), and `withSuffix()` method
+- [x] T012d Update RegisterHandler with `resolveUsername()` flow using DDD pattern
 
 ### Repository Interfaces
 
