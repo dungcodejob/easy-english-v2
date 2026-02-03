@@ -108,6 +108,16 @@ Users must provide valid input data during registration. The system validates al
 
 - **Session**: Created after registration to manage the user's login session with tokens, device info, and expiration.
 
+### Domain-Persistence Separation (DDD)
+
+- **Mapper Pattern**: System uses mapper classes (TenantMapper, UserMapper, AuthIdentityMapper) to convert between domain entities and ORM entities, maintaining clean separation between domain logic and persistence concerns.
+
+- **Entity Rehydration**: Domain entities implement `rehydrate()` static methods to reconstruct domain objects from database records, enabling read operations while preserving domain invariants.
+
+- **Repository Injection**: Repository interfaces use dependency injection pattern via `createInjection()` utility for loose coupling between domain and infrastructure layers.
+
+- **Password Hashing**: Password VO accepts pre-hashed values (hashing performed in application layer using IPasswordHasher port), maintaining single responsibility and avoiding infrastructure dependency in domain layer.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes

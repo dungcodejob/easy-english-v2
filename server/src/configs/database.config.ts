@@ -1,16 +1,14 @@
 import { defineConfig } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+import { ENV_KEY } from '@shared/constants';
 import 'dotenv/config';
 
 const databaseConfig = defineConfig({
   driver: PostgreSqlDriver,
 
-  dbName: process.env.DB_NAME || 'easy_english',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
+  clientUrl: process.env[ENV_KEY.DATABASE_URL],
+
   entities: ['./dist/**/*.orm-entity.js'],
   entitiesTs: ['./src/**/*.orm-entity.ts'],
   migrations: {

@@ -24,6 +24,11 @@ import {
 } from '../../domain/ports/username-generator.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
+import {
+  AuthIdentityMapper,
+  TenantMapper,
+  UserMapper,
+} from '../../infrastructure/mappers';
 import { AuthIdentityRepository } from '../../infrastructure/repositories/auth-identity.repository';
 import { RegisterCommand } from './register.command';
 
@@ -45,6 +50,9 @@ export class RegisterHandler implements ICommandHandler<
     @InjectPasswordHasher()
     private readonly hasher: IPasswordHasher,
     private readonly eventEmitter: EventEmitter2,
+    private readonly tenantMapper: TenantMapper,
+    private readonly userMapper: UserMapper,
+    private readonly authIdentityMapper: AuthIdentityMapper,
   ) {}
 
   async execute(command: RegisterCommand): Promise<RegisterResponseDto> {
@@ -80,8 +88,9 @@ export class RegisterHandler implements ICommandHandler<
       role: UserRole.ADMIN,
     });
 
+    const passwordHashed = await this.hasher.hash(password);
     // 3. Create Password (Hash)
-    const passwordVO = await Password.create(password, this.hasher);
+    const passwordVO = Password.create(passwordHashed);
 
     // 4. Create AuthIdentity
     const authIdentity = AuthIdentity.create({
@@ -91,9 +100,16 @@ export class RegisterHandler implements ICommandHandler<
       password: passwordVO,
     });
 
-    this.em.persist(tenant);
-    this.em.persist(user);
-    this.em.persist(authIdentity);
+    // Convert domain entities to ORM entities using mappers
+    const tenantOrm = this.tenantMapper.toPersistence(tenant);
+    const userOrm = this.userMapper.toPersistence(user);
+    const authIdentityOrm = this.authIdentityMapper.toPersistence(authIdentity);
+
+    // Persist ORM entities
+    this.em.persist(tenantOrm);
+    this.em.persist(userOrm);
+    this.em.persist(authIdentityOrm);
+
     // Persist all entities atomically
     await this.em.flush();
 

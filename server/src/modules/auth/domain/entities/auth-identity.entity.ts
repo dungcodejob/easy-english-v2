@@ -54,4 +54,8 @@ export class AuthIdentity extends AggregateRoot {
     );
     return authIdentity;
   }
+
+  static rehydrate(props: CreateEntityProps<AuthIdentityProps>): AuthIdentity {
+    return new AuthIdentity(props);
+  }
 }

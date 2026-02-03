@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:create": "mikro-orm migration:create --config ./src/configs/database.config.ts",
+    "migration:up": "mikro-orm migration:up --config ./src/configs/database.config.ts",
+    "migration:down": "mikro-orm migration:down --config ./src/configs/database.config.ts",
+    "migration:fresh": "mikro-orm migration:fresh --config ./src/configs/database.config.ts"
   },
   "dependencies": {
     "@mikro-orm/core": "^6.6.6",
@@ -34,6 +38,7 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "ms": "^2.1.3",
     "neverthrow": "^8.2.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

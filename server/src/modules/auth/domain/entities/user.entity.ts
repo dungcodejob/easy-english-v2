@@ -60,4 +60,8 @@ export class User extends AggregateRoot {
     );
     return user;
   }
+
+  static rehydrate(props: CreateEntityProps<UserProps>): User {
+    return new User(props);
+  }
 }

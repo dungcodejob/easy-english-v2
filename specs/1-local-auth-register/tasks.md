@@ -81,6 +81,44 @@
 
 ---
 
+## Phase 2a: Mapper Implementation (DDD Persistence Layer)
+
+**Purpose**: Implement mapper pattern to separate domain entities from ORM entities
+
+### Mapper Classes
+
+- [x] T018a Create TenantMapper at `server/src/modules/auth/infrastructure/mappers/tenant.mapper.ts`
+- [x] T018b Create UserMapper at `server/src/modules/auth/infrastructure/mappers/user.mapper.ts` (handles tenantId → tenant reference)
+- [x] T018c Create AuthIdentityMapper at `server/src/modules/auth/infrastructure/mappers/auth-identity.mapper.ts` (handles userId → user reference)
+- [x] T018d Create barrel export at `server/src/modules/auth/infrastructure/mappers/index.ts`
+
+### Entity Rehydration
+
+- [x] T018e Add `rehydrate()` static method to User entity at `server/src/modules/auth/domain/entities/user.entity.ts`
+- [x] T018f Add `rehydrate()` static method to AuthIdentity entity at `server/src/modules/auth/domain/entities/auth-identity.entity.ts`
+- [x] T018g Implement `toDomain()` method in UserMapper (reconstructs domain entities from ORM)
+- [x] T018h Implement `toDomain()` method in AuthIdentityMapper (reconstructs domain entities from ORM)
+
+### Repository Injection Pattern
+
+- [x] T018i Add injection helpers to ITenantRepository at `server/src/modules/auth/domain/repositories/tenant.repository.interface.ts`
+- [x] T018j Add injection helpers to IUserRepository at `server/src/modules/auth/domain/repositories/user.repository.interface.ts`
+- [x] T018k Add injection helpers to IAuthIdentityRepository at `server/src/modules/auth/domain/repositories/auth-identity.repository.interface.ts`
+
+### Password VO Refactoring
+
+- [x] T018l Update Password VO to accept pre-hashed values at `server/src/modules/auth/domain/value-objects/password.vo.ts`
+- [x] T018m Update RegisterHandler to hash password before creating Password VO
+
+### Integration
+
+- [x] T018n Update RegisterHandler to inject and use mappers for `toPersistence()`
+- [x] T018o Register mapper providers in `server/src/modules/auth/auth.module.ts`
+
+**Checkpoint**: Mapper layer complete - domain and persistence layers properly separated
+
+---
+
 ## Phase 3: User Story 1 - New User Registration (Priority: P1) 🎯 MVP
 
 **Goal**: A new user can create an account with email/password, which creates a new tenant and assigns them as ADMIN
@@ -166,24 +204,24 @@
 
 ### Module Structure
 
-- [ ] T036 [P] Create auth module directory structure at `client/src/modules/auth/`
-- [ ] T037 [P] Create auth types at `client/src/modules/auth/types/auth.types.ts`
+- [x] T036 [P] Create auth module directory structure at `client/src/modules/auth/`
+- [x] T037 [P] Create auth types at `client/src/modules/auth/types/auth.types.ts`
 
 ### API Layer
 
-- [ ] T038 Create auth API service at `client/src/modules/auth/services/auth.api.ts`
-- [ ] T039 Create useRegister mutation hook at `client/src/modules/auth/hooks/use-register.ts`
+- [x] T038 Create auth API service at `client/src/modules/auth/services/auth.api.ts`
+- [x] T039 Create useRegister mutation hook at `client/src/modules/auth/hooks/use-register.ts`
 
 ### Components
 
-- [ ] T040 [P] Create PasswordInput component at `client/src/modules/auth/components/password-input.tsx`
-- [ ] T041 Create RegisterForm component at `client/src/modules/auth/components/register-form.tsx`
+- [x] T040 [P] Create PasswordInput component at `client/src/modules/auth/components/password-input.tsx`
+- [x] T041 Create RegisterForm component at `client/src/modules/auth/components/register-form.tsx`
 
 ### Page and Route
 
-- [ ] T042 Create RegisterPage at `client/src/modules/auth/pages/register.page.tsx`
-- [ ] T043 Add /register route to `client/src/routes.ts`
-- [ ] T044 Create module barrel export at `client/src/modules/auth/index.ts`
+- [x] T042 Create RegisterPage at `client/src/modules/auth/pages/register.page.tsx`
+- [x] T043 Add /register route to `client/src/routes.ts`
+- [x] T044 Create module barrel export at `client/src/modules/auth/index.ts`
 
 ### Frontend Verification
 

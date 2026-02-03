@@ -16,6 +16,11 @@ import {
   usernameGeneratorToken,
 } from './domain/ports/username-generator.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
+import {
+  AuthIdentityMapper,
+  TenantMapper,
+  UserMapper,
+} from './infrastructure/mappers';
 import { AuthIdentityOrmEntity } from './infrastructure/persistence/auth-identity.orm-entity';
 import { TenantOrmEntity } from './infrastructure/persistence/tenant.orm-entity';
 import { UserOrmEntity } from './infrastructure/persistence/user.orm-entity';
@@ -29,6 +34,7 @@ import { UsernameAvailabilityService } from './infrastructure/services/username-
 
 const repositories = [TenantRepository, UserRepository, AuthIdentityRepository];
 const commandHandlers = [RegisterHandler];
+const mappers = [TenantMapper, UserMapper, AuthIdentityMapper];
 
 @Module({
   imports: [
@@ -44,6 +50,7 @@ const commandHandlers = [RegisterHandler];
   providers: [
     ...repositories,
     ...commandHandlers,
+    ...mappers,
 
     passwordHasherProvider(BcryptPasswordHasher),
     usernameGeneratorProvider(UsernameGeneratorService),

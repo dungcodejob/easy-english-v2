@@ -1,5 +1,4 @@
 import { ValueObject } from '@core/ddd';
-import { IPasswordHasher } from '../ports/password-hasher.interface';
 
 export class Password extends ValueObject<string> {
   private constructor(value: string) {
@@ -11,12 +10,8 @@ export class Password extends ValueObject<string> {
     return this.props.value;
   }
 
-  public static async create(
-    plainText: string,
-    hasher: IPasswordHasher,
-  ): Promise<Password> {
-    const hash = await hasher.hash(plainText);
-    return new Password(hash);
+  public static create(hashedValue: string): Password {
+    return new Password(hashedValue);
   }
 
   protected validate({ value }: { value: string }): void {
@@ -26,10 +21,7 @@ export class Password extends ValueObject<string> {
     }
   }
 
-  public async compare(
-    plainText: string,
-    hasher: IPasswordHasher,
-  ): Promise<boolean> {
-    return hasher.compare(plainText, this.props.value);
+  public compare(plainText: string): boolean {
+    return plainText === this.props.value;
   }
 }

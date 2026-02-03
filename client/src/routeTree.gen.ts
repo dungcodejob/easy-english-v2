@@ -9,50 +9,83 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './root'
-import { Route as pagesIndexRouteImport } from './pages/index'
+import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
+import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
 
-const pagesIndexRoute = pagesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const DotModulesShellPagesUnauthenticatedLayoutRoute =
+  DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
+    id: '/_(unauthenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotModulesAuthPagesRegisterDotpageRoute =
+  DotModulesAuthPagesRegisterDotpageRouteImport.update({
+    id: '/register',
+    path: '/register',
+    getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof pagesIndexRoute
+  '/': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof pagesIndexRoute
+  '/': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof pagesIndexRoute
+  '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/register'
+  id: '__root__' | '/_(unauthenticated)' | '/_(unauthenticated)/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  pagesIndexRoute: typeof pagesIndexRoute
+  DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_(unauthenticated)': {
+      id: '/_(unauthenticated)'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof pagesIndexRouteImport
+      preLoaderRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_(unauthenticated)/register': {
+      id: '/_(unauthenticated)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport
+      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
   }
 }
 
+interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
+  DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
+}
+
+const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
+  {
+    DotModulesAuthPagesRegisterDotpageRoute:
+      DotModulesAuthPagesRegisterDotpageRoute,
+  }
+
+const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =
+  DotModulesShellPagesUnauthenticatedLayoutRoute._addFileChildren(
+    DotModulesShellPagesUnauthenticatedLayoutRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
-  pagesIndexRoute: pagesIndexRoute,
+  DotModulesShellPagesUnauthenticatedLayoutRoute:
+    DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,10 @@
-import { BaseResponseDto } from '@app/models';
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiErrorDto,
+  ApiErrorResponseDto,
+} from '../../../core/api/dto/api-response.dto';
+import { ErrorType } from '../../../core/api/response.types';
 
 /**
  * Error Response Interface
@@ -15,127 +19,113 @@ export interface ErrorResponseConfig {
  * Common Error Examples
  */
 export const validationErrorExample = {
-  statusCode: 400,
-  errorCode: 'Validation.Failed',
   success: false,
-  message: 'Validation failed',
-  result: {
-    meta: {
-      errors: [
-        {
-          field: 'email',
-          message: 'Email must be a valid email address',
-          value: 'invalid-email',
-        },
-        {
-          field: 'password',
-          message: 'Password must be at least 8 characters long',
-          value: '123',
-        },
-      ],
-    },
+  error: {
+    code: 'Validation.Failed',
+    type: ErrorType.CLIENT,
+    message: 'Validation failed',
+    details: [
+      {
+        field: 'email',
+        message: 'Email must be a valid email address',
+      },
+      {
+        field: 'password',
+        message: 'Password must be at least 8 characters long',
+      },
+    ],
   },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/auth/register',
-  method: 'POST',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const unauthorizedExample = {
-  statusCode: 401,
-  errorCode: 'Auth.Unauthorized',
   success: false,
-  message: 'Unauthorized',
-  result: null,
+  error: {
+    code: 'Auth.Unauthorized',
+    type: ErrorType.CLIENT,
+    message: 'Unauthorized',
+  },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/users/profile',
-  method: 'GET',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const forbiddenExample = {
-  statusCode: 403,
-  errorCode: 'Auth.Forbidden',
   success: false,
-  message: 'Forbidden - Insufficient permissions',
-  result: null,
+  error: {
+    code: 'Auth.Forbidden',
+    type: ErrorType.CLIENT,
+    message: 'Forbidden - Insufficient permissions',
+  },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/admin/users',
-  method: 'GET',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const notFoundExample = {
-  statusCode: 404,
-  errorCode: 'Resource.NotFound',
   success: false,
-  message: 'Resource not found',
-  result: null,
+  error: {
+    code: 'Resource.NotFound',
+    type: ErrorType.CLIENT,
+    message: 'Resource not found',
+  },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/users/999',
-  method: 'GET',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const rateLimitExample = {
-  statusCode: 429,
-  errorCode: 'RateLimit.Exceeded',
   success: false,
-  message: 'Too many requests. Please try again later.',
-  result: {
-    meta: {
-      limit: 100,
-      remaining: 0,
-      resetTime: '2024-01-01T01:00:00.000Z',
-    },
+  error: {
+    code: 'RateLimit.Exceeded',
+    type: ErrorType.CLIENT,
+    message: 'Too many requests. Please try again later.',
   },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/auth/login',
-  method: 'POST',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const internalServerErrorExample = {
-  statusCode: 500,
-  errorCode: 'App.InternalServerError',
   success: false,
-  message: 'Internal server error',
-  result: null,
+  error: {
+    code: 'App.InternalServerError',
+    type: ErrorType.SYSTEM,
+    message: 'Internal server error',
+  },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/collections',
-  method: 'POST',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const conflictExample = {
-  statusCode: 409,
-  errorCode: 'Resource.Conflict',
   success: false,
-  message: 'Resource already exists',
-  result: {
-    meta: {
-      conflictField: 'email',
-      conflictValue: 'user@example.com',
-    },
+  error: {
+    code: 'Resource.Conflict',
+    type: ErrorType.CLIENT,
+    message: 'Resource already exists',
+    details: [
+      {
+        field: 'email',
+        message: 'Email already exists',
+      },
+    ],
   },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/auth/register',
-  method: 'POST',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 export const unprocessableEntityExample = {
-  statusCode: 422,
-  errorCode: 'Validation.UnprocessableEntity',
   success: false,
-  message: 'The request was well-formed but contains semantic errors',
-  result: {
-    meta: {
-      errors: [
-        {
-          field: 'url',
-          message: 'URL is not accessible',
-          value: 'https://invalid-domain.xyz',
-        },
-      ],
-    },
+  error: {
+    code: 'Validation.UnprocessableEntity',
+    type: ErrorType.CLIENT,
+    message: 'The request was well-formed but contains semantic errors',
+    details: [
+      {
+        field: 'url',
+        message: 'URL is not accessible',
+      },
+    ],
   },
   timestamp: '2024-01-01T00:00:00.000Z',
-  url: '/api/bookmarks',
-  method: 'POST',
+  correlationId: '123e4567-e89b-12d3-a456-426614174000',
 };
 
 /**
@@ -197,53 +187,22 @@ export const CRUD_ERROR_RESPONSES: ErrorResponseConfig[] = [
  *
  * @param errorConfigs Array of error response configurations
  * @returns Combined decorators for all error responses
- *
- * @example
- * ```typescript
- * @ApiErrorResponses([
- *   { status: 400, description: 'Validation Error', example: validationErrorExample },
- *   { status: 401, description: 'Unauthorized', example: unauthorizedExample },
- *   { status: 429, description: 'Rate Limited', example: rateLimitExample }
- * ])
- * @Post('login')
- * async login() { ... }
- * ```
- *
- * @example
- * // Using predefined sets
- * @ApiErrorResponses(AUTH_ERROR_RESPONSES)
- * @Post('login')
- * async login() { ... }
- *
- * @ApiErrorResponses(CRUD_ERROR_RESPONSES)
- * @Get(':id')
- * async findOne() { ... }
  */
 export const ApiErrorResponses = (errorConfigs: ErrorResponseConfig[]) => {
   const decorators = [
-    ApiExtraModels(BaseResponseDto),
+    ApiExtraModels(ApiErrorResponseDto, ApiErrorDto),
     ...errorConfigs.map((config) =>
       ApiResponse({
         status: config.status,
         description: config.description,
         schema: {
           allOf: [
-            { $ref: getSchemaPath(BaseResponseDto) },
+            { $ref: getSchemaPath(ApiErrorResponseDto) },
             {
-              properties: {
-                success: {
-                  type: 'boolean',
-                  example: false,
-                },
-                result: {
-                  type: 'object',
-                  nullable: true,
-                  example: config.example?.result || null,
-                },
-              },
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              example: config.example,
             },
           ],
-          example: config.example,
         },
       }),
     ),

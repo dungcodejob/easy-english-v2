@@ -1,5 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
+import { UUID_VERSION } from '@shared/constants';
+import { Constructor } from '@shared/utils';
 import { Type } from 'class-transformer';
 import {
   IsArray,
@@ -24,9 +26,6 @@ import {
   NotEquals,
   ValidateNested,
 } from 'class-validator';
-
-import { UUID_VERSION } from '@app/constants';
-import { Constructor } from '@app/utils';
 import { ToBoolean, ToLowerCase, ToUpperCase } from './transform.decorators';
 import { IsNullable } from './validators/is-nullable.decorator';
 import { IsPassword } from './validators/is-password.decorator';

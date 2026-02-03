@@ -1,9 +1,12 @@
-import { BaseResponseDto } from '@app/models';
 import { Type, applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiSuccessResponseDto,
+  PaginationDto,
+} from '../../../core/api/dto/api-response.dto';
+
 /**
  * Generic Single Response Decorator
- * Sử dụng applyDecorators và getSchemaPath để tạo response documentation
  */
 export const ApiOkResponseSingle = <
   GenericType extends Type<unknown>,
@@ -15,26 +18,18 @@ export const ApiOkResponseSingle = <
     dataType,
     description = `Successful response with ${dataType?.name} data`,
   } = options;
+
   if (dataType) {
     return applyDecorators(
-      ApiExtraModels(BaseResponseDto, dataType),
+      ApiExtraModels(ApiSuccessResponseDto, dataType),
       ApiOkResponse({
         description,
         schema: {
           allOf: [
-            { $ref: getSchemaPath(BaseResponseDto) },
+            { $ref: getSchemaPath(ApiSuccessResponseDto) },
             {
               properties: {
-                success: {
-                  type: 'boolean',
-                  example: true,
-                },
-                result: {
-                  type: 'object',
-                  properties: {
-                    data: { $ref: getSchemaPath(dataType) },
-                  },
-                },
+                data: { $ref: getSchemaPath(dataType) },
               },
             },
           ],
@@ -44,17 +39,15 @@ export const ApiOkResponseSingle = <
   }
 
   return applyDecorators(
+    ApiExtraModels(ApiSuccessResponseDto),
     ApiOkResponse({
       description,
       schema: {
         allOf: [
-          { $ref: getSchemaPath(BaseResponseDto) },
+          { $ref: getSchemaPath(ApiSuccessResponseDto) },
           {
             properties: {
-              success: {
-                type: 'boolean',
-                example: true,
-              },
+              data: { nullable: true },
             },
           },
         ],
@@ -76,35 +69,17 @@ export const ApiOkResponseList = <GenericType extends Type<unknown>>(options: {
   } = options;
 
   return applyDecorators(
-    ApiExtraModels(BaseResponseDto, itemType),
+    ApiExtraModels(ApiSuccessResponseDto, itemType),
     ApiOkResponse({
       description,
       schema: {
         allOf: [
-          { $ref: getSchemaPath(BaseResponseDto) },
+          { $ref: getSchemaPath(ApiSuccessResponseDto) },
           {
             properties: {
-              success: {
-                type: 'boolean',
-                example: true,
-              },
-              result: {
-                type: 'object',
-                properties: {
-                  items: {
-                    type: 'array',
-                    items: { $ref: getSchemaPath(itemType) },
-                  },
-                  meta: {
-                    type: 'object',
-                    properties: {
-                      count: {
-                        type: 'number',
-                        example: 0,
-                      },
-                    },
-                  },
-                },
+              data: {
+                type: 'array',
+                items: { $ref: getSchemaPath(itemType) },
               },
             },
           },
@@ -128,53 +103,19 @@ export const ApiOkResponsePagination = <
     description = `Successful paginated response with ${itemType.name} items`,
   } = options;
   return applyDecorators(
-    ApiExtraModels(BaseResponseDto, itemType),
+    ApiExtraModels(ApiSuccessResponseDto, itemType, PaginationDto),
     ApiOkResponse({
       description,
       schema: {
         allOf: [
-          { $ref: getSchemaPath(BaseResponseDto) },
+          { $ref: getSchemaPath(ApiSuccessResponseDto) },
           {
             properties: {
-              success: {
-                type: 'boolean',
-                example: true,
+              data: {
+                type: 'array',
+                items: { $ref: getSchemaPath(itemType) },
               },
-              result: {
-                type: 'object',
-                properties: {
-                  items: {
-                    type: 'array',
-                    items: { $ref: getSchemaPath(itemType) },
-                  },
-                  meta: {
-                    type: 'object',
-                    properties: {
-                      pagination: {
-                        type: 'object',
-                        properties: {
-                          page: {
-                            type: 'number',
-                            example: 1,
-                          },
-                          limit: {
-                            type: 'number',
-                            example: 10,
-                          },
-                          total: {
-                            type: 'number',
-                            example: 100,
-                          },
-                          totalPages: {
-                            type: 'number',
-                            example: 10,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
+              pagination: { $ref: getSchemaPath(PaginationDto) },
             },
           },
         ],
@@ -184,7 +125,6 @@ export const ApiOkResponsePagination = <
 };
 
 // Legacy factory functions for backward compatibility
-// Deprecated: Use decorators above instead
 export const createSwaggerResponseDto = <T>(dataType: Type<T>) =>
   ApiOkResponseSingle({ dataType, description: '' });
 export const createSwaggerListResponseDto = <T>(itemType: Type<T>) =>

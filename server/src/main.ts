@@ -1,10 +1,29 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { appConfig, AppConfig, httpConfig, HttpConfig } from './configs';
 import { GlobalExceptionFilter, ResponseInterceptor } from './core/api';
+import { swagger } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const appConfigValues = app.get<AppConfig>(appConfig.KEY);
+  // const cookieConfigValues = app.get<CookieConfig>(cookieConfig.KEY);
+  const httpConfigValues = app.get<HttpConfig>(httpConfig.KEY);
+
+  const port = appConfigValues.port;
+  const domain = appConfigValues.domain;
+  const testing = appConfigValues.testing;
+
+  const globalPrefix = 'api';
+  app.enableCors({
+    origin: httpConfigValues.corsOrigins, // cho phép Angular gọi
+    credentials: true, // nếu bạn gửi cookie/token
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
+  app.setGlobalPrefix(globalPrefix);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -16,6 +35,23 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
-  await app.listen(process.env.PORT ?? 3000);
+  if (httpConfigValues.versioningEnable) {
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: httpConfigValues.version,
+      prefix: httpConfigValues.versioningPrefix,
+    });
+  }
+
+  swagger(app, appConfigValues);
+
+  await app.listen(port, testing ? '127.0.0.1' : '0.0.0.0');
+
+  console.log(`Server in ${process.env.NODE_ENV} mode`);
+  console.log(`Server is listening on :${port}/${globalPrefix}`);
+  console.log(`Swagger: ${domain}/${globalPrefix}/docs`);
 }
-void bootstrap();
+bootstrap().catch((err) => {
+  console.error('Error during bootstrap:', err);
+  process.exit(1);
+});
