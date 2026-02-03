@@ -31,6 +31,7 @@ This specification defines the **Local Authentication Login Flow** where a user 
 - Q: What are the expiration durations for access and refresh tokens? → A: 7 days for access tokens, 30 days for refresh tokens (configurable via environment variables)
 - Q: Should the system track consecutive failed login attempts per user/IP? → A: Yes, track failed attempts for rate limiting integration (infrastructure layer can use this data for brute-force protection)
 - Q: Should there be a limit on maximum concurrent sessions per user? → A: Yes, limit to 5 concurrent sessions per user (oldest session auto-revoked when limit exceeded)
+- Q: Should password complexity be validated during login? → A: No, login only verifies hash match; complexity validation belongs in registration flow
 
 ## Ubiquitous Language
 
@@ -344,8 +345,7 @@ Emitted when a new session is established.
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can successfully authenticate with valid credentials and receive access tokens within 500ms (95th percentile)
-- **SC-002**: Invalid login attempts are rejected with appropriate errors without leaking account existence information (100% of attempts)
+
 - **SC-003**: All login attempts (successful and failed) generate audit events that can be consumed for security monitoring (100% coverage)
 - **SC-004**: Blocked accounts are prevented from authenticating even with valid credentials (100% of attempts)
 - **SC-005**: The domain model can be tested independently of infrastructure without requiring NestJS, databases, or HTTP servers
