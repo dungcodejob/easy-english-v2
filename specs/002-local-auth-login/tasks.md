@@ -75,12 +75,12 @@ graph TD
 
 ### Tasks
 
-- [ ] T001 Install backend dependencies: `@node-rs/argon2`, `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `@nestjs/schedule`
-- [ ] T002 Install frontend dependencies: `@tanstack/react-query`, `axios` (if not already installed)
-- [ ] T003 Generate RSA key pair for JWT signing in `server/keys/` directory
-- [ ] T004 Configure backend environment variables in `server/.env` (JWT paths, cookie settings, rate limiting, argon2 config)
-- [ ] T005 Configure frontend environment variables in `client/.env` (API base URL)
-- [ ] T006 Enable CORS with credentials support in `server/src/main.ts` (set `credentials: true`, `origin` from env)
+- [x] T001 Install backend dependencies: `@node-rs/argon2`, `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `@nestjs/schedule`
+- [x] T002 Install frontend dependencies: `@tanstack/react-query`, `axios` (if not already installed)
+- [x] T003 Generate RSA key pair for JWT signing in `server/keys/` directory
+- [x] T004 Configure backend environment variables in `server/.env` (JWT paths, cookie settings, rate limiting, argon2 config)
+- [x] T005 Configure frontend environment variables in `client/.env` (API base URL)
+- [x] T006 Enable CORS with credentials support in `server/src/main.ts` (set `credentials: true`, `origin` from env)
 
 ---
 
