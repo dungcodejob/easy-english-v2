@@ -1,10 +1,9 @@
 import { createInjection } from '@shared/utils';
-import { UserOrmEntity } from '../../infrastructure/persistence/user.orm-entity';
+import { User } from '../entities';
 
 export interface IUserRepository {
-  create(user: UserOrmEntity): UserOrmEntity;
-  persist(user: UserOrmEntity): void;
-  findByEmail(email: string): Promise<UserOrmEntity | null>;
+  persist(user: User): void;
+  findByEmail(email: string): Promise<User | null>;
 }
 
 const { inject, provider, token } =

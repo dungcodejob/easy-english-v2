@@ -1,7 +1,9 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { Tenant } from '../../domain/entities';
 import { ITenantRepository } from '../../domain/repositories/tenant.repository.interface';
+import { TenantMapper } from '../mappers/tenant.mapper';
 import { TenantOrmEntity } from '../persistence/tenant.orm-entity';
 
 @Injectable()
@@ -10,14 +12,11 @@ export class TenantRepository implements ITenantRepository {
     @InjectRepository(TenantOrmEntity)
     private readonly repo: EntityRepository<TenantOrmEntity>,
     private readonly em: EntityManager,
+    private readonly mapper: TenantMapper,
   ) {}
 
-  create(tenant: TenantOrmEntity): TenantOrmEntity {
-    this.em.persist(tenant);
-    return tenant;
-  }
-
-  persist(tenant: TenantOrmEntity): void {
-    this.em.persist(tenant);
+  persist(tenant: Tenant): void {
+    const ormEntity = this.mapper.toPersistence(tenant);
+    this.em.persist(ormEntity);
   }
 }

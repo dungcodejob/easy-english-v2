@@ -1,7 +1,9 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { User } from '../../domain/entities';
 import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { UserMapper } from '../mappers/user.mapper';
 import { UserOrmEntity } from '../persistence/user.orm-entity';
 
 @Injectable()
@@ -10,18 +12,16 @@ export class UserRepository implements IUserRepository {
     @InjectRepository(UserOrmEntity)
     private readonly repo: EntityRepository<UserOrmEntity>,
     private readonly em: EntityManager,
+    private readonly mapper: UserMapper,
   ) {}
 
-  create(user: UserOrmEntity): UserOrmEntity {
-    this.em.persist(user);
-    return user;
+  persist(user: User): void {
+    const ormEntity = this.mapper.toPersistence(user);
+    this.em.persist(ormEntity);
   }
 
-  persist(user: UserOrmEntity): void {
-    this.em.persist(user);
-  }
-
-  async findByEmail(email: string): Promise<UserOrmEntity | null> {
-    return this.repo.findOne({ email });
+  async findByEmail(email: string): Promise<User | null> {
+    const ormEntity = await this.repo.findOne({ email });
+    return ormEntity ? this.mapper.toDomain(ormEntity) : null;
   }
 }

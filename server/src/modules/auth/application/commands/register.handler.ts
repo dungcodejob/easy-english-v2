@@ -22,14 +22,20 @@ import {
   InjectUsernameGenerator,
   type IUsernameGenerator,
 } from '../../domain/ports/username-generator.interface';
+import {
+  injectAuthIdentityRepository,
+  type IAuthIdentityRepository,
+} from '../../domain/repositories/auth-identity.repository.interface';
+import {
+  injectTenantRepository,
+  type ITenantRepository,
+} from '../../domain/repositories/tenant.repository.interface';
+import {
+  injectUserRepository,
+  type IUserRepository,
+} from '../../domain/repositories/user.repository.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
-import {
-  AuthIdentityMapper,
-  TenantMapper,
-  UserMapper,
-} from '../../infrastructure/mappers';
-import { AuthIdentityRepository } from '../../infrastructure/repositories/auth-identity.repository';
 import { RegisterCommand } from './register.command';
 
 @CommandHandler(RegisterCommand)
@@ -41,30 +47,37 @@ export class RegisterHandler implements ICommandHandler<
 
   constructor(
     private readonly em: EntityManager,
+
+    // Repositories (following DI pattern)
+    @injectTenantRepository()
+    private readonly tenantRepo: ITenantRepository,
+    @injectUserRepository()
+    private readonly userRepo: IUserRepository,
+    @injectAuthIdentityRepository()
+    private readonly authIdentityRepo: IAuthIdentityRepository,
+
+    // Domain services
+    @InjectPasswordHasher()
+    private readonly hasher: IPasswordHasher,
     @InjectUsernameGenerator()
     private readonly usernameGenerator: IUsernameGenerator,
     @InjectUsernameAvailabilityService()
     private readonly usernameAvailability: IUsernameAvailabilityService,
 
-    private readonly authIdentityRepository: AuthIdentityRepository,
-    @InjectPasswordHasher()
-    private readonly hasher: IPasswordHasher,
+    // Infrastructure
     private readonly eventEmitter: EventEmitter2,
-    private readonly tenantMapper: TenantMapper,
-    private readonly userMapper: UserMapper,
-    private readonly authIdentityMapper: AuthIdentityMapper,
   ) {}
 
   async execute(command: RegisterCommand): Promise<RegisterResponseDto> {
     const { email, password, name, tenantName } = command.props;
 
     // Phase 4: Check if email already exists
-    const existingUser =
-      await this.authIdentityRepository.findByProviderAndProviderUserId(
+    const existingAuthIdentity =
+      await this.authIdentityRepo.findByProviderAndProviderUserId(
         AuthProvider.LOCAL,
         email,
       );
-    if (existingUser) {
+    if (existingAuthIdentity) {
       throw new EmailAlreadyExistsException(email);
     }
 
@@ -100,15 +113,10 @@ export class RegisterHandler implements ICommandHandler<
       password: passwordVO,
     });
 
-    // Convert domain entities to ORM entities using mappers
-    const tenantOrm = this.tenantMapper.toPersistence(tenant);
-    const userOrm = this.userMapper.toPersistence(user);
-    const authIdentityOrm = this.authIdentityMapper.toPersistence(authIdentity);
-
-    // Persist ORM entities
-    this.em.persist(tenantOrm);
-    this.em.persist(userOrm);
-    this.em.persist(authIdentityOrm);
+    // 5: Persist all entities (repositories handle domain→ORM conversion internally)
+    this.tenantRepo.persist(tenant);
+    this.userRepo.persist(user);
+    this.authIdentityRepo.persist(authIdentity);
 
     // Persist all entities atomically
     await this.em.flush();

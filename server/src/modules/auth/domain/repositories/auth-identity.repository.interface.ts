@@ -1,13 +1,12 @@
 import { createInjection } from '@shared/utils';
-import { AuthIdentityOrmEntity } from '../../infrastructure/persistence/auth-identity.orm-entity';
+import { AuthIdentity } from '../entities';
 
 export interface IAuthIdentityRepository {
-  create(identity: AuthIdentityOrmEntity): AuthIdentityOrmEntity;
-  persist(identity: AuthIdentityOrmEntity): void;
+  persist(identity: AuthIdentity): void;
   findByProviderAndProviderUserId(
     provider: string,
     providerUserId: string,
-  ): Promise<AuthIdentityOrmEntity | null>;
+  ): Promise<AuthIdentity | null>;
 }
 
 const { inject, provider, token } = createInjection<IAuthIdentityRepository>(

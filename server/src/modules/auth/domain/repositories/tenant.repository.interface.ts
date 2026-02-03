@@ -1,9 +1,8 @@
 import { createInjection } from '@shared/utils';
-import { TenantOrmEntity } from '../../infrastructure/persistence/tenant.orm-entity';
+import { Tenant } from '../entities';
 
 export interface ITenantRepository {
-  create(tenant: TenantOrmEntity): TenantOrmEntity;
-  persist(tenant: TenantOrmEntity): void;
+  persist(tenant: Tenant): void;
 }
 
 const { inject, provider, token } =
