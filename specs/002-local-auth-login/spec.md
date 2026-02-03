@@ -30,6 +30,7 @@ This specification defines the **Local Authentication Login Flow** where a user 
 
 - Q: What are the expiration durations for access and refresh tokens? → A: 7 days for access tokens, 30 days for refresh tokens (configurable via environment variables)
 - Q: Should the system track consecutive failed login attempts per user/IP? → A: Yes, track failed attempts for rate limiting integration (infrastructure layer can use this data for brute-force protection)
+- Q: Should there be a limit on maximum concurrent sessions per user? → A: Yes, limit to 5 concurrent sessions per user (oldest session auto-revoked when limit exceeded)
 
 ## Ubiquitous Language
 
@@ -113,7 +114,8 @@ Every login attempt, whether successful or failed, generates a domain event that
   - Login fails with InvalidCredentials error (same as non-existent email to prevent enumeration)
   
 - **What happens when** the same user logs in from multiple devices simultaneously?
-  - Each login creates an independent session; all sessions remain valid unless explicitly revoked
+  - Each login creates an independent session; maximum of 5 concurrent sessions allowed per user
+  - When the 6th session is created, the oldest active session is automatically revoked
   
 - **What happens when** a password hash algorithm needs to be upgraded?
   - Password verification is encapsulated in AuthIdentity; hash migration is handled separately and not part of the login flow
@@ -211,6 +213,7 @@ The following business rules are enforced at the domain layer:
 6. **BR-006**: A successful login MUST always create a new Session (no session reuse)
 7. **BR-007**: Refresh tokens MUST be stored as one-way hashes and are one-time-use
 8. **BR-008**: The domain layer MUST NOT depend on infrastructure concerns (databases, JWT libraries, HTTP)
+9. **BR-009**: A User MUST NOT have more than 5 concurrent active sessions; when this limit is reached, the oldest session MUST be automatically revoked before creating a new one
 
 ## Application Flow
 
