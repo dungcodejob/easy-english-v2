@@ -289,7 +289,153 @@ export class TokenGeneratorService {
 
 ---
 
-## 6. Rate Limiting Strategy for Login Endpoint
+## 6. Token Storage Strategy: Cookies vs localStorage
+
+### Decision
+**Store tokens in HttpOnly, Secure, SameSite cookies instead of localStorage**.
+
+### Rationale
+
+| Criterion | localStorage | HttpOnly Cookies | Winner |
+|-----------|--------------|------------------|--------|
+| **XSS Protection** | ❌ Vulnerable to XSS attacks (JavaScript can access) | ✅ Cannot be accessed by JavaScript | Cookies ✅ |
+| **CSRF Protection** | ✅ Not vulnerable to CSRF | ⚠️ Needs SameSite attribute | Tie (with SameSite) |
+| **Automatic Transmission** | ❌ Must manually add to headers | ✅ Automatically sent with requests | Cookies ✅ |
+| **Mobile App Support** | ✅ Easy to implement | ⚠️ Requires native cookie handling | localStorage |
+| **Developer Experience** | ✅ Simple API | ⚠️ Requires backend configuration | localStorage |
+| **Security Best Practice** | ❌ OWASP discourages for sensitive data | ✅ OWASP recommended for auth tokens | Cookies ✅ |
+
+**Cookie Configuration**:
+```http
+Set-Cookie: accessToken=eyJhbGc...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+Set-Cookie: refreshToken=eyJhbGc...; HttpOnly; Secure; SameSite=Strict; Path=/api/v1/auth/refresh; Max-Age=2592000
+```
+
+**Cookie Attributes Explained**:
+- `HttpOnly`: Prevents JavaScript access (mitigates XSS attacks)
+- `Secure`: Only sent over HTTPS (prevents man-in-the-middle attacks)
+- `SameSite=Strict`: Prevents CSRF attacks (cookie not sent with cross-origin requests)
+- `Path=/`: Access token available for all routes
+- `Path=/api/v1/auth/refresh`: Refresh token only sent to refresh endpoint (minimizes exposure)
+- `Max-Age`: Cookie expiration in seconds (7 days for access, 30 days for refresh)
+
+**Security Benefits**:
+1. **XSS Mitigation**: Even if attacker injects malicious script, they cannot steal tokens
+2. **CSRF Protection**: SameSite=Strict prevents cross-site request forgery
+3. **Automatic Cleanup**: Expired cookies automatically removed by browser
+4. **No Manual Token Management**: No need to store/retrieve from localStorage in frontend code
+
+**Implementation Approach**:
+
+**Backend** (NestJS):
+```typescript
+// In LoginCommandHandler, after generating tokens:
+response.cookie('accessToken', accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+  sameSite: 'strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+  path: '/',
+});
+
+response.cookie('refreshToken', refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  path: '/api/v1/auth/refresh', // Restricted to refresh endpoint only
+});
+
+// Return success (tokens not in JSON response body)
+return {
+  success: true,
+  data: {
+    user: { id: user.id, email: user.email },
+    expiresAt: session.expiresAt,
+    refreshExpiresAt: session.refreshExpiresAt,
+  },
+};
+```
+
+**Frontend** (React):
+```typescript
+// No need to manually store tokens!
+// Cookies are automatically sent with every request
+
+// Login request
+const response = await apiClient.post('/api/v1/auth/login', { email, password });
+// Cookies are automatically set by browser from Set-Cookie headers
+
+// Subsequent authenticated requests
+const userData = await apiClient.get('/api/v1/user/profile');
+// accessToken cookie automatically included
+```
+
+**Logout**:
+```typescript
+// Backend: Clear cookies
+response.clearCookie('accessToken');
+response.clearCookie('refreshToken');
+```
+
+**Trade-offs**:
+- ✅ Pro: Superior security posture
+- ✅ Pro: Simpler frontend code (no manual token management)
+- ✅ Pro: Automatic CSRF protection with SameSite
+- ⚠️ Con: Requires CORS configuration (`credentials: 'include'`)
+- ⚠️ Con: Slightly more complex for mobile apps (need native cookie jar)
+- ⚠️ Con: Cannot easily inspect token in browser DevTools (intentional security feature)
+
+**CORS Configuration Required**:
+```typescript
+// Backend: Enable credentials in CORS
+app.enableCors({
+  origin: process.env.FRONTEND_URL, // e.g., 'http://localhost:5173'
+  credentials: true, // Allow cookies to be sent cross-origin
+});
+
+// Frontend: Include credentials in requests
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true, // Include cookies in cross-origin requests
+});
+```
+
+**Environment Configuration**:
+```bash
+# Backend
+FRONTEND_URL=http://localhost:5173  # For CORS
+COOKIE_DOMAIN=localhost              # Use .example.com in prod for subdomain sharing
+COOKIE_SECURE=false                  # true in production (HTTPS only)
+
+# Frontend
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+```
+
+### Alternatives Considered
+
+- **localStorage**: Simple but vulnerable to XSS. Modern security best practices strongly discourage storing auth tokens in localStorage.
+- **sessionStorage**: Same XSS vulnerability as localStorage, plus data lost on tab close.
+- **In-memory Only**: Most secure but lost on page refresh. Requires server-side session or frequent re-authentication.
+- **localStorage + Cookie Hybrid**: Unnecessary complexity. If using cookies for refresh token, use for access token too.
+
+### Mobile App Considerations
+
+For React Native or native mobile apps where cookies are less natural:
+- Option 1: Use native cookie jar (e.g., `@react-native-cookies/cookies`)
+- Option 2: Add API endpoint variant that returns tokens in response body for mobile clients (detect via User-Agent or API version)
+- Option 3: Use secure encrypted storage (e.g., Keychain on iOS, Keystore on Android)
+
+**Recommendation**: Start with web (cookies), add mobile-specific storage later if needed.
+
+**References**:
+- [OWASP: Token Storage](https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#local-storage)
+- [MDN: SameSite Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+- [RFC 6265: HTTP State Management (Cookies)](https://datatracker.ietf.org/doc/html/rfc6265)
+
+---
+
+## 7. Rate Limiting Strategy for Login Endpoint
 
 ### Decision
 **Implement multi-layered rate limiting with both IP-based and account-based limits**.
@@ -402,6 +548,7 @@ All open questions have been resolved with concrete decisions:
 | Session cleanup | **Daily background job** | Medium - Database maintenance |
 | "Remember me" | **Out of scope** (future) | Low - Can add incrementally |
 | JWT structure | **RS256 with tenant-scoped claims** | High - Security & multi-tenancy |
+| Token storage | **HttpOnly cookies** (not localStorage) | High - XSS prevention |
 | Rate limiting | **Multi-layered (IP + account)** | High - Attack prevention |
 
 All decisions align with the constitution (§4 Security, §3 Multi-Tenancy) and the feature specification (BR-001 through BR-009, NFR-001 through NFR-008).

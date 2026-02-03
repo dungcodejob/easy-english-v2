@@ -32,6 +32,7 @@ This specification defines the **Local Authentication Login Flow** where a user 
 - Q: Should the system track consecutive failed login attempts per user/IP? → A: Yes, track failed attempts for rate limiting integration (infrastructure layer can use this data for brute-force protection)
 - Q: Should there be a limit on maximum concurrent sessions per user? → A: Yes, limit to 5 concurrent sessions per user (oldest session auto-revoked when limit exceeded)
 - Q: Should password complexity be validated during login? → A: No, login only verifies hash match; complexity validation belongs in registration flow
+- Q: How should tokens be stored on the client side? → A: Use HttpOnly, Secure, SameSite cookies for both access and refresh tokens (prevents XSS attacks, more secure than localStorage)
 
 ## Ubiquitous Language
 

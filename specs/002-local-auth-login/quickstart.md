@@ -59,6 +59,11 @@ LOGIN_FLAG_THRESHOLD=20
 # Session Cleanup
 SESSION_CLEANUP_SCHEDULE="0 2 * * *"
 SESSION_RETENTION_DAYS=90
+
+# Cookie Configuration
+FRONTEND_URL=http://localhost:5173
+COOKIE_DOMAIN=localhost
+COOKIE_SECURE=false  # true in production (HTTPS only)
 ```
 
 **Frontend** (`client/.env`):
@@ -198,31 +203,24 @@ Follow the structure in [plan.md](file:///e:/Projects/multi-tenant/easy-english-
 
 ### Step 3: Configure API Client
 
-Update `client/src/shared/api/axios-instance.ts` to add auth interceptor:
+Update `client/src/shared/api/axios-instance.ts` for cookie-based auth:
 
 ```typescript
 import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true, // CRITICAL: Include cookies in cross-origin requests
 });
 
-// Add auth token to requests
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// No need to manually add auth headers - cookies are sent automatically!
 
 // Handle 401 errors (redirect to login)
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      // Cookies will be cleared by server on logout
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -231,6 +229,8 @@ apiClient.interceptors.response.use(
 
 export default apiClient;
 ```
+
+**Important**: Tokens are now stored in **HttpOnly cookies** by the backend. Frontend code cannot and should not access them directly. The `withCredentials: true` option ensures cookies are automatically sent with every request.
 
 ### Step 4: Setup Routes
 
@@ -314,18 +314,24 @@ npm run test -- src/modules/auth/hooks/use-login.test.ts
    - Email: `test@example.com`
    - Password: `password123`
 3. Click "Login" button
-4. **Expected**: Redirect to dashboard, token stored in localStorage
+4. **Expected**: Redirect to dashboard, tokens stored in HttpOnly cookies
 
 **Verify**:
 ```bash
-# Check localStorage in browser console
-localStorage.getItem('accessToken')
-localStorage.getItem('refreshToken')
+# Check cookies in browser DevTools (Application tab → Cookies)
+# Should see:
+# - accessToken (HttpOnly, Secure in prod, SameSite=Strict)
+# - refreshToken (HttpOnly, Secure in prod, SameSite=Strict, Path=/api/v1/auth/refresh)
 
 # Check network tab for API call
 # POST http://localhost:3000/api/v1/auth/login
 # Status: 200
-# Response: { success: true, data: { accessToken, refreshToken, ... } }
+# Response Headers should include:
+# Set-Cookie: accessToken=...; HttpOnly; Secure; SameSite=Strict; ...
+# Set-Cookie: refreshToken=...; HttpOnly; Secure; SameSite=Strict; ...
+
+# Response body should NOT contain tokens (security best practice):
+# { success: true, data: { user: {...}, expiresAt: "...", refreshExpiresAt: "..." } }
 ```
 
 #### Scenario 2: Invalid Credentials
@@ -381,40 +387,48 @@ SELECT * FROM sessions WHERE user_id = '<user-id>' AND status = 'ACTIVE' ORDER B
 
 ## API Testing with cURL
 
-### Login Request
+### Login Request (with cookie support)
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/auth/login \
   -H "Content-Type: application/json" \
+  -c cookies.txt \
   -d '{
     "email": "test@example.com",
     "password": "password123"
   }'
 ```
 
-**Expected Response**:
+**Expected Response Headers**:
+```http
+Set-Cookie: accessToken=eyJhbGc...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+Set-Cookie: refreshToken=eyJhbGc...; HttpOnly; Secure; SameSite=Strict; Path=/api/v1/auth/refresh; Max-Age=2592000
+```
+
+**Expected Response Body** (tokens NOT in body, only in cookies):
 ```json
 {
   "success": true,
   "data": {
-    "accessToken": "eyJhbGc...",
-    "refreshToken": "eyJhbGc...",
-    "expiresAt": "2026-02-11T00:51:34Z",
-    "refreshExpiresAt": "2026-03-06T00:51:34Z",
     "user": {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "email": "test@example.com"
-    }
+    },
+    "expiresAt": "2026-02-11T00:51:34Z",
+    "refreshExpiresAt": "2026-03-06T00:51:34Z"
   },
   "timestamp": "2026-02-04T00:51:34Z"
 }
 ```
 
-### Using Access Token
+### Using Cookies for Authenticated Requests
 
 ```bash
+# Use saved cookies from login
 curl -X GET http://localhost:3000/api/v1/protected-endpoint \
-  -H "Authorization: Bearer <access-token>"
+  -b cookies.txt
+
+# Cookie is automatically sent, no need for Authorization header
 ```
 
 ---

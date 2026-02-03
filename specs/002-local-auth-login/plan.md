@@ -191,8 +191,10 @@ server/src/modules/auth/
 | Store/Hook | Type | Purpose |
 |------------|------|------------|
 | `useLogin` | TanStack Query Mutation | Server state: POST /api/v1/auth/login |
-| `useAuthStore` | Zustand | UI state: current user, auth tokens (localStorage persistence) |
+| `useAuthStore` | Zustand | UI state: current user info (tokens stored in HttpOnly cookies, not Zustand) |
 | `useSession` | TanStack Query | Server state: GET /api/v1/auth/session (validate current session) |
+
+**Note**: Access and refresh tokens are stored in **HttpOnly cookies** (not localStorage) for XSS protection. Frontend code cannot access tokens directly - they're automatically sent with requests.
 
 ### Components
 
@@ -277,9 +279,10 @@ npm run typecheck
 1. Navigate to `http://localhost:3000/login`
 2. Enter valid credentials: `test@example.com` / `password123`
 3. Click "Login" button
-4. **Expected**: Redirect to dashboard, session stored in localStorage
+4. **Expected**: Redirect to dashboard, tokens stored in HttpOnly cookies
 5. **Expected**: Network tab shows `POST /api/v1/auth/login` with 200 status
-6. **Expected**: Response contains `accessToken`, `refreshToken`, `expiresAt`
+6. **Expected**: Response contains user data, but NOT tokens in body (tokens in Set-Cookie headers)
+7. **Expected**: Browser Application tab shows `accessToken` and `refreshToken` cookies with HttpOnly flag
 
 **Test Scenario 2: Invalid Credentials**
 1. Navigate to `http://localhost:3000/login`
