@@ -15,6 +15,9 @@ import {
   usernameGeneratorProvider,
   usernameGeneratorToken,
 } from './domain/ports/username-generator.interface';
+import { authIdentityRepositoryProvider } from './domain/repositories/auth-identity.repository.interface';
+import { tenantRepositoryProvider } from './domain/repositories/tenant.repository.interface';
+import { userRepositoryProvider } from './domain/repositories/user.repository.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
 import {
   AuthIdentityMapper,
@@ -51,6 +54,10 @@ const mappers = [TenantMapper, UserMapper, AuthIdentityMapper];
     ...repositories,
     ...commandHandlers,
     ...mappers,
+
+    authIdentityRepositoryProvider(AuthIdentityRepository),
+    tenantRepositoryProvider(TenantRepository),
+    userRepositoryProvider(UserRepository),
 
     passwordHasherProvider(BcryptPasswordHasher),
     usernameGeneratorProvider(UsernameGeneratorService),

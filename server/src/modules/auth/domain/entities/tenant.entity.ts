@@ -1,5 +1,5 @@
 import { AggregateRoot, CreateEntityProps } from '@core/ddd';
-import { v4 } from 'uuid';
+import { v7 } from 'uuid';
 import { TenantCreatedEvent } from '../events';
 
 export enum TenantStatus {
@@ -19,7 +19,7 @@ export interface TenantProps {
 }
 
 export class Tenant extends AggregateRoot {
-  protected _id: string;
+  // _id is inherited from Entity base class - do not redeclare!
 
   public name: string;
   public status: TenantStatus;
@@ -37,7 +37,7 @@ export class Tenant extends AggregateRoot {
   }
 
   static create(create: Omit<TenantProps, 'status' | 'plan'>): Tenant {
-    const id = v4();
+    const id = v7();
     const props: CreateEntityProps<TenantProps> = {
       id,
       name: create.name,

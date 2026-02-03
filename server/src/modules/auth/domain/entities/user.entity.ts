@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { v7 } from 'uuid';
 
 import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { UserRegisteredEvent } from '../events';
@@ -19,7 +19,7 @@ export interface UserProps {
 }
 
 export class User extends AggregateRoot {
-  protected _id: string;
+  // _id is inherited from Entity base class - do not redeclare!
 
   public tenantId: string;
   public email: Email;
@@ -41,7 +41,7 @@ export class User extends AggregateRoot {
   }
 
   static create(create: Omit<UserProps, 'role'> & { role?: UserRole }): User {
-    const id = v4();
+    const id = v7();
     const props: CreateEntityProps<UserProps> = {
       id,
       ...create,

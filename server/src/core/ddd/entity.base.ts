@@ -29,8 +29,10 @@ export abstract class Entity {
    * different ID types depending on your needs.
    * For example it could be a UUID for aggregate root,
    * and shortid / nanoid for child entities.
+   *
+   * Uses definite assignment assertion (!) because setId() is called in constructor.
    */
-  protected abstract _id: AggregateID;
+  protected _id!: AggregateID;
 
   private readonly _createdAt: Date;
 

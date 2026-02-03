@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { v7 } from 'uuid';
 
 import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { AuthIdentityCreatedEvent } from '../events';
@@ -17,7 +17,7 @@ export interface AuthIdentityProps {
 }
 
 export class AuthIdentity extends AggregateRoot {
-  protected _id: string;
+  // _id is inherited from Entity base class - do not redeclare!
 
   public userId: string;
   public provider: AuthProvider;
@@ -37,7 +37,7 @@ export class AuthIdentity extends AggregateRoot {
   }
 
   static create(create: AuthIdentityProps): AuthIdentity {
-    const id = v4();
+    const id = v7();
     const props: CreateEntityProps<AuthIdentityProps> = {
       id,
       ...create,
