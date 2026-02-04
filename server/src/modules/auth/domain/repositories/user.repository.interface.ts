@@ -9,6 +9,6 @@ export interface IUserRepository {
 const { inject, provider, token } =
   createInjection<IUserRepository>('IUserRepository');
 
-export const injectUserRepository = inject;
+export const InjectUserRepository = inject;
 export const userRepositoryProvider = provider;
 export const userRepositoryToken = token;

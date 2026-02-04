@@ -1,7 +1,10 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { LoginHandler } from './application/commands/login.handler';
 import { RegisterHandler } from './application/commands/register.handler';
+import { GetSessionHandler } from './application/queries/get-session.handler';
+import { ValidateSessionHandler } from './application/queries/validate-session.handler';
 import { AuthController } from './controllers/auth.controller';
 import {
   passwordHasherProvider,
@@ -55,7 +58,8 @@ const repositories = [
   SessionRepository,
   LoginAttemptTrackerRepository,
 ];
-const commandHandlers = [RegisterHandler];
+const commandHandlers = [RegisterHandler, LoginHandler];
+const queryHandlers = [GetSessionHandler, ValidateSessionHandler];
 const mappers = [
   TenantMapper,
   UserMapper,
@@ -80,6 +84,7 @@ const mappers = [
   providers: [
     ...repositories,
     ...commandHandlers,
+    ...queryHandlers,
     ...mappers,
 
     authIdentityRepositoryProvider(AuthIdentityRepository),

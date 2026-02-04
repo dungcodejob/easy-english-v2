@@ -38,4 +38,9 @@ export class SessionRepository implements ISessionRepository {
       status: SessionStatus.ACTIVE,
     });
   }
+
+  async findById(id: string): Promise<Session | null> {
+    const entity = await this.repo.findOne({ id });
+    return entity ? this.mapper.toDomain(entity) : null;
+  }
 }

@@ -1,5 +1,6 @@
 import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v7 } from 'uuid';
+import { SessionCreatedEvent } from '../events';
 
 export enum SessionStatus {
   ACTIVE = 'ACTIVE',
@@ -53,11 +54,23 @@ export class Session extends AggregateRoot {
     props: Omit<SessionProps, 'status'> & { status?: SessionStatus },
   ): Session {
     const id = v7();
-    return new Session({
+
+    const session = new Session({
       id,
       ...props,
       status: props.status || SessionStatus.ACTIVE,
     });
+
+    const event = new SessionCreatedEvent({
+      aggregateId: session.id,
+      sessionId: session.id,
+      userId: session.userId,
+      tenantId: session.tenantId,
+      expiresAt: session.expiresAt,
+    });
+
+    session.addEvent(event);
+    return session;
   }
 
   static rehydrate(props: CreateEntityProps<SessionProps>): Session {
@@ -66,6 +79,10 @@ export class Session extends AggregateRoot {
 
   public isExpired(): boolean {
     return new Date() > this.expiresAt;
+  }
+
+  public isRevoked(): boolean {
+    return this.status === SessionStatus.REVOKED;
   }
 
   public isValid(): boolean {

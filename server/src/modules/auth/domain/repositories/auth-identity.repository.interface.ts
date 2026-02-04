@@ -13,6 +13,6 @@ const { inject, provider, token } = createInjection<IAuthIdentityRepository>(
   'IAuthIdentityRepository',
 );
 
-export const injectAuthIdentityRepository = inject;
+export const InjectAuthIdentityRepository = inject;
 export const authIdentityRepositoryProvider = provider;
 export const authIdentityRepositoryToken = token;
