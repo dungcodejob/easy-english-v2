@@ -22,4 +22,4 @@ const { token, inject, provider } =
 
 export const InjectUsernameGenerator = inject;
 export const usernameGeneratorToken = token;
-export const usernameGeneratorProvider = provider;
+export const provideUsernameGenerator = provider;

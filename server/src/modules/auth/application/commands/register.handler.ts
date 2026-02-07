@@ -15,7 +15,7 @@ import {
   type IPasswordHasher,
 } from '../../domain/ports/password-hasher.interface';
 import {
-  InjectUsernameAvailabilityService,
+  InjectUsernameAvailability,
   type IUsernameAvailabilityService,
 } from '../../domain/ports/username-availability.interface';
 import {
@@ -61,7 +61,7 @@ export class RegisterHandler implements ICommandHandler<
     private readonly hasher: IPasswordHasher,
     @InjectUsernameGenerator()
     private readonly usernameGenerator: IUsernameGenerator,
-    @InjectUsernameAvailabilityService()
+    @InjectUsernameAvailability()
     private readonly usernameAvailability: IUsernameAvailabilityService,
 
     // Infrastructure

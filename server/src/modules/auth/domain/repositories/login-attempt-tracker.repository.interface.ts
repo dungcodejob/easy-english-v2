@@ -16,5 +16,5 @@ const { inject, provider, token } =
   );
 
 export const injectLoginAttemptTrackerRepository = inject;
-export const loginAttemptTrackerRepositoryProvider = provider;
+export const provideLoginAttemptTrackerRepository = provider;
 export const loginAttemptTrackerRepositoryToken = token;

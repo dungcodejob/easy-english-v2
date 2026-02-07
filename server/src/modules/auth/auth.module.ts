@@ -1,35 +1,37 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConfig } from '../../configs';
 import { LoginHandler } from './application/commands/login.handler';
 import { RegisterHandler } from './application/commands/register.handler';
 import { GetSessionHandler } from './application/queries/get-session.handler';
 import { ValidateSessionHandler } from './application/queries/validate-session.handler';
 import { AuthController } from './controllers/auth.controller';
 import {
-  passwordHasherProvider,
   passwordHasherToken,
+  providePasswordHasher,
 } from './domain/ports/password-hasher.interface';
 import {
-  tokenGeneratorProvider,
+  provideTokenGenerator,
   tokenGeneratorToken,
 } from './domain/ports/token-generator.interface';
 import {
-  usernameAvailabilityServiceProvider,
-  usernameAvailabilityServiceToken,
+  provideTokenHasher,
+  tokenHasherToken,
+} from './domain/ports/token-hasher.interface';
+import {
+  provideUsernameAvailability,
+  usernameAvailabilityToken,
 } from './domain/ports/username-availability.interface';
 import {
-  usernameGeneratorProvider,
+  provideUsernameGenerator,
   usernameGeneratorToken,
 } from './domain/ports/username-generator.interface';
-import { authIdentityRepositoryProvider } from './domain/repositories/auth-identity.repository.interface';
-import { loginAttemptTrackerRepositoryProvider } from './domain/repositories/login-attempt-tracker.repository.interface';
-import { sessionRepositoryProvider } from './domain/repositories/session.repository.interface';
-import { tenantRepositoryProvider } from './domain/repositories/tenant.repository.interface';
-import { userRepositoryProvider } from './domain/repositories/user.repository.interface';
+import { provideAuthIdentityRepository } from './domain/repositories/auth-identity.repository.interface';
+import { provideLoginAttemptTrackerRepository } from './domain/repositories/login-attempt-tracker.repository.interface';
+import { provideSessionRepository } from './domain/repositories/session.repository.interface';
+import { provideTenantRepository } from './domain/repositories/tenant.repository.interface';
+import { provideUserRepository } from './domain/repositories/user.repository.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
 import {
   AuthIdentityMapper,
@@ -51,17 +53,11 @@ import {
   UserRepository,
 } from './infrastructure/repositories';
 import { BcryptPasswordHasher } from './infrastructure/services/bcrypt-password-hasher.service';
+import { Sha256TokenHasherService } from './infrastructure/services/sha256-token-hasher.service';
 import { TokenGeneratorService } from './infrastructure/services/token-generator.service';
 import { UserSessionCookie } from './infrastructure/services/user-session-cookie';
 import { UsernameAvailabilityService } from './infrastructure/services/username-availability.service';
 
-const repositories = [
-  TenantRepository,
-  UserRepository,
-  AuthIdentityRepository,
-  SessionRepository,
-  LoginAttemptTrackerRepository,
-];
 const commandHandlers = [RegisterHandler, LoginHandler];
 const queryHandlers = [GetSessionHandler, ValidateSessionHandler];
 const mappers = [
@@ -75,7 +71,6 @@ const mappers = [
 @Module({
   imports: [
     CqrsModule,
-    ConfigModule.forFeature(jwtConfig),
     JwtModule.register({
       global: false,
     }),
@@ -89,29 +84,29 @@ const mappers = [
   ],
   controllers: [AuthController],
   providers: [
-    ...repositories,
     ...commandHandlers,
     ...queryHandlers,
     ...mappers,
 
-    authIdentityRepositoryProvider(AuthIdentityRepository),
-    tenantRepositoryProvider(TenantRepository),
-    userRepositoryProvider(UserRepository),
-    sessionRepositoryProvider(SessionRepository),
-    loginAttemptTrackerRepositoryProvider(LoginAttemptTrackerRepository),
+    provideAuthIdentityRepository(AuthIdentityRepository),
+    provideTenantRepository(TenantRepository),
+    provideUserRepository(UserRepository),
+    provideSessionRepository(SessionRepository),
+    provideLoginAttemptTrackerRepository(LoginAttemptTrackerRepository),
 
-    passwordHasherProvider(BcryptPasswordHasher),
-    usernameGeneratorProvider(UsernameGeneratorService),
-    usernameAvailabilityServiceProvider(UsernameAvailabilityService),
-    tokenGeneratorProvider(TokenGeneratorService),
+    providePasswordHasher(BcryptPasswordHasher),
+    provideTokenHasher(Sha256TokenHasherService),
+    provideUsernameGenerator(UsernameGeneratorService),
+    provideUsernameAvailability(UsernameAvailabilityService),
+    provideTokenGenerator(TokenGeneratorService),
     UserSessionCookie,
   ],
   exports: [
     passwordHasherToken,
     usernameGeneratorToken,
-    usernameGeneratorToken,
-    usernameAvailabilityServiceToken,
+    usernameAvailabilityToken,
     tokenGeneratorToken,
+    tokenHasherToken,
   ],
 })
 export class AuthModule {}

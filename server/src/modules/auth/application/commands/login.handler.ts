@@ -13,6 +13,10 @@ import {
   TokenType,
 } from '../../domain/ports/token-generator.interface';
 import {
+  type ITokenHasher,
+  InjectTokenHasher,
+} from '../../domain/ports/token-hasher.interface';
+import {
   type IAuthIdentityRepository,
   InjectAuthIdentityRepository,
 } from '../../domain/repositories/auth-identity.repository.interface';
@@ -45,6 +49,9 @@ export class LoginHandler implements ICommandHandler<
 
   @InjectPasswordHasher()
   private readonly passwordHasher: IPasswordHasher;
+
+  @InjectTokenHasher()
+  private readonly tokenHasher: ITokenHasher;
 
   @InjectTokenGenerator()
   private readonly tokenGenerator: ITokenGenerator;
@@ -129,7 +136,7 @@ export class LoginHandler implements ICommandHandler<
       this.tokenGenerator.sign(payload, TokenType.REFRESH),
     ]);
 
-    const refreshTokenHash = await this.passwordHasher.hash(refreshToken);
+    const refreshTokenHash = await this.tokenHasher.hash(refreshToken);
 
     // We rely on the repository implementation or an interceptor to publish these events
     // but typically we should ensure they are dispatched.

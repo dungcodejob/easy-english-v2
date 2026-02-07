@@ -21,5 +21,5 @@ const { inject, provider, token } =
   createInjection<ITokenGenerator>('ITokenGenerator');
 
 export const InjectTokenGenerator = inject;
-export const tokenGeneratorProvider = provider;
+export const provideTokenGenerator = provider;
 export const tokenGeneratorToken = token;

@@ -12,5 +12,5 @@ const { inject, provider, token } =
   createInjection<ISessionRepository>('ISessionRepository');
 
 export const InjectSessionRepository = inject;
-export const sessionRepositoryProvider = provider;
+export const provideSessionRepository = provider;
 export const sessionRepositoryToken = token;

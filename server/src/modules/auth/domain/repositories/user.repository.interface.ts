@@ -10,5 +10,5 @@ const { inject, provider, token } =
   createInjection<IUserRepository>('IUserRepository');
 
 export const InjectUserRepository = inject;
-export const userRepositoryProvider = provider;
+export const provideUserRepository = provider;
 export const userRepositoryToken = token;

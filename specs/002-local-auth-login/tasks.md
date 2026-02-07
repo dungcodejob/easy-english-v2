@@ -10,8 +10,8 @@
 
 This document provides a complete, dependency-ordered task breakdown for implementing the Local Authentication Login Flow feature. Tasks are organized by user story to enable independent, incremental delivery.
 
-**Total Tasks**: 72  
-**Parallelizable Tasks**: 46  
+**Total Tasks**: 73  
+**Parallelizable Tasks**: 47  
 **User Stories**: 4 (US1-US3: P1, US4: P2)
 
 **Suggested MVP**: US1-US3 (core login + security) = ~50 tasks
@@ -130,6 +130,7 @@ graph TD
 
 - [ ] T025 [P] Create PasswordHasherService in `server/src/modules/auth/infrastructure/services/password-hasher.service.ts` (argon2 hash, verify methods)
 - [ ] T026 [P] Create TokenGeneratorService in `server/src/modules/auth/infrastructure/services/token-generator.service.ts` (generateAccessToken, generateRefreshToken, validateToken methods using RS256)
+- [x] T026a [P] Create Sha256TokenHasherService in `server/src/modules/auth/infrastructure/services/sha256-token-hasher.service.ts` (hash refresh token)
 
 ### Module Registration
 
