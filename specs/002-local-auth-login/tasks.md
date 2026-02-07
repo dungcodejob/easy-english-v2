@@ -187,17 +187,17 @@ graph TD
   - POST /api/v1/auth/login endpoint
   - Validate LoginRequestDto
   - Execute LoginCommand
-  - Set accessToken & refreshToken in HttpOnly, Secure, SameSite=Strict cookies
-  - Return LoginResponseDto (user data + expiration times)
+  - Set refreshToken in HttpOnly, Secure, SameSite=Strict cookies
+  - Return LoginResponseDto (user data + accessToken + expiration times)
   - Apply rate limiting (@Throttle decorator: 10/min, 50/hour)
 
 ### API Layer - Guards & Strategies
 
-- [ ] T039a [P] [US1] Create JwtStrategy in `server/src/modules/auth/strategies/jwt.strategy.ts` (extract from cookie, validate session)
-- [ ] T039b [P] [US1] Create JwtAuthGuard in `server/src/modules/auth/guards/jwt-auth.guard.ts` (handle 401)
-- [ ] T039c [P] [US1] Create Public decorator in `server/src/modules/auth/decorators/public.decorator.ts` (bypass guard)
-- [ ] T039d [P] [US1] Create CurrentUser decorator in `server/src/modules/auth/decorators/current-user.decorator.ts` (extract user)
-- [ ] T039e [US1] Register JwtStrategy and global guard in `server/src/modules/auth/auth.module.ts`
+- [x] T039a [P] [US1] Create JwtStrategy in `server/src/modules/auth/strategies/jwt.strategy.ts` (extract from Bearer Auth Header)
+- [x] T039b [P] [US1] Create JwtAuthGuard in `server/src/modules/auth/guards/jwt-auth.guard.ts` (handle 401)
+- [x] T039c [P] [US1] Create Public decorator in `server/src/modules/auth/decorators/public.decorator.ts` (bypass guard)
+- [x] T039d [P] [US1] Create CurrentUser decorator in `server/src/modules/auth/decorators/current-user.decorator.ts` (extract user)
+- [x] T039e [US1] Register JwtStrategy and global guard in `server/src/modules/auth/auth.module.ts`
 
 ### Frontend - Types
 

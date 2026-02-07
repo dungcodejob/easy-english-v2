@@ -1,5 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginHandler } from './application/commands/login.handler';
@@ -33,6 +35,7 @@ import { provideSessionRepository } from './domain/repositories/session.reposito
 import { provideTenantRepository } from './domain/repositories/tenant.repository.interface';
 import { provideUserRepository } from './domain/repositories/user.repository.interface';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import {
   AuthIdentityMapper,
   TenantMapper,
@@ -57,6 +60,7 @@ import { Sha256TokenHasherService } from './infrastructure/services/sha256-token
 import { TokenGeneratorService } from './infrastructure/services/token-generator.service';
 import { UserSessionCookie } from './infrastructure/services/user-session-cookie';
 import { UsernameAvailabilityService } from './infrastructure/services/username-availability.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 const commandHandlers = [RegisterHandler, LoginHandler];
 const queryHandlers = [GetSessionHandler, ValidateSessionHandler];
@@ -70,6 +74,7 @@ const mappers = [
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     CqrsModule,
     JwtModule.register({
       global: false,
@@ -100,6 +105,11 @@ const mappers = [
     provideUsernameAvailability(UsernameAvailabilityService),
     provideTokenGenerator(TokenGeneratorService),
     UserSessionCookie,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   exports: [
     passwordHasherToken,

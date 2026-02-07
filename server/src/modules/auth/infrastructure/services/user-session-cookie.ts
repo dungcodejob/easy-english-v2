@@ -23,6 +23,7 @@ export class UserSessionCookie {
       maxAge: UserSessionCookie.COOKIE_MAX_AGE,
       expires: refreshToken.expiresAt,
       path: UserSessionCookie.COOKIE_PATH,
+      sameSite: 'strict', // Prevent CSRF attacks
     });
   }
 
