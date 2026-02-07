@@ -7,4 +7,5 @@ export class LoginRequestDto {
   @IsString()
   @MinLength(8)
   readonly password!: string;
+  deviceId: string | undefined;
 }

@@ -6,9 +6,14 @@ export interface ITokenPayload {
   email: string;
 }
 
+export enum TokenType {
+  ACCESS = 'access',
+  REFRESH = 'refresh',
+}
+
 export interface ITokenGenerator {
-  sign(payload: ITokenPayload): Promise<string>;
-  verify(token: string): Promise<ITokenPayload>;
+  sign(payload: ITokenPayload, tokenType: TokenType): Promise<string>;
+  verify(token: string, tokenType: TokenType): Promise<ITokenPayload>;
   decode(token: string): ITokenPayload | null;
 }
 

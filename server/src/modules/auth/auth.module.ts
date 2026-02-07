@@ -49,6 +49,7 @@ import {
 } from './infrastructure/repositories';
 import { BcryptPasswordHasher } from './infrastructure/services/bcrypt-password-hasher.service';
 import { TokenGeneratorService } from './infrastructure/services/token-generator.service';
+import { UserSessionCookie } from './infrastructure/services/user-session-cookie';
 import { UsernameAvailabilityService } from './infrastructure/services/username-availability.service';
 
 const repositories = [
@@ -97,6 +98,7 @@ const mappers = [
     usernameGeneratorProvider(UsernameGeneratorService),
     usernameAvailabilityServiceProvider(UsernameAvailabilityService),
     tokenGeneratorProvider(TokenGeneratorService),
+    UserSessionCookie,
   ],
   exports: [
     passwordHasherToken,

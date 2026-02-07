@@ -8,9 +8,13 @@ import { LoginRequestDto } from '../dto/requests/login.request.dto';
 import { RegisterRequestDto } from '../dto/requests/register.request.dto';
 import { LoginResponseDto } from '../dto/responses/login.response.dto';
 import { RegisterResponseDto } from '../dto/responses/register.response.dto';
+import { UserSessionCookie } from '../infrastructure/services/user-session-cookie';
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly userSessionCookie: UserSessionCookie,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   @Post('register')
   async register(
@@ -35,31 +39,20 @@ export class AuthController {
         password: dto.password,
         ipAddress,
         userAgent,
-        deviceId: null,
+        deviceId: undefined,
       }),
     );
 
     const { accessToken, refreshToken, expiresAt, refreshExpiresAt, user } =
       result;
 
-    // Set Cookies
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      expires: expiresAt,
-    });
-
-    response.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      expires: refreshExpiresAt,
-      path: '/api/v1/auth/refresh', // Restrict path for refresh token? Or global?
-    });
+    // Set only refresh token and session ID in httpOnly cookies
+    // Access token is returned in response body for client-side state management
+    this.userSessionCookie.set(response, refreshToken, refreshExpiresAt);
 
     return new LoginResponseDto({
       user,
+      accessToken,
       expiresAt,
       refreshExpiresAt,
     });

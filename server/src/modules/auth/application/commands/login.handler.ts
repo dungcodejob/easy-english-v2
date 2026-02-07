@@ -159,6 +159,7 @@ export class LoginHandler implements ICommandHandler<
 
     return new AuthResultDto({
       user: userDto,
+      sessionId: session.id,
       expiresAt: session.expiresAt,
       refreshExpiresAt: session.expiresAt,
       accessToken,
