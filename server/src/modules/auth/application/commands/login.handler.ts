@@ -1,4 +1,4 @@
-import { Inject, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AuthProvider } from '../../domain/entities/auth-identity.entity';
 import { Session } from '../../domain/entities/session.entity';
@@ -9,7 +9,8 @@ import {
 import {
   type ITokenGenerator,
   ITokenPayload,
-  injectTokenGenerator,
+  InjectTokenGenerator,
+  TokenType,
 } from '../../domain/ports/token-generator.interface';
 import {
   type IAuthIdentityRepository,
@@ -45,7 +46,7 @@ export class LoginHandler implements ICommandHandler<
   @InjectPasswordHasher()
   private readonly passwordHasher: IPasswordHasher;
 
-  @Inject(injectTokenGenerator)
+  @InjectTokenGenerator()
   private readonly tokenGenerator: ITokenGenerator;
 
   async execute(command: LoginCommand): Promise<AuthResultDto> {
@@ -108,8 +109,6 @@ export class LoginHandler implements ICommandHandler<
       deviceId,
     });
 
-    this.sessionRepo.persist(session);
-
     // 6. Generate Tokens
     const payload: ITokenPayload = {
       userId: user.id,
@@ -126,13 +125,18 @@ export class LoginHandler implements ICommandHandler<
 
     // Using Promise.all for parallelism
     const [accessToken, refreshToken] = await Promise.all([
-      this.tokenGenerator.sign(payload),
-      this.tokenGenerator.sign(payload),
+      this.tokenGenerator.sign(payload, TokenType.ACCESS),
+      this.tokenGenerator.sign(payload, TokenType.REFRESH),
     ]);
+
+    const refreshTokenHash = await this.passwordHasher.hash(refreshToken);
 
     // We rely on the repository implementation or an interceptor to publish these events
     // but typically we should ensure they are dispatched.
     // For now assuming the infrastructure handles event dispatching on persist or commit.
+
+    session.setRefreshTokenHash(refreshTokenHash);
+    this.sessionRepo.persist(session);
 
     const userDto = new UserResponseDto(
       user.id,
@@ -140,30 +144,17 @@ export class LoginHandler implements ICommandHandler<
       user.tenantId,
     );
 
-    // We only expose non-sensitive user data and expiration info in the body
-    // Tokens are expected to be handled by the controller (cookies)
-    // BUT the return type of Execute usually strictly matches the DTO.
-    // LoginResponseDto defined earlier does NOT have tokens.
-    // So we need to return something that holds tokens too, OR LoginResponseDto should have them
-    // and the controller strips them out / moves them to cookies.
-    // For cleanliness, let's return a Result object that includes tokens,
-    // or modify LoginResponseDto to be the 'internal' response.
-    // The requirement T038 says "NO tokens" in LoginResponseDto (user object, expiresAt...).
-    // So the command handler needs to return { ...dto, accessToken, refreshToken }.
-    // But properties on DTO validation?
-    // I'll return a composite object and let the controller map it.
-
-    // Changing return type to `any` or a specific internal interface temporarily
-    // because `LoginResponseDto` doesn't have tokens.
-    // Or I extend it.
-
     return new AuthResultDto({
       user: userDto,
       sessionId: session.id,
-      expiresAt: session.expiresAt,
-      refreshExpiresAt: session.expiresAt,
-      accessToken,
-      refreshToken,
+      accessToken: {
+        token: accessToken,
+        expiresAt: session.expiresAt,
+      },
+      refreshToken: {
+        token: refreshToken,
+        expiresAt: session.expiresAt,
+      },
     });
   }
 }

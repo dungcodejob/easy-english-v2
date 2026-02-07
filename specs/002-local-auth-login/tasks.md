@@ -10,11 +10,11 @@
 
 This document provides a complete, dependency-ordered task breakdown for implementing the Local Authentication Login Flow feature. Tasks are organized by user story to enable independent, incremental delivery.
 
-**Total Tasks**: 67  
-**Parallelizable Tasks**: 42  
+**Total Tasks**: 72  
+**Parallelizable Tasks**: 46  
 **User Stories**: 4 (US1-US3: P1, US4: P2)
 
-**Suggested MVP**: US1-US3 (core login + security) = ~45 tasks
+**Suggested MVP**: US1-US3 (core login + security) = ~50 tasks
 
 ---
 
@@ -190,6 +190,14 @@ graph TD
   - Return LoginResponseDto (user data + expiration times)
   - Apply rate limiting (@Throttle decorator: 10/min, 50/hour)
 
+### API Layer - Guards & Strategies
+
+- [ ] T039a [P] [US1] Create JwtStrategy in `server/src/modules/auth/strategies/jwt.strategy.ts` (extract from cookie, validate session)
+- [ ] T039b [P] [US1] Create JwtAuthGuard in `server/src/modules/auth/guards/jwt-auth.guard.ts` (handle 401)
+- [ ] T039c [P] [US1] Create Public decorator in `server/src/modules/auth/decorators/public.decorator.ts` (bypass guard)
+- [ ] T039d [P] [US1] Create CurrentUser decorator in `server/src/modules/auth/decorators/current-user.decorator.ts` (extract user)
+- [ ] T039e [US1] Register JwtStrategy and global guard in `server/src/modules/auth/auth.module.ts`
+
 ### Frontend - Types
 
 - [ ] T040 [P] [US1] Create auth types in `client/src/modules/auth/types/auth.types.ts` (LoginRequest, LoginResponse, User interfaces)
@@ -209,7 +217,7 @@ graph TD
 
 ### Frontend - Context
 
-- [ ] T045 [US1] Create AuthProvider context in `client/src/shared/contexts/auth-context.tsx` (provides current user state, NO token storage - uses cookies)
+- [ ] T045 [US1] Create AuthProvider context in `client/src/shared/contexts/auth-context.tsx` (provides current user state, storage for access token, NO refresh token storage - uses HttpOnly cookies)
 
 ### Frontend - Configuration
 

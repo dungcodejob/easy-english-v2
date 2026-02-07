@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import type { Request, Response } from 'express';
+import { type AppConfig, InjectAppConfig } from 'src/configs';
+import { TokenResultDto } from '../../dto/auth-result.dto';
 
 @Injectable()
 export class UserSessionCookie {
@@ -8,19 +9,19 @@ export class UserSessionCookie {
   private static readonly COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30; // 30 days
   private static readonly COOKIE_PATH = '/api/auth';
 
-  constructor(private readonly configService: ConfigService) {}
+  @InjectAppConfig() appConfig: AppConfig;
 
   get(request: Request): string | undefined {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
     return request.cookies[UserSessionCookie.COOKIE_NAME];
   }
 
-  set(response: Response, sessionId: string, expiresAt: Date) {
-    response.cookie(UserSessionCookie.COOKIE_NAME, sessionId, {
+  set(response: Response, refreshToken: TokenResultDto) {
+    response.cookie(UserSessionCookie.COOKIE_NAME, refreshToken.token, {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
+      secure: this.appConfig.isProduction,
       maxAge: UserSessionCookie.COOKIE_MAX_AGE,
-      expires: expiresAt,
+      expires: refreshToken.expiresAt,
       path: UserSessionCookie.COOKIE_PATH,
     });
   }

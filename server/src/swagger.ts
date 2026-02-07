@@ -93,7 +93,7 @@ export function swagger(app: INestApplication, appConfig: AppConfig): void {
         res,
         next,
         httpAdapter.getType(),
-        appConfig.testing,
+        appConfig.isProduction,
       );
     },
   );
@@ -168,7 +168,7 @@ function swaggerAuthMiddleware(
   res: Response,
   next: NextFunction,
   type: string,
-  isTesting: boolean,
+  isProduction: boolean,
 ) {
   function parseAuthHeader(input: string): { name: string; pass: string } {
     const [, encodedPart] = input.split(' ');
@@ -192,7 +192,7 @@ function swaggerAuthMiddleware(
     next();
   }
 
-  if (!isTesting) {
+  if (isProduction) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return unauthorizedResponse();

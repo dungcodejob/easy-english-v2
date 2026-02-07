@@ -43,18 +43,15 @@ export class AuthController {
       }),
     );
 
-    const { accessToken, refreshToken, expiresAt, refreshExpiresAt, user } =
-      result;
+    const { accessToken, refreshToken, user } = result;
 
     // Set only refresh token and session ID in httpOnly cookies
     // Access token is returned in response body for client-side state management
-    this.userSessionCookie.set(response, refreshToken, refreshExpiresAt);
+    this.userSessionCookie.set(response, refreshToken);
 
     return new LoginResponseDto({
       user,
       accessToken,
-      expiresAt,
-      refreshExpiresAt,
     });
   }
 }

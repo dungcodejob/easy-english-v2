@@ -7,7 +7,7 @@ export const appConfig = registerAs('app', () => {
   const port = Number(process.env.APP_PORT) || 3000;
 
   return {
-    testing: process.env.NODE_ENV === 'dev',
+    isProduction: process.env.NODE_ENV === 'production',
     appId: process.env.APP_ID || 'app_id',
     client: process.env.APP_CLIENT_DOMAIN || 'http://localhost:4200',
     host,

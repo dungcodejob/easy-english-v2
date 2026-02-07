@@ -41,8 +41,3 @@ export const FEATURE_KEY = {
   USER_WORD_SENSE: 'user-word-sense',
   WORKSPACE: 'workspace',
 } as const;
-
-export const ENV_KEY = {
-  DATABASE_URL: 'DATABASE_URL',
-  CORS_ORIGINS: 'CORS_ORIGINS',
-} as const;

@@ -73,6 +73,11 @@ export class Session extends AggregateRoot {
     return session;
   }
 
+  public setRefreshTokenHash(refreshTokenHash: string): void {
+    this.refreshTokenHash = refreshTokenHash;
+    this.updateUpdatedAt();
+  }
+
   static rehydrate(props: CreateEntityProps<SessionProps>): Session {
     return new Session(props);
   }

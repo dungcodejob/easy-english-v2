@@ -1,6 +1,9 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConfig } from '../../configs';
 import { LoginHandler } from './application/commands/login.handler';
 import { RegisterHandler } from './application/commands/register.handler';
 import { GetSessionHandler } from './application/queries/get-session.handler';
@@ -72,7 +75,10 @@ const mappers = [
 @Module({
   imports: [
     CqrsModule,
-
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.register({
+      global: false,
+    }),
     MikroOrmModule.forFeature([
       TenantOrmEntity,
       UserOrmEntity,
