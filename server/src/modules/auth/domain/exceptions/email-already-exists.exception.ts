@@ -4,6 +4,7 @@ export enum AuthErrorCodes {
   BASE = 'AUTH',
   EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
   SESSION_NOT_FOUND = 'SESSION_NOT_FOUND',
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
 }
 
 export class AuthDomainException extends DomainException {
@@ -27,5 +28,11 @@ export class SessionNotFoundException extends AuthDomainException {
       `Session with ID ${sessionId} not found`,
       AuthErrorCodes.SESSION_NOT_FOUND,
     );
+  }
+}
+
+export class InvalidCredentialsException extends AuthDomainException {
+  constructor() {
+    super(`Invalid credentials`, AuthErrorCodes.INVALID_CREDENTIALS);
   }
 }

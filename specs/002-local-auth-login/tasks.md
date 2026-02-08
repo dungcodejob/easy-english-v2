@@ -193,10 +193,10 @@ graph TD
 
 ### API Layer - Guards & Strategies
 
-- [x] T039a [P] [US1] Create JwtStrategy in `server/src/modules/auth/strategies/jwt.strategy.ts` (extract from Bearer Auth Header)
-- [x] T039b [P] [US1] Create JwtAuthGuard in `server/src/modules/auth/guards/jwt-auth.guard.ts` (handle 401)
-- [x] T039c [P] [US1] Create Public decorator in `server/src/modules/auth/decorators/public.decorator.ts` (bypass guard)
-- [x] T039d [P] [US1] Create CurrentUser decorator in `server/src/modules/auth/decorators/current-user.decorator.ts` (extract user)
+- [x] T039a [P] [US1] Create JwtStrategy in `server/src/modules/auth/infrastructure/strategies/jwt.strategy.ts` (extract from Bearer Auth Header)
+- [x] T039b [P] [US1] Create JwtAuthGuard in `server/src/modules/auth/infrastructure/guards/jwt-auth.guard.ts` (handle 401)
+- [x] T039c [P] [US1] Create Public decorator in `server/src/shared/decorators/public.decorator.ts` (bypass guard)
+- [x] T039d [P] [US1] Create CurrentUser decorator in `server/src/shared/decorators/current-user.decorator.ts` (extract user)
 - [x] T039e [US1] Register JwtStrategy and global guard in `server/src/modules/auth/auth.module.ts`
 
 ### Frontend - Types

@@ -1,4 +1,3 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AuthProvider } from '../../domain/entities/auth-identity.entity';
 import { Session } from '../../domain/entities/session.entity';
@@ -25,6 +24,7 @@ import {
   InjectSessionRepository,
 } from '../../domain/repositories/session.repository.interface';
 
+import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type IUserRepository,
   InjectUserRepository,
@@ -58,11 +58,11 @@ export class LoginHandler implements ICommandHandler<
 
   async execute(command: LoginCommand): Promise<AuthResultDto> {
     const { email, password, ipAddress, userAgent, deviceId } = command.props;
-
+    console.log('LoginCommand');
     // 1. Find User
     const user = await this.userRepo.findByEmail(email);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new InvalidCredentialsException();
     }
 
     // 2. Find AuthIdentity
@@ -73,7 +73,7 @@ export class LoginHandler implements ICommandHandler<
       );
 
     if (!authIdentity) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new InvalidCredentialsException();
     }
 
     // 3. Verify Password
@@ -82,7 +82,7 @@ export class LoginHandler implements ICommandHandler<
       this.passwordHasher,
     );
     if (!isValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new InvalidCredentialsException();
     }
 
     // 4. Session Management (Limit 5)

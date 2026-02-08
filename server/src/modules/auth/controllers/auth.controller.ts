@@ -1,5 +1,6 @@
 import { Body, Controller, Ip, Post, Req, Res } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
+import { Public } from '@shared/decorators';
 import type { Request, Response } from 'express';
 import { LoginCommand } from '../application/commands/login.command';
 import { RegisterCommand } from '../application/commands/register.command';
@@ -16,6 +17,7 @@ export class AuthController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @Public()
   @Post('register')
   async register(
     @Body() dto: RegisterRequestDto,
@@ -23,6 +25,7 @@ export class AuthController {
     return this.commandBus.execute(new RegisterCommand(dto));
   }
 
+  @Public()
   @Post('login')
   // @Throttle({ default: { limit: 10, ttl: 60000 } }) // TODO: Enable Throttle
   async login(

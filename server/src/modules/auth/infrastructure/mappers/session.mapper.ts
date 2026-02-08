@@ -35,11 +35,6 @@ export class SessionMapper implements Mapper<
   }
 
   toDomain(record: SessionOrmEntity): Session {
-    console.log(
-      '[SessionMapper] toDomain record:',
-      JSON.stringify(record, null, 2),
-    );
-
     const entity = Session.rehydrate({
       id: record.id,
       tenantId: record.tenant.id,

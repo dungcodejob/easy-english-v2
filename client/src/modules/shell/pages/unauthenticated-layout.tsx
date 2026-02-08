@@ -1,15 +1,19 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { APP_ROUTES } from '@/shared/constants';
+import { useAuthStore } from '@/shared/stores';
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
-const fallback = '/' as const;
+const fallback = APP_ROUTES.ROOT;
 
 export const Route = createFileRoute('/_(unauthenticated)')({
   component: RouteComponent,
-  // beforeLoad: ({ search }) => {
-  //   const { isAuthenticated } = useAuthStore.getState();
-  //   if (isAuthenticated) {
-  //     throw redirect({ to: (search as TypeSafe).redirect || fallback });
-  //   }
-  // },
+  beforeLoad: ({ search }: { search: { redirect?: string } }) => {
+    const { isAuthenticated } = useAuthStore.getState();
+    if (isAuthenticated) {
+      throw redirect({
+        to: search.redirect || fallback,
+      });
+    }
+  },
 });
 
 function RouteComponent() {

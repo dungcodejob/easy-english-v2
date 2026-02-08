@@ -7,6 +7,7 @@ export const APP_ROUTES = {
   ONBOARDING: {
     WORKSPACE: '/onboarding/workspace',
   },
+  DASHBOARD: '/dashboard',
   TOPIC: {
     LIST: '/topic',
     DETAIL: '/topic/$topicId',

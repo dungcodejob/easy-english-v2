@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "Debug Server",
+            "request": "launch",
+            "command": "npm run start:debug",
+            "cwd": "${workspaceFolder}/server"
+        },
+        {
+            "type": "node-terminal",
+            "name": "Run Client",
+            "request": "launch",
+            "command": "npm run dev",
+            "cwd": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Debug Client (Chrome)",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/client"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack (Server + Client)",
+            "configurations": [
+                "Debug Server",
+                "Run Client"
+            ]
+        }
+    ]
+}

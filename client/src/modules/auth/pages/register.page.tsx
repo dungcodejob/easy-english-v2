@@ -41,15 +41,17 @@ export default function RegisterPage() {
           <RegisterForm />
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{' '}
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <Link
-              to="/terms"
+              to={'/terms' as any}
               className="underline underline-offset-4 hover:text-primary"
             >
               Terms of Service
             </Link>{' '}
             and{' '}
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <Link
-              to="/privacy"
+              to={'/privacy' as any}
               className="underline underline-offset-4 hover:text-primary"
             >
               Privacy Policy
