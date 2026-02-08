@@ -1,9 +1,10 @@
 import { create } from 'zustand';
-import { setAccessToken } from '../../core/api/api.client';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { type User } from '../../modules/auth/types/auth.types';
 
 interface AuthState {
   user: User | null;
+  accessToken: string | null;
   isAuthenticated: boolean;
   actions: {
     login: (user: User, accessToken: string) => void;
@@ -12,23 +13,35 @@ interface AuthState {
   };
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  isAuthenticated: false,
-  actions: {
-    login: (user: User, accessToken: string) => {
-      setAccessToken(accessToken);
-      set({ user, isAuthenticated: true });
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      accessToken: null,
+      isAuthenticated: false,
+      actions: {
+        login: (user: User, accessToken: string) => {
+          set({ user, accessToken, isAuthenticated: true });
+        },
+        logout: () => {
+          set({ user: null, accessToken: null, isAuthenticated: false });
+        },
+        setUser: (user: User | null) => {
+          set({ user, isAuthenticated: !!user });
+        },
+      },
+    }),
+    {
+      name: 'auth-storage',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        isAuthenticated: state.isAuthenticated,
+      }),
     },
-    logout: () => {
-      setAccessToken(null);
-      set({ user: null, isAuthenticated: false });
-    },
-    setUser: (user: User | null) => {
-      set({ user, isAuthenticated: !!user });
-    },
-  },
-}));
+  ),
+);
 
 export const useAuthActions = () => useAuthStore((state) => state.actions);
 export const useUser = () => useAuthStore((state) => state.user);

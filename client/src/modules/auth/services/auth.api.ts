@@ -1,4 +1,4 @@
-import { api, type ApiResponseEnvelope } from '@/core/api';
+import { api, type ApiSuccessResponse } from '@/core/api';
 import type {
   LoginRequest,
   LoginResponse,
@@ -9,13 +9,13 @@ import type {
 export const authApi = {
   login: async (
     data: LoginRequest,
-  ): Promise<ApiResponseEnvelope<LoginResponse>> => {
+  ): Promise<ApiSuccessResponse<LoginResponse>> => {
     return api.post('/auth/login', data);
   },
 
   register: async (
     data: RegisterRequest,
-  ): Promise<ApiResponseEnvelope<RegisterResponse>> => {
+  ): Promise<ApiSuccessResponse<RegisterResponse>> => {
     return api.post('/auth/register', data);
   },
 };

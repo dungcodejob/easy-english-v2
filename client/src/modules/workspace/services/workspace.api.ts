@@ -1,4 +1,4 @@
-import { api, type ApiResponseEnvelope } from '@/core/api';
+import { api, type ApiSuccessResponse } from '@/core/api';
 import type {
   CheckHasWorkspaceResponse,
   CreateWorkspaceRequest,
@@ -8,12 +8,12 @@ import type {
 export const workspaceApi = {
   create: async (
     data: CreateWorkspaceRequest,
-  ): Promise<ApiResponseEnvelope<Workspace>> => {
+  ): Promise<ApiSuccessResponse<Workspace>> => {
     return api.post('/workspaces', data);
   },
 
   checkHasWorkspace: async (): Promise<
-    ApiResponseEnvelope<CheckHasWorkspaceResponse>
+    ApiSuccessResponse<CheckHasWorkspaceResponse>
   > => {
     return api.get('/workspaces/check');
   },

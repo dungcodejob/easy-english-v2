@@ -55,7 +55,7 @@ const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
   DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport.update({
     id: '/workspace/new',
     path: '/workspace/new',
-    getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -80,7 +80,7 @@ export interface FileRoutesById {
   '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/_(unauthenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
+  '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -95,7 +95,7 @@ export interface FileRouteTypes {
     | '/_(authenticated)/dashboard'
     | '/_(unauthenticated)/login'
     | '/_(unauthenticated)/register'
-    | '/_(unauthenticated)/workspace/new'
+    | '/_(authenticated)/workspace/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -148,24 +148,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
-    '/_(unauthenticated)/workspace/new': {
-      id: '/_(unauthenticated)/workspace/new'
+    '/_(authenticated)/workspace/new': {
+      id: '/_(authenticated)/workspace/new'
       path: '/workspace/new'
       fullPath: '/workspace/new'
       preLoaderRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
   }
 }
 
 interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
+  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
 }
 
 const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPagesAuthenticatedLayoutRouteChildren =
   {
     DotModulesDashboardPagesDashboardPageRoute:
       DotModulesDashboardPagesDashboardPageRoute,
+    DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
+      DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
   }
 
 const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
@@ -176,7 +179,6 @@ const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
   DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute
   DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
-  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
 }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
@@ -184,8 +186,6 @@ const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPag
     DotModulesAuthPagesLoginPageRoute: DotModulesAuthPagesLoginPageRoute,
     DotModulesAuthPagesRegisterDotpageRoute:
       DotModulesAuthPagesRegisterDotpageRoute,
-    DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
-      DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
   }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =

@@ -5,6 +5,6 @@ const NewWorkspacePage = () => {
   return <WorkspaceWizard />;
 };
 
-export const Route = createFileRoute('/_(unauthenticated)/workspace/new')({
+export const Route = createFileRoute('/_(authenticated)/workspace/new')({
   component: NewWorkspacePage,
 });

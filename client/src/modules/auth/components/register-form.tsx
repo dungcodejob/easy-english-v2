@@ -59,8 +59,7 @@ export function RegisterForm() {
         },
         onError: (error) => {
           toast.error('Registration failed', {
-            description:
-              error.response?.data?.message || 'Something went wrong',
+            description: error.message || 'Something went wrong',
           });
         },
       },

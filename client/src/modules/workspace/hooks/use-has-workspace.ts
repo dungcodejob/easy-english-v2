@@ -1,19 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-
-import type { ApiErrorResponse } from '@/core/api';
+import { ApiRequestError } from '@/core/api';
 import { QUERY_KEYS } from '@/shared/constants';
+import { useQuery } from '@tanstack/react-query';
 import { workspaceApi } from '../services/workspace.api';
 import type { CheckHasWorkspaceResponse } from '../types/workspace.types';
 
 export const useHasWorkspace = () => {
-  return useQuery<CheckHasWorkspaceResponse, AxiosError<ApiErrorResponse>>({
+  return useQuery<CheckHasWorkspaceResponse, ApiRequestError>({
     queryKey: [QUERY_KEYS.WORKSPACE, 'check'],
     queryFn: async () => {
       const response = await workspaceApi.checkHasWorkspace();
-      if (!response.success) {
-        throw new Error(response.error.message);
-      }
       if (!response.data) {
         throw new Error('No data received from server');
       }
