@@ -10,6 +10,10 @@ export const routes = rootRoute('root.tsx', [
     [
       route(APP_ROUTES.AUTH.LOGIN, './modules/auth/pages/login-page.tsx'),
       route(APP_ROUTES.AUTH.REGISTER, './modules/auth/pages/register.page.tsx'),
+      route(
+        APP_ROUTES.WORKSPACE.NEW,
+        './modules/workspace/pages/new-workspace.page.tsx',
+      ),
     ],
   ),
 

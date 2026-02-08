@@ -7,6 +7,10 @@ export const APP_ROUTES = {
   ONBOARDING: {
     WORKSPACE: '/onboarding/workspace',
   },
+  WORKSPACE: {
+    NEW: '/workspace/new',
+    LIST: '/workspace',
+  },
   DASHBOARD: '/dashboard',
   TOPIC: {
     LIST: '/topic',
