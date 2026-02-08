@@ -11,6 +11,8 @@
 
 - Q: Can multiple users have workspaces with the same name, or must workspace names be globally unique? → A: Workspace names are unique per user only (different users can have the same workspace name)
 - Q: Can a user create and manage multiple workspaces, or is each user limited to exactly one workspace? → A: Users can create multiple workspaces and switch between them
+- Q: Should the frontend store/use the non-persisted wizard fields after workspace creation, or discard them? → A: All wizard fields (workspaceType, learningGoal, level, dailyTarget, studyReminder, defaultLearningMode) should be persisted to the database via the API
+
 
 
 ## User Scenarios & Testing *(mandatory)*
@@ -120,7 +122,7 @@ A user sees a clear progress indicator showing which step they are on and how ma
 - **FR-004**: System MUST preserve user input when navigating between steps using Back/Next buttons
 - **FR-005**: System MUST allow users to skip Step 3 (Preferences) and proceed with default values
 - **FR-006**: System MUST display a summary of all collected data on Step 4 before final submission
-- **FR-007**: System MUST call the backend API (`POST /workspaces`) with the workspace data upon final submission
+- **FR-007**: System MUST call the backend API (`POST /workspaces`) with all workspace data upon final submission: name, description, workspaceType, language, learningGoal, level, dailyTarget, studyReminder, defaultLearningMode
 - **FR-008**: System MUST redirect users to the dashboard (`/`) upon successful workspace creation
 - **FR-009**: System MUST display error feedback via toast notification when workspace creation fails
 - **FR-010**: System MUST show a loading state on the submit button during API request
@@ -131,8 +133,17 @@ A user sees a clear progress indicator showing which step they are on and how ma
 
 ### Key Entities
 
-- **Workspace**: Represents a user's learning environment containing name, description, and language settings. Links to user's account. Workspace names are unique per user (different users may have workspaces with the same name). Users can create and manage multiple workspaces.
-- **WorkspacePreferences**: Settings that control user's learning experience including daily goals, reminders, and default learning mode.
+- **Workspace**: Represents a user's learning environment. Links to user's account. Users can create and manage multiple workspaces. Workspace names are unique per user.
+  - `name` (string, required, 1-100 chars)
+  - `description` (string, optional)
+  - `workspaceType` (enum: PERSONAL | TEAM | CLASSROOM, default: PERSONAL)
+  - `language` (enum: EN | VI | ES | FR | DE | JA | KO | ZH, required)
+  - `learningGoal` (enum: VOCABULARY | EXAM_PREP | DAILY_PRACTICE, default: VOCABULARY)
+  - `level` (enum: BEGINNER | INTERMEDIATE | ADVANCED, default: BEGINNER)
+  - `dailyTarget` (number, 1-100, default: 10)
+  - `studyReminder` (boolean, default: false)
+  - `defaultLearningMode` (enum: FLASHCARD | QUIZ | SPACED_REPETITION, default: FLASHCARD)
+
 
 ## Success Criteria *(mandatory)*
 
