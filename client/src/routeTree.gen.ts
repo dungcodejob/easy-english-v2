@@ -10,11 +10,26 @@
 
 import { Route as rootRouteImport } from './root'
 import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
+import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
+import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
 import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
+import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
+import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
 
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
   DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
     id: '/_(unauthenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotModulesShellPagesAuthenticatedLayoutRoute =
+  DotModulesShellPagesAuthenticatedLayoutRouteImport.update({
+    id: '/_(authenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const modulesShellPagesLandingPageRoute =
+  modulesShellPagesLandingPageRouteImport.update({
+    id: '/',
+    path: '/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const DotModulesAuthPagesRegisterDotpageRoute =
@@ -23,29 +38,58 @@ const DotModulesAuthPagesRegisterDotpageRoute =
     path: '/register',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
   } as any)
+const DotModulesAuthPagesLoginPageRoute =
+  DotModulesAuthPagesLoginPageRouteImport.update({
+    id: '/login',
+    path: '/login',
+    getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
+  } as any)
+const DotModulesDashboardPagesDashboardPageRoute =
+  DotModulesDashboardPagesDashboardPageRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/': typeof modulesShellPagesLandingPageRoute
+  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/': typeof modulesShellPagesLandingPageRoute
+  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof modulesShellPagesLandingPageRoute
+  '/_(authenticated)': typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
   '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/register'
+  fullPaths: '/' | '/dashboard' | '/login' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/register'
-  id: '__root__' | '/_(unauthenticated)' | '/_(unauthenticated)/register'
+  to: '/' | '/dashboard' | '/login' | '/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/_(authenticated)'
+    | '/_(unauthenticated)'
+    | '/_(authenticated)/dashboard'
+    | '/_(unauthenticated)/login'
+    | '/_(unauthenticated)/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  modulesShellPagesLandingPageRoute: typeof modulesShellPagesLandingPageRoute
+  DotModulesShellPagesAuthenticatedLayoutRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
   DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
 }
 
@@ -58,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_(authenticated)': {
+      id: '/_(authenticated)'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof modulesShellPagesLandingPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_(unauthenticated)/register': {
       id: '/_(unauthenticated)/register'
       path: '/register'
@@ -65,15 +123,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
+    '/_(unauthenticated)/login': {
+      id: '/_(unauthenticated)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport
+      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
+    }
+    '/_(authenticated)/dashboard': {
+      id: '/_(authenticated)/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+    }
   }
 }
 
+interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
+  DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
+}
+
+const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPagesAuthenticatedLayoutRouteChildren =
+  {
+    DotModulesDashboardPagesDashboardPageRoute:
+      DotModulesDashboardPagesDashboardPageRoute,
+  }
+
+const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
+  DotModulesShellPagesAuthenticatedLayoutRoute._addFileChildren(
+    DotModulesShellPagesAuthenticatedLayoutRouteChildren,
+  )
+
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
+  DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute
   DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
   {
+    DotModulesAuthPagesLoginPageRoute: DotModulesAuthPagesLoginPageRoute,
     DotModulesAuthPagesRegisterDotpageRoute:
       DotModulesAuthPagesRegisterDotpageRoute,
   }
@@ -84,6 +173,9 @@ const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =
   )
 
 const rootRouteChildren: RootRouteChildren = {
+  modulesShellPagesLandingPageRoute: modulesShellPagesLandingPageRoute,
+  DotModulesShellPagesAuthenticatedLayoutRoute:
+    DotModulesShellPagesAuthenticatedLayoutRouteWithChildren,
   DotModulesShellPagesUnauthenticatedLayoutRoute:
     DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren,
 }

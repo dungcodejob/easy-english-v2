@@ -1,9 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { ConfigType, registerAs } from '@nestjs/config';
-import { ENV_KEY } from '@shared/constants';
 
 export const httpConfig = registerAs('http', () => {
-  const rawCorsOrigins = process.env[ENV_KEY.CORS_ORIGINS];
+  const rawCorsOrigins = process.env.CORS_ORIGINS;
 
   return {
     version: process.env.HTTP_VERSION || '1',

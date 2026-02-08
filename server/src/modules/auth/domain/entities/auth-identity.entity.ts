@@ -2,6 +2,7 @@ import { v7 } from 'uuid';
 
 import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { AuthIdentityCreatedEvent } from '../events';
+import { IPasswordHasher } from '../ports/password-hasher.interface';
 import { Password } from '../value-objects/password.vo';
 
 export enum AuthProvider {
@@ -58,4 +59,18 @@ export class AuthIdentity extends AggregateRoot {
   static rehydrate(props: CreateEntityProps<AuthIdentityProps>): AuthIdentity {
     return new AuthIdentity(props);
   }
+
+  async verifyPassword(
+    plainText: string,
+    hasher: IPasswordHasher,
+  ): Promise<boolean> {
+    if (!this.password) {
+      return false;
+    }
+    return hasher.compare(plainText, this.password.getHashedValue());
+  }
 }
+
+// Add import for IPasswordHasher at top if needed, but since it's an interface, I might need to import it.
+// Wait, I can't add imports with replace_file_content if I don't see the top.
+// I WILL USE MULTI_REPLACE to add import and method.

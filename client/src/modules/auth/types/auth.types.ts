@@ -16,3 +16,27 @@ export interface AuthError {
   error: string;
   statusCode: number;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  fullName?: string; // Changed from firstName/lastName to fullName to match common practice or keep as is? Let's check backend User entity if possible, but for now generic.
+  role: 'USER' | 'ADMIN';
+  avatar?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: User;
+  accessToken: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}

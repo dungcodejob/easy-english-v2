@@ -78,6 +78,10 @@ export abstract class Entity {
     return this.id ? this.id === object.id : false;
   }
 
+  public updateUpdatedAt(): void {
+    this._updatedAt = new Date();
+  }
+
   /**
    * There are certain rules that always have to be true (invariants)
    * for each entity. Validate method is called every time before

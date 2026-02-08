@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const port = appConfigValues.port;
   const domain = appConfigValues.domain;
-  const testing = appConfigValues.testing;
+  const isProduction = appConfigValues.isProduction;
 
   const globalPrefix = 'api';
   app.enableCors({
@@ -45,7 +45,7 @@ async function bootstrap() {
 
   swagger(app, appConfigValues);
 
-  await app.listen(port, testing ? '127.0.0.1' : '0.0.0.0');
+  await app.listen(port, isProduction ? '0.0.0.0' : '127.0.0.1');
 
   console.log(`Server in ${process.env.NODE_ENV} mode`);
   console.log(`Server is listening on :${port}/${globalPrefix}`);

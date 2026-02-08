@@ -7,12 +7,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { appConfig, httpConfig } from './configs';
 import databaseConfig from './configs/database.config';
+import { jwtConfig } from './configs/jwt.config';
 import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
-      load: [appConfig, httpConfig],
+      load: [appConfig, httpConfig, jwtConfig],
       envFilePath: `./.env.${process.env.NODE_ENV || 'dev'}`,
       isGlobal: true,
     }),

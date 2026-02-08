@@ -10,4 +10,4 @@ const { token, inject, provider } =
 
 export const InjectPasswordHasher = inject;
 export const passwordHasherToken = token;
-export const passwordHasherProvider = provider;
+export const providePasswordHasher = provider;

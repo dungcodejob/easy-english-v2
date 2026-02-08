@@ -15,7 +15,7 @@ import {
   type IPasswordHasher,
 } from '../../domain/ports/password-hasher.interface';
 import {
-  InjectUsernameAvailabilityService,
+  InjectUsernameAvailability,
   type IUsernameAvailabilityService,
 } from '../../domain/ports/username-availability.interface';
 import {
@@ -23,7 +23,7 @@ import {
   type IUsernameGenerator,
 } from '../../domain/ports/username-generator.interface';
 import {
-  injectAuthIdentityRepository,
+  InjectAuthIdentityRepository,
   type IAuthIdentityRepository,
 } from '../../domain/repositories/auth-identity.repository.interface';
 import {
@@ -31,7 +31,7 @@ import {
   type ITenantRepository,
 } from '../../domain/repositories/tenant.repository.interface';
 import {
-  injectUserRepository,
+  InjectUserRepository,
   type IUserRepository,
 } from '../../domain/repositories/user.repository.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
@@ -51,9 +51,9 @@ export class RegisterHandler implements ICommandHandler<
     // Repositories (following DI pattern)
     @injectTenantRepository()
     private readonly tenantRepo: ITenantRepository,
-    @injectUserRepository()
+    @InjectUserRepository()
     private readonly userRepo: IUserRepository,
-    @injectAuthIdentityRepository()
+    @InjectAuthIdentityRepository()
     private readonly authIdentityRepo: IAuthIdentityRepository,
 
     // Domain services
@@ -61,7 +61,7 @@ export class RegisterHandler implements ICommandHandler<
     private readonly hasher: IPasswordHasher,
     @InjectUsernameGenerator()
     private readonly usernameGenerator: IUsernameGenerator,
-    @InjectUsernameAvailabilityService()
+    @InjectUsernameAvailability()
     private readonly usernameAvailability: IUsernameAvailabilityService,
 
     // Infrastructure

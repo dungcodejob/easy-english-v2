@@ -1,0 +1,311 @@
+openapi: 3.0.3
+info:
+  title: Local Authentication Login API
+  description: |
+    API contract for Local Authentication (email/password) login flow.
+    
+    All responses follow the standard response schema defined in the API Response Schema Specification.
+    All endpoints adhere to the API contract standards for HTTP methods and status codes.
+  version: 1.0.0
+  contact:
+    name: Easy English V2 Team
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development
+  - url: https://api.easy-english-v2.com/api/v1
+    description: Production
+
+tags:
+  - name: Authentication
+    description: User authentication operations
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user with email and password
+      description: |
+        Validates user credentials and creates a new authenticated session.
+        Returns access and refresh tokens upon successful authentication.
+        
+        **Security**:
+        - Error responses DO NOT indicate whether the email exists (prevents account enumeration)
+        - Rate limited: 10 attempts per IP per minute, 50 per hour
+        - Account-based lockout after repeated failures
+        
+        **Session Management**:
+        - Always creates a new session (no session reuse)
+        - Maximum 5 concurrent sessions per user
+        - Oldest session automatically revoked when limit exceeded
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              validCredentials:
+                summary: Valid login credentials
+                value:
+                  email: user@example.com
+                  password: SecurePassword123!
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/LoginResponse'
+              examples:
+                successfulLogin:
+                  summary: Successful login response
+                  value:
+                    success: true
+                    data:
+                      accessToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                      refreshToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                      expiresAt: "2026-02-11T00:51:34Z"
+                      refreshExpiresAt: "2026-03-06T00:51:34Z"
+                      user:
+                        id: 550e8400-e29b-41d4-a716-446655440000
+                        email: user@example.com
+                    timestamp: "2026-02-04T00:51:34Z"
+        '401':
+          description: Invalid credentials or account blocked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              examples:
+                invalidCredentials:
+                  summary: Invalid email or password
+                  value:
+                    success: false
+                    error:
+                      code: ERR_INVALID_CREDENTIALS
+                      message: Invalid email or password.
+                      details: null
+                    timestamp: "2026-02-04T00:51:34Z"
+                    correlationId: 7f3d2a1b-5c8e-4f9a-b3d6-1e4a2c7f8b9d
+        '403':
+          description: Account is blocked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              examples:
+                accountBlocked:
+                  summary: Account blocked by administrator
+                  value:
+                    success: false
+                    error:
+                      code: ERR_ACCOUNT_BLOCKED
+                      message: Account is blocked. Please contact support.
+                      details: null
+                    timestamp: "2026-02-04T00:51:34Z"
+                    correlationId: 7f3d2a1b-5c8e-4f9a-b3d6-1e4a2c7f8b9d
+        '429':
+          description: Too many login attempts (rate limit exceeded)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              examples:
+                rateLimitExceeded:
+                  summary: Too many failed attempts
+                  value:
+                    success: false
+                    error:
+                      code: ERR_RATE_LIMIT_EXCEEDED
+                      message: Too many failed login attempts. Please try again in 15 minutes.
+                      details:
+                        retryAfter: 900
+                        lockExpiresAt: "2026-02-04T01:06:34Z"
+                    timestamp: "2026-02-04T00:51:34Z"
+                    correlationId: 7f3d2a1b-5c8e-4f9a-b3d6-1e4a2c7f8b9d
+        '422':
+          description: Validation error (invalid email format, missing fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              examples:
+                validationError:
+                  summary: Invalid email format
+                  value:
+                    success: false
+                    error:
+                      code: ERR_VALIDATION_FAILED
+                      message: Validation failed.
+                      details:
+                        - field: email
+                          message: Invalid email format
+                        - field: password
+                          message: Password is required
+                    timestamp: "2026-02-04T00:51:34Z"
+                    correlationId: 7f3d2a1b-5c8e-4f9a-b3d6-1e4a2c7f8b9d
+
+components:
+  schemas:
+    # === Request DTOs ===
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address (case-insensitive, normalized)
+          example: user@example.com
+          minLength: 3
+          maxLength: 255
+        password:
+          type: string
+          format: password
+          description: User's password (plain text, will be hashed on server)
+          example: SecurePassword123!
+          minLength: 1
+          maxLength: 255
+
+    # === Response DTOs ===
+    LoginResponse:
+      type: object
+      required:
+        - accessToken
+        - refreshToken
+        - expiresAt
+        - refreshExpiresAt
+        - user
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token (valid for 7 days by default)
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        refreshToken:
+          type: string
+          description: JWT refresh token (valid for 30 days by default, one-time-use)
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        expiresAt:
+          type: string
+          format: date-time
+          description: Access token expiration timestamp (ISO 8601)
+          example: "2026-02-11T00:51:34Z"
+        refreshExpiresAt:
+          type: string
+          format: date-time
+          description: Refresh token expiration timestamp (ISO 8601)
+          example: "2026-03-06T00:51:34Z"
+        user:
+          $ref: '#/components/schemas/UserData'
+
+    UserData:
+      type: object
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User's unique identifier
+          example: 550e8400-e29b-41d4-a716-446655440000
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: user@example.com
+
+    # === Standard Response Envelopes ===
+    SuccessEnvelope:
+      type: object
+      required:
+        - success
+        - data
+        - timestamp
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+          description: Indicates a successful response
+          example: true
+        data:
+          type: object
+          description: Response payload (schema varies by endpoint)
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp (ISO 8601)
+          example: "2026-02-04T00:51:34Z"
+
+    ErrorEnvelope:
+      type: object
+      required:
+        - success
+        - error
+        - timestamp
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+          description: Indicates an error response
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp (ISO 8601)
+          example: "2026-02-04T00:51:34Z"
+        correlationId:
+          type: string
+          format: uuid
+          description: Unique identifier for tracing this request across services
+          example: 7f3d2a1b-5c8e-4f9a-b3d6-1e4a2c7f8b9d
+
+    ErrorDetail:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - ERR_INVALID_CREDENTIALS
+            - ERR_ACCOUNT_BLOCKED
+            - ERR_RATE_LIMIT_EXCEEDED
+            - ERR_VALIDATION_FAILED
+            - ERR_INTERNAL_SERVER_ERROR
+          example: ERR_INVALID_CREDENTIALS
+        message:
+          type: string
+          description: Human-readable error message
+          example: Invalid email or password.
+        details:
+          description: Additional error details (optional, null if not applicable)
+          oneOf:
+            - type: object
+              description: Additional context (e.g., validation errors, retry info)
+            - type: "null"
+          example: null
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT access token obtained from POST /auth/login.
+        Include in Authorization header as: `Authorization: Bearer {accessToken}`

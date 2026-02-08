@@ -24,6 +24,6 @@ export interface IUsernameAvailabilityService {
 const { token, inject, provider } =
   createInjection<IUsernameAvailabilityService>('IUsernameAvailabilityService');
 
-export const InjectUsernameAvailabilityService = inject;
-export const usernameAvailabilityServiceToken = token;
-export const usernameAvailabilityServiceProvider = provider;
+export const InjectUsernameAvailability = inject;
+export const usernameAvailabilityToken = token;
+export const provideUsernameAvailability = provider;
