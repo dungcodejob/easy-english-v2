@@ -9,20 +9,19 @@ import { appConfig, httpConfig } from './configs';
 import databaseConfig from './configs/database.config';
 import { jwtConfig } from './configs/jwt.config';
 import { AuthModule } from './modules/auth/auth.module';
+import { WorkspaceModule } from './modules/workspace/workspace.module';
+
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       load: [appConfig, httpConfig, jwtConfig],
-      envFilePath: `./.env.${process.env.NODE_ENV || 'dev'}`,
       isGlobal: true,
     }),
-    MikroOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: () => databaseConfig,
-    }),
+    MikroOrmModule.forRoot(databaseConfig),
     CqrsModule,
     AuthModule,
+    WorkspaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
