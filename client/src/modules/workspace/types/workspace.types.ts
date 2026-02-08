@@ -1,8 +1,7 @@
-export enum WorkspaceType {
-  PERSONAL = 'PERSONAL',
-  TEAM = 'TEAM',
-  CLASSROOM = 'CLASSROOM',
-}
+import type { WorkspaceLearningGoal } from './workspace-learning-goal.enum';
+import type { WorkspaceLearningLevel } from './workspace-learning-level.enum';
+import type { WorkspaceLearningMode } from './workspace-learning-mode.enum';
+import type { WorkspaceType } from './workspace-type.enum';
 
 export enum Language {
   EN = 'EN',
@@ -15,24 +14,6 @@ export enum Language {
   ZH = 'ZH',
 }
 
-export enum LearningGoal {
-  VOCABULARY = 'VOCABULARY',
-  EXAM_PREP = 'EXAM_PREP',
-  DAILY_PRACTICE = 'DAILY_PRACTICE',
-}
-
-export enum Level {
-  BEGINNER = 'BEGINNER',
-  INTERMEDIATE = 'INTERMEDIATE',
-  ADVANCED = 'ADVANCED',
-}
-
-export enum LearningMode {
-  FLASHCARD = 'FLASHCARD',
-  QUIZ = 'QUIZ',
-  SPACED_REPETITION = 'SPACED_REPETITION',
-}
-
 export interface Workspace {
   id: string;
   tenantId: string;
@@ -41,11 +22,11 @@ export interface Workspace {
   description?: string;
   type: WorkspaceType;
   language: Language;
-  learningGoal: LearningGoal;
-  level: Level;
+  learningGoal: WorkspaceLearningGoal;
+  level: WorkspaceLearningLevel;
   dailyTarget: number;
   studyReminder: boolean;
-  defaultLearningMode: LearningMode;
+  defaultLearningMode: WorkspaceLearningMode;
   createdAt: string;
   updatedAt: string;
 }
@@ -55,12 +36,14 @@ export interface CreateWorkspaceRequest {
   description?: string;
   type: WorkspaceType;
   language: Language;
-  learningGoal: LearningGoal;
-  level: Level;
+  learningGoal: WorkspaceLearningGoal;
+  level: WorkspaceLearningLevel;
   dailyTarget: number;
   studyReminder: boolean;
-  defaultLearningMode: LearningMode;
+  defaultLearningMode: WorkspaceLearningMode;
 }
+
+export type CreateWorkspaceWizardData = CreateWorkspaceRequest;
 
 export interface CheckHasWorkspaceResponse {
   hasWorkspace: boolean;

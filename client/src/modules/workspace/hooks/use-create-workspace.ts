@@ -1,6 +1,7 @@
 import { ApiRequestError } from '@/core/api';
-import { QUERY_KEYS } from '@/shared/constants';
+import { APP_ROUTES, workspaceKeys } from '@/shared/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { workspaceApi } from '../services/workspace.api';
 import { useWizardActions } from '../stores/use-wizard-store';
@@ -12,8 +13,13 @@ import type {
 export const useCreateWorkspace = () => {
   const queryClient = useQueryClient();
   const { reset } = useWizardActions();
+  const navigate = useNavigate();
 
-  return useMutation<Workspace, ApiRequestError, CreateWorkspaceRequest>({
+  const mutation = useMutation<
+    Workspace,
+    ApiRequestError,
+    CreateWorkspaceRequest
+  >({
     mutationFn: async (data: CreateWorkspaceRequest) => {
       const response = await workspaceApi.create(data);
       if (!response.data) {
@@ -22,14 +28,23 @@ export const useCreateWorkspace = () => {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Workspace created successfully!');
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.WORKSPACE] });
+      queryClient.invalidateQueries({ queryKey: workspaceKeys.all });
       reset();
-      // navigate({ to: APP_ROUTES.WORKSPACE.LIST });
+      navigate({ to: APP_ROUTES.DASHBOARD });
     },
     onError: (error) => {
-      // error is now ApiRequestError with structured info
       toast.error(error.message || 'Failed to create workspace.');
     },
   });
+
+  return {
+    ...mutation,
+    mutateAsync: (data: CreateWorkspaceRequest) =>
+      toast.promise(mutation.mutateAsync(data), {
+        loading: 'Creating workspace...',
+        success: 'Workspace created successfully!',
+        error: (error: ApiRequestError) =>
+          error.message || 'Failed to create workspace.',
+      }),
+  };
 };

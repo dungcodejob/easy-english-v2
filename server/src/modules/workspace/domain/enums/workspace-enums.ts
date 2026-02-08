@@ -1,7 +1,7 @@
 export enum WorkspaceType {
-  PERSONAL = 'PERSONAL',
-  TEAM = 'TEAM',
-  CLASSROOM = 'CLASSROOM',
+  Personal = 'Personal',
+  Team = 'Team',
+  Classroom = 'Classroom',
 }
 
 export enum Language {
@@ -16,19 +16,19 @@ export enum Language {
 }
 
 export enum LearningGoal {
-  VOCABULARY = 'VOCABULARY',
-  EXAM_PREP = 'EXAM_PREP',
-  DAILY_PRACTICE = 'DAILY_PRACTICE',
+  Vocabulary = 'Vocabulary',
+  ExamPrep = 'ExamPrep',
+  DailyPractice = 'DailyPractice',
 }
 
 export enum Level {
-  BEGINNER = 'BEGINNER',
-  INTERMEDIATE = 'INTERMEDIATE',
-  ADVANCED = 'ADVANCED',
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Advanced = 'Advanced',
 }
 
 export enum LearningMode {
-  FLASHCARD = 'FLASHCARD',
-  QUIZ = 'QUIZ',
-  SPACED_REPETITION = 'SPACED_REPETITION',
+  Flashcard = 'Flashcard',
+  Quiz = 'Quiz',
+  SpacedRepetition = 'SpacedRepetition',
 }

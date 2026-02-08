@@ -11,42 +11,56 @@ import {
   useWizardStep,
 } from '../../stores/use-wizard-store';
 import type { CreateWorkspaceRequest } from '../../types/workspace.types';
-import { WizardStepBasics } from './wizard-step-basics';
-import { WizardStepContext } from './wizard-step-context';
-import { WizardStepPreferences } from './wizard-step-preferences';
-import { WizardStepReview } from './wizard-step-review';
+import { WorkspaceBasicsStep } from './workspace-basics-step';
+import { WorkspaceLearningStep } from './workspace-learning-step';
+import { WorkspacePreferencesStep } from './workspace-preferences-step';
+import { WorkspaceReviewStep } from './workspace-review-step';
 
 export const WorkspaceWizard = () => {
   const step = useWizardStep();
-  const { setStep } = useWizardActions();
+  const { setStep, updateData } = useWizardActions();
   const wizardData = useWizardData();
   const { mutate: createWorkspace, isPending } = useCreateWorkspace();
 
-  const handleNext = () => setStep(step + 1);
+  const handleNext = (data: Partial<CreateWorkspaceRequest>) => {
+    updateData(data);
+    setStep(step + 1);
+  };
+
   const handleBack = () => setStep(step - 1);
+  const handleSkip = () => setStep(step + 1);
 
   const handleSubmit = () => {
-    // Validate necessary fields here or inside Step3 if needed,
-    // though the wizard allows free navigation usually, final check is good.
-    // Ensure data is complete before submitting
-    // Since types are Partial in store, we need to cast or ensure they exist.
-    // For now assuming the wizard flow ensures completeness or defaults are set.
     createWorkspace(wizardData as CreateWorkspaceRequest);
   };
 
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <WizardStepBasics onNext={handleNext} />;
+        return (
+          <WorkspaceBasicsStep defaultValues={wizardData} onNext={handleNext} />
+        );
       case 2:
-        return <WizardStepContext onNext={handleNext} onBack={handleBack} />;
+        return (
+          <WorkspaceLearningStep
+            defaultValues={wizardData}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        );
       case 3:
         return (
-          <WizardStepPreferences onNext={handleNext} onBack={handleBack} />
+          <WorkspacePreferencesStep
+            defaultValues={wizardData}
+            onNext={handleNext}
+            onBack={handleBack}
+            onSkip={handleSkip}
+          />
         );
       case 4:
         return (
-          <WizardStepReview
+          <WorkspaceReviewStep
+            data={wizardData}
             onBack={handleBack}
             onSubmit={handleSubmit}
             isSubmitting={isPending}

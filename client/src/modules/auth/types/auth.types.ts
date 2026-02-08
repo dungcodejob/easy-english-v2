@@ -29,14 +29,3 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
-
-export interface LoginResponse {
-  user: User;
-  accessToken: string;
-}
-
-export interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-}

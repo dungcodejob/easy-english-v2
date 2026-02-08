@@ -24,16 +24,16 @@ export class WorkspaceOrmEntity {
   @Property({ type: 'text', nullable: true })
   description?: string;
 
-  @Enum({ items: () => WorkspaceType, default: WorkspaceType.PERSONAL })
+  @Enum({ items: () => WorkspaceType, default: WorkspaceType.Personal })
   type!: WorkspaceType;
 
   @Enum({ items: () => Language })
   language!: Language;
 
-  @Enum({ items: () => LearningGoal, default: LearningGoal.VOCABULARY })
+  @Enum({ items: () => LearningGoal, default: LearningGoal.Vocabulary })
   learningGoal!: LearningGoal;
 
-  @Enum({ items: () => Level, default: Level.BEGINNER })
+  @Enum({ items: () => Level, default: Level.Beginner })
   level!: Level;
 
   @Property({ type: 'integer', default: 10 })
@@ -44,7 +44,7 @@ export class WorkspaceOrmEntity {
 
   @Enum({
     items: () => LearningMode,
-    default: LearningMode.FLASHCARD,
+    default: LearningMode.Flashcard,
   })
   defaultLearningMode!: LearningMode;
 

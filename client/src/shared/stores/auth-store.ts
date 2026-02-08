@@ -1,15 +1,15 @@
+import type { TokenResultDto, UserResponseDto } from '@/modules/auth/types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { type User } from '../../modules/auth/types/auth.types';
 
 interface AuthState {
-  user: User | null;
-  accessToken: string | null;
+  user: UserResponseDto | null;
+  accessToken: TokenResultDto | null;
   isAuthenticated: boolean;
   actions: {
-    login: (user: User, accessToken: string) => void;
+    login: (user: UserResponseDto, accessToken: TokenResultDto) => void;
     logout: () => void;
-    setUser: (user: User | null) => void;
+    setUser: (user: UserResponseDto | null) => void;
   };
 }
 
@@ -20,13 +20,13 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       isAuthenticated: false,
       actions: {
-        login: (user: User, accessToken: string) => {
-          set({ user, accessToken, isAuthenticated: true });
+        login: (user: UserResponseDto, accessToken: TokenResultDto) => {
+          set({ user, accessToken: accessToken, isAuthenticated: true });
         },
         logout: () => {
           set({ user: null, accessToken: null, isAuthenticated: false });
         },
-        setUser: (user: User | null) => {
+        setUser: (user: UserResponseDto | null) => {
           set({ user, isAuthenticated: !!user });
         },
       },

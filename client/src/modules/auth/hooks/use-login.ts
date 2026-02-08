@@ -1,14 +1,16 @@
 import { ApiRequestError, type ApiSuccessResponse } from '@/core/api';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { useAuthActions } from '../../../shared/stores/auth-store';
 import { authApi } from '../services/auth.api';
-import type { LoginRequest, LoginResponse } from '../types/auth.types';
+import type { LoginResponseDto } from '../types';
+import type { LoginRequest } from '../types/auth.types';
 
 export const useLogin = () => {
   const { login } = useAuthActions();
 
-  return useMutation<
-    ApiSuccessResponse<LoginResponse>,
+  const mutation = useMutation<
+    ApiSuccessResponse<LoginResponseDto>,
     ApiRequestError,
     LoginRequest
   >({
@@ -19,4 +21,14 @@ export const useLogin = () => {
       }
     },
   });
+
+  return {
+    ...mutation,
+    mutateAsync: (data: LoginRequest) =>
+      toast.promise(mutation.mutateAsync(data), {
+        loading: 'Logging in...',
+        success: 'Logged in successfully!',
+        error: (error: ApiRequestError) => error.message || 'Failed to log in.',
+      }),
+  };
 };

@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import {
+  WorkspaceLearningGoal,
+  WorkspaceLearningLevel,
+  WorkspaceLearningMode,
+  WorkspaceType,
+} from '../types';
+import {
   type CreateWorkspaceRequest,
   Language,
-  LearningGoal,
-  LearningMode,
-  Level,
-  WorkspaceType,
 } from '../types/workspace.types';
 
 export interface WizardState {
@@ -24,13 +26,13 @@ const initialState: WizardState = {
   data: {
     name: '',
     description: '',
-    type: WorkspaceType.PERSONAL,
+    type: WorkspaceType.Personal,
     language: Language.EN,
-    learningGoal: LearningGoal.DAILY_PRACTICE,
-    level: Level.BEGINNER,
+    learningGoal: WorkspaceLearningGoal.DailyPractice,
+    level: WorkspaceLearningLevel.Beginner,
     dailyTarget: 30,
     studyReminder: true,
-    defaultLearningMode: LearningMode.FLASHCARD,
+    defaultLearningMode: WorkspaceLearningMode.Flashcard,
   },
 };
 

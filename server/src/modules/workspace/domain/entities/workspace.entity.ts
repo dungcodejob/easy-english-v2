@@ -7,6 +7,7 @@ import {
   Level,
   WorkspaceType,
 } from '../enums/workspace-enums';
+import { WorkspaceCreatedEvent } from '../events';
 
 export interface WorkspaceProps {
   tenantId: string;
@@ -61,6 +62,15 @@ export class WorkspaceEntity extends AggregateRoot {
       ...create,
     };
     const workspace = new WorkspaceEntity(props);
+
+    workspace.addEvent(
+      new WorkspaceCreatedEvent({
+        workspaceId: workspace.id,
+        userId: workspace.userId,
+        tenantId: workspace.tenantId,
+        aggregateId: workspace.id,
+      }),
+    );
 
     return workspace;
   }

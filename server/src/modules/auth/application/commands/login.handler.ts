@@ -24,6 +24,9 @@ import {
   InjectSessionRepository,
 } from '../../domain/repositories/session.repository.interface';
 
+import { EntityManager } from '@mikro-orm/core';
+import { Logger } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type IUserRepository,
@@ -38,6 +41,8 @@ export class LoginHandler implements ICommandHandler<
   LoginCommand,
   AuthResultDto
 > {
+  private readonly logger = new Logger(LoginHandler.name);
+
   @InjectUserRepository()
   private readonly userRepo: IUserRepository;
 
@@ -55,6 +60,11 @@ export class LoginHandler implements ICommandHandler<
 
   @InjectTokenGenerator()
   private readonly tokenGenerator: ITokenGenerator;
+
+  constructor(
+    private readonly em: EntityManager,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async execute(command: LoginCommand): Promise<AuthResultDto> {
     const { email, password, ipAddress, userAgent, deviceId } = command.props;
@@ -144,6 +154,10 @@ export class LoginHandler implements ICommandHandler<
 
     session.setRefreshTokenHash(refreshTokenHash);
     this.sessionRepo.persist(session);
+
+    await this.em.flush();
+
+    await session.publishEvents(this.logger, this.eventEmitter);
 
     const userDto = new UserResponseDto(
       user.id,

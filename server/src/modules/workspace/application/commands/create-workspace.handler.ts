@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { ConflictException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { WorkspaceEntity } from '../../domain/entities/workspace.entity';
 import {
   InjectWorkspaceRepository,
@@ -20,6 +21,7 @@ export class CreateWorkspaceHandler implements ICommandHandler<
     @InjectWorkspaceRepository()
     private readonly workspaceRepo: IWorkspaceRepository,
     private readonly em: EntityManager,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async execute(
@@ -63,6 +65,8 @@ export class CreateWorkspaceHandler implements ICommandHandler<
 
     this.workspaceRepo.persist(workspace);
     await this.em.flush();
+
+    await workspace.publishEvents(this.logger, this.eventEmitter);
 
     return new WorkspaceResponseDto(
       workspace.id,

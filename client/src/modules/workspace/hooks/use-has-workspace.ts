@@ -1,12 +1,12 @@
 import { ApiRequestError } from '@/core/api';
-import { QUERY_KEYS } from '@/shared/constants';
+import { workspaceKeys } from '@/shared/constants';
 import { useQuery } from '@tanstack/react-query';
 import { workspaceApi } from '../services/workspace.api';
 import type { CheckHasWorkspaceResponse } from '../types/workspace.types';
 
 export const useHasWorkspace = () => {
   return useQuery<CheckHasWorkspaceResponse, ApiRequestError>({
-    queryKey: [QUERY_KEYS.WORKSPACE, 'check'],
+    queryKey: workspaceKeys.hasWorkspace(),
     queryFn: async () => {
       const response = await workspaceApi.checkHasWorkspace();
       if (!response.data) {
