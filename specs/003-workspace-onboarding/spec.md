@@ -5,6 +5,14 @@
 **Status**: Draft  
 **Input**: User description: "Design and implement a Workspace Onboarding Wizard for a language-learning SaaS product"
 
+## Clarifications
+
+### Session 2026-02-08
+
+- Q: Can multiple users have workspaces with the same name, or must workspace names be globally unique? → A: Workspace names are unique per user only (different users can have the same workspace name)
+- Q: Can a user create and manage multiple workspaces, or is each user limited to exactly one workspace? → A: Users can create multiple workspaces and switch between them
+
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Complete Basic Workspace Setup (Priority: P1)
@@ -123,7 +131,7 @@ A user sees a clear progress indicator showing which step they are on and how ma
 
 ### Key Entities
 
-- **Workspace**: Represents a user's learning environment containing name, description, and language settings. Links to user's account.
+- **Workspace**: Represents a user's learning environment containing name, description, and language settings. Links to user's account. Workspace names are unique per user (different users may have workspaces with the same name). Users can create and manage multiple workspaces.
 - **WorkspacePreferences**: Settings that control user's learning experience including daily goals, reminders, and default learning mode.
 
 ## Success Criteria *(mandatory)*
