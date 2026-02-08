@@ -11,9 +11,10 @@ import {
   useWizardStep,
 } from '../../stores/use-wizard-store';
 import type { CreateWorkspaceRequest } from '../../types/workspace.types';
-import { Step1BasicInfo } from './step-1-basic-info';
-import { Step2LearningPreferences } from './step-2-learning-preferences';
-import { Step3Review } from './step-3-review';
+import { WizardStepBasics } from './wizard-step-basics';
+import { WizardStepContext } from './wizard-step-context';
+import { WizardStepPreferences } from './wizard-step-preferences';
+import { WizardStepReview } from './wizard-step-review';
 
 export const WorkspaceWizard = () => {
   const step = useWizardStep();
@@ -36,14 +37,16 @@ export const WorkspaceWizard = () => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <Step1BasicInfo onNext={handleNext} />;
+        return <WizardStepBasics onNext={handleNext} />;
       case 2:
-        return (
-          <Step2LearningPreferences onNext={handleNext} onBack={handleBack} />
-        );
+        return <WizardStepContext onNext={handleNext} onBack={handleBack} />;
       case 3:
         return (
-          <Step3Review
+          <WizardStepPreferences onNext={handleNext} onBack={handleBack} />
+        );
+      case 4:
+        return (
+          <WizardStepReview
             onBack={handleBack}
             onSubmit={handleSubmit}
             isSubmitting={isPending}
@@ -58,7 +61,7 @@ export const WorkspaceWizard = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle>Create Your Workspace - Step {step} of 3</CardTitle>
+          <CardTitle>Create Your Workspace - Step {step} of 4</CardTitle>
           {/* Add a progress bar here if needed */}
         </CardHeader>
         <CardContent>{renderStep()}</CardContent>

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { WorkspaceWizard } from '../components/wizard/WorkspaceWizard';
+import { WorkspaceWizard } from '../components/wizard/workspace-wizard';
 
 const NewWorkspacePage = () => {
   return <WorkspaceWizard />;

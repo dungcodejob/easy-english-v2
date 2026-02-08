@@ -5,6 +5,10 @@ export interface IWorkspaceRepository {
   persist(workspace: WorkspaceEntity): void;
   findOneById(id: string): Promise<WorkspaceEntity | null>;
   findOneByName(name: string): Promise<WorkspaceEntity | null>;
+  findOneByNameAndUserId(
+    name: string,
+    userId: string,
+  ): Promise<WorkspaceEntity | null>;
   findOneByUserId(userId: string): Promise<WorkspaceEntity | null>;
   findOneByTenantId(tenantId: string): Promise<WorkspaceEntity | null>;
 }

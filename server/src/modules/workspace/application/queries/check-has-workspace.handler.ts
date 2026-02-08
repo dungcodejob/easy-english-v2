@@ -11,8 +11,10 @@ export class CheckHasWorkspaceHandler implements IQueryHandler<
   CheckHasWorkspaceQuery,
   HasWorkspaceResponseDto
 > {
-  @InjectWorkspaceRepository()
-  private readonly workspaceRepo: IWorkspaceRepository;
+  constructor(
+    @InjectWorkspaceRepository()
+    private readonly workspaceRepo: IWorkspaceRepository,
+  ) {}
 
   async execute(
     query: CheckHasWorkspaceQuery,

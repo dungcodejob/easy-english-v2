@@ -30,6 +30,14 @@ export class WorkspaceRepository implements IWorkspaceRepository {
     return ormEntity ? this.mapper.toDomain(ormEntity) : null;
   }
 
+  async findOneByNameAndUserId(
+    name: string,
+    userId: string,
+  ): Promise<WorkspaceEntity | null> {
+    const ormEntity = await this.repo.findOne({ name, userId });
+    return ormEntity ? this.mapper.toDomain(ormEntity) : null;
+  }
+
   async findOneByUserId(userId: string): Promise<WorkspaceEntity | null> {
     const ormEntity = await this.repo.findOne({ userId });
     return ormEntity ? this.mapper.toDomain(ormEntity) : null;

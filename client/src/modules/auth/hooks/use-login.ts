@@ -1,3 +1,4 @@
+import type { ApiResponseEnvelope } from '@/core/api';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthActions } from '../../../shared/stores/auth-store';
 import { authApi } from '../services/auth.api';
@@ -8,8 +9,8 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.login(data),
-    onSuccess: (data: LoginResponse) => {
-      login(data.user, data.accessToken);
+    onSuccess: (response: ApiResponseEnvelope<LoginResponse>) => {
+      login(response.data.user, response.data.accessToken);
     },
   });
 };

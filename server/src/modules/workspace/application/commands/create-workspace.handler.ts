@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/core';
-import { Logger } from '@nestjs/common';
+import { ConflictException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { WorkspaceEntity } from '../../domain/entities/workspace.entity';
 import {
@@ -39,11 +39,13 @@ export class CreateWorkspaceHandler implements ICommandHandler<
       defaultLearningMode,
     } = command;
 
-    // Check if duplicate name exists for user (optional validation)
-    // const existing = await this.workspaceRepo.findOneByName(name);
-    // if (existing && existing.userId === userId) {
-    //   throw new ConflictException('Workspace with this name already exists');
-    // }
+    const existing = await this.workspaceRepo.findOneByNameAndUserId(
+      name,
+      userId,
+    );
+    if (existing) {
+      throw new ConflictException('Workspace with this name already exists');
+    }
 
     const workspace = WorkspaceEntity.create({
       tenantId,

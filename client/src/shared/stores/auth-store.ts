@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { setAccessToken } from '../../core/api/api';
+import { setAccessToken } from '../../core/api/api.client';
 import { type User } from '../../modules/auth/types/auth.types';
 
 interface AuthState {

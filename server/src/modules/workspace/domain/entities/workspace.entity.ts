@@ -61,6 +61,7 @@ export class WorkspaceEntity extends AggregateRoot {
       ...create,
     };
     const workspace = new WorkspaceEntity(props);
+
     return workspace;
   }
 

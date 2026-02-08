@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { ApiSuccessResponse } from './api.model';
+import type { ApiResponseEnvelope } from './api.model';
 
 export const api = axios.create({
   baseURL: import.meta.env.PUBLIC_API_URL || '/api/v1',
@@ -27,7 +27,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    const data = response.data as ApiSuccessResponse<unknown>;
+    const data = response.data as ApiResponseEnvelope<unknown>;
 
     // Unwrap the response if it follows the standard envelope structure
     if (
@@ -36,15 +36,10 @@ api.interceptors.response.use(
       'success' in data &&
       data.success === true
     ) {
-      // If there's pagination, we might need to handle it.
-      // For now, returning data.data assumes the caller expects the inner payload.
-      // TODO: Handle pagination if needed, possibly by attaching it to the data or returning a different structure.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return data.data as any;
+      return data;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return data as any;
+    return data;
   },
   async (error) => {
     const originalRequest = error.config;
