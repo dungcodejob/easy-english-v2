@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/shared/ui/shadcn/select';
 import { Switch } from '@/shared/ui/shadcn/switch';
+import { cn } from '@/shared/utils';
 import { Controller, useForm } from 'react-hook-form';
 
 import { WorkspaceLearningMode } from '../../types';
@@ -28,9 +29,12 @@ export function WorkspacePreferencesStep({
   onBack,
   onSkip,
 }: WorkspacePreferencesStepProps) {
-  const { register, control, handleSubmit } = useForm<
-    Partial<CreateWorkspaceWizardData>
-  >({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Partial<CreateWorkspaceWizardData>>({
     defaultValues: {
       dailyTarget: defaultValues.dailyTarget || 10,
       studyReminder: defaultValues.studyReminder || false,
@@ -58,11 +62,25 @@ export function WorkspacePreferencesStep({
               type="number"
               min={1}
               max={100}
-              className="w-24"
-              {...register('dailyTarget', { valueAsNumber: true })}
+              className={cn(
+                'w-24',
+                errors.dailyTarget &&
+                  'border-destructive focus-visible:ring-destructive',
+              )}
+              autoFocus
+              {...register('dailyTarget', {
+                valueAsNumber: true,
+                min: { value: 1, message: 'Minimum 1 word' },
+                max: { value: 100, message: 'Maximum 100 words' },
+              })}
             />
             <span className="text-sm text-muted-foreground">words per day</span>
           </div>
+          {errors.dailyTarget && (
+            <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
+              {errors.dailyTarget.message}
+            </p>
+          )}
           <p className="text-xs text-muted-foreground">
             Recommended: 10-20 words for steady progress.
           </p>

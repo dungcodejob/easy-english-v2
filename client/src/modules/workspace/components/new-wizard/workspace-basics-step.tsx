@@ -52,6 +52,7 @@ export function WorkspaceBasicsStep({
             <Input
               id="name"
               placeholder="e.g. My English Journey"
+              autoFocus
               className={cn(
                 errors.name &&
                   'border-destructive focus-visible:ring-destructive',
@@ -59,7 +60,7 @@ export function WorkspaceBasicsStep({
               {...register('name', { required: 'Workspace name is required' })}
             />
             {errors.name && (
-              <p className="text-sm text-destructive font-medium">
+              <p className="text-sm text-destructive font-medium mt-1 animate-in slide-in-from-top-1 fade-in-0">
                 {errors.name.message}
               </p>
             )}

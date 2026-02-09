@@ -55,7 +55,7 @@ export function WorkspaceLearningStep({
               <div className="space-y-2">
                 <LanguagePicker value={field.value} onChange={field.onChange} />
                 {errors.language && (
-                  <p className="text-sm text-destructive font-medium">
+                  <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
                     {errors.language.message}
                   </p>
                 )}

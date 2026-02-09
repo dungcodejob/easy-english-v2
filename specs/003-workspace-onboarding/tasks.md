@@ -167,8 +167,8 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T053 [P] Add inline validation error styling to all wizard steps
-- [ ] T054 [P] Add form field focus management for accessibility
+- [x] T053 [P] Add inline validation error styling to all wizard steps
+- [x] T054 [P] Add form field focus management for accessibility
 - [ ] T055 Run manual verification per quickstart.md scenarios
 - [ ] T056 Clean up unused imports and code
 
