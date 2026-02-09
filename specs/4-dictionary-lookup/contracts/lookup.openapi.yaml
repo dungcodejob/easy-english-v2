@@ -1,0 +1,337 @@
+openapi: 3.0.3
+info:
+  title: Dictionary Lookup API
+  description: |
+    Read-only API for looking up word definitions in the Easy English platform.
+    
+    **Phase 1 Scope:**
+    - Exact word lookup only (no prefix search)
+    - AzVocab as single external provider
+    - JWT authentication required
+  version: 1.0.0
+  contact:
+    name: Easy English Dev Team
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development
+  - url: https://api.easyenglish.dev/api/v1
+    description: Production
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Dictionary
+    description: Word lookup operations
+
+paths:
+  /dictionary/lookup/{word}:
+    get:
+      operationId: lookupWord
+      summary: Look up a word definition
+      description: |
+        Returns the full definition, pronunciations, examples, and translations for a word.
+        
+        **Resolution Order:**
+        1. Memory cache (5 min TTL)
+        2. Internal word database
+        3. Provider response cache (90 day TTL)
+        4. AzVocab external API
+        
+        If the word is not found anywhere, returns 404.
+      tags:
+        - Dictionary
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: word
+          in: path
+          required: true
+          description: The word to look up (1-100 characters)
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+            example: hello
+      responses:
+        '200':
+          description: Word found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                success: true
+                data:
+                  text: hello
+                  normalizedText: hello
+                  language: en
+                  source: internal
+                  rank: 150
+                  frequency: 0.95
+                  pronunciations:
+                    - ipa: /həˈloʊ/
+                      audioUrl: https://cdn.example.com/audio/hello-us.mp3
+                      region: US
+                    - ipa: /həˈləʊ/
+                      audioUrl: https://cdn.example.com/audio/hello-uk.mp3
+                      region: UK
+                  senses:
+                    - partOfSpeech: interjection
+                      definition: Used as a greeting or to begin a phone conversation.
+                      shortDefinition: A greeting
+                      cefrLevel: A1
+                      examples:
+                        - text: Hello, how are you?
+                          translationVi: Xin chào, bạn khỏe không?
+                      synonyms:
+                        - hi
+                        - hey
+                        - greetings
+                      antonyms:
+                        - goodbye
+                        - farewell
+                      definitionVi: Dùng để chào hỏi hoặc bắt đầu cuộc gọi điện thoại.
+                message: null
+                timestamp: '2026-02-10T00:30:00.000Z'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                data: null
+                message: Word must be between 1 and 100 characters
+                timestamp: '2026-02-10T00:30:00.000Z'
+                error:
+                  code: VALIDATION_ERROR
+                  details:
+                    field: word
+                    constraint: maxLength
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                data: null
+                message: Authentication required
+                timestamp: '2026-02-10T00:30:00.000Z'
+                error:
+                  code: UNAUTHORIZED
+        '404':
+          description: Word not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                data: null
+                message: Word 'xyzabc123' not found
+                timestamp: '2026-02-10T00:30:00.000Z'
+                error:
+                  code: NOT_FOUND
+        '503':
+          description: External provider unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                data: null
+                message: Dictionary service temporarily unavailable
+                timestamp: '2026-02-10T00:30:00.000Z'
+                error:
+                  code: SERVICE_UNAVAILABLE
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from login endpoint
+
+  schemas:
+    ApiResponse:
+      type: object
+      required:
+        - success
+        - data
+        - timestamp
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/WordSnapshot'
+        message:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - message
+        - timestamp
+      properties:
+        success:
+          type: boolean
+          example: false
+        data:
+          type: object
+          nullable: true
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+                - VALIDATION_ERROR
+                - UNAUTHORIZED
+                - NOT_FOUND
+                - SERVICE_UNAVAILABLE
+            details:
+              type: object
+
+    WordSnapshot:
+      type: object
+      required:
+        - text
+        - normalizedText
+        - language
+        - source
+        - pronunciations
+        - senses
+      properties:
+        text:
+          type: string
+          description: Original word text
+          example: hello
+        normalizedText:
+          type: string
+          description: Lowercase, trimmed word
+          example: hello
+        language:
+          type: string
+          description: ISO 639-1 language code
+          example: en
+        source:
+          type: string
+          enum:
+            - internal
+            - azvocab
+          description: Data source
+        rank:
+          type: integer
+          nullable: true
+          description: Word frequency rank
+          example: 150
+        frequency:
+          type: number
+          nullable: true
+          description: Usage frequency score (0-1)
+          example: 0.95
+        pronunciations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pronunciation'
+        senses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sense'
+
+    Pronunciation:
+      type: object
+      required:
+        - ipa
+        - region
+      properties:
+        ipa:
+          type: string
+          description: IPA phonetic transcription
+          example: /həˈloʊ/
+        audioUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to audio pronunciation
+          example: https://cdn.example.com/audio/hello.mp3
+        region:
+          type: string
+          description: Regional variant (US, UK, AU)
+          example: US
+
+    Sense:
+      type: object
+      required:
+        - partOfSpeech
+        - definition
+      properties:
+        partOfSpeech:
+          type: string
+          description: Grammatical category
+          example: interjection
+        definition:
+          type: string
+          description: Full definition
+        shortDefinition:
+          type: string
+          nullable: true
+          description: Brief definition
+        cefrLevel:
+          type: string
+          nullable: true
+          enum:
+            - A1
+            - A2
+            - B1
+            - B2
+            - C1
+            - C2
+          description: CEFR proficiency level
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/Example'
+        synonyms:
+          type: array
+          items:
+            type: string
+        antonyms:
+          type: array
+          items:
+            type: string
+        definitionVi:
+          type: string
+          nullable: true
+          description: Vietnamese translation
+
+    Example:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Example sentence
+        translationVi:
+          type: string
+          nullable: true
+          description: Vietnamese translation

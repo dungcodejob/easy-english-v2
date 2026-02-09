@@ -29,6 +29,18 @@ The Lookup flow provides real-time, read-only access to word definitions and lin
 
 ---
 
+## Clarifications
+
+### Session 2026-02-10
+
+- Q: Is authentication required for the lookup endpoint? → A: Authenticated only - JWT required, anonymous access blocked
+- Q: How should rate limiting work for lookup? → A: No rate limiting on lookup endpoint; rely on external provider quotas only
+- Q: How should concurrent identical requests be deduplicated? → A: Skip for Phase 1; caching handles most cases; revisit if measured need arises
+- Q: Should prefix search/autocomplete be included in Phase 1? → A: Defer to Phase 2; focus on exact word lookup only
+- Q: Which external providers should be implemented? → A: AzVocab only for Phase 1; Oxford and FreeDictionary deferred
+
+---
+
 ## High-Level Architecture
 
 ### Module Structure (Aligned with Project Patterns)
@@ -285,10 +297,11 @@ Multiple learners perform simultaneous lookups during peak usage without experie
 - **FR-005**: External provider integrations MUST NOT have direct database access or side effects
 - **FR-006**: System MUST aggregate results from multiple external providers when primary provider returns incomplete data
 - **FR-007**: System MUST validate lookup input (word text) and reject malformed requests
-- **FR-008**: System MUST support at least three external dictionary providers (AzVocab, Oxford, FreeDictionary)
+- **FR-008**: System MUST support AzVocab as external dictionary provider for Phase 1 *(Oxford, FreeDictionary deferred to Phase 2)*
 - **FR-009**: System MUST return consistent response format regardless of data source (cache, DB, or provider)
 - **FR-010**: System MUST implement request timeout handling with configurable thresholds
-- **FR-011**: System MUST deduplicate concurrent requests for the same word to prevent redundant external calls
+- **FR-011**: *(Deferred to Phase 2)* System MAY deduplicate concurrent requests for the same word; caching provides sufficient mitigation for Phase 1
+- **FR-012**: System MUST require valid JWT authentication for all lookup requests; anonymous access is blocked
 
 ### Key Entities
 
@@ -429,7 +442,7 @@ Selects appropriate provider(s) based on:
 
 Read-optimized repository interface:
 - Query by word text (exact match)
-- Query by word text (prefix match for future autocomplete)
+- *(Phase 2)* Query by word text prefix for autocomplete
 - Returns WordSnapshot
 - Supports caching layer integration
 
