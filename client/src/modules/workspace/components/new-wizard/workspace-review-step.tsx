@@ -1,3 +1,4 @@
+import { defaultWizardPreferences } from '@/modules/workspace/stores/use-wizard-store';
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
 import { Button } from '@/shared/ui/shadcn/button';
 import { Card, CardContent } from '@/shared/ui/shadcn/card';
@@ -11,6 +12,7 @@ interface WorkspaceReviewStepProps {
   onBack: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
+  isError: boolean;
 }
 
 export function WorkspaceReviewStep({
@@ -18,6 +20,7 @@ export function WorkspaceReviewStep({
   onBack,
   onSubmit,
   isSubmitting,
+  isError,
 }: WorkspaceReviewStepProps) {
   return (
     <WizardStepLayout
@@ -76,20 +79,42 @@ export function WorkspaceReviewStep({
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
                   Daily Target
                 </div>
-                <div>{data.dailyTarget} words</div>
+                <div>
+                  {data.dailyTarget} words{' '}
+                  {data.dailyTarget ===
+                    defaultWizardPreferences.dailyTarget && (
+                    <span className="text-xs text-muted-foreground ml-1">
+                      (Default)
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="space-y-1">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
                   Reminders
                 </div>
-                <div>{data.studyReminder ? 'Enabled' : 'Disabled'}</div>
+                <div>
+                  {data.studyReminder ? 'Enabled' : 'Disabled'}{' '}
+                  {data.studyReminder ===
+                    defaultWizardPreferences.studyReminder && (
+                    <span className="text-xs text-muted-foreground ml-1">
+                      (Default)
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="space-y-1">
                 <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
                   Mode
                 </div>
                 <div className="capitalize">
-                  {data.defaultLearningMode?.replace('_', ' ')}
+                  {data.defaultLearningMode?.replace('_', ' ')}{' '}
+                  {data.defaultLearningMode ===
+                    defaultWizardPreferences.defaultLearningMode && (
+                    <span className="text-xs text-muted-foreground ml-1">
+                      (Default)
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -119,7 +144,7 @@ export function WorkspaceReviewStep({
             ) : (
               <>
                 <CheckCircle2 className="mr-2 h-4 w-4" />
-                Create Workspace
+                {isError ? 'Retry Create Workspace' : 'Create Workspace'}
               </>
             )}
           </Button>

@@ -10,6 +10,7 @@ export interface IWorkspaceRepository {
     userId: string,
   ): Promise<WorkspaceEntity | null>;
   findOneByUserId(userId: string): Promise<WorkspaceEntity | null>;
+  findAllByUserId(userId: string): Promise<WorkspaceEntity[]>;
   findOneByTenantId(tenantId: string): Promise<WorkspaceEntity | null>;
 }
 

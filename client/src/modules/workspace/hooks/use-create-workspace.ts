@@ -32,9 +32,6 @@ export const useCreateWorkspace = () => {
       reset();
       navigate({ to: APP_ROUTES.DASHBOARD });
     },
-    onError: (error) => {
-      toast.error(error.message || 'Failed to create workspace.');
-    },
   });
 
   return {

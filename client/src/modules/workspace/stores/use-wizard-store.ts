@@ -11,6 +11,12 @@ import {
   Language,
 } from '../types/workspace.types';
 
+export const defaultWizardPreferences = {
+  dailyTarget: 30,
+  studyReminder: true,
+  defaultLearningMode: WorkspaceLearningMode.Flashcard,
+};
+
 export interface WizardState {
   step: number;
   data: Partial<CreateWorkspaceRequest>;
@@ -31,9 +37,7 @@ const initialState: WizardState = {
     language: Language.EN,
     learningGoal: WorkspaceLearningGoal.DailyPractice,
     level: WorkspaceLearningLevel.Beginner,
-    dailyTarget: 30,
-    studyReminder: true,
-    defaultLearningMode: WorkspaceLearningMode.Flashcard,
+    ...defaultWizardPreferences,
   },
 };
 

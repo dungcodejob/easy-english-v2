@@ -5,13 +5,16 @@ import {
   CardTitle,
 } from '@/shared/ui/shadcn/card';
 import { useNavigate } from '@tanstack/react-router';
+import { AnimatePresence, motion } from 'motion/react';
 import { useCreateWorkspace } from '../../hooks/use-create-workspace';
 import {
+  defaultWizardPreferences,
   useWizardActions,
   useWizardData,
   useWizardStep,
 } from '../../stores/use-wizard-store';
 import type { CreateWorkspaceRequest } from '../../types/workspace.types';
+import { WizardProgressBar } from '../wizard-progress-bar';
 import { WorkspaceBasicsStep } from './workspace-basics-step';
 import { WorkspaceLearningStep } from './workspace-learning-step';
 import { WorkspacePreferencesStep } from './workspace-preferences-step';
@@ -21,7 +24,7 @@ export const WorkspaceWizard = () => {
   const step = useWizardStep();
   const { setStep, updateData } = useWizardActions();
   const wizardData = useWizardData();
-  const { mutate: createWorkspace, isPending } = useCreateWorkspace();
+  const { mutate: createWorkspace, isPending, isError } = useCreateWorkspace();
   const navigate = useNavigate();
 
   const handleNext = (data: Partial<CreateWorkspaceRequest>) => {
@@ -30,14 +33,17 @@ export const WorkspaceWizard = () => {
   };
 
   const handleBack = () => setStep(step - 1);
-  const handleSkip = () => setStep(step + 1);
+  const handleSkip = () => {
+    updateData(defaultWizardPreferences);
+    setStep(step + 1);
+  };
   const handleCancel = () => navigate({ to: '/' });
 
   const handleSubmit = () => {
     createWorkspace(wizardData as CreateWorkspaceRequest);
   };
 
-  const renderStep = () => {
+  const renderStepContent = () => {
     switch (step) {
       case 1:
         return (
@@ -71,6 +77,7 @@ export const WorkspaceWizard = () => {
             onBack={handleBack}
             onSubmit={handleSubmit}
             isSubmitting={isPending}
+            isError={isError}
           />
         );
       default:
@@ -80,12 +87,26 @@ export const WorkspaceWizard = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-2xl">
+      <Card className="w-full max-w-2xl overflow-hidden">
         <CardHeader>
-          <CardTitle>Create Your Workspace - Step {step} of 4</CardTitle>
-          {/* Add a progress bar here if needed */}
+          <CardTitle>Create Your Workspace</CardTitle>
+          <div className="pt-2">
+            <WizardProgressBar currentStep={step} totalSteps={4} />
+          </div>
         </CardHeader>
-        <CardContent>{renderStep()}</CardContent>
+        <CardContent>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -20, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {renderStepContent()}
+            </motion.div>
+          </AnimatePresence>
+        </CardContent>
       </Card>
     </div>
   );

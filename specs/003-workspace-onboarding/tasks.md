@@ -111,9 +111,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T039 [US3] Add Skip button to WizardStepPreferences in `client/src/modules/workspace/components/new-wizard/workspace-preferences-step.tsx`
-- [ ] T040 [US3] Apply default values in useWizardStore when skipping in `client/src/modules/workspace/stores/use-wizard-store.ts`
-- [ ] T041 [US3] Display default values indicator in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
+- [x] T039 [US3] Add Skip button to WizardStepPreferences in `client/src/modules/workspace/components/new-wizard/workspace-preferences-step.tsx`
+- [x] T040 [US3] Apply default values in useWizardStore when skipping in `client/src/modules/workspace/stores/use-wizard-store.ts`
+- [x] T041 [US3] Display default values indicator in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
 
 **Checkpoint**: User Story 3 complete - skip functionality working
 
@@ -127,9 +127,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T042 [US4] Add error handling to useCreateWorkspace hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
-- [ ] T043 [US4] Display error toast in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
-- [ ] T044 [US4] Add retry logic and loading state to Create button in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
+- [x] T042 [US4] Add error handling to useCreateWorkspace hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
+- [x] T043 [US4] Display error toast in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
+- [x] T044 [US4] Add retry logic and loading state to Create button in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
 
 **Checkpoint**: User Story 4 complete - error handling working
 
@@ -143,9 +143,9 @@
 
 ### Implementation for User Story 5
 
-- [ ] T045 [US5] Create WizardProgressBar component in `client/src/modules/workspace/components/wizard-progress-bar.tsx`
-- [ ] T046 [US5] Integrate progress bar in WorkspaceWizardPage in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
-- [ ] T047 [US5] Add step transition animations (fade/slide) in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
+- [x] T045 [US5] Create WizardProgressBar component in `client/src/modules/workspace/components/wizard-progress-bar.tsx`
+- [x] T046 [US5] Integrate progress bar in WorkspaceWizardPage in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
+- [x] T047 [US5] Add step transition animations (fade/slide) in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
 
 **Checkpoint**: User Story 5 complete - progress indicator working
 
@@ -155,11 +155,11 @@
 
 **Purpose**: Additional backend endpoints for workspace management
 
-- [ ] T048 [P] Create ListWorkspacesQuery in `server/src/modules/workspace/application/queries/list-workspaces.query.ts`
-- [ ] T049 [P] Create GetWorkspaceQuery in `server/src/modules/workspace/application/queries/get-workspace.query.ts`
-- [ ] T050 Create ListWorkspacesHandler in `server/src/modules/workspace/application/queries/list-workspaces.handler.ts`
-- [ ] T051 Create GetWorkspaceHandler in `server/src/modules/workspace/application/queries/get-workspace.handler.ts`
-- [ ] T052 Add GET /workspaces and GET /workspaces/:id to WorkspaceController in `server/src/modules/workspace/controllers/workspace.controller.ts`
+- [x] T048 [P] Create ListWorkspacesQuery in `server/src/modules/workspace/application/queries/list-workspaces.query.ts`
+- [x] T049 [P] Create GetWorkspaceQuery in `server/src/modules/workspace/application/queries/get-workspace.query.ts`
+- [x] T050 Create ListWorkspacesHandler in `server/src/modules/workspace/application/queries/list-workspaces.handler.ts`
+- [x] T051 Create GetWorkspaceHandler in `server/src/modules/workspace/application/queries/get-workspace.handler.ts`
+- [x] T052 Add GET /workspaces and GET /workspaces/:id to WorkspaceController in `server/src/modules/workspace/controllers/workspace.controller.ts`
 
 ---
 
