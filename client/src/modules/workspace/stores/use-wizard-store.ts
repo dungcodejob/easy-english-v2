@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import {
   WorkspaceLearningGoal,
   WorkspaceLearningLevel,
@@ -36,15 +37,22 @@ const initialState: WizardState = {
   },
 };
 
-export const useWizardStore = create<WizardState & WizardActions>((set) => ({
-  ...initialState,
-  setStep: (step) => set({ step }),
-  updateData: (data) =>
-    set((state) => ({
-      data: { ...state.data, ...data },
-    })),
-  reset: () => set(initialState),
-}));
+export const useWizardStore = create<WizardState & WizardActions>()(
+  persist(
+    (set) => ({
+      ...initialState,
+      setStep: (step) => set({ step }),
+      updateData: (data) =>
+        set((state) => ({
+          data: { ...state.data, ...data },
+        })),
+      reset: () => set(initialState),
+    }),
+    {
+      name: 'workspace-wizard-storage',
+    },
+  ),
+);
 
 export const useWizardStep = () => useWizardStore((state) => state.step);
 export const useWizardData = () => useWizardStore((state) => state.data);

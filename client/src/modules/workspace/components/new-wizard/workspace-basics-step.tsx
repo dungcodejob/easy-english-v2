@@ -13,11 +13,13 @@ import { WizardStepLayout } from '../wizard-step-layout';
 interface WorkspaceBasicsStepProps {
   defaultValues: Partial<CreateWorkspaceWizardData>;
   onNext: (data: Partial<CreateWorkspaceWizardData>) => void;
+  onBack?: () => void;
 }
 
 export function WorkspaceBasicsStep({
   defaultValues,
   onNext,
+  onBack,
 }: WorkspaceBasicsStepProps) {
   const {
     register,
@@ -144,7 +146,10 @@ export function WorkspaceBasicsStep({
           </div>
         </div>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-between pt-4">
+          <Button type="button" variant="ghost" onClick={onBack}>
+            Cancel
+          </Button>
           <Button type="submit" size="lg">
             Next Step
           </Button>

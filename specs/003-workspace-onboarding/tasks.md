@@ -42,6 +42,7 @@
 - [x] T011 [P] Create CreateWorkspaceRequestDto in `server/src/modules/workspace/dto/requests/create-workspace.request.dto.ts`
 - [x] T012 [P] Create WorkspaceResponseDto in `server/src/modules/workspace/dto/responses/workspace.response.dto.ts`
 - [x] T013 [P] Create HasWorkspaceResponseDto in `server/src/modules/workspace/dto/responses/has-workspace.response.dto.ts`
+- [x] T014 [P] Create WorkspaceCreatedEvent in `server/src/modules/workspace/events/workspace-created.event.ts`
 - [x] T014 Create workspace.module.ts with all providers in `server/src/modules/workspace/workspace.module.ts`
 - [x] T015 Import WorkspaceModule in `server/src/app.module.ts`
 - [x] T016 Create workspace API service in `client/src/modules/workspace/services/workspace.api.ts`
@@ -59,25 +60,26 @@
 
 ### Backend Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Create CreateWorkspaceCommand in `server/src/modules/workspace/application/commands/create-workspace.command.ts`
-- [ ] T019 [P] [US1] Create CheckHasWorkspaceQuery in `server/src/modules/workspace/application/queries/check-has-workspace.query.ts`
-- [ ] T020 [US1] Create CreateWorkspaceHandler with uniqueness validation in `server/src/modules/workspace/application/commands/create-workspace.handler.ts`
-- [ ] T021 [US1] Create CheckHasWorkspaceHandler in `server/src/modules/workspace/application/queries/check-has-workspace.handler.ts`
-- [ ] T022 [US1] Create WorkspaceController with POST /workspaces and GET /workspaces/check in `server/src/modules/workspace/controllers/workspace.controller.ts`
-- [ ] T023 [US1] Register command and query handlers in workspace.module.ts
+- [x] T018 [P] [US1] Create CreateWorkspaceCommand in `server/src/modules/workspace/application/commands/create-workspace.command.ts`
+- [x] T019 [P] [US1] Create CheckHasWorkspaceQuery in `server/src/modules/workspace/application/queries/check-has-workspace.query.ts`
+- [x] T020 [US1] Create CreateWorkspaceHandler with uniqueness validation in `server/src/modules/workspace/application/commands/create-workspace.handler.ts`
+- [x] T021 [US1] Create CheckHasWorkspaceHandler in `server/src/modules/workspace/application/queries/check-has-workspace.handler.ts`
+- [x] T022 [US1] Create WorkspaceController with POST /workspaces and GET /workspaces/check in `server/src/modules/workspace/controllers/workspace.controller.ts`
+
+- [x] T023 [US1] Register command and query handlers in workspace.module.ts
 
 ### Frontend Implementation for User Story 1
 
-- [ ] T024 [P] [US1] Create useCreateWorkspace mutation hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
-- [ ] T025 [P] [US1] Create useHasWorkspace query hook in `client/src/modules/workspace/hooks/use-has-workspace.ts`
-- [ ] T026 [US1] Create WizardStepBasics component (name, description) in `client/src/modules/workspace/components/wizard-step-basics.tsx`
-- [ ] T027 [US1] Create WizardStepContext component (language, type, goal, level) in `client/src/modules/workspace/components/wizard-step-context.tsx`
-- [ ] T028 [US1] Create WizardStepPreferences component (dailyTarget, reminder, mode) in `client/src/modules/workspace/components/wizard-step-preferences.tsx`
-- [ ] T029 [US1] Create WizardStepReview component (summary, create button) in `client/src/modules/workspace/components/wizard-step-review.tsx`
-- [ ] T030 [US1] Create WorkspaceWizardPage with step navigation in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
-- [ ] T031 [US1] Add /workspace/new route in `client/src/routes.ts`
-- [ ] T032 [US1] Add redirect logic for users without workspace in `client/src/modules/shell/pages/authenticated-layout.tsx`
-- [ ] T033 [US1] Create module index exports in `client/src/modules/workspace/index.ts`
+- [x] T024 [P] [US1] Create useCreateWorkspace mutation hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
+- [x] T025 [P] [US1] Create useHasWorkspace query hook in `client/src/modules/workspace/hooks/use-has-workspace.ts`
+- [x] T026 [US1] Create WizardStepBasics component (name, description) in `client/src/modules/workspace/components/wizard-step-basics.tsx`
+- [x] T027 [US1] Create WizardStepContext component (language, type, goal, level) in `client/src/modules/workspace/components/wizard-step-context.tsx`
+- [x] T028 [US1] Create WizardStepPreferences component (dailyTarget, reminder, mode) in `client/src/modules/workspace/components/wizard-step-preferences.tsx`
+- [x] T029 [US1] Create WizardStepReview component (summary, create button) in `client/src/modules/workspace/components/wizard-step-review.tsx`
+- [x] T030 [US1] Create WorkspaceWizardPage with step navigation in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
+- [x] T031 [US1] Add /workspace/new route in `client/src/routes.ts`
+- [x] T032 [US1] Add redirect logic for users without workspace in `client/src/modules/shell/pages/authenticated-layout.tsx`
+- [x] T033 [US1] Create module index exports in `client/src/modules/workspace/index.ts`
 
 **Checkpoint**: User Story 1 complete - core wizard flow functional
 
@@ -91,10 +93,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T034 [US2] Enhance useWizardStore with step data persistence in `client/src/modules/workspace/stores/use-wizard-store.ts`
-- [ ] T035 [US2] Add Back button logic to WizardStepContext in `client/src/modules/workspace/components/wizard-step-context.tsx`
-- [ ] T036 [US2] Add Back button logic to WizardStepPreferences in `client/src/modules/workspace/components/wizard-step-preferences.tsx`
-- [ ] T037 [US2] Add Back button logic to WizardStepReview in `client/src/modules/workspace/components/wizard-step-review.tsx`
+- [x] T034 [US2] Enhance useWizardStore with step data persistence in `client/src/modules/workspace/stores/use-wizard-store.ts`
+- [x] T035 [US2] Add Back button logic to WizardStepContext in `client/src/modules/workspace/components/new-wizard/workspace-basics-step.tsx`
+- [x] T036 [US2] Add Back button logic to WizardStepPreferences in `client/src/modules/workspace/components/new-wizard/workspace-learning-step.tsx`
+- [x] T037 [US2] Add Back button logic to WizardStepPreferences in `client/src/modules/workspace/components/new-wizard/workspace-preferences-step.tsx`
+- [x] T038 [US2] Add Back button logic to WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
 
 **Checkpoint**: User Story 2 complete - navigation with data preservation working
 
@@ -108,9 +111,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T038 [US3] Add Skip button to WizardStepPreferences in `client/src/modules/workspace/components/wizard-step-preferences.tsx`
-- [ ] T039 [US3] Apply default values in useWizardStore when skipping in `client/src/modules/workspace/stores/use-wizard-store.ts`
-- [ ] T040 [US3] Display default values indicator in WizardStepReview in `client/src/modules/workspace/components/wizard-step-review.tsx`
+- [ ] T039 [US3] Add Skip button to WizardStepPreferences in `client/src/modules/workspace/components/new-wizard/workspace-preferences-step.tsx`
+- [ ] T040 [US3] Apply default values in useWizardStore when skipping in `client/src/modules/workspace/stores/use-wizard-store.ts`
+- [ ] T041 [US3] Display default values indicator in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
 
 **Checkpoint**: User Story 3 complete - skip functionality working
 
@@ -124,9 +127,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T041 [US4] Add error handling to useCreateWorkspace hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
-- [ ] T042 [US4] Display error toast in WizardStepReview in `client/src/modules/workspace/components/wizard-step-review.tsx`
-- [ ] T043 [US4] Add retry logic and loading state to Create button in `client/src/modules/workspace/components/wizard-step-review.tsx`
+- [ ] T042 [US4] Add error handling to useCreateWorkspace hook in `client/src/modules/workspace/hooks/use-create-workspace.ts`
+- [ ] T043 [US4] Display error toast in WizardStepReview in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
+- [ ] T044 [US4] Add retry logic and loading state to Create button in `client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx`
 
 **Checkpoint**: User Story 4 complete - error handling working
 
@@ -140,9 +143,9 @@
 
 ### Implementation for User Story 5
 
-- [ ] T044 [US5] Create WizardProgressBar component in `client/src/modules/workspace/components/wizard-progress-bar.tsx`
-- [ ] T045 [US5] Integrate progress bar in WorkspaceWizardPage in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
-- [ ] T046 [US5] Add step transition animations (fade/slide) in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
+- [ ] T045 [US5] Create WizardProgressBar component in `client/src/modules/workspace/components/wizard-progress-bar.tsx`
+- [ ] T046 [US5] Integrate progress bar in WorkspaceWizardPage in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
+- [ ] T047 [US5] Add step transition animations (fade/slide) in `client/src/modules/workspace/pages/workspace-wizard-page.tsx`
 
 **Checkpoint**: User Story 5 complete - progress indicator working
 
@@ -152,11 +155,11 @@
 
 **Purpose**: Additional backend endpoints for workspace management
 
-- [ ] T047 [P] Create ListWorkspacesQuery in `server/src/modules/workspace/application/queries/list-workspaces.query.ts`
-- [ ] T048 [P] Create GetWorkspaceQuery in `server/src/modules/workspace/application/queries/get-workspace.query.ts`
-- [ ] T049 Create ListWorkspacesHandler in `server/src/modules/workspace/application/queries/list-workspaces.handler.ts`
-- [ ] T050 Create GetWorkspaceHandler in `server/src/modules/workspace/application/queries/get-workspace.handler.ts`
-- [ ] T051 Add GET /workspaces and GET /workspaces/:id to WorkspaceController in `server/src/modules/workspace/controllers/workspace.controller.ts`
+- [ ] T048 [P] Create ListWorkspacesQuery in `server/src/modules/workspace/application/queries/list-workspaces.query.ts`
+- [ ] T049 [P] Create GetWorkspaceQuery in `server/src/modules/workspace/application/queries/get-workspace.query.ts`
+- [ ] T050 Create ListWorkspacesHandler in `server/src/modules/workspace/application/queries/list-workspaces.handler.ts`
+- [ ] T051 Create GetWorkspaceHandler in `server/src/modules/workspace/application/queries/get-workspace.handler.ts`
+- [ ] T052 Add GET /workspaces and GET /workspaces/:id to WorkspaceController in `server/src/modules/workspace/controllers/workspace.controller.ts`
 
 ---
 
@@ -164,10 +167,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T052 [P] Add inline validation error styling to all wizard steps
-- [ ] T053 [P] Add form field focus management for accessibility
-- [ ] T054 Run manual verification per quickstart.md scenarios
-- [ ] T055 Clean up unused imports and code
+- [ ] T053 [P] Add inline validation error styling to all wizard steps
+- [ ] T054 [P] Add form field focus management for accessibility
+- [ ] T055 Run manual verification per quickstart.md scenarios
+- [ ] T056 Clean up unused imports and code
 
 ---
 

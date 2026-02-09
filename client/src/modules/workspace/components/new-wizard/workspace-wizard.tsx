@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/shadcn/card';
+import { useNavigate } from '@tanstack/react-router';
 import { useCreateWorkspace } from '../../hooks/use-create-workspace';
 import {
   useWizardActions,
@@ -21,6 +22,7 @@ export const WorkspaceWizard = () => {
   const { setStep, updateData } = useWizardActions();
   const wizardData = useWizardData();
   const { mutate: createWorkspace, isPending } = useCreateWorkspace();
+  const navigate = useNavigate();
 
   const handleNext = (data: Partial<CreateWorkspaceRequest>) => {
     updateData(data);
@@ -29,6 +31,7 @@ export const WorkspaceWizard = () => {
 
   const handleBack = () => setStep(step - 1);
   const handleSkip = () => setStep(step + 1);
+  const handleCancel = () => navigate({ to: '/' });
 
   const handleSubmit = () => {
     createWorkspace(wizardData as CreateWorkspaceRequest);
@@ -38,7 +41,11 @@ export const WorkspaceWizard = () => {
     switch (step) {
       case 1:
         return (
-          <WorkspaceBasicsStep defaultValues={wizardData} onNext={handleNext} />
+          <WorkspaceBasicsStep
+            defaultValues={wizardData}
+            onNext={handleNext}
+            onBack={handleCancel}
+          />
         );
       case 2:
         return (
