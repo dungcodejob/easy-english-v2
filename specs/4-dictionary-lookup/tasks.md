@@ -56,12 +56,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Create `WordSnapshotMapper` in `server/src/modules/dictionary/infrastructure/repositories/word-snapshot.mapper.ts` — map existing `WordOrmEntity` (with eager-loaded senses, pronunciations, examples) → `WordSnapshot` VO
-- [ ] T017 [US1] Implement `WordReadRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-read.repository.ts` — implements `IWordReadRepository`, queries existing `WordOrmEntity` by `normalizedWord` + `tenantId`, uses eager loading, returns `WordSnapshot` via mapper
-- [ ] T018 [US1] Create `LookupWordQuery` in `server/src/modules/dictionary/application/queries/lookup-word.query.ts` — CQRS query class with `word`, `tenantId`, `userId`
-- [ ] T019 [US1] Implement `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — `@QueryHandler(LookupWordQuery)`: normalize word → check NestJS `CacheManager` → query `WordReadRepository` → return `WordSnapshot` or proceed to provider layer (US2). For US1 MVP: return result or `NotFoundException`
-- [ ] T020 [US1] Create `LookupController` in `server/src/modules/dictionary/controllers/lookup.controller.ts` — `GET /api/v1/dictionary/lookup/:word`, JWT guard, validate word input (1-100 chars), dispatch `LookupWordQuery`, return `WordSnapshotResponseDto`
-- [ ] T021 [US1] Register `LookupWordHandler` and `LookupController` in `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts`
+- [x] T016 [US1] Create `WordSnapshotMapper` in `server/src/modules/dictionary/infrastructure/repositories/word-snapshot.mapper.ts` — map existing `WordOrmEntity` (with eager-loaded senses, pronunciations, examples) → `WordSnapshot` VO
+- [x] T017 [US1] Implement `WordReadRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-read.repository.ts` — implements `IWordReadRepository`, queries existing `WordOrmEntity` by `normalizedWord` + `tenantId`, uses eager loading, returns `WordSnapshot` via mapper
+- [x] T018 [US1] Create `LookupWordQuery` in `server/src/modules/dictionary/application/queries/lookup-word.query.ts` — CQRS query class with `word`, `tenantId`, `userId`
+- [x] T019 [US1] Implement `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — `@QueryHandler(LookupWordQuery)`: normalize word → check NestJS `CacheManager` → query `WordReadRepository` → return `WordSnapshot` or proceed to provider layer (US2). For US1 MVP: return result or `NotFoundException`
+- [x] T020 [US1] Create `LookupController` in `server/src/modules/dictionary/controllers/lookup.controller.ts` — `GET /api/v1/dictionary/lookup/:word`, JWT guard, validate word input (1-100 chars), dispatch `LookupWordQuery`, return `WordSnapshotResponseDto`
+- [x] T021 [US1] Register `LookupWordHandler` and `LookupController` in `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts`
 
 **Checkpoint**: `GET /api/v1/dictionary/lookup/hello` returns full definition for DB-cached words. US1 is independently testable.
 
