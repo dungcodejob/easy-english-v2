@@ -198,8 +198,9 @@ CachingProviderDecorator.lookup(word)
 | `LookupController` | HTTP → Query dispatch | ❌ | ❌ |
 | `LookupWordHandler` | Orchestrate lookup logic | ✅ (read-only) | ✅ (emit events) |
 | `WordReadRepository` | Query DB for WordSnapshot | ✅ (read-only) | ❌ |
-| `LookupProvider` | Fetch from external APIs | ❌ | ❌ |
-| `LookupProviderFactory` | Select/create provider | ❌ | ❌ |
+| `AzVocabHttpClient` | Pure HTTP calls to AzVocab (search + getDefinition) | ❌ | ❌ |
+| `AzVocabAdapter` | Map AzVocab DTOs → WordSnapshot | ❌ | ❌ |
+| `AzVocabLookupProvider` | Orchestrate: search → getDefinitions → adapt | ❌ | ❌ |
 | `CachingProviderDecorator` | Wrap provider with cache | ✅ (read+async write) | ❌ |
 | `ProviderCacheRepository` | Query/save raw responses | ✅ | ❌ |
 | `WordSnapshotMapper` | ORM → ValueObject | ❌ | ❌ |
@@ -424,11 +425,34 @@ The main orchestrator for lookup operations:
 ### LookupProvider
 
 Pure interface for external dictionary access:
-- Accepts word text, returns WordSnapshot or null
+- Accepts word text, returns `LookupResult` (snapshot + raw + status) or null
 - No database access
 - No side effects
 - Supports timeout configuration
 - Provides health/availability status
+
+### AzVocab Provider Architecture
+
+The AzVocab integration follows a 3-layer architecture:
+
+1. **`AzVocabHttpClient`** — Pure HTTP transport layer
+   - `search(word)` → `POST /api/vocab/search?q={word}` → `AzVocabSearchResponseDto[]`
+   - `getDefinitionById(defId)` → `GET /_next/data/{buildId}/vi/definition/{defId}.json` → `AzVocabDefinitionResponseDto`
+   - Cookie-based authentication, browser-like headers
+   - Error handling per HTTP status (404, 429, 5xx)
+
+2. **`AzVocabAdapter`** — DTO-to-domain mapping
+   - Merges search results + definition details into a single `WordSnapshot`
+   - Base metadata (pronunciation, rank, family) from search response
+   - Senses/examples/collocations from definition responses
+   - Handles partial data gracefully (missing definitions)
+
+3. **`AzVocabLookupProvider`** — Orchestration layer (implements `ILookupProvider`)
+   - Calls `httpClient.search(word)`
+   - Extracts definition IDs from search results
+   - Calls `httpClient.getDefinitionById(defId)` for each definition
+   - Passes both results to `adapter` for mapping
+   - Returns `LookupResult`
 
 ### LookupProviderFactory
 
@@ -588,4 +612,4 @@ The following capabilities are anticipated for future iterations but not include
 - **Existing Word Entity**: The Word aggregate and persistence layer from the Import flow
 - **Event Bus**: Infrastructure for publishing and subscribing to domain events
 - **Cache Layer**: Distributed cache for read model optimization
-- **External Provider Credentials**: API keys and configuration for AzVocab, Oxford, FreeDictionary
+- **External Provider Credentials**: Cookie-based auth and build ID for AzVocab (`AZVOCAB_COOKIE`, `AZVOCAB_BUILD_ID`)

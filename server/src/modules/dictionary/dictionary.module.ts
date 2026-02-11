@@ -8,14 +8,20 @@ import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
 import { LookupController } from './controllers/lookup.controller';
-
-import { provideProviderCacheRepository } from './domain/repositories/provider-cache.repository.interface';
+import { lookupProviderToken } from './domain/providers/lookup-provider.interface';
+import {
+  IProviderCacheRepository,
+  provideProviderCacheRepository,
+  providerCacheRepositoryToken,
+} from './domain/repositories/provider-cache.repository.interface';
 import { provideWordReadRepository } from './domain/repositories/word-read.repository.interface';
 import { ProviderResponseCacheOrmEntity } from './infrastructure/persistence/provider-response-cache.orm-entity';
 import { WordExampleOrmEntity } from './infrastructure/persistence/word-example.orm-entity';
 import { WordPronunciationOrmEntity } from './infrastructure/persistence/word-pronunciation.orm-entity';
 import { WordSenseOrmEntity } from './infrastructure/persistence/word-sense.orm-entity';
 import { WordOrmEntity } from './infrastructure/persistence/word.orm-entity';
+import { AzVocabAdapter } from './infrastructure/providers/azvocab/azvocab.adapter';
+import { AzVocabHttpClient } from './infrastructure/providers/azvocab/azvocab.http-client';
 import { AzVocabLookupProvider } from './infrastructure/providers/azvocab/azvocab.lookup-provider';
 import { CachingProviderDecorator } from './infrastructure/providers/caching-provider.decorator';
 import { ProviderCacheRepository } from './infrastructure/repositories/provider-cache.repository';
@@ -23,9 +29,9 @@ import { WordReadRepository } from './infrastructure/repositories/word-read.repo
 
 const httpControllers = [LookupController];
 const messageControllers = [];
-const commandHandlers = [LookupMissedHandler];
+const commandHandlers = [];
 const queryHandlers = [LookupWordHandler];
-const eventHandlers = [];
+const eventHandlers = [LookupMissedHandler];
 const repositories = [
   provideWordReadRepository(WordReadRepository),
   provideProviderCacheRepository(ProviderCacheRepository),
@@ -62,10 +68,12 @@ const mappers = [];
     ...repositories,
     ...mappers,
 
+    AzVocabHttpClient,
+    AzVocabAdapter,
     AzVocabLookupProvider,
 
     {
-      provide: LOOKUP_PROVIDER,
+      provide: lookupProviderToken,
       useFactory: (
         azvocab: AzVocabLookupProvider,
         cacheRepo: IProviderCacheRepository,
@@ -73,7 +81,11 @@ const mappers = [];
       ) => {
         return new CachingProviderDecorator(azvocab, cacheRepo, configService);
       },
-      inject: [AzVocabLookupProvider, PROVIDER_CACHE_REPOSITORY, ConfigService],
+      inject: [
+        AzVocabLookupProvider,
+        providerCacheRepositoryToken,
+        ConfigService,
+      ],
     },
   ],
 })

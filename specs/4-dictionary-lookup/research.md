@@ -118,40 +118,95 @@ When a word is not found in internal storage:
 
 ## AzVocab Integration
 
+### Two-Step Data Flow
+
+The AzVocab API requires **two sequential calls** to get complete word data:
+
+```
+1. Search(word) → AzVocabSearchResponseDto[] (basic metadata + def IDs)
+2. For each def → GetDefinition(defId) → AzVocabDefinitionResponseDto (full details)
+```
+
+The **search** endpoint returns basic word info (vocab, pos, rank, pronunciations) and a list of definition stubs with IDs. To get the full definition data (samples, collocations, images, etc.), a separate **getDefinition** call per definition is required.
+
 ### Endpoints
 
-1. **Search**: `GET https://azvocab.com/api/v1/words/{word}`
-   - Returns `AzVocabSearchResponseDto` with word details, pronunciations, and definitions.
-   - Primary endpoint for Phase 1 lookup.
+#### 1. Search: `POST /api/vocab/search?q={word}`
 
-2. **Get Definition** (Optional): `GET https://azvocab.com/api/v1/definitions/{defId}`
-   - Returns detailed definition data (not used in Phase 1 as Search response is sufficient).
+- **Method**: `POST` (body is `null`, query in URL param)
+- **Auth**: Cookie-based (`Cookie: _azvocab_token=...; _azvocab_refresh=...`)
+- **Response**: `AzVocabSearchResponseDto[]`
+- **Returns**: Array of word entries with basic metadata and definition IDs
+- Each entry contains: `id`, `vocab`, `pos`, `pron_uk/us`, `uk/us` (audio), `rank`, `freq`, `family`, `inflects`, and `defs[]` (definition stubs with `id`, `def`, `vi`, `pos`)
 
-### Response Mapping (Search Response)
+#### 2. Get Definition: `GET /_next/data/{buildId}/vi/definition/{defId}.json?id={defId}`
 
-| AzVocab Field | WordSnapshot Field |
-|---------------|-------------------|
-| `vocab` | `text` |
-| `pron_uk` / `pron_us` | `pronunciations[].ipa` |
-| `uk` / `us` | `pronunciations[].audioUrl` |
-| `defs[].pos` | `senses[].partOfSpeech` |
-| `defs[].def` | `senses[].definition` |
-| `defs[].vi` | `senses[].definitionVi` |
-| `defs[].samples[]` | `senses[].examples[]` |
-| `defs[].idioms` | `senses[].idioms` |
-| `defs[].phrases` | `senses[].phrases` |
-| `defs[].images` | `senses[].images` |
-| `family` | `wordFamily` |
-| `inflects` | `inflects` |
+- **Method**: `GET`
+- **Auth**: Cookie-based (same cookie)
+- **Headers**: `x-nextjs-data: 1` (required for Next.js data route)
+- **Response**: `AzVocabDefinitionResponseDto`
+- **Returns**: `{ pageProps: { def: DefinitionDto, vocab: AzVocabSearchResponseDto } }`
+- Contains full definition details: `samples[]`, `synonyms[]`, `antonyms[]`, `colloc`, `images[]`, `idioms[]`, `phrases[]`, `verb_phrases[]`, `level`
+
+> [!IMPORTANT]
+> The `buildId` changes with each deployment of azvocab.com. Must be configured via `AZVOCAB_BUILD_ID` env var.
+
+### Architecture: 3-File Split
+
+```
+azvocab/
+├── azvocab.http-client.ts     # Pure HTTP client (search + getDefinition)
+├── azvocab.adapter.ts         # DTO → WordSnapshot mapping (merges search + definitions)
+└── azvocab.lookup-provider.ts # Implements ILookupProvider, orchestrates client + adapter
+```
+
+| File | Responsibility | Dependencies |
+|------|---------------|--------------|
+| `http-client` | HTTP calls, cookie auth, headers, error handling | `HttpService`, `ConfigService` |
+| `adapter` | Maps `AzVocabSearchResponseDto[]` + `AzVocabDefinitionResponseDto[]` → `WordSnapshot` | Value objects only |
+| `lookup-provider` | Orchestrates: search → getDefinitions → adapt | `http-client`, `adapter` |
+
+### Response Mapping
+
+**From Search (base metadata):**
+
+| AzVocab Field | WordSnapshot Field | Notes |
+|---------------|-------------------|-------|
+| `vocab` | `text` | From primary entry |
+| `pron_uk` / `pron_us` | `pronunciations[].ipa` | From primary entry |
+| `uk` / `us` | `pronunciations[].audioUrl` | From primary entry |
+| `rank` | `rank` | From primary entry |
+| `freq` | `frequency` | From primary entry |
+| `family` | `wordFamily` | From primary entry |
+| `inflects` | `inflects` | From primary entry |
+
+**From GetDefinition (per definition):**
+
+| AzVocab Field | WordSnapshot Field | Notes |
+|---------------|-------------------|-------|
+| `def.pos` | `senses[].partOfSpeech` | Fallback to search entry `pos` |
+| `def.def` | `senses[].definition` | |
+| `def.vi` | `senses[].definitionVi` | |
+| `def.level` | `senses[].cefrLevel` | |
+| `def.samples[]` | `senses[].examples[]` | Full sample sentences |
+| `def.synonyms[]` | `senses[].synonyms` | |
+| `def.antonyms[]` | `senses[].antonyms` | |
+| `def.colloc` | `senses[].collocations` | |
+| `def.idioms[]` | `senses[].idioms` | |
+| `def.phrases[]` | `senses[].phrases` | |
+| `def.verb_phrases[]` | `senses[].verbPhrases` | |
+| `def.images[]` | `senses[].images` | |
 
 ### Error Handling
 
-| Status | Action |
-|--------|--------|
-| 200 | Map to WordSnapshot, cache response |
-| 404 | Return null, cache 404 (short TTL: 24h) |
-| 429 | Throw RateLimitError, do not cache |
-| 5xx | Throw ProviderError, do not cache |
+| Endpoint | Status | Action |
+|----------|--------|--------|
+| Search | 200 (empty []) | Return null snapshot |
+| Search | 404 | Return null, cache 404 (24h TTL) |
+| Search | 429 | Throw RateLimitError, do not cache |
+| Search | 5xx | Throw ProviderError, do not cache |
+| GetDef | 404 | Skip this definition, continue others |
+| GetDef | 429/5xx | Log warning, return partial data (search-only) |
 
 ---
 
@@ -161,8 +216,9 @@ When a word is not found in internal storage:
 
 ```bash
 # AzVocab Provider
-AZVOCAB_API_URL=https://azvocab.com/api/v1
-AZVOCAB_API_KEY=<secret>
+AZVOCAB_API_URL=https://azvocab.com
+AZVOCAB_COOKIE=_azvocab_token=...; _azvocab_refresh=...
+AZVOCAB_BUILD_ID=<nextjs-build-id>
 AZVOCAB_TIMEOUT_MS=5000
 
 # Cache TTLs

@@ -75,14 +75,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [P] [US2] Create `IProviderCacheRepository` interface in `server/src/modules/dictionary/domain/repositories/provider-cache.repository.interface.ts` — `findByWord(normalizedWord, provider): Promise<ProviderResponseCacheOrmEntity | null>`, `saveAsync(entity): void`
-- [ ] T023 [P] [US2] Implement `ProviderCacheRepository` in `server/src/modules/dictionary/infrastructure/repositories/provider-cache.repository.ts` — implements `IProviderCacheRepository`, queries `ProviderResponseCacheOrmEntity`, handles upsert with TTL
-- [ ] T024 [US2] Implement `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — implements `ILookupProvider`, pure HTTP via `HttpService`, maps AzVocab response → `WordSnapshot` (per research.md field mapping), handles 404/429/5xx per error table
-- [ ] T025 [US2] Create `AzVocabResponseMapper` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab-response.mapper.ts` — map raw AzVocab JSON fields to `WordSnapshot` VOs (phonetics→pronunciations, meanings→senses, definitions→examples)
-- [ ] T026 [US2] Implement `CachingProviderDecorator` in `server/src/modules/dictionary/infrastructure/providers/caching-provider.decorator.ts` — wraps `ILookupProvider`, checks `ProviderCacheRepository` first, on miss calls inner provider, async saves to cache (fire-and-forget), respects TTL config
-- [ ] T027 [US2] Create `LookupMissedHandler` in `server/src/modules/dictionary/application/events/lookup-missed.handler.ts` — `@OnEvent('LookupMissedEvent')`, logs missed word for future async enrichment (placeholder for Import flow integration)
-- [ ] T028 [US2] Update `LookupWordHandler` to integrate provider fallback in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — after DB miss, call `CachingProviderDecorator.lookup()`, emit `LookupMissedEvent` if provider returns data, emit `LookupSucceededEvent` on any hit
-- [ ] T029 [US2] Register `AzVocabLookupProvider`, `CachingProviderDecorator`, `ProviderCacheRepository`, and `LookupMissedHandler` in `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts`
+- [x] T022 [P] [US2] Create `IProviderCacheRepository` interface in `server/src/modules/dictionary/domain/repositories/provider-cache.repository.interface.ts` — `findByWord(normalizedWord, provider): Promise<ProviderResponseCacheOrmEntity | null>`, `saveAsync(entity): void`
+- [x] T023 [P] [US2] Implement `ProviderCacheRepository` in `server/src/modules/dictionary/infrastructure/repositories/provider-cache.repository.ts` — implements `IProviderCacheRepository`, queries `ProviderResponseCacheOrmEntity`, handles upsert with TTL
+- [x] T024a [P] [US2] Create `AzVocabHttpClient` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.http-client.ts` — pure HTTP client: `search(word)` → `POST /api/vocab/search?q={word}` returns `AzVocabSearchResponseDto[]`; `getDefinitionById(defId)` → `GET /_next/data/{buildId}/vi/definition/{defId}.json` returns `AzVocabDefinitionResponseDto | null`; cookie-based auth, browser-like headers, per-endpoint error handling (404/429/5xx)
+- [x] T024b [P] [US2] Create `AzVocabAdapter` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.adapter.ts` — DTO→WordSnapshot mapping: accepts search results + definition details, merges base metadata from search (pronunciation, rank, family) with full senses from getDefinition; handles partial data (missing definitions gracefully)
+- [x] T024c [US2] Refactor `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — implements `ILookupProvider`, orchestrates: `httpClient.search(word)` → extract def IDs → `httpClient.getDefinitionById(defId)` per def → `adapter.toDomain()` → returns `LookupResult`; NO direct HTTP or mapping logic
+- [x] T026 [US2] Implement `CachingProviderDecorator` in `server/src/modules/dictionary/infrastructure/providers/caching-provider.decorator.ts` — wraps `ILookupProvider`, checks `ProviderCacheRepository` first, on miss calls inner provider, async saves to cache (fire-and-forget), respects TTL config
+- [x] T027 [US2] Create `LookupMissedHandler` in `server/src/modules/dictionary/application/events/lookup-missed.handler.ts` — `@OnEvent('LookupMissedEvent')`, logs missed word for future async enrichment (placeholder for Import flow integration)
+- [x] T028 [US2] Update `LookupWordHandler` to integrate provider fallback in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — after DB miss, call `CachingProviderDecorator.lookup()`, emit `LookupMissedEvent` if provider returns data, emit `LookupSucceededEvent` on any hit
+- [x] T029 [US2] Register `AzVocabLookupProvider`, `CachingProviderDecorator`, `ProviderCacheRepository`, and `LookupMissedHandler` in `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts`
 
 **Checkpoint**: Words not in DB are fetched from AzVocab, cached in `provider_response_cache`, and returned in the same format as internal words.
 
@@ -202,14 +203,14 @@ T022 IProviderCacheRepository │ T023 ProviderCacheRepository
 
 | Metric | Value |
 |--------|-------|
-| **Total tasks** | 37 |
+| **Total tasks** | 38 |
 | **Phase 1 (Setup)** | 3 tasks |
 | **Phase 2 (Foundational)** | 12 tasks |
 | **Phase 3 (US1 — MVP)** | 6 tasks |
-| **Phase 4 (US2)** | 8 tasks |
+| **Phase 4 (US2)** | 9 tasks |
 | **Phase 5 (US3)** | 3 tasks |
 | **Phase 6 (US4)** | 2 tasks |
 | **Phase 7 (Polish)** | 3 tasks |
-| **Parallel tasks** | 17 (46%) |
+| **Parallel tasks** | 18 (47%) |
 | **Suggested MVP scope** | Phases 1–3 (US1: 21 tasks) |
 | **Format validation** | ✅ All tasks follow `- [ ] [ID] [P?] [Story?] Description with file path` |

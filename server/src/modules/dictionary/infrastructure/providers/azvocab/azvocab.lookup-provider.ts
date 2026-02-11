@@ -1,20 +1,20 @@
-import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
   Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { firstValueFrom } from 'rxjs';
 import {
   ILookupProvider,
   LookupResult,
 } from '../../../domain/providers/lookup-provider.interface';
 import { WordSnapshot } from '../../../domain/value-objects/word-snapshot.vo';
+import { AzVocabAdapter } from './azvocab.adapter';
+import { AzVocabHttpClient } from './azvocab.http-client';
 import {
-  AzVocabResponseMapper,
+  AzVocabDefinitionResponseDto,
   AzVocabSearchResponseDto,
-} from './azvocab-response.mapper';
+} from './azvocab.types';
 
 @Injectable()
 export class AzVocabLookupProvider implements ILookupProvider {
@@ -22,80 +22,84 @@ export class AzVocabLookupProvider implements ILookupProvider {
   private readonly logger = new Logger(AzVocabLookupProvider.name);
 
   constructor(
-    private readonly httpService: HttpService,
+    private readonly httpClient: AzVocabHttpClient,
+    private readonly adapter: AzVocabAdapter,
     private readonly configService: ConfigService,
   ) {}
 
-  mapResponse(raw: any): WordSnapshot | null {
-    try {
-      return AzVocabResponseMapper.toDomain(raw as AzVocabSearchResponseDto);
-    } catch (error) {
-      this.logger.error(
-        `Failed to map raw response: ${(error as Error).message}`,
-      );
+  mapResponse(raw: unknown): WordSnapshot | null {
+    // This method is part of ILookupProvider but primarily used for cache hydration from raw JSON
+    // Raw JSON stored in cache should match the structure we return in lookup(): { search: [], definitions: [] }
+    const r = raw as {
+      search?: AzVocabSearchResponseDto[];
+      definitions?: AzVocabDefinitionResponseDto[];
+    };
+
+    if (!r || !r.search) {
       return null;
     }
+    return this.adapter.toDomain(r.search, r.definitions || []);
   }
 
   async lookup(word: string): Promise<LookupResult> {
-    const baseUrl = this.configService.get<string>('dictionary.azvocab.url');
-    const apiKey = this.configService.get<string>('dictionary.azvocab.apiKey');
-    const timeout =
-      this.configService.get<number>('dictionary.azvocab.timeoutMs') || 5000;
-
-    if (!baseUrl || !apiKey) {
-      this.logger.error('AzVocab API URL or Key not configured');
-      throw new ServiceUnavailableException('Dictionary provider unavailable');
-    }
-
     try {
-      const { data, status } = await firstValueFrom(
-        this.httpService.get<AzVocabSearchResponseDto>(
-          `${baseUrl}/words/${word}`,
-          {
-            headers: { Authorization: `Bearer ${apiKey}` },
-            timeout,
-          },
-        ),
-      );
+      // 1. Search for the word
+      const searchResponses = await this.httpClient.search(word);
+      if (!searchResponses || searchResponses.length === 0) {
+        return { snapshot: null, raw: null, status: 404 };
+      }
 
-      return {
-        snapshot: this.mapResponse(data),
-        raw: data,
-        status,
-      };
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const err = error as any;
-      if (err.response) {
-        if (err.response.status === 404) {
-          return {
-            snapshot: null,
-            raw: err.response.data || {},
-            status: 404,
-          };
-        }
-        if (err.response.status === 429) {
-          this.logger.warn(`AzVocab rate limit exceeded for word '${word}'`);
-          throw new ServiceUnavailableException('Provider rate limit exceeded');
-        }
-        if (err.response.status && err.response.status >= 500) {
-          this.logger.error(
-            `AzVocab server error for word '${word}': ${err.response.status}`,
-          );
-          throw new ServiceUnavailableException('Provider server error');
+      // 2. Fetch full definitions for each definition ID found
+      const definitionPromises: Promise<AzVocabDefinitionResponseDto | null>[] =
+        [];
+
+      // Collect unique definition IDs across all search entries
+      const defIds = new Set<string>();
+      for (const entry of searchResponses) {
+        if (entry.defs) {
+          entry.defs.forEach((def) => {
+            if (def.id && !defIds.has(def.id)) {
+              defIds.add(def.id);
+              definitionPromises.push(
+                this.httpClient.getDefinitionById(def.id),
+              );
+            }
+          });
         }
       }
+
+      // Execute all definition fetches in parallel
+      const definitionResultsRaw = await Promise.all(definitionPromises);
+      const definitions = definitionResultsRaw.filter(
+        (d): d is AzVocabDefinitionResponseDto => d !== null,
+      );
+
+      // 3. Map to Domain
+      const snapshot = this.adapter.toDomain(searchResponses, definitions);
+
+      // 4. Construct Result
+      return {
+        snapshot,
+        raw: {
+          search: searchResponses,
+          definitions,
+        },
+        status: snapshot ? 200 : 404, // If mapped snapshot is null, treat as not found?
+      };
+    } catch (error) {
+      if (error instanceof ServiceUnavailableException) {
+        throw error;
+      }
       this.logger.error(
-        `AzVocab lookup failed for word '${word}': ${(error as Error).message}`,
+        `Lookup failed for word '${word}': ${(error as Error).message}`,
         (error as Error).stack,
       );
-      throw new ServiceUnavailableException('Provider lookup failed');
+      throw new ServiceUnavailableException('Dictionary provider failed');
     }
   }
 
-  isAvailable(): Promise<boolean> {
-    const baseUrl = this.configService.get<string>('dictionary.azvocab.url');
-    return Promise.resolve(!!baseUrl);
+  async isAvailable(): Promise<boolean> {
+    const url = this.configService.get<string>('dictionary.azvocab.url');
+    return Promise.resolve(!!url);
   }
 }
