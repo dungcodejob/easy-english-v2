@@ -1,3 +1,4 @@
+import { createInjection } from '@shared/utils';
 import { WordSnapshot } from '../value-objects/word-snapshot.vo';
 
 export interface IWordReadRepository {
@@ -7,4 +8,10 @@ export interface IWordReadRepository {
   ): Promise<WordSnapshot | null>;
 }
 
-export const WORD_READ_REPOSITORY = Symbol('WORD_READ_REPOSITORY');
+const { inject, provider, token } = createInjection<IWordReadRepository>(
+  'IWordReadRepository',
+);
+
+export const InjectWordReadRepository = inject;
+export const provideWordReadRepository = provider;
+export const wordReadRepositoryToken = token;
