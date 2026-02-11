@@ -12,8 +12,8 @@ import {
 } from '../../../domain/providers/lookup-provider.interface';
 import { WordSnapshot } from '../../../domain/value-objects/word-snapshot.vo';
 import {
-  AzVocabResponse,
   AzVocabResponseMapper,
+  AzVocabSearchResponseDto,
 } from './azvocab-response.mapper';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
   mapResponse(raw: any): WordSnapshot | null {
     try {
-      return AzVocabResponseMapper.toDomain(raw as AzVocabResponse);
+      return AzVocabResponseMapper.toDomain(raw as AzVocabSearchResponseDto);
     } catch (error) {
       this.logger.error(
         `Failed to map raw response: ${(error as Error).message}`,
@@ -50,10 +50,13 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
     try {
       const { data, status } = await firstValueFrom(
-        this.httpService.get<AzVocabResponse>(`${baseUrl}/words/${word}`, {
-          headers: { Authorization: `Bearer ${apiKey}` },
-          timeout,
-        }),
+        this.httpService.get<AzVocabSearchResponseDto>(
+          `${baseUrl}/words/${word}`,
+          {
+            headers: { Authorization: `Bearer ${apiKey}` },
+            timeout,
+          },
+        ),
       );
 
       return {

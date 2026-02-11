@@ -10,6 +10,21 @@ export interface WordSenseProps {
   synonyms: string[];
   antonyms: string[];
   definitionVi: string | null;
+  collocations?: Collocation;
+  idioms?: string[];
+  phrases?: string[];
+  verbPhrases?: string[];
+  images?: string[];
+}
+
+export interface Collocation {
+  pre?: {
+    v?: string[];
+    adv?: string[];
+  };
+  suf?: {
+    prep?: string[];
+  };
 }
 
 export class WordSenseVO extends ValueObject<WordSenseProps> {
@@ -43,5 +58,25 @@ export class WordSenseVO extends ValueObject<WordSenseProps> {
 
   get definitionVi(): string | null {
     return this.props.definitionVi;
+  }
+
+  get collocations(): Collocation | undefined {
+    return this.props.collocations;
+  }
+
+  get idioms(): string[] | undefined {
+    return this.props.idioms;
+  }
+
+  get phrases(): string[] | undefined {
+    return this.props.phrases;
+  }
+
+  get verbPhrases(): string[] | undefined {
+    return this.props.verbPhrases;
+  }
+
+  get images(): string[] | undefined {
+    return this.props.images;
   }
 }

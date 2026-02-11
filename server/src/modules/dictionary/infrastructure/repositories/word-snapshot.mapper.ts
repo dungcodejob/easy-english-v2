@@ -40,6 +40,11 @@ export class WordSnapshotMapper {
         synonyms: s.synonyms || [],
         antonyms: s.antonyms || [],
         definitionVi: s.definitionVi,
+        idioms: s.idioms || [],
+        phrases: s.phrases || [], // Map generic phrases
+        // verbPhrases not in entity
+        // collocations type mismatch (string[] vs object), skip for now or future migration
+        images: s.images || [],
         examples: examples,
       });
     });
@@ -53,6 +58,8 @@ export class WordSnapshotMapper {
       frequency: entity.frequency,
       pronunciations: pronunciations,
       senses: senses,
+      inflects: (entity.inflects as Record<string, string[]>) || undefined,
+      // wordFamily mismatch (string vs object), skip
     });
   }
 }

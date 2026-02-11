@@ -26,6 +26,36 @@ export class ExampleDto {
   order!: number;
 }
 
+export class WordFamilyDto {
+  @ApiProperty({ type: [String], required: false })
+  n?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  adj?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  adv?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  v?: string[];
+
+  @ApiProperty()
+  head!: string;
+}
+
+export class CollocationDto {
+  @ApiProperty({ required: false })
+  pre?: {
+    v?: string[];
+    adv?: string[];
+  };
+
+  @ApiProperty({ required: false })
+  suf?: {
+    prep?: string[];
+  };
+}
+
 export class SenseDto {
   @ApiProperty({ example: 'interjection' })
   partOfSpeech!: string;
@@ -52,6 +82,21 @@ export class SenseDto {
 
   @ApiProperty({ example: 'Dùng để chào hỏi.', nullable: true })
   definitionVi!: string | null;
+
+  @ApiProperty({ type: [String], required: false })
+  idioms?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  phrases?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  verbPhrases?: string[];
+
+  @ApiProperty({ type: [String], required: false })
+  images?: string[];
+
+  @ApiProperty({ type: CollocationDto, required: false })
+  collocations?: CollocationDto;
 }
 
 export class WordSnapshotResponseDto {
@@ -79,6 +124,12 @@ export class WordSnapshotResponseDto {
   @ApiProperty({ type: [SenseDto] })
   senses!: SenseDto[];
 
+  @ApiProperty({ required: false })
+  inflects?: Record<string, string[]>;
+
+  @ApiProperty({ type: WordFamilyDto, required: false })
+  wordFamily?: WordFamilyDto;
+
   constructor(snapshot: WordSnapshot) {
     this.text = snapshot.text;
     this.normalizedText = snapshot.normalizedText;
@@ -104,6 +155,13 @@ export class WordSnapshotResponseDto {
         translationVi: e.translationVi,
         order: e.order,
       })),
+      idioms: s.idioms,
+      phrases: s.phrases,
+      verbPhrases: s.verbPhrases,
+      images: s.images,
+      collocations: s.collocations,
     }));
+    this.inflects = snapshot.inflects;
+    this.wordFamily = snapshot.wordFamily;
   }
 }

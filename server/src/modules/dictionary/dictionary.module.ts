@@ -8,12 +8,9 @@ import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
 import { LookupController } from './controllers/lookup.controller';
-import { LOOKUP_PROVIDER } from './domain/providers/lookup-provider.interface';
-import {
-  IProviderCacheRepository,
-  PROVIDER_CACHE_REPOSITORY,
-} from './domain/repositories/provider-cache.repository.interface';
-import { WORD_READ_REPOSITORY } from './domain/repositories/word-read.repository.interface';
+
+import { provideProviderCacheRepository } from './domain/repositories/provider-cache.repository.interface';
+import { provideWordReadRepository } from './domain/repositories/word-read.repository.interface';
 import { ProviderResponseCacheOrmEntity } from './infrastructure/persistence/provider-response-cache.orm-entity';
 import { WordExampleOrmEntity } from './infrastructure/persistence/word-example.orm-entity';
 import { WordPronunciationOrmEntity } from './infrastructure/persistence/word-pronunciation.orm-entity';
@@ -23,6 +20,17 @@ import { AzVocabLookupProvider } from './infrastructure/providers/azvocab/azvoca
 import { CachingProviderDecorator } from './infrastructure/providers/caching-provider.decorator';
 import { ProviderCacheRepository } from './infrastructure/repositories/provider-cache.repository';
 import { WordReadRepository } from './infrastructure/repositories/word-read.repository';
+
+const httpControllers = [LookupController];
+const messageControllers = [];
+const commandHandlers = [LookupMissedHandler];
+const queryHandlers = [LookupWordHandler];
+const eventHandlers = [];
+const repositories = [
+  provideWordReadRepository(WordReadRepository),
+  provideProviderCacheRepository(ProviderCacheRepository),
+];
+const mappers = [];
 
 @Module({
   imports: [
@@ -46,19 +54,16 @@ import { WordReadRepository } from './infrastructure/repositories/word-read.repo
       inject: [ConfigService],
     }),
   ],
-  controllers: [LookupController],
+  controllers: [...httpControllers, ...messageControllers],
   providers: [
-    LookupWordHandler,
-    LookupMissedHandler,
-    {
-      provide: WORD_READ_REPOSITORY,
-      useClass: WordReadRepository,
-    },
-    {
-      provide: PROVIDER_CACHE_REPOSITORY,
-      useClass: ProviderCacheRepository,
-    },
+    ...commandHandlers,
+    ...queryHandlers,
+    ...eventHandlers,
+    ...repositories,
+    ...mappers,
+
     AzVocabLookupProvider,
+
     {
       provide: LOOKUP_PROVIDER,
       useFactory: (

@@ -118,22 +118,31 @@ When a word is not found in internal storage:
 
 ## AzVocab Integration
 
-### Endpoint
+### Endpoints
 
-```
-GET https://azvocab.com/api/v1/words/{word}
-```
+1. **Search**: `GET https://azvocab.com/api/v1/words/{word}`
+   - Returns `AzVocabSearchResponseDto` with word details, pronunciations, and definitions.
+   - Primary endpoint for Phase 1 lookup.
 
-### Response Mapping
+2. **Get Definition** (Optional): `GET https://azvocab.com/api/v1/definitions/{defId}`
+   - Returns detailed definition data (not used in Phase 1 as Search response is sufficient).
+
+### Response Mapping (Search Response)
 
 | AzVocab Field | WordSnapshot Field |
 |---------------|-------------------|
-| `word` | `text` |
-| `phonetics[].text` | `pronunciations[].ipa` |
-| `phonetics[].audio` | `pronunciations[].audioUrl` |
-| `meanings[].partOfSpeech` | `senses[].partOfSpeech` |
-| `meanings[].definitions[].definition` | `senses[].definition` |
-| `meanings[].definitions[].example` | `senses[].examples[]` |
+| `vocab` | `text` |
+| `pron_uk` / `pron_us` | `pronunciations[].ipa` |
+| `uk` / `us` | `pronunciations[].audioUrl` |
+| `defs[].pos` | `senses[].partOfSpeech` |
+| `defs[].def` | `senses[].definition` |
+| `defs[].vi` | `senses[].definitionVi` |
+| `defs[].samples[]` | `senses[].examples[]` |
+| `defs[].idioms` | `senses[].idioms` |
+| `defs[].phrases` | `senses[].phrases` |
+| `defs[].images` | `senses[].images` |
+| `family` | `wordFamily` |
+| `inflects` | `inflects` |
 
 ### Error Handling
 
