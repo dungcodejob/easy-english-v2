@@ -246,6 +246,19 @@ Pure HTTP client:
 
 ---
 
+#### [MODIFY] `infrastructure/providers/azvocab/azvocab.http-client.ts`
+
+Add **definition-level caching** to `getDefinitionById(defId)`:
+- Inject `IProviderCacheRepository`
+- Before HTTP call: check cache with `findByWord(defId, 'azvocab-definition')`
+- On cache HIT (not expired): return cached `rawResponse` as DTO
+- On cache MISS + successful HTTP: fire-and-forget save with TTL 30 days
+- On cache MISS + HTTP failure: return null (partial data acceptable)
+- Provider key: `azvocab-definition` (distinct from word-level `azvocab`)
+- Cache key: `defId` stored in existing `normalizedWord` column (no migration needed)
+
+---
+
 #### [NEW] `dto/responses/word-snapshot.response.dto.ts`
 
 Response DTO for API output.
@@ -275,8 +288,22 @@ Response DTO for API output.
    curl -H "Authorization: Bearer <JWT>" http://localhost:3000/api/v1/dictionary/lookup/supercalifragilistic
    ```
    - Verify response from external provider
-   - Check `provider_response_cache` table for new entry
-4. **Verify auth required**:
+   - Check `provider_response_cache` table for new word-level entry
+4. **Verify definition-level cache**:
+   ```sql
+   SELECT normalized_word, provider, http_status, expires_at
+   FROM provider_response_cache
+   WHERE provider = 'azvocab-definition';
+   ```
+   - Verify individual definition records exist with `provider = 'azvocab-definition'`
+   - Verify `normalized_word` contains defId UUIDs
+   - Verify `expires_at` is ~30 days from now
+5. **Verify partial recovery**:
+   - Lookup a word, note its definition defIds
+   - Delete the word-level cache entry (`provider = 'azvocab'`)
+   - Lookup the same word again
+   - Verify definition cache hits (no HTTP calls for those definitions)
+6. **Verify auth required**:
    ```bash
    curl http://localhost:3000/api/v1/dictionary/lookup/hello
    ```

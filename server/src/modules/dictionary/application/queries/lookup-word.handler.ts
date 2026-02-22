@@ -1,15 +1,21 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Logger,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { EventBus, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import type { Cache } from 'cache-manager';
 import { LookupMissedEvent } from '../../domain/events/lookup-missed.event';
 import { LookupSucceededEvent } from '../../domain/events/lookup-succeeded.event';
+import { WordEnrichedEvent } from '../../domain/events/word-enriched.event';
 import {
-  LOOKUP_PROVIDER,
+  lookupProviderToken,
   type ILookupProvider,
 } from '../../domain/providers/lookup-provider.interface';
 import {
-  WORD_READ_REPOSITORY,
+  wordReadRepositoryToken,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
@@ -20,11 +26,11 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
   private readonly logger = new Logger(LookupWordHandler.name);
 
   constructor(
-    @Inject(WORD_READ_REPOSITORY)
+    @Inject(wordReadRepositoryToken)
     private readonly repo: IWordReadRepository,
     private readonly eventBus: EventBus,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    @Inject(LOOKUP_PROVIDER) private readonly provider: ILookupProvider,
+    @Inject(lookupProviderToken) private readonly provider: ILookupProvider,
   ) {}
 
   async execute(query: LookupWordQuery): Promise<WordSnapshot> {
@@ -53,22 +59,35 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
 
     // Provider Fallback
     try {
-      const result = await this.provider.lookup(normalizedWord);
+      const timeoutMs = 3000;
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(
+          () =>
+            reject(new Error('Dictionary provider timeout exceeded 3000ms')),
+          timeoutMs,
+        ),
+      );
 
-      if (result.snapshot) {
+      const result = await Promise.race([
+        this.provider.lookup(normalizedWord),
+        timeoutPromise,
+      ]);
+
+      if (result.snapshots && result.snapshots.length > 0) {
+        const snapshot = result.snapshots[0];
         // Found in external provider
         // Emit LookupSucceeded because the USER got the word
         this.eventBus.publish(
           new LookupSucceededEvent({
-            aggregateId: result.snapshot.normalizedText,
-            word: result.snapshot.normalizedText,
-            source: result.snapshot.source,
+            aggregateId: snapshot.normalizedText,
+            word: snapshot.normalizedText,
+            source: snapshot.source,
             tenantId,
             userId,
           }),
         );
 
-        // Emit LookupMissed because it was missing from internal DB (trigger enrichment)
+        // Emit LookupMissed because it was missing from internal DB (trigger enrichment logging/metrics)
         this.eventBus.publish(
           new LookupMissedEvent({
             aggregateId: normalizedWord,
@@ -77,9 +96,32 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
             userId,
           }),
         );
-        return result.snapshot;
+
+        // Emit WordEnrichedEvent to persist the snapshot asynchronously
+        this.eventBus.publish(
+          new WordEnrichedEvent({
+            aggregateId: normalizedWord,
+            snapshot,
+            tenantId,
+          }),
+        );
+        return snapshot;
       }
     } catch (error) {
+      const err = error as { code?: string; name?: string; message?: string };
+      if (
+        err &&
+        (err.code === 'ECONNABORTED' ||
+          err.name === 'TimeoutError' ||
+          err.message === 'Dictionary provider timeout exceeded 3000ms')
+      ) {
+        this.logger.error(
+          `Lookup total budget (3000ms) exceeded for ${normalizedWord}`,
+        );
+        throw new ServiceUnavailableException(
+          'Dictionary provider unavailable or too slow.',
+        );
+      }
       this.logger.warn(
         `Provider lookup failed for ${normalizedWord}: ${error}`,
       );

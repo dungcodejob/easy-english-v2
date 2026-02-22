@@ -20,18 +20,22 @@ Based on clarification session 2026-02-10:
 
 ## Caching Strategy
 
-### Decision: 3-Layer Caching
+### Decision: Multi-Layer Caching
 
 ```
-Request → Memory Cache → Word DB → Provider Cache → AzVocab API
-           (5 min)       (persistent)   (90 days)
+Request → Memory Cache → Word DB → Provider Cache (word-level) → AzVocab API
+            (5 min)       (persistent)   (90 days)
+                                                                     ↓
+                                                         Definition Cache (def-level)
+                                                              (30 days)
 ```
 
 ### Rationale
 
 1. **Memory Cache (Redis/In-process)**: Sub-millisecond response for hot words
 2. **Word DB**: Source of truth for enriched internal data
-3. **Provider Cache**: Reduces external API calls and costs
+3. **Provider Cache (word-level)**: Reduces external API calls and costs — caches full `LookupResult` by `(word, provider)`
+4. **Definition Cache (def-level)**: Caches individual AzVocab definitions by `(defId, 'azvocab-definition')` inside `AzVocabHttpClient` — enables partial recovery when some API calls fail and cross-word definition reuse
 
 ### Alternatives Considered
 
@@ -162,7 +166,7 @@ azvocab/
 
 | File | Responsibility | Dependencies |
 |------|---------------|--------------|
-| `http-client` | HTTP calls, cookie auth, headers, error handling | `HttpService`, `ConfigService` |
+| `http-client` | HTTP calls, cookie auth, headers, error handling, **definition-level cache** (check/save per defId) | `HttpService`, `ConfigService`, `IProviderCacheRepository` |
 | `adapter` | Maps `AzVocabSearchResponseDto[]` + `AzVocabDefinitionResponseDto[]` → `WordSnapshot` | Value objects only |
 | `lookup-provider` | Orchestrates: search → getDefinitions → adapt | `http-client`, `adapter` |
 

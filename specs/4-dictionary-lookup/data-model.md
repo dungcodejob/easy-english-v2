@@ -82,8 +82,8 @@ erDiagram
 | Column | Type | Constraints | Description |
 |--------|------|-------------|-------------|
 | `id` | UUID | PK, DEFAULT gen_random_uuid() | Primary key |
-| `normalizedWord` | VARCHAR(100) | NOT NULL, INDEX | Lowercase, trimmed word |
-| `provider` | VARCHAR(50) | NOT NULL | Provider name: 'azvocab' |
+| `normalizedWord` | VARCHAR(100) | NOT NULL, INDEX | Lowercase word or defId (for definition cache) |
+| `provider` | VARCHAR(50) | NOT NULL | Provider name: `'azvocab'` (word-level) or `'azvocab-definition'` (def-level) |
 | `rawResponse` | JSONB | NOT NULL | Full API response |
 | `httpStatus` | INTEGER | NOT NULL | HTTP status code |
 | `createdAt` | TIMESTAMPTZ | NOT NULL, DEFAULT NOW() | Cache creation time |
@@ -204,7 +204,7 @@ export class SenseVO extends ValueObject<SenseProps> {
 | `word.text` | Required, 1-100 characters |
 | `word.normalizedText` | Lowercase, trimmed, no special characters |
 | `word.language` | ISO 639-1 code (e.g., 'en', 'vi') |
-| `cache.provider` | Enum: 'azvocab' (Phase 1) |
+| `cache.provider` | Enum: `'azvocab'`, `'azvocab-definition'` (Phase 1) |
 | `cache.httpStatus` | Valid HTTP status code |
 
 ---
@@ -237,3 +237,12 @@ CREATE INDEX idx_provider_cache_expires_at
 COMMENT ON TABLE provider_response_cache IS 
     'Caches raw API responses from external dictionary providers';
 ```
+
+### Cache Record Examples
+
+| `normalized_word` | `provider` | `raw_response` (summary) | `expires_at` |
+|---|---|---|---|
+| `hello` | `azvocab` | Full search + definitions JSON | +90 days |
+| `abc-uuid-1` | `azvocab-definition` | Single definition JSON | +30 days |
+| `def-uuid-2` | `azvocab-definition` | Single definition JSON | +30 days |
+| `unknown_word` | `azvocab` | `{}` (404 response) | +24 hours |

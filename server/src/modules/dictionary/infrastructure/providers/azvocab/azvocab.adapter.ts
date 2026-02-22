@@ -14,15 +14,11 @@ export class AzVocabAdapter {
   private readonly logger = new Logger(AzVocabAdapter.name);
 
   toDomain(
-    searchResponses: AzVocabSearchResponseDto[],
+    searchResponses: AzVocabSearchResponseDto,
     definitions: AzVocabDefinitionResponseDto[],
-  ): WordSnapshot | null {
-    if (!searchResponses || searchResponses.length === 0) {
-      return null;
-    }
-
+  ): WordSnapshot {
     // 1. Base Metadata from Primary Search Result
-    const primary = searchResponses[0];
+    const primary = searchResponses;
     const pronunciations = this.mapPronunciations(primary);
 
     // 2. Aggregate Senses
@@ -38,22 +34,34 @@ export class AzVocabAdapter {
       }
     }
 
-    // 2b. Fallback to partial definitions from search results if not fetched
-    for (const searchEntry of searchResponses) {
-      if (searchEntry.defs) {
-        for (const partialDef of searchEntry.defs) {
-          if (!processedDefIds.has(partialDef.id)) {
-            // Only map if partialDef has essential fields (id, def)
-            if (partialDef.id && partialDef.def) {
-              senses.push(
-                this.mapPartialDefinitionToSense(partialDef, searchEntry.pos),
-              );
-              processedDefIds.add(partialDef.id);
-            }
-          }
+    for (const partialDef of primary.defs) {
+      if (!processedDefIds.has(partialDef.id)) {
+        // Only map if partialDef has essential fields (id, def)
+        if (partialDef.id && partialDef.def) {
+          senses.push(
+            this.mapPartialDefinitionToSense(partialDef, primary.pos),
+          );
+          processedDefIds.add(partialDef.id);
         }
       }
     }
+
+    // 2b. Fallback to partial definitions from search results if not fetched
+    // for (const searchEntry of searchResponses) {
+    //   if (searchEntry.defs) {
+    //     for (const partialDef of searchEntry.defs) {
+    //       if (!processedDefIds.has(partialDef.id)) {
+    //         // Only map if partialDef has essential fields (id, def)
+    //         if (partialDef.id && partialDef.def) {
+    //           senses.push(
+    //             this.mapPartialDefinitionToSense(partialDef, searchEntry.pos),
+    //           );
+    //           processedDefIds.add(partialDef.id);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     if (senses.length === 0) {
       this.logger.warn(`No senses found for word '${primary.vocab}'`);
@@ -82,6 +90,9 @@ export class AzVocabAdapter {
     primary: AzVocabSearchResponseDto,
   ): WordPronunciationVO[] {
     const prons: WordPronunciationVO[] = [];
+
+    // primary or its fields could be missing partially, use safe checks
+    if (!primary) return prons;
 
     if (primary.pron_uk || primary.uk) {
       prons.push(
@@ -114,19 +125,21 @@ export class AzVocabAdapter {
 
     if (def.samples) {
       def.samples.forEach((sample, index) => {
-        examples.push(
-          new WordExampleVO({
-            text: sample.text,
-            translationVi: null,
-            order: index + 1,
-          }),
-        );
+        if (sample && sample.text) {
+          examples.push(
+            new WordExampleVO({
+              text: sample.text,
+              translationVi: null,
+              order: index + 1,
+            }),
+          );
+        }
       });
     }
 
     return new WordSenseVO({
       partOfSpeech: def.pos || fallbackPos,
-      definition: def.def,
+      definition: def.def || '',
       shortDefinition: null,
       cefrLevel: def.level || null,
       examples,

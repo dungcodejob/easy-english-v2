@@ -1,12 +1,13 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  ILookupProvider,
+  type ILookupProvider,
+  InjectLookupProvider,
   LookupResult,
 } from '../../domain/providers/lookup-provider.interface';
 import {
-  IProviderCacheRepository,
-  providerCacheRepositoryToken,
+  InjectProviderCacheRepository,
+  type IProviderCacheRepository,
 } from '../../domain/repositories/provider-cache.repository.interface';
 import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { ProviderResponseCacheOrmEntity } from '../persistence/provider-response-cache.orm-entity';
@@ -16,8 +17,9 @@ export class CachingProviderDecorator implements ILookupProvider {
   private readonly logger = new Logger(CachingProviderDecorator.name);
 
   constructor(
+    @InjectLookupProvider()
     private readonly inner: ILookupProvider,
-    @Inject(providerCacheRepositoryToken)
+    @InjectProviderCacheRepository()
     private readonly cacheRepository: IProviderCacheRepository,
     private readonly configService: ConfigService,
   ) {}
@@ -26,8 +28,8 @@ export class CachingProviderDecorator implements ILookupProvider {
     return this.inner.name;
   }
 
-  mapResponse(raw: any): WordSnapshot | null {
-    return this.inner.mapResponse(raw);
+  toDomain(raw: any): WordSnapshot[] {
+    return this.inner.toDomain(raw);
   }
 
   isAvailable(): Promise<boolean> {
@@ -48,18 +50,20 @@ export class CachingProviderDecorator implements ILookupProvider {
         // HIT
         if (cached.httpStatus === 404) {
           return {
-            snapshot: null,
-            raw: cached.rawResponse,
+            snapshots: [],
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            raw: cached.rawResponse as unknown as any,
             status: 404,
           };
         }
 
         // Only treat as valid hit if we can map it or it's a known raw response
         if (cached.httpStatus >= 200 && cached.httpStatus < 300) {
-          const snapshot = this.mapResponse(cached.rawResponse);
+          const snapshots = this.toDomain(cached.rawResponse);
           return {
-            snapshot,
-            raw: cached.rawResponse,
+            snapshots: snapshots,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            raw: cached.rawResponse as unknown as any,
             status: cached.httpStatus,
           };
         }
@@ -114,8 +118,7 @@ export class CachingProviderDecorator implements ILookupProvider {
     const entity = new ProviderResponseCacheOrmEntity();
     entity.normalizedWord = normalizedWord;
     entity.provider = provider;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    entity.rawResponse = (result.raw as any) || {};
+    entity.rawResponse = result.raw || {};
     entity.httpStatus = result.status;
     entity.expiresAt = expiresAt;
 

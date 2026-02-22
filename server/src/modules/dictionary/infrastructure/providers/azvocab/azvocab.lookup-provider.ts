@@ -27,18 +27,20 @@ export class AzVocabLookupProvider implements ILookupProvider {
     private readonly configService: ConfigService,
   ) {}
 
-  mapResponse(raw: unknown): WordSnapshot | null {
+  toDomain(raw: unknown): WordSnapshot[] {
     // This method is part of ILookupProvider but primarily used for cache hydration from raw JSON
     // Raw JSON stored in cache should match the structure we return in lookup(): { search: [], definitions: [] }
     const r = raw as {
-      search?: AzVocabSearchResponseDto[];
-      definitions?: AzVocabDefinitionResponseDto[];
-    };
+      search: AzVocabSearchResponseDto;
+      definitions: AzVocabDefinitionResponseDto[];
+    }[];
 
-    if (!r || !r.search) {
-      return null;
+    if (!r || !r.length) {
+      return [];
     }
-    return this.adapter.toDomain(r.search, r.definitions || []);
+    return r.map((entry) =>
+      this.adapter.toDomain(entry.search, entry.definitions),
+    );
   }
 
   async lookup(word: string): Promise<LookupResult> {
@@ -46,7 +48,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
       // 1. Search for the word
       const searchResponses = await this.httpClient.search(word);
       if (!searchResponses || searchResponses.length === 0) {
-        return { snapshot: null, raw: null, status: 404 };
+        return { snapshots: [], raw: null, status: 404 };
       }
 
       // 2. Fetch full definitions for each definition ID found
@@ -74,17 +76,32 @@ export class AzVocabLookupProvider implements ILookupProvider {
         (d): d is AzVocabDefinitionResponseDto => d !== null,
       );
 
+      const snapshots: WordSnapshot[] = [];
+
+      for (const entry of searchResponses) {
+        if (!entry.defs) {
+          continue;
+        }
+        const definitionsByEntry = definitions.filter(
+          (def) => def.pageProps.def.id === entry.id,
+        );
+
+        const snapshot = this.adapter.toDomain(entry, definitionsByEntry);
+        if (snapshot) {
+          snapshots.push(snapshot);
+        }
+      }
+
       // 3. Map to Domain
-      const snapshot = this.adapter.toDomain(searchResponses, definitions);
 
       // 4. Construct Result
       return {
-        snapshot,
+        snapshots,
         raw: {
           search: searchResponses,
           definitions,
         },
-        status: snapshot ? 200 : 404, // If mapped snapshot is null, treat as not found?
+        status: snapshots.length > 0 ? 200 : 404, // If mapped snapshot is null, treat as not found?
       };
     } catch (error) {
       if (error instanceof ServiceUnavailableException) {

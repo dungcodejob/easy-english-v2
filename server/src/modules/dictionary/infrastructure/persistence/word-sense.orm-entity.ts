@@ -56,6 +56,8 @@ export class WordSenseOrmEntity {
   @Property()
   order!: number;
 
-  @OneToMany(() => WordExampleOrmEntity, (example) => example.sense)
+  @OneToMany(() => WordExampleOrmEntity, (example) => example.sense, {
+    orphanRemoval: true,
+  })
   examples = new Collection<WordExampleOrmEntity>(this);
 }

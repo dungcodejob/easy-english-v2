@@ -19,6 +19,19 @@ export class ProviderCacheRepository implements IProviderCacheRepository {
     });
   }
 
+  async findManyByWords(
+    normalizedWords: string[],
+    provider: string,
+  ): Promise<ProviderResponseCacheOrmEntity[]> {
+    if (!normalizedWords.length) {
+      return [];
+    }
+    return this.em.find(ProviderResponseCacheOrmEntity, {
+      normalizedWord: { $in: normalizedWords },
+      provider,
+    });
+  }
+
   saveAsync(entity: ProviderResponseCacheOrmEntity): Promise<void> {
     const fork = this.em.fork();
 

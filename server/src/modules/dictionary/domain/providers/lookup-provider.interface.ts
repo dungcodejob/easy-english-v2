@@ -1,16 +1,18 @@
 import { createInjection } from '@shared/utils';
 import { WordSnapshot } from '../value-objects/word-snapshot.vo';
 
+export type RawResponse = any;
+
 export interface LookupResult {
-  snapshot: WordSnapshot | null;
-  raw: any;
+  snapshots: WordSnapshot[];
+  raw: RawResponse;
   status: number;
 }
 
 export interface ILookupProvider {
   readonly name: string;
   lookup(word: string): Promise<LookupResult>;
-  mapResponse(raw: any): WordSnapshot | null;
+  toDomain(raw: any): WordSnapshot[];
   isAvailable(): Promise<boolean>;
 }
 

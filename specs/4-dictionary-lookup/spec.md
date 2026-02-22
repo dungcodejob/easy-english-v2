@@ -162,6 +162,31 @@ CachingProviderDecorator.lookup(word)
               → Return null
 ```
 
+### Definition-Level Cache Flow (inside AzVocabHttpClient)
+
+```
+AzVocabHttpClient.getDefinitionById(defId)
+  │
+  ├─▶ 1. Query ProviderResponseCacheRepository
+  │       WHERE normalizedWord = defId AND provider = "azvocab-definition" AND expiresAt > NOW()
+  │
+  ├─▶ 2. If CACHE HIT:
+  │       → Return cached rawResponse as AzVocabDefinitionResponseDto
+  │
+  └─▶ 3. If CACHE MISS:
+          → HTTP GET /_next/data/{buildId}/vi/definition/{defId}.json
+          → If success:
+              → Async save to ProviderResponseCacheEntity (fire-and-forget, TTL 30 days)
+              → Return definition DTO
+          → If failure:
+              → Return null (partial data acceptable)
+```
+
+**Benefits of definition-level caching:**
+- **Partial recovery**: If 5/7 definitions succeed, next lookup only retries the 2 that failed
+- **Cross-word sharing**: Words sharing the same defId reuse cached definitions
+- **Independent of word-level cache**: Works as an inner cache layer below CachingProviderDecorator
+
 ### Write Path (Async Enrichment - Decoupled)
 
 ```
@@ -198,10 +223,10 @@ CachingProviderDecorator.lookup(word)
 | `LookupController` | HTTP → Query dispatch | ❌ | ❌ |
 | `LookupWordHandler` | Orchestrate lookup logic | ✅ (read-only) | ✅ (emit events) |
 | `WordReadRepository` | Query DB for WordSnapshot | ✅ (read-only) | ❌ |
-| `AzVocabHttpClient` | Pure HTTP calls to AzVocab (search + getDefinition) | ❌ | ❌ |
+| `AzVocabHttpClient` | Pure HTTP calls to AzVocab (search + getDefinition) + definition-level cache | ✅ (def cache read+async write) | ❌ |
 | `AzVocabAdapter` | Map AzVocab DTOs → WordSnapshot | ❌ | ❌ |
 | `AzVocabLookupProvider` | Orchestrate: search → getDefinitions → adapt | ❌ | ❌ |
-| `CachingProviderDecorator` | Wrap provider with cache | ✅ (read+async write) | ❌ |
+| `CachingProviderDecorator` | Wrap provider with word-level cache | ✅ (read+async write) | ❌ |
 | `ProviderCacheRepository` | Query/save raw responses | ✅ | ❌ |
 | `WordSnapshotMapper` | ORM → ValueObject | ❌ | ❌ |
 | `LookupMissedHandler` | Handle async enrichment | ✅ (write) | ✅ |
@@ -450,9 +475,27 @@ The AzVocab integration follows a 3-layer architecture:
 3. **`AzVocabLookupProvider`** — Orchestration layer (implements `ILookupProvider`)
    - Calls `httpClient.search(word)`
    - Extracts definition IDs from search results
-   - Calls `httpClient.getDefinitionById(defId)` for each definition
+   - Calls `httpClient.getDefinitionById(defId)` for each definition (leverages definition cache)
    - Passes both results to `adapter` for mapping
    - Returns `LookupResult`
+
+#### Definition-Level Caching (inside HttpClient)
+
+The `AzVocabHttpClient` implements an **inner cache layer** for individual definitions:
+
+| Aspect | Detail |
+|--------|--------|
+| **Cache key** | `defId` (stored in `normalizedWord` column) |
+| **Provider name** | `azvocab-definition` (distinct from word-level `azvocab`) |
+| **TTL** | 30 days (definitions are relatively stable) |
+| **Cache strategy** | Check before HTTP call, fire-and-forget save on success |
+| **Failure handling** | Return null on API failure; cached definitions from previous attempts remain available |
+
+This creates a **two-layer cache architecture**:
+1. **Outer (word-level)**: `CachingProviderDecorator` caches the full `LookupResult` by `(word, 'azvocab')`
+2. **Inner (definition-level)**: `AzVocabHttpClient` caches individual definitions by `(defId, 'azvocab-definition')`
+
+When the outer cache expires or misses, the inner cache can still serve previously-fetched definitions, reducing the number of HTTP calls to the external API.
 
 ### LookupProviderFactory
 
@@ -518,6 +561,8 @@ Read-optimized repository interface:
 
 ### Provider Response Cache Strategy
 
+#### Word-Level Cache (CachingProviderDecorator)
+
 | Setting | Default Value | Rationale |
 |---------|---------------|----------|
 | **Cache TTL** | 90 days | Dictionary data rarely changes |
@@ -525,6 +570,24 @@ Read-optimized repository interface:
 | **Cache on 404** | Yes (30 days TTL) | Avoid retrying non-existent words |
 | **Async write** | Fire-and-forget | Don't block response on cache save |
 | **Compression** | gzip on rawResponse | Reduce storage for large responses |
+
+#### Definition-Level Cache (AzVocabHttpClient)
+
+| Setting | Default Value | Rationale |
+|---------|---------------|----------|
+| **Cache TTL** | 30 days | Definitions are stable but may be updated |
+| **Provider key** | `azvocab-definition` | Distinct from word-level `azvocab` |
+| **Cache key** | `defId` (in `normalizedWord` column) | Reuses existing schema, no migration |
+| **Async write** | Fire-and-forget | Don't block the parallel definition fetch |
+| **Failure behavior** | Return null, keep existing cache | Partial data acceptable |
+
+#### DB Records Example
+
+| `normalized_word` | `provider` | `http_status` | `expires_at` |
+|---|---|---|---|
+| `hello` | `azvocab` | 200 | +90 days |
+| `abc-uuid-1` | `azvocab-definition` | 200 | +30 days |
+| `def-uuid-2` | `azvocab-definition` | 200 | +30 days |
 
 **Cache Invalidation Triggers:**
 - Manual admin purge for specific words

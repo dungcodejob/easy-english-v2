@@ -80,6 +80,7 @@
 - [x] T024a [P] [US2] Create `AzVocabHttpClient` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.http-client.ts` — pure HTTP client: `search(word)` → `POST /api/vocab/search?q={word}` returns `AzVocabSearchResponseDto[]`; `getDefinitionById(defId)` → `GET /_next/data/{buildId}/vi/definition/{defId}.json` returns `AzVocabDefinitionResponseDto | null`; cookie-based auth, browser-like headers, per-endpoint error handling (404/429/5xx)
 - [x] T024b [P] [US2] Create `AzVocabAdapter` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.adapter.ts` — DTO→WordSnapshot mapping: accepts search results + definition details, merges base metadata from search (pronunciation, rank, family) with full senses from getDefinition; handles partial data (missing definitions gracefully)
 - [x] T024c [US2] Refactor `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — implements `ILookupProvider`, orchestrates: `httpClient.search(word)` → extract def IDs → `httpClient.getDefinitionById(defId)` per def → `adapter.toDomain()` → returns `LookupResult`; NO direct HTTP or mapping logic
+- [x] T024d [US2] Add definition-level caching to `AzVocabHttpClient.getDefinitionById()` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.http-client.ts` — inject `IProviderCacheRepository`, check cache `findByWord(defId, 'azvocab-definition')` before HTTP call, on miss + success fire-and-forget save with TTL 30 days, uses existing `provider_response_cache` table (no migration needed)
 - [x] T026 [US2] Implement `CachingProviderDecorator` in `server/src/modules/dictionary/infrastructure/providers/caching-provider.decorator.ts` — wraps `ILookupProvider`, checks `ProviderCacheRepository` first, on miss calls inner provider, async saves to cache (fire-and-forget), respects TTL config
 - [x] T027 [US2] Create `LookupMissedHandler` in `server/src/modules/dictionary/application/events/lookup-missed.handler.ts` — `@OnEvent('LookupMissedEvent')`, logs missed word for future async enrichment (placeholder for Import flow integration)
 - [x] T028 [US2] Update `LookupWordHandler` to integrate provider fallback in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — after DB miss, call `CachingProviderDecorator.lookup()`, emit `LookupMissedEvent` if provider returns data, emit `LookupSucceededEvent` on any hit
@@ -97,11 +98,30 @@
 
 ### Implementation for User Story 3
 
-- [ ] T030 [US3] Add configurable timeout handling in `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — use `AbortController` / `HttpService` timeout, catch `TimeoutError` and return null
-- [ ] T031 [US3] Add partial data handling in `AzVocabResponseMapper` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab-response.mapper.ts` — gracefully handle missing fields (no examples, no audio), map only available data
-- [ ] T032 [US3] Update `LookupWordHandler` error handling in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — catch provider errors, return `ServiceUnavailableException` (503) when all sources fail, ensure total request budget ≤ 3000ms
+- [x] T030 [US3] Add configurable timeout handling in `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — use `AbortController` / `HttpService` timeout, catch `TimeoutError` and return null
+- [x] T031 [US3] Add partial data handling in `AzVocabResponseMapper` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab-response.mapper.ts` — gracefully handle missing fields (no examples, no audio), map only available data
+- [x] T032 [US3] Update `LookupWordHandler` error handling in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — catch provider errors, return `ServiceUnavailableException` (503) when all sources fail, ensure total request budget ≤ 3000ms
 
 **Checkpoint**: System returns user-friendly errors within 3 seconds when providers fail. Partial data renders correctly.
+
+---
+
+## Phase 5.5: Word Persistence After Provider Lookup (Priority: P1)
+
+**Goal**: After a successful provider lookup, persist the `WordSnapshot` to the internal DB so subsequent lookups are served from DB instead of calling the external provider.
+
+**Independent Test**: Lookup a word not in DB → verify it's returned AND a new row appears in `words` table. Lookup same word again → verify it comes from DB (no provider call).
+
+### Implementation for Word Persistence
+
+- [ ] T033a [US2] Create `WordEnrichedEvent` in `server/src/modules/dictionary/domain/events/word-enriched.event.ts` — domain event carrying `WordSnapshot` + `tenantId`, extends `DomainEvent`
+- [ ] T033b [US2] Create `IWordWriteRepository` interface in `server/src/modules/dictionary/domain/repositories/word-write.repository.interface.ts` — `save(snapshot: WordSnapshot, tenantId: string): Promise<void>`, uses `createInjection` pattern
+- [ ] T033c [US2] Create `WordWriteRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-write.repository.ts` — upsert logic via MikroORM `EntityManager`, cascade creates `WordOrmEntity` → `WordSenseOrmEntity[]` → `WordExampleOrmEntity[]` + `WordPronunciationOrmEntity[]`, wrapped in `em.transactional()`
+- [ ] T033d [US2] Create `WordEnrichedHandler` in `server/src/modules/dictionary/application/events/word-enriched.handler.ts` — `@EventsHandler(WordEnrichedEvent)`, injects `IWordWriteRepository`, calls `repo.save(event.snapshot, event.tenantId)`
+- [ ] T033e [US2] Update `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — emit `WordEnrichedEvent` after successful provider fallback (alongside existing `LookupSucceededEvent` and `LookupMissedEvent`)
+- [ ] T033f [US2] Register in `DictionaryModule` — add `provideWordWriteRepository(WordWriteRepository)` to `repositories`, add `WordEnrichedHandler` to `eventHandlers`
+
+**Checkpoint**: Words fetched from external provider are saved to DB. Second lookup for same word is served from internal DB.
 
 ---
 
@@ -203,11 +223,11 @@ T022 IProviderCacheRepository │ T023 ProviderCacheRepository
 
 | Metric | Value |
 |--------|-------|
-| **Total tasks** | 38 |
+| **Total tasks** | 39 |
 | **Phase 1 (Setup)** | 3 tasks |
 | **Phase 2 (Foundational)** | 12 tasks |
 | **Phase 3 (US1 — MVP)** | 6 tasks |
-| **Phase 4 (US2)** | 9 tasks |
+| **Phase 4 (US2)** | 10 tasks |
 | **Phase 5 (US3)** | 3 tasks |
 | **Phase 6 (US4)** | 2 tasks |
 | **Phase 7 (Polish)** | 3 tasks |

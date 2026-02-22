@@ -51,12 +51,15 @@ export class WordOrmEntity {
   @Property({ onUpdate: () => new Date() })
   updatedAt: Date = new Date();
 
-  @OneToMany(() => WordSenseOrmEntity, (sense) => sense.word)
+  @OneToMany(() => WordSenseOrmEntity, (sense) => sense.word, {
+    orphanRemoval: true,
+  })
   senses = new Collection<WordSenseOrmEntity>(this);
 
   @OneToMany(
     () => WordPronunciationOrmEntity,
     (pronunciation) => pronunciation.word,
+    { orphanRemoval: true },
   )
   pronunciations = new Collection<WordPronunciationOrmEntity>(this);
 }

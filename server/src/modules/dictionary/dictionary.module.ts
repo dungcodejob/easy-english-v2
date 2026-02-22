@@ -8,12 +8,7 @@ import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
 import { LookupController } from './controllers/lookup.controller';
-import { lookupProviderToken } from './domain/providers/lookup-provider.interface';
-import {
-  IProviderCacheRepository,
-  provideProviderCacheRepository,
-  providerCacheRepositoryToken,
-} from './domain/repositories/provider-cache.repository.interface';
+import { provideProviderCacheRepository } from './domain/repositories/provider-cache.repository.interface';
 import { provideWordReadRepository } from './domain/repositories/word-read.repository.interface';
 import { ProviderResponseCacheOrmEntity } from './infrastructure/persistence/provider-response-cache.orm-entity';
 import { WordExampleOrmEntity } from './infrastructure/persistence/word-example.orm-entity';
@@ -23,7 +18,6 @@ import { WordOrmEntity } from './infrastructure/persistence/word.orm-entity';
 import { AzVocabAdapter } from './infrastructure/providers/azvocab/azvocab.adapter';
 import { AzVocabHttpClient } from './infrastructure/providers/azvocab/azvocab.http-client';
 import { AzVocabLookupProvider } from './infrastructure/providers/azvocab/azvocab.lookup-provider';
-import { CachingProviderDecorator } from './infrastructure/providers/caching-provider.decorator';
 import { ProviderCacheRepository } from './infrastructure/repositories/provider-cache.repository';
 import { WordReadRepository } from './infrastructure/repositories/word-read.repository';
 
@@ -72,21 +66,21 @@ const mappers = [];
     AzVocabAdapter,
     AzVocabLookupProvider,
 
-    {
-      provide: lookupProviderToken,
-      useFactory: (
-        azvocab: AzVocabLookupProvider,
-        cacheRepo: IProviderCacheRepository,
-        configService: ConfigService,
-      ) => {
-        return new CachingProviderDecorator(azvocab, cacheRepo, configService);
-      },
-      inject: [
-        AzVocabLookupProvider,
-        providerCacheRepositoryToken,
-        ConfigService,
-      ],
-    },
+    // {
+    //   provide: lookupProviderToken,
+    //   useFactory: (
+    //     azvocab: AzVocabLookupProvider,
+    //     cacheRepo: IProviderCacheRepository,
+    //     configService: ConfigService,
+    //   ) => {
+    //     return new CachingProviderDecorator(azvocab, cacheRepo, configService);
+    //   },
+    //   inject: [
+    //     AzVocabLookupProvider,
+    //     providerCacheRepositoryToken,
+    //     ConfigService,
+    //   ],
+    // },
   ],
 })
 export class DictionaryModule {}
