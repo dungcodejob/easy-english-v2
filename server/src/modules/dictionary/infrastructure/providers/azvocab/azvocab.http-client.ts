@@ -42,12 +42,26 @@ export class AzVocabHttpClient {
     this.timeout = this.configService.azVocab.timeoutMs;
   }
 
-  private buildHeaders(): Record<string, string> {
+  private buildHeaders(defId?: string): Record<string, string> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: '*/*',
+      Origin: 'https://azvocab.ai',
+      Pragma: 'no-cache',
+      Connection: 'keep-alive',
+      Referer: defId
+        ? `https://azvocab.ai/vi/definition/${encodeURIComponent(defId)}`
+        : 'https://azvocab.ai/dashboard',
+      'sec-ch-ua-platform': '"Windows"',
+      'Sec-Fetch-Dest': 'empty',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Site': 'same-origin',
       'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0',
+      purpose: 'prefetch',
+      'sec-ch-ua':
+        '"Microsoft Edge";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+      'sec-ch-ua-mobile': '?0',
     };
 
     const cookie = this.cookie;
@@ -139,7 +153,7 @@ export class AzVocabHttpClient {
       const { data } = await firstValueFrom(
         this.httpService.get<AzVocabDefinitionResponseDto>(url, {
           headers: this.buildHeaders(),
-          params: { id: defId },
+          params: { id: encodeURIComponent(defId) },
           timeout: this.timeout,
         }),
       );

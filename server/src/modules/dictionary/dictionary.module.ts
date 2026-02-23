@@ -8,8 +8,10 @@ import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
 import { LookupController } from './controllers/lookup.controller';
+import { lookupProviderToken } from './domain/providers/lookup-provider.interface';
 import { provideProviderCacheRepository } from './domain/repositories/provider-cache.repository.interface';
 import { provideWordReadRepository } from './domain/repositories/word-read.repository.interface';
+import { provideWordWriteRepository } from './domain/repositories/word-write.repository.interface';
 import { ProviderResponseCacheOrmEntity } from './infrastructure/persistence/provider-response-cache.orm-entity';
 import { WordExampleOrmEntity } from './infrastructure/persistence/word-example.orm-entity';
 import { WordPronunciationOrmEntity } from './infrastructure/persistence/word-pronunciation.orm-entity';
@@ -20,6 +22,7 @@ import { AzVocabHttpClient } from './infrastructure/providers/azvocab/azvocab.ht
 import { AzVocabLookupProvider } from './infrastructure/providers/azvocab/azvocab.lookup-provider';
 import { ProviderCacheRepository } from './infrastructure/repositories/provider-cache.repository';
 import { WordReadRepository } from './infrastructure/repositories/word-read.repository';
+import { WordWriteRepository } from './infrastructure/repositories/word-write.repository';
 
 const httpControllers = [LookupController];
 const messageControllers = [];
@@ -27,6 +30,7 @@ const commandHandlers = [];
 const queryHandlers = [LookupWordHandler];
 const eventHandlers = [LookupMissedHandler];
 const repositories = [
+  provideWordWriteRepository(WordWriteRepository),
   provideWordReadRepository(WordReadRepository),
   provideProviderCacheRepository(ProviderCacheRepository),
 ];
@@ -66,6 +70,10 @@ const mappers = [];
     AzVocabAdapter,
     AzVocabLookupProvider,
 
+    {
+      provide: lookupProviderToken,
+      useClass: AzVocabLookupProvider,
+    },
     // {
     //   provide: lookupProviderToken,
     //   useFactory: (

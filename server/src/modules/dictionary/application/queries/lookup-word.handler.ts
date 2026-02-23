@@ -33,7 +33,7 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
     @Inject(lookupProviderToken) private readonly provider: ILookupProvider,
   ) {}
 
-  async execute(query: LookupWordQuery): Promise<WordSnapshot> {
+  async execute(query: LookupWordQuery): Promise<WordSnapshot[]> {
     const { word, tenantId, userId } = query;
     const normalizedWord = word.trim().toLowerCase();
     // const cacheKey = `word:${tenantId}:${normalizedWord}`;
@@ -42,19 +42,23 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
     // const cachedProps = await this.cacheManager.get<WordSnapshotProps>(cacheKey);
     // if (cachedProps) { ... }
 
-    const snapshot = await this.repo.findByWord(normalizedWord, tenantId);
+    const existingSnapshots = await this.repo.findByWord(
+      normalizedWord,
+      tenantId,
+    );
 
-    if (snapshot) {
+    if (existingSnapshots && existingSnapshots.length > 0) {
       this.eventBus.publish(
         new LookupSucceededEvent({
-          aggregateId: snapshot.normalizedText,
-          word: snapshot.normalizedText,
-          source: snapshot.source,
+          aggregateId: normalizedWord,
+          words: existingSnapshots.map((snapshot) => snapshot.normalizedText),
+          sources: existingSnapshots.map((snapshot) => snapshot.source),
           tenantId,
           userId,
         }),
       );
-      return snapshot;
+
+      return existingSnapshots;
     }
 
     // Provider Fallback
@@ -74,14 +78,27 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
       ]);
 
       if (result.snapshots && result.snapshots.length > 0) {
-        const snapshot = result.snapshots[0];
+        const newSnapshots = result.snapshots;
         // Found in external provider
         // Emit LookupSucceeded because the USER got the word
+        for (const snapshot of newSnapshots) {
+          this.eventBus.publish(
+            new WordEnrichedEvent({
+              aggregateId: snapshot.normalizedText,
+              snapshot,
+              tenantId,
+            }),
+          );
+        }
+
+        const words = newSnapshots.map((snapshot) => snapshot.normalizedText);
+        const sources = newSnapshots.map((snapshot) => snapshot.source);
+
         this.eventBus.publish(
           new LookupSucceededEvent({
-            aggregateId: snapshot.normalizedText,
-            word: snapshot.normalizedText,
-            source: snapshot.source,
+            aggregateId: normalizedWord,
+            words: words,
+            sources: sources,
             tenantId,
             userId,
           }),
@@ -98,14 +115,8 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
         );
 
         // Emit WordEnrichedEvent to persist the snapshot asynchronously
-        this.eventBus.publish(
-          new WordEnrichedEvent({
-            aggregateId: normalizedWord,
-            snapshot,
-            tenantId,
-          }),
-        );
-        return snapshot;
+
+        return newSnapshots;
       }
     } catch (error) {
       const err = error as { code?: string; name?: string; message?: string };

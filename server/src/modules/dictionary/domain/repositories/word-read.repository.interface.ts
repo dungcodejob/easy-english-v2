@@ -2,10 +2,7 @@ import { createInjection } from '@shared/utils';
 import { WordSnapshot } from '../value-objects/word-snapshot.vo';
 
 export interface IWordReadRepository {
-  findByWord(
-    normalizedWord: string,
-    tenantId: string,
-  ): Promise<WordSnapshot | null>;
+  findByWord(normalizedWord: string, tenantId: string): Promise<WordSnapshot[]>;
 }
 
 const { inject, provider, token } = createInjection<IWordReadRepository>(

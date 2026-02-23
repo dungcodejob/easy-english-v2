@@ -16,16 +16,19 @@ export class WordReadRepository implements IWordReadRepository {
   async findByWord(
     normalizedWord: string,
     tenantId: string,
-  ): Promise<WordSnapshot | null> {
-    const word = await this.repo.findOne(
-      { normalizedText: normalizedWord, tenantId },
-      { populate: ['senses', 'senses.examples', 'pronunciations'] }, // Eager load
-    );
+  ): Promise<WordSnapshot[]> {
+    const word = await this.repo.findAll({
+      where: {
+        normalizedText: normalizedWord,
+        tenantId,
+      },
+      populate: ['senses', 'senses.examples', 'pronunciations'],
+    });
 
     if (!word) {
-      return null;
+      return [];
     }
 
-    return WordSnapshotMapper.toDomain(word);
+    return word.map((word) => WordSnapshotMapper.toDomain(word));
   }
 }
