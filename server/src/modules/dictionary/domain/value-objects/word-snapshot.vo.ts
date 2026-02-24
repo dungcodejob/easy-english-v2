@@ -1,12 +1,15 @@
 import { ValueObject } from '@core/ddd';
+import { DataSource } from './data-source.vo';
+import { Language } from './language.vo';
 import { WordPronunciationVO } from './word-pronunciation.vo';
 import { WordSenseVO } from './word-sense.vo';
+import { WordText } from './word-text.vo';
 
 export interface WordSnapshotProps {
-  text: string;
-  normalizedText: string;
-  language: string;
-  source: 'internal' | 'azvocab';
+  text: WordText;
+  normalizedText: WordText;
+  language: Language;
+  source: DataSource;
   rank: number | null;
   frequency: number | null;
   pronunciations: WordPronunciationVO[];
@@ -24,19 +27,19 @@ export interface WordFamily {
 }
 
 export class WordSnapshot extends ValueObject<WordSnapshotProps> {
-  get text(): string {
+  get text(): WordText {
     return this.props.text;
   }
 
-  get normalizedText(): string {
+  get normalizedText(): WordText {
     return this.props.normalizedText;
   }
 
-  get language(): string {
+  get language(): Language {
     return this.props.language;
   }
 
-  get source(): 'internal' | 'azvocab' {
+  get source(): DataSource {
     return this.props.source;
   }
 

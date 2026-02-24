@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
+import { Word } from '../../domain/entities/word.aggregate';
 import { IWordWriteRepository } from '../../domain/repositories/word-write.repository.interface';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { WordExampleOrmEntity } from '../persistence/word-example.orm-entity';
 import { WordPronunciationOrmEntity } from '../persistence/word-pronunciation.orm-entity';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
@@ -13,12 +13,14 @@ export class WordWriteRepository implements IWordWriteRepository {
 
   constructor(private readonly em: EntityManager) {}
 
-  async save(snapshot: WordSnapshot, tenantId: string): Promise<void> {
+  async save(word: Word, tenantId: string): Promise<void> {
+    const snapshot = word.snapshot;
+
     await this.em.transactional(async (em) => {
       // 1. Check if word exists
       let wordEntity: WordOrmEntity | null = await em.findOne(
         WordOrmEntity,
-        { normalizedText: snapshot.normalizedText, tenantId },
+        { id: word.id, tenantId },
         { populate: ['senses', 'senses.examples', 'pronunciations'] },
       );
 
@@ -33,15 +35,16 @@ export class WordWriteRepository implements IWordWriteRepository {
         // but to be safe we can just clear and add.
       } else {
         wordEntity = new WordOrmEntity();
+        wordEntity.id = word.id;
         wordEntity.tenantId = tenantId;
-        wordEntity.normalizedText = snapshot.normalizedText;
+        wordEntity.normalizedText = snapshot.normalizedText.value;
         em.persist(wordEntity);
       }
 
       // 3. Assign flat properties
-      wordEntity.text = snapshot.text;
-      wordEntity.language = snapshot.language;
-      wordEntity.source = snapshot.source;
+      wordEntity.text = snapshot.text.value;
+      wordEntity.language = snapshot.language.value;
+      wordEntity.source = snapshot.source.value;
       wordEntity.rank = snapshot.rank;
       wordEntity.frequency = snapshot.frequency;
       wordEntity.inflects = snapshot.inflects;
@@ -59,10 +62,10 @@ export class WordWriteRepository implements IWordWriteRepository {
       // 5. Map and assign senses and examples
       snapshot.senses.forEach((s, senseIndex) => {
         const senseEntity = new WordSenseOrmEntity();
-        senseEntity.partOfSpeech = s.partOfSpeech;
+        senseEntity.partOfSpeech = s.partOfSpeech.value;
         senseEntity.definition = s.definition;
         senseEntity.shortDefinition = s.shortDefinition;
-        senseEntity.cefrLevel = s.cefrLevel;
+        senseEntity.cefrLevel = s.cefrLevel?.value || null;
         senseEntity.synonyms = s.synonyms;
         senseEntity.antonyms = s.antonyms;
         senseEntity.definitionVi = s.definitionVi;
@@ -85,7 +88,7 @@ export class WordWriteRepository implements IWordWriteRepository {
     });
 
     this.logger.debug(
-      `Saved word snapshot '${snapshot.normalizedText}' to DB.`,
+      `Saved word snapshot '${snapshot.normalizedText.value}' to DB.`,
     );
   }
 }

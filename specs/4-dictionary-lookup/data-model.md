@@ -134,33 +134,62 @@ export class ProviderResponseCacheOrmEntity {
 
 ---
 
+## Domain Primitives (Value Objects)
+
+To enforce Domain-Driven Design (DDD) principles and type safety, we use the following domain primitives:
+
+- `WordId`: Encapsulates a UUID v7 identifier for strongly-typed word IDs.
+- `WordText`: Encapsulates word text, handling normalization and trimming.
+- `Language`: Language code identifier with predefined constants (e.g., `Language.ENGLISH`).
+- `DataSource`: Tracks the origin of the word data (`DataSource.INTERNAL`, `DataSource.AZVOCAB`).
+- `CefrLevel`: Validates CEFR levels (`A1` through `C2`).
+- `PartOfSpeech`: Encapsulates valid grammatical parts of speech.
+
+---
+
+## Aggregate Root: Word
+
+The `Word` entity serves as an Aggregate Root, encapsulating the `WordSnapshot`, `WordId`, `DataSource`, and tracking versioning/events.
+
+```typescript
+export class Word extends AggregateRoot {
+  get wordId(): WordId;
+  get snapshot(): WordSnapshot;
+  get version(): number;
+  get source(): DataSource;
+  
+  static createFromProvider(props: { snapshot: WordSnapshot, source: DataSource, tenantId: string }): Word;
+  static reconstitute(props: { id: string, snapshot: WordSnapshot, source: DataSource, version: number, createdAt: Date, updatedAt: Date }): Word;
+  
+  updateFromProvider(snapshot: WordSnapshot): void;
+}
+```
+
+---
+
 ## Value Object: WordSnapshot
 
-Read-only projection for API responses.
+Read-only projection for API responses and aggregate persistence format. Now utilizes domain primitives.
 
 ```typescript
 export class WordSnapshot extends ValueObject<WordSnapshotProps> {
-  get text(): string { return this.props.text; }
-  get normalizedText(): string { return this.props.normalizedText; }
-  get language(): string { return this.props.language; }
-  get pronunciations(): PronunciationVO[] { return this.props.pronunciations; }
-  get senses(): SenseVO[] { return this.props.senses; }
-  get source(): 'internal' | 'azvocab' { return this.props.source; }
-  get rank(): number | null { return this.props.rank; }
-  get frequency(): number | null { return this.props.frequency; }
-
-  static create(props: WordSnapshotProps): WordSnapshot {
-    return new WordSnapshot(props);
-  }
+  get text(): WordText;
+  get normalizedText(): WordText;
+  get language(): Language;
+  get pronunciations(): PronunciationVO[];
+  get senses(): SenseVO[];
+  get source(): DataSource;
+  get rank(): number | null;
+  get frequency(): number | null;
 }
 
 interface WordSnapshotProps {
-  text: string;
-  normalizedText: string;
-  language: string;
+  text: WordText;
+  normalizedText: WordText;
+  language: Language;
   pronunciations: PronunciationVO[];
   senses: SenseVO[];
-  source: 'internal' | 'azvocab';
+  source: DataSource;
   rank: number | null;
   frequency: number | null;
 }
@@ -184,14 +213,14 @@ export class PronunciationVO extends ValueObject<PronunciationProps> {
 
 ```typescript
 export class SenseVO extends ValueObject<SenseProps> {
-  get partOfSpeech(): string { return this.props.partOfSpeech; }
-  get definition(): string { return this.props.definition; }
-  get shortDefinition(): string | null { return this.props.shortDefinition; }
-  get cefrLevel(): string | null { return this.props.cefrLevel; }
-  get examples(): ExampleVO[] { return this.props.examples; }
-  get synonyms(): string[] { return this.props.synonyms; }
-  get antonyms(): string[] { return this.props.antonyms; }
-  get definitionVi(): string | null { return this.props.definitionVi; }
+  get partOfSpeech(): PartOfSpeech;
+  get definition(): string;
+  get shortDefinition(): string | null;
+  get cefrLevel(): CefrLevel | null;
+  get examples(): ExampleVO[];
+  get synonyms(): string[];
+  get antonyms(): string[];
+  get definitionVi(): string | null;
 }
 ```
 

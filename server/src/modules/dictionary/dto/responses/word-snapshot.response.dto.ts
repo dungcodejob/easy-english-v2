@@ -131,10 +131,10 @@ export class WordSnapshotResponseDto {
   wordFamily?: WordFamilyDto;
 
   constructor(snapshot: WordSnapshot) {
-    this.text = snapshot.text;
-    this.normalizedText = snapshot.normalizedText;
-    this.language = snapshot.language;
-    this.source = snapshot.source;
+    this.text = snapshot.text.value;
+    this.normalizedText = snapshot.normalizedText.value;
+    this.language = snapshot.language.value;
+    this.source = snapshot.source.value as 'internal' | 'azvocab';
     this.rank = snapshot.rank;
     this.frequency = snapshot.frequency;
     this.pronunciations = snapshot.pronunciations.map((p) => ({
@@ -143,10 +143,10 @@ export class WordSnapshotResponseDto {
       region: p.region,
     }));
     this.senses = snapshot.senses.map((s) => ({
-      partOfSpeech: s.partOfSpeech,
+      partOfSpeech: s.partOfSpeech.value,
       definition: s.definition,
       shortDefinition: s.shortDefinition,
-      cefrLevel: s.cefrLevel,
+      cefrLevel: s.cefrLevel?.value || null,
       synonyms: s.synonyms,
       antonyms: s.antonyms,
       definitionVi: s.definitionVi,

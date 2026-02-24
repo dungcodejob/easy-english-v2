@@ -1,8 +1,8 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { Word } from '../../domain/entities/word.aggregate';
 import { IWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 import { WordSnapshotMapper } from './word-snapshot.mapper';
 
@@ -13,11 +13,8 @@ export class WordReadRepository implements IWordReadRepository {
     private readonly repo: EntityRepository<WordOrmEntity>, // Using generic EntityRepository
   ) {}
 
-  async findByWord(
-    normalizedWord: string,
-    tenantId: string,
-  ): Promise<WordSnapshot[]> {
-    const word = await this.repo.findAll({
+  async findByWord(normalizedWord: string, tenantId: string): Promise<Word[]> {
+    const words = await this.repo.findAll({
       where: {
         normalizedText: normalizedWord,
         tenantId,
@@ -25,10 +22,20 @@ export class WordReadRepository implements IWordReadRepository {
       populate: ['senses', 'senses.examples', 'pronunciations'],
     });
 
-    if (!word) {
+    if (!words) {
       return [];
     }
 
-    return word.map((word) => WordSnapshotMapper.toDomain(word));
+    return words.map((wordOrm) => {
+      const snapshot = WordSnapshotMapper.toDomain(wordOrm);
+      return Word.reconstitute({
+        id: wordOrm.id,
+        snapshot,
+        source: snapshot.source,
+        version: 1, // Defaulting as version control is not in the entity yet
+        createdAt: wordOrm.createdAt,
+        updatedAt: wordOrm.updatedAt,
+      });
+    });
   }
 }

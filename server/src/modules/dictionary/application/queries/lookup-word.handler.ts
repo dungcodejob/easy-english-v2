@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { EventBus, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import type { Cache } from 'cache-manager';
+import { Word } from '../../domain/entities/word.aggregate';
 import { LookupMissedEvent } from '../../domain/events/lookup-missed.event';
 import { LookupSucceededEvent } from '../../domain/events/lookup-succeeded.event';
-import { WordEnrichedEvent } from '../../domain/events/word-enriched.event';
 import {
   lookupProviderToken,
   type ILookupProvider,
@@ -18,7 +18,6 @@ import {
   wordReadRepositoryToken,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { LookupWordQuery } from './lookup-word.query';
 
 @QueryHandler(LookupWordQuery)
@@ -33,7 +32,7 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
     @Inject(lookupProviderToken) private readonly provider: ILookupProvider,
   ) {}
 
-  async execute(query: LookupWordQuery): Promise<WordSnapshot[]> {
+  async execute(query: LookupWordQuery): Promise<Word[]> {
     const { word, tenantId, userId } = query;
     const normalizedWord = word.trim().toLowerCase();
     // const cacheKey = `word:${tenantId}:${normalizedWord}`;
@@ -42,23 +41,20 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
     // const cachedProps = await this.cacheManager.get<WordSnapshotProps>(cacheKey);
     // if (cachedProps) { ... }
 
-    const existingSnapshots = await this.repo.findByWord(
-      normalizedWord,
-      tenantId,
-    );
+    const existingWords = await this.repo.findByWord(normalizedWord, tenantId);
 
-    if (existingSnapshots && existingSnapshots.length > 0) {
+    if (existingWords && existingWords.length > 0) {
       this.eventBus.publish(
         new LookupSucceededEvent({
           aggregateId: normalizedWord,
-          words: existingSnapshots.map((snapshot) => snapshot.normalizedText),
-          sources: existingSnapshots.map((snapshot) => snapshot.source),
+          words: existingWords.map((w) => w.normalizedText.value),
+          sources: existingWords.map((w) => w.source.value),
           tenantId,
           userId,
         }),
       );
 
-      return existingSnapshots;
+      return existingWords;
     }
 
     // Provider Fallback
@@ -79,26 +75,31 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
 
       if (result.snapshots && result.snapshots.length > 0) {
         const newSnapshots = result.snapshots;
+        const newWords: Word[] = [];
+
         // Found in external provider
-        // Emit LookupSucceeded because the USER got the word
         for (const snapshot of newSnapshots) {
-          this.eventBus.publish(
-            new WordEnrichedEvent({
-              aggregateId: snapshot.normalizedText,
-              snapshot,
-              tenantId,
-            }),
-          );
+          const newWord = Word.createFromProvider({
+            snapshot,
+            source: snapshot.source,
+            tenantId,
+          });
+          newWords.push(newWord);
+
+          // Publish aggregate domain events (WordCreatedEvent)
+          newWord.domainEvents.forEach((event) => {
+            this.eventBus.publish(event);
+          });
         }
 
-        const words = newSnapshots.map((snapshot) => snapshot.normalizedText);
-        const sources = newSnapshots.map((snapshot) => snapshot.source);
+        const words = newWords.map((w) => w.normalizedText.value);
+        const sources = newWords.map((w) => w.source.value);
 
         this.eventBus.publish(
           new LookupSucceededEvent({
             aggregateId: normalizedWord,
-            words: words,
-            sources: sources,
+            words,
+            sources,
             tenantId,
             userId,
           }),
@@ -114,9 +115,7 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
           }),
         );
 
-        // Emit WordEnrichedEvent to persist the snapshot asynchronously
-
-        return newSnapshots;
+        return newWords;
       }
     } catch (error) {
       const err = error as { code?: string; name?: string; message?: string };

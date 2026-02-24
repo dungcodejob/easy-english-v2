@@ -1,11 +1,13 @@
 import { ValueObject } from '@core/ddd';
+import { CefrLevel } from './cefr-level.vo';
+import { PartOfSpeech } from './part-of-speech.vo';
 import { WordExampleVO } from './word-example.vo';
 
 export interface WordSenseProps {
-  partOfSpeech: string;
+  partOfSpeech: PartOfSpeech;
   definition: string;
   shortDefinition: string | null;
-  cefrLevel: string | null;
+  cefrLevel: CefrLevel | null;
   examples: WordExampleVO[];
   synonyms: string[];
   antonyms: string[];
@@ -28,7 +30,7 @@ export interface Collocation {
 }
 
 export class WordSenseVO extends ValueObject<WordSenseProps> {
-  get partOfSpeech(): string {
+  get partOfSpeech(): PartOfSpeech {
     return this.props.partOfSpeech;
   }
 
@@ -40,7 +42,7 @@ export class WordSenseVO extends ValueObject<WordSenseProps> {
     return this.props.shortDefinition;
   }
 
-  get cefrLevel(): string | null {
+  get cefrLevel(): CefrLevel | null {
     return this.props.cefrLevel;
   }
 

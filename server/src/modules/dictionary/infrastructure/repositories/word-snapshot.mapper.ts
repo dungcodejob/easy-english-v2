@@ -4,6 +4,12 @@ import { WordSenseVO } from '../../domain/value-objects/word-sense.vo';
 import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 
+import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
+import { DataSource } from '../../domain/value-objects/data-source.vo';
+import { Language } from '../../domain/value-objects/language.vo';
+import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
+import { WordText } from '../../domain/value-objects/word-text.vo';
+
 export class WordSnapshotMapper {
   static toDomain(entity: WordOrmEntity): WordSnapshot {
     const pronunciations = entity.pronunciations.getItems().map(
@@ -33,10 +39,10 @@ export class WordSnapshotMapper {
         );
 
       return new WordSenseVO({
-        partOfSpeech: s.partOfSpeech,
+        partOfSpeech: PartOfSpeech.from(s.partOfSpeech),
         definition: s.definition,
         shortDefinition: s.shortDefinition,
-        cefrLevel: s.cefrLevel,
+        cefrLevel: s.cefrLevel ? CefrLevel.from(s.cefrLevel) : null,
         synonyms: s.synonyms || [],
         antonyms: s.antonyms || [],
         definitionVi: s.definitionVi,
@@ -50,10 +56,10 @@ export class WordSnapshotMapper {
     });
 
     return new WordSnapshot({
-      text: entity.text,
-      normalizedText: entity.normalizedText,
-      language: entity.language,
-      source: entity.source as 'internal' | 'azvocab',
+      text: WordText.create(entity.text),
+      normalizedText: WordText.create(entity.normalizedText),
+      language: Language.from(entity.language),
+      source: DataSource.from(entity.source),
       rank: entity.rank,
       frequency: entity.frequency,
       pronunciations: pronunciations,

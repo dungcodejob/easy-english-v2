@@ -1,8 +1,8 @@
 import { createInjection } from '@shared/utils';
-import { WordSnapshot } from '../value-objects/word-snapshot.vo';
+import { Word } from '../entities/word.aggregate';
 
 export interface IWordReadRepository {
-  findByWord(normalizedWord: string, tenantId: string): Promise<WordSnapshot[]>;
+  findByWord(normalizedWord: string, tenantId: string): Promise<Word[]>;
 }
 
 const { inject, provider, token } = createInjection<IWordReadRepository>(

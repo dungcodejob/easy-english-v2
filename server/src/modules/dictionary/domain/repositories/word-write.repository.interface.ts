@@ -1,8 +1,8 @@
 import { createInjection } from '@shared/utils';
-import { WordSnapshot } from '../value-objects/word-snapshot.vo';
+import { Word } from '../entities/word.aggregate';
 
 export interface IWordWriteRepository {
-  save(snapshot: WordSnapshot, tenantId: string): Promise<void>;
+  save(word: Word, tenantId: string): Promise<void>;
 }
 
 const { inject, provider, token } = createInjection<IWordWriteRepository>(

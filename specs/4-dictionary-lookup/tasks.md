@@ -114,12 +114,12 @@
 
 ### Implementation for Word Persistence
 
-- [ ] T033a [US2] Create `WordEnrichedEvent` in `server/src/modules/dictionary/domain/events/word-enriched.event.ts` — domain event carrying `WordSnapshot` + `tenantId`, extends `DomainEvent`
-- [ ] T033b [US2] Create `IWordWriteRepository` interface in `server/src/modules/dictionary/domain/repositories/word-write.repository.interface.ts` — `save(snapshot: WordSnapshot, tenantId: string): Promise<void>`, uses `createInjection` pattern
-- [ ] T033c [US2] Create `WordWriteRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-write.repository.ts` — upsert logic via MikroORM `EntityManager`, cascade creates `WordOrmEntity` → `WordSenseOrmEntity[]` → `WordExampleOrmEntity[]` + `WordPronunciationOrmEntity[]`, wrapped in `em.transactional()`
-- [ ] T033d [US2] Create `WordEnrichedHandler` in `server/src/modules/dictionary/application/events/word-enriched.handler.ts` — `@EventsHandler(WordEnrichedEvent)`, injects `IWordWriteRepository`, calls `repo.save(event.snapshot, event.tenantId)`
-- [ ] T033e [US2] Update `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — emit `WordEnrichedEvent` after successful provider fallback (alongside existing `LookupSucceededEvent` and `LookupMissedEvent`)
-- [ ] T033f [US2] Register in `DictionaryModule` — add `provideWordWriteRepository(WordWriteRepository)` to `repositories`, add `WordEnrichedHandler` to `eventHandlers`
+- [x] T033a [US2] Create `WordEnrichedEvent` in `server/src/modules/dictionary/domain/events/word-enriched.event.ts` — domain event carrying `WordSnapshot` + `tenantId`, extends `DomainEvent`
+- [x] T033b [US2] Create `IWordWriteRepository` interface in `server/src/modules/dictionary/domain/repositories/word-write.repository.interface.ts` — `save(snapshot: WordSnapshot, tenantId: string): Promise<void>`, uses `createInjection` pattern
+- [x] T033c [US2] Create `WordWriteRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-write.repository.ts` — upsert logic via MikroORM `EntityManager`, cascade creates `WordOrmEntity` → `WordSenseOrmEntity[]` → `WordExampleOrmEntity[]` + `WordPronunciationOrmEntity[]`, wrapped in `em.transactional()`
+- [x] T033d [US2] Create `WordEnrichedHandler` in `server/src/modules/dictionary/application/events/word-enriched.handler.ts` — `@EventsHandler(WordEnrichedEvent)`, injects `IWordWriteRepository`, calls `repo.save(event.snapshot, event.tenantId)`
+- [x] T033e [US2] Update `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — emit `WordEnrichedEvent` after successful provider fallback (alongside existing `LookupSucceededEvent` and `LookupMissedEvent`)
+- [x] T033f [US2] Register in `DictionaryModule` — add `provideWordWriteRepository(WordWriteRepository)` to `repositories`, add `WordEnrichedHandler` to `eventHandlers`
 
 **Checkpoint**: Words fetched from external provider are saved to DB. Second lookup for same word is served from internal DB.
 

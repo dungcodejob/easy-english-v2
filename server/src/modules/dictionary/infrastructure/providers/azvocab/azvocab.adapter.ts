@@ -1,8 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { CefrLevel } from '../../../domain/value-objects/cefr-level.vo';
+import { DataSource } from '../../../domain/value-objects/data-source.vo';
+import { Language } from '../../../domain/value-objects/language.vo';
+import { PartOfSpeech } from '../../../domain/value-objects/part-of-speech.vo';
 import { WordExampleVO } from '../../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../../domain/value-objects/word-pronunciation.vo';
 import { WordSenseVO } from '../../../domain/value-objects/word-sense.vo';
 import { WordSnapshot } from '../../../domain/value-objects/word-snapshot.vo';
+import { WordText } from '../../../domain/value-objects/word-text.vo';
 import {
   AzVocabDefinitionResponseDto,
   AzVocabSearchResponseDto,
@@ -46,37 +51,15 @@ export class AzVocabAdapter {
       }
     }
 
-    // 2b. Fallback to partial definitions from search results if not fetched
-    // for (const searchEntry of searchResponses) {
-    //   if (searchEntry.defs) {
-    //     for (const partialDef of searchEntry.defs) {
-    //       if (!processedDefIds.has(partialDef.id)) {
-    //         // Only map if partialDef has essential fields (id, def)
-    //         if (partialDef.id && partialDef.def) {
-    //           senses.push(
-    //             this.mapPartialDefinitionToSense(partialDef, searchEntry.pos),
-    //           );
-    //           processedDefIds.add(partialDef.id);
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
     if (senses.length === 0) {
       this.logger.warn(`No senses found for word '${primary.vocab}'`);
-      // Return null if no meaningful content found? Or return snapshot with empty senses?
-      // Given requirements, let's return null to signify incomplete data if that's preferred,
-      // but usually a word exists even without definitions.
-      // However, WordSnapshot validation might require senses.
-      // Let's return the snapshot, as pronunciations might be useful.
     }
 
     return new WordSnapshot({
-      text: primary.vocab,
-      normalizedText: primary.vocab.toLowerCase(),
-      language: 'en',
-      source: 'azvocab',
+      text: WordText.create(primary.vocab),
+      normalizedText: WordText.create(primary.vocab.toLowerCase()),
+      language: Language.ENGLISH,
+      source: DataSource.AZVOCAB,
       rank: primary.rank || null,
       frequency: primary.freq || null,
       pronunciations,
@@ -137,11 +120,20 @@ export class AzVocabAdapter {
       });
     }
 
+    let cefrLevel: CefrLevel | null = null;
+    if (def.level) {
+      try {
+        cefrLevel = CefrLevel.from(def.level);
+      } catch {
+        this.logger.warn(`Invalid CEFR level ${def.level} from provider`);
+      }
+    }
+
     return new WordSenseVO({
-      partOfSpeech: def.pos || fallbackPos,
+      partOfSpeech: PartOfSpeech.from(def.pos || fallbackPos || 'unknown'),
       definition: def.def || '',
       shortDefinition: null,
-      cefrLevel: def.level || null,
+      cefrLevel,
       examples,
       synonyms: def.synonyms || [],
       antonyms: def.antonyms || [],
@@ -159,7 +151,7 @@ export class AzVocabAdapter {
     fallbackPos: string,
   ): WordSenseVO {
     return new WordSenseVO({
-      partOfSpeech: def.pos || fallbackPos,
+      partOfSpeech: PartOfSpeech.from(def.pos || fallbackPos || 'unknown'),
       definition: def.def,
       shortDefinition: null,
       cefrLevel: null,
