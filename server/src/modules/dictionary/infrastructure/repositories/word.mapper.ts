@@ -1,17 +1,17 @@
 import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
 import { WordSenseVO } from '../../domain/value-objects/word-sense.vo';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 
+import { Word } from '../../domain/entities/word.aggregate';
 import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
 import { DataSource } from '../../domain/value-objects/data-source.vo';
 import { Language } from '../../domain/value-objects/language.vo';
 import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
 import { WordText } from '../../domain/value-objects/word-text.vo';
 
-export class WordSnapshotMapper {
-  static toDomain(entity: WordOrmEntity): WordSnapshot {
+export class WordMapper {
+  static toDomain(entity: WordOrmEntity): Word {
     const pronunciations = entity.pronunciations.getItems().map(
       (p) =>
         new WordPronunciationVO({
@@ -55,7 +55,7 @@ export class WordSnapshotMapper {
       });
     });
 
-    return new WordSnapshot({
+    const wordProps = {
       text: WordText.create(entity.text),
       normalizedText: WordText.create(entity.normalizedText),
       language: Language.from(entity.language),
@@ -66,6 +66,10 @@ export class WordSnapshotMapper {
       senses: senses,
       inflects: (entity.inflects as Record<string, string[]>) || undefined,
       // wordFamily mismatch (string vs object), skip
+    };
+
+    return Word.createFromProvider({
+      wordProps,
     });
   }
 }

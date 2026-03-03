@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
+import { Word } from '../../domain/entities/word.aggregate';
 
 export class PronunciationDto {
   @ApiProperty({ example: '/həˈloʊ/' })
@@ -99,7 +99,7 @@ export class SenseDto {
   collocations?: CollocationDto;
 }
 
-export class WordSnapshotResponseDto {
+export class WordResponseDto {
   @ApiProperty({ example: 'hello' })
   text!: string;
 
@@ -130,19 +130,19 @@ export class WordSnapshotResponseDto {
   @ApiProperty({ type: WordFamilyDto, required: false })
   wordFamily?: WordFamilyDto;
 
-  constructor(snapshot: WordSnapshot) {
-    this.text = snapshot.text.value;
-    this.normalizedText = snapshot.normalizedText.value;
-    this.language = snapshot.language.value;
-    this.source = snapshot.source.value as 'internal' | 'azvocab';
-    this.rank = snapshot.rank;
-    this.frequency = snapshot.frequency;
-    this.pronunciations = snapshot.pronunciations.map((p) => ({
+  constructor(word: Word) {
+    this.text = word.text.value;
+    this.normalizedText = word.normalizedText.value;
+    this.language = word.language.value;
+    this.source = word.source.value as 'internal' | 'azvocab';
+    this.rank = word.rank;
+    this.frequency = word.frequency;
+    this.pronunciations = word.pronunciations.map((p) => ({
       ipa: p.ipa,
       audioUrl: p.audioUrl,
       region: p.region,
     }));
-    this.senses = snapshot.senses.map((s) => ({
+    this.senses = word.senses.map((s) => ({
       partOfSpeech: s.partOfSpeech.value,
       definition: s.definition,
       shortDefinition: s.shortDefinition,
@@ -161,7 +161,7 @@ export class WordSnapshotResponseDto {
       images: s.images,
       collocations: s.collocations,
     }));
-    this.inflects = snapshot.inflects;
-    this.wordFamily = snapshot.wordFamily;
+    this.inflects = word.inflects;
+    this.wordFamily = word.wordFamily;
   }
 }

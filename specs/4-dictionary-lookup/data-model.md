@@ -149,49 +149,44 @@ To enforce Domain-Driven Design (DDD) principles and type safety, we use the fol
 
 ## Aggregate Root: Word
 
-The `Word` entity serves as an Aggregate Root, encapsulating the `WordSnapshot`, `WordId`, `DataSource`, and tracking versioning/events.
+The `Word` entity serves as an Aggregate Root, encapsulating properties previously held in `WordSnapshot`, the `WordId`, and tracking versioning/events.
 
 ```typescript
 export class Word extends AggregateRoot {
   get wordId(): WordId;
-  get snapshot(): WordSnapshot;
-  get version(): number;
+  get text(): WordText;
+  get normalizedText(): WordText;
+  get language(): Language;
   get source(): DataSource;
+  get rank(): number | null;
+  get frequency(): number | null;
+  get pronunciations(): PronunciationVO[];
+  get senses(): SenseVO[];
+  get version(): number;
   
-  static createFromProvider(props: { snapshot: WordSnapshot, source: DataSource, tenantId: string }): Word;
-  static reconstitute(props: { id: string, snapshot: WordSnapshot, source: DataSource, version: number, createdAt: Date, updatedAt: Date }): Word;
+  static createFromProvider(props: { wordProps: WordProps, tenantId: string }): Word;
+  static rehydrate(props: { id: string, wordProps: WordProps, version: number, createdAt: Date, updatedAt: Date }): Word;
   
-  updateFromProvider(snapshot: WordSnapshot): void;
+  updateFromProvider(props: WordProps, tenantId: string): void;
 }
 ```
 
 ---
 
-## Value Object: WordSnapshot
+## Interface: WordProps
 
-Read-only projection for API responses and aggregate persistence format. Now utilizes domain primitives.
+Used as a flat property transfer object for mapper and factory inputs. Now utilizes domain primitives.
 
 ```typescript
-export class WordSnapshot extends ValueObject<WordSnapshotProps> {
-  get text(): WordText;
-  get normalizedText(): WordText;
-  get language(): Language;
-  get pronunciations(): PronunciationVO[];
-  get senses(): SenseVO[];
-  get source(): DataSource;
-  get rank(): number | null;
-  get frequency(): number | null;
-}
-
-interface WordSnapshotProps {
+export interface WordProps {
   text: WordText;
   normalizedText: WordText;
   language: Language;
-  pronunciations: PronunciationVO[];
-  senses: SenseVO[];
   source: DataSource;
   rank: number | null;
   frequency: number | null;
+  pronunciations: PronunciationVO[];
+  senses: SenseVO[];
 }
 ```
 

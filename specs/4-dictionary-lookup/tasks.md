@@ -31,16 +31,16 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [x] T004 [P] Create `WordSnapshot` value object in `server/src/modules/dictionary/domain/value-objects/word-snapshot.vo.ts` — immutable read model with `text`, `normalizedText`, `language`, `source`, `rank`, `frequency`, `pronunciations[]`, `senses[]` (per data-model.md)
+- [x] T004 [P] Create `WordProps` interface in `server/src/modules/dictionary/domain/entities/word-props.interface.ts` and update `Word` Aggregate — replacing `WordSnapshot` with `text`, `normalizedText`, `language`, `source`, `rank`, `frequency`, `pronunciations[]`, `senses[]` (per data-model.md)
 - [x] T005 [P] Create `WordPronunciationVO` value object in `server/src/modules/dictionary/domain/value-objects/word-pronunciation.vo.ts` — with `ipa`, `audioUrl`, `region`
 - [x] T006 [P] Create `WordSenseVO` value object in `server/src/modules/dictionary/domain/value-objects/word-sense.vo.ts` — with `partOfSpeech`, `definition`, `shortDefinition`, `cefrLevel`, `examples[]`, `synonyms[]`, `antonyms[]`, `definitionVi`
 - [x] T007 [P] Create `WordExampleVO` value object in `server/src/modules/dictionary/domain/value-objects/word-example.vo.ts` — with `text`, `translationVi`, `order`
-- [x] T008 [P] Create `IWordReadRepository` interface in `server/src/modules/dictionary/domain/repositories/word-read.repository.interface.ts` — `findByWord(normalizedWord, tenantId): Promise<WordSnapshot | null>`
-- [x] T009 [P] Create `ILookupProvider` interface in `server/src/modules/dictionary/domain/providers/lookup-provider.interface.ts` — `lookup(word): Promise<WordSnapshot | null>`, `isAvailable(): Promise<boolean>`, `readonly name: string`
+- [x] T008 [P] Create `IWordReadRepository` interface in `server/src/modules/dictionary/domain/repositories/word-read.repository.interface.ts` — `findByWord(normalizedWord): Promise<Word[]>`
+- [x] T009 [P] Create `ILookupProvider` interface in `server/src/modules/dictionary/domain/providers/lookup-provider.interface.ts` — `lookup(word): Promise<LookupResult>`, `isAvailable(): Promise<boolean>`, `readonly name: string`
 - [x] T010 [P] Create `ProviderResponseCacheOrmEntity` in `server/src/modules/dictionary/infrastructure/persistence/provider-response-cache.orm-entity.ts` — MikroORM entity per data-model.md schema with unique `[normalizedWord, provider]` constraint
 - [x] T011 [P] Create `LookupMissedEvent` in `server/src/modules/dictionary/domain/events/lookup-missed.event.ts` — domain event with `word`, `tenantId`, `userId`
 - [x] T012 [P] Create `LookupSucceededEvent` in `server/src/modules/dictionary/domain/events/lookup-succeeded.event.ts` — domain event with `word`, `source`, `tenantId`, `userId`
-- [x] T013 [P] Create `WordSnapshotResponseDto` in `server/src/modules/dictionary/dto/responses/word-snapshot.response.dto.ts` — DTO mapping from `WordSnapshot` VO for API output (per contracts/lookup.openapi.yaml)
+- [x] T013 [P] Create `WordResponseDto` in `server/src/modules/dictionary/dto/responses/word.response.dto.ts` — DTO mapping from `Word` aggregate for API output (per contracts/lookup.openapi.yaml)
 - [x] T014 Create `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts` — register all providers, handlers, repositories; import `CqrsModule`, `HttpModule`; register in `AppModule`
 - [x] T015 Create database migration for `provider_response_cache` table in `server/src/database/migrations/` — per migration SQL in data-model.md
 
@@ -56,11 +56,11 @@
 
 ### Implementation for User Story 1
 
-- [x] T016 [US1] Create `WordSnapshotMapper` in `server/src/modules/dictionary/infrastructure/repositories/word-snapshot.mapper.ts` — map existing `WordOrmEntity` (with eager-loaded senses, pronunciations, examples) → `WordSnapshot` VO
-- [x] T017 [US1] Implement `WordReadRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-read.repository.ts` — implements `IWordReadRepository`, queries existing `WordOrmEntity` by `normalizedWord` + `tenantId`, uses eager loading, returns `WordSnapshot` via mapper
+- [x] T016 [US1] Create `WordMapper` in `server/src/modules/dictionary/infrastructure/repositories/word.mapper.ts` — map existing `WordOrmEntity` (with eager-loaded senses, pronunciations, examples) → `Word` aggregate
+- [x] T017 [US1] Implement `WordReadRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-read.repository.ts` — implements `IWordReadRepository`, queries existing `WordOrmEntity` by `normalizedWord`, uses eager loading, returns `Word[]` via mapper
 - [x] T018 [US1] Create `LookupWordQuery` in `server/src/modules/dictionary/application/queries/lookup-word.query.ts` — CQRS query class with `word`, `tenantId`, `userId`
-- [x] T019 [US1] Implement `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — `@QueryHandler(LookupWordQuery)`: normalize word → check NestJS `CacheManager` → query `WordReadRepository` → return `WordSnapshot` or proceed to provider layer (US2). For US1 MVP: return result or `NotFoundException`
-- [x] T020 [US1] Create `LookupController` in `server/src/modules/dictionary/controllers/lookup.controller.ts` — `GET /api/v1/dictionary/lookup/:word`, JWT guard, validate word input (1-100 chars), dispatch `LookupWordQuery`, return `WordSnapshotResponseDto`
+- [x] T019 [US1] Implement `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — `@QueryHandler(LookupWordQuery)`: normalize word → check NestJS `CacheManager` → query `WordReadRepository` → return `Word[]` or proceed to provider layer (US2). For US1 MVP: return result or `NotFoundException`
+- [x] T020 [US1] Create `LookupController` in `server/src/modules/dictionary/controllers/lookup.controller.ts` — `GET /api/v1/dictionary/lookup/:word`, JWT guard, validate word input (1-100 chars), dispatch `LookupWordQuery`, return `WordResponseDto`
 - [x] T021 [US1] Register `LookupWordHandler` and `LookupController` in `DictionaryModule` in `server/src/modules/dictionary/dictionary.module.ts`
 
 **Checkpoint**: `GET /api/v1/dictionary/lookup/hello` returns full definition for DB-cached words. US1 is independently testable.
@@ -78,7 +78,7 @@
 - [x] T022 [P] [US2] Create `IProviderCacheRepository` interface in `server/src/modules/dictionary/domain/repositories/provider-cache.repository.interface.ts` — `findByWord(normalizedWord, provider): Promise<ProviderResponseCacheOrmEntity | null>`, `saveAsync(entity): void`
 - [x] T023 [P] [US2] Implement `ProviderCacheRepository` in `server/src/modules/dictionary/infrastructure/repositories/provider-cache.repository.ts` — implements `IProviderCacheRepository`, queries `ProviderResponseCacheOrmEntity`, handles upsert with TTL
 - [x] T024a [P] [US2] Create `AzVocabHttpClient` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.http-client.ts` — pure HTTP client: `search(word)` → `POST /api/vocab/search?q={word}` returns `AzVocabSearchResponseDto[]`; `getDefinitionById(defId)` → `GET /_next/data/{buildId}/vi/definition/{defId}.json` returns `AzVocabDefinitionResponseDto | null`; cookie-based auth, browser-like headers, per-endpoint error handling (404/429/5xx)
-- [x] T024b [P] [US2] Create `AzVocabAdapter` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.adapter.ts` — DTO→WordSnapshot mapping: accepts search results + definition details, merges base metadata from search (pronunciation, rank, family) with full senses from getDefinition; handles partial data (missing definitions gracefully)
+- [x] T024b [P] [US2] Create `AzVocabAdapter` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.adapter.ts` — DTO→Word mapping: accepts search results + definition details, merges base metadata from search (pronunciation, rank, family) with full senses from getDefinition; handles partial data (missing definitions gracefully)
 - [x] T024c [US2] Refactor `AzVocabLookupProvider` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.lookup-provider.ts` — implements `ILookupProvider`, orchestrates: `httpClient.search(word)` → extract def IDs → `httpClient.getDefinitionById(defId)` per def → `adapter.toDomain()` → returns `LookupResult`; NO direct HTTP or mapping logic
 - [x] T024d [US2] Add definition-level caching to `AzVocabHttpClient.getDefinitionById()` in `server/src/modules/dictionary/infrastructure/providers/azvocab/azvocab.http-client.ts` — inject `IProviderCacheRepository`, check cache `findByWord(defId, 'azvocab-definition')` before HTTP call, on miss + success fire-and-forget save with TTL 30 days, uses existing `provider_response_cache` table (no migration needed)
 - [x] T026 [US2] Implement `CachingProviderDecorator` in `server/src/modules/dictionary/infrastructure/providers/caching-provider.decorator.ts` — wraps `ILookupProvider`, checks `ProviderCacheRepository` first, on miss calls inner provider, async saves to cache (fire-and-forget), respects TTL config
@@ -108,18 +108,18 @@
 
 ## Phase 5.5: Word Persistence After Provider Lookup (Priority: P1)
 
-**Goal**: After a successful provider lookup, persist the `WordSnapshot` to the internal DB so subsequent lookups are served from DB instead of calling the external provider.
+**Goal**: After a successful provider lookup, persist the `Word` Aggregate to the internal DB so subsequent lookups are served from DB instead of calling the external provider.
 
 **Independent Test**: Lookup a word not in DB → verify it's returned AND a new row appears in `words` table. Lookup same word again → verify it comes from DB (no provider call).
 
 ### Implementation for Word Persistence
 
-- [x] T033a [US2] Create `WordEnrichedEvent` in `server/src/modules/dictionary/domain/events/word-enriched.event.ts` — domain event carrying `WordSnapshot` + `tenantId`, extends `DomainEvent`
-- [x] T033b [US2] Create `IWordWriteRepository` interface in `server/src/modules/dictionary/domain/repositories/word-write.repository.interface.ts` — `save(snapshot: WordSnapshot, tenantId: string): Promise<void>`, uses `createInjection` pattern
+- [x] T033a [US2] (Removed `WordEnrichedEvent` as we no longer emit it. Persistence uses `WordCreatedEvent`/`WordUpdatedEvent`).
+- [x] T033b [US2] Create `IWordWriteRepository` interface in `server/src/modules/dictionary/domain/repositories/word-write.repository.interface.ts` — `save(word: Word): Promise<void>`, uses `createInjection` pattern
 - [x] T033c [US2] Create `WordWriteRepository` in `server/src/modules/dictionary/infrastructure/repositories/word-write.repository.ts` — upsert logic via MikroORM `EntityManager`, cascade creates `WordOrmEntity` → `WordSenseOrmEntity[]` → `WordExampleOrmEntity[]` + `WordPronunciationOrmEntity[]`, wrapped in `em.transactional()`
-- [x] T033d [US2] Create `WordEnrichedHandler` in `server/src/modules/dictionary/application/events/word-enriched.handler.ts` — `@EventsHandler(WordEnrichedEvent)`, injects `IWordWriteRepository`, calls `repo.save(event.snapshot, event.tenantId)`
-- [x] T033e [US2] Update `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — emit `WordEnrichedEvent` after successful provider fallback (alongside existing `LookupSucceededEvent` and `LookupMissedEvent`)
-- [x] T033f [US2] Register in `DictionaryModule` — add `provideWordWriteRepository(WordWriteRepository)` to `repositories`, add `WordEnrichedHandler` to `eventHandlers`
+- [x] T033d [US2] Modify `WordPersistenceHandler` in `server/src/modules/dictionary/application/events/word-persistence.handler.ts` — injects `IWordWriteRepository`, calls `repo.save(event.word)`
+- [x] T033e [US2] Update `LookupWordHandler` in `server/src/modules/dictionary/application/queries/lookup-word.handler.ts` — emit `WordCreatedEvent` after successful provider fallback (alongside existing `LookupSucceededEvent` and `LookupMissedEvent`)
+- [x] T033f [US2] Register in `DictionaryModule` — add `provideWordWriteRepository(WordWriteRepository)` to `repositories`, add `WordPersistenceHandler` to `eventHandlers`
 
 **Checkpoint**: Words fetched from external provider are saved to DB. Second lookup for same word is served from internal DB.
 
@@ -186,7 +186,7 @@ graph TD
 
 **Phase 2** — all T004–T013 are [P] (different files, no dependencies):
 ```
-T004 WordSnapshot VO    │ T008 IWordReadRepository    │ T011 LookupMissedEvent
+T004 WordProps Interface  │ T008 IWordReadRepository    │ T011 LookupMissedEvent
 T005 PronunciationVO    │ T009 ILookupProvider         │ T012 LookupSucceededEvent
 T006 SenseVO            │ T010 ProviderCacheEntity     │ T013 ResponseDto
 T007 ExampleVO          │                              │

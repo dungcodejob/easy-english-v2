@@ -1,10 +1,10 @@
 import { createInjection } from '@shared/utils';
-import { WordSnapshot } from '../value-objects/word-snapshot.vo';
+import { Word } from '../entities/word.aggregate';
 
 export type RawResponse = any;
 
 export interface LookupResult {
-  snapshots: WordSnapshot[];
+  words: Word[];
   raw: RawResponse;
   status: number;
 }
@@ -12,7 +12,7 @@ export interface LookupResult {
 export interface ILookupProvider {
   readonly name: string;
   lookup(word: string): Promise<LookupResult>;
-  toDomain(raw: any): WordSnapshot[];
+  toDomain(raw: any): Word[];
   isAvailable(): Promise<boolean>;
 }
 

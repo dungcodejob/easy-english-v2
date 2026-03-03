@@ -4,11 +4,11 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Word } from 'src/modules/dictionary/domain/entities/word.aggregate';
 import {
   ILookupProvider,
   LookupResult,
 } from '../../../domain/providers/lookup-provider.interface';
-import { WordSnapshot } from '../../../domain/value-objects/word-snapshot.vo';
 import { AzVocabAdapter } from './azvocab.adapter';
 import { AzVocabHttpClient } from './azvocab.http-client';
 import {
@@ -27,7 +27,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
     private readonly configService: ConfigService,
   ) {}
 
-  toDomain(raw: unknown): WordSnapshot[] {
+  toDomain(raw: unknown): Word[] {
     // This method is part of ILookupProvider but primarily used for cache hydration from raw JSON
     // Raw JSON stored in cache should match the structure we return in lookup(): { search: [], definitions: [] }
     const r = raw as {
@@ -48,7 +48,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
       // 1. Search for the word
       const searchResponses = await this.httpClient.search(word);
       if (!searchResponses || searchResponses.length === 0) {
-        return { snapshots: [], raw: null, status: 404 };
+        return { words: [], raw: null, status: 404 };
       }
 
       // 2. Fetch full definitions for each definition ID found
@@ -76,7 +76,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
         (d): d is AzVocabDefinitionResponseDto => d !== null,
       );
 
-      const snapshots: WordSnapshot[] = [];
+      const words: Word[] = [];
 
       for (const entry of searchResponses) {
         if (!entry.defs) {
@@ -86,9 +86,9 @@ export class AzVocabLookupProvider implements ILookupProvider {
           (def) => def.pageProps.def.id === entry.id,
         );
 
-        const snapshot = this.adapter.toDomain(entry, definitionsByEntry);
-        if (snapshot) {
-          snapshots.push(snapshot);
+        const wordProps = this.adapter.toDomain(entry, definitionsByEntry);
+        if (wordProps) {
+          words.push(wordProps);
         }
       }
 
@@ -96,12 +96,12 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
       // 4. Construct Result
       return {
-        snapshots,
+        words,
         raw: {
           search: searchResponses,
           definitions,
         },
-        status: snapshots.length > 0 ? 200 : 404, // If mapped snapshot is null, treat as not found?
+        status: words.length > 0 ? 200 : 404, // If mapped wordProps is null, treat as not found?
       };
     } catch (error) {
       if (error instanceof ServiceUnavailableException) {

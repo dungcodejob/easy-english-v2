@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Word } from '../../domain/entities/word.aggregate';
 import {
   type ILookupProvider,
   InjectLookupProvider,
@@ -9,7 +10,6 @@ import {
   InjectProviderCacheRepository,
   type IProviderCacheRepository,
 } from '../../domain/repositories/provider-cache.repository.interface';
-import { WordSnapshot } from '../../domain/value-objects/word-snapshot.vo';
 import { ProviderResponseCacheOrmEntity } from '../persistence/provider-response-cache.orm-entity';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class CachingProviderDecorator implements ILookupProvider {
     return this.inner.name;
   }
 
-  toDomain(raw: any): WordSnapshot[] {
+  toDomain(raw: any): Word[] {
     return this.inner.toDomain(raw);
   }
 
@@ -50,7 +50,7 @@ export class CachingProviderDecorator implements ILookupProvider {
         // HIT
         if (cached.httpStatus === 404) {
           return {
-            snapshots: [],
+            words: [],
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             raw: cached.rawResponse as unknown as any,
             status: 404,
@@ -59,9 +59,9 @@ export class CachingProviderDecorator implements ILookupProvider {
 
         // Only treat as valid hit if we can map it or it's a known raw response
         if (cached.httpStatus >= 200 && cached.httpStatus < 300) {
-          const snapshots = this.toDomain(cached.rawResponse);
+          const words = this.toDomain(cached.rawResponse);
           return {
-            snapshots: snapshots,
+            words: words,
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             raw: cached.rawResponse as unknown as any,
             status: cached.httpStatus,
@@ -118,6 +118,7 @@ export class CachingProviderDecorator implements ILookupProvider {
     const entity = new ProviderResponseCacheOrmEntity();
     entity.normalizedWord = normalizedWord;
     entity.provider = provider;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     entity.rawResponse = result.raw || {};
     entity.httpStatus = result.status;
     entity.expiresAt = expiresAt;

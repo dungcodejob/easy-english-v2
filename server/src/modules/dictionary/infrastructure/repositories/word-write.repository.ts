@@ -13,14 +13,13 @@ export class WordWriteRepository implements IWordWriteRepository {
 
   constructor(private readonly em: EntityManager) {}
 
-  async save(word: Word, tenantId: string): Promise<void> {
-    const snapshot = word.snapshot;
-
+  async save(word: Word): Promise<void> {
     await this.em.transactional(async (em) => {
       // 1. Check if word exists
       let wordEntity: WordOrmEntity | null = await em.findOne(
         WordOrmEntity,
-        { id: word.id, tenantId },
+        // { id: word.id, tenantId },
+        { id: word.id },
         { populate: ['senses', 'senses.examples', 'pronunciations'] },
       );
 
@@ -36,22 +35,22 @@ export class WordWriteRepository implements IWordWriteRepository {
       } else {
         wordEntity = new WordOrmEntity();
         wordEntity.id = word.id;
-        wordEntity.tenantId = tenantId;
-        wordEntity.normalizedText = snapshot.normalizedText.value;
+        // wordEntity.tenantId = tenantId;
+        wordEntity.normalizedText = word.normalizedText.value;
         em.persist(wordEntity);
       }
 
       // 3. Assign flat properties
-      wordEntity.text = snapshot.text.value;
-      wordEntity.language = snapshot.language.value;
-      wordEntity.source = snapshot.source.value;
-      wordEntity.rank = snapshot.rank;
-      wordEntity.frequency = snapshot.frequency;
-      wordEntity.inflects = snapshot.inflects;
+      wordEntity.text = word.text.value;
+      wordEntity.language = word.language.value;
+      wordEntity.source = word.source.value;
+      wordEntity.rank = word.rank;
+      wordEntity.frequency = word.frequency;
+      wordEntity.inflects = word.inflects;
       // wordEntity.wordFamily mapping if necessary
 
       // 4. Map and assign pronunciations
-      snapshot.pronunciations.forEach((p) => {
+      word.pronunciations.forEach((p) => {
         const pronEntity = new WordPronunciationOrmEntity();
         pronEntity.ipa = p.ipa;
         pronEntity.audioUrl = p.audioUrl;
@@ -60,7 +59,7 @@ export class WordWriteRepository implements IWordWriteRepository {
       });
 
       // 5. Map and assign senses and examples
-      snapshot.senses.forEach((s, senseIndex) => {
+      word.senses.forEach((s, senseIndex) => {
         const senseEntity = new WordSenseOrmEntity();
         senseEntity.partOfSpeech = s.partOfSpeech.value;
         senseEntity.definition = s.definition;
@@ -87,8 +86,6 @@ export class WordWriteRepository implements IWordWriteRepository {
       });
     });
 
-    this.logger.debug(
-      `Saved word snapshot '${snapshot.normalizedText.value}' to DB.`,
-    );
+    this.logger.debug(`Saved word '${word.normalizedText.value}' to DB.`);
   }
 }

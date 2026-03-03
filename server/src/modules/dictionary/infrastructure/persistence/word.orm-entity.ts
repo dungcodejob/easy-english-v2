@@ -41,9 +41,9 @@ export class WordOrmEntity {
   @Property({ nullable: true })
   wordFamily!: string | null;
 
-  @Property({ type: 'uuid' }) // Assuming simple uuid storage for tenantId for now, or use relation if Tenant entity works. ERD says FK.
-  @Index()
-  tenantId!: string;
+  // @Property({ type: 'uuid' }) // Assuming simple uuid storage for tenantId for now, or use relation if Tenant entity works. ERD says FK.
+  // @Index()
+  // tenantId!: string;
 
   @Property()
   createdAt: Date = new Date();

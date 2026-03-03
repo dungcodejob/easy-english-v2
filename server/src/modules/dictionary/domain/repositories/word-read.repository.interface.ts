@@ -2,7 +2,7 @@ import { createInjection } from '@shared/utils';
 import { Word } from '../entities/word.aggregate';
 
 export interface IWordReadRepository {
-  findByWord(normalizedWord: string, tenantId: string): Promise<Word[]>;
+  findByWord(normalizedWord: string): Promise<Word[]>;
 }
 
 const { inject, provider, token } = createInjection<IWordReadRepository>(

@@ -38,10 +38,10 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
     // const cacheKey = `word:${tenantId}:${normalizedWord}`;
 
     // TODO: Add NestJS CacheManager check here (Phase 1 T002/T019)
-    // const cachedProps = await this.cacheManager.get<WordSnapshotProps>(cacheKey);
+    // const cachedProps = await this.cacheManager.get<WordProps>(cacheKey);
     // if (cachedProps) { ... }
 
-    const existingWords = await this.repo.findByWord(normalizedWord, tenantId);
+    const existingWords = await this.repo.findByWord(normalizedWord);
 
     if (existingWords && existingWords.length > 0) {
       this.eventBus.publish(
@@ -73,19 +73,11 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
         timeoutPromise,
       ]);
 
-      if (result.snapshots && result.snapshots.length > 0) {
-        const newSnapshots = result.snapshots;
-        const newWords: Word[] = [];
+      if (result.words && result.words.length > 0) {
+        const newWords = result.words;
 
         // Found in external provider
-        for (const snapshot of newSnapshots) {
-          const newWord = Word.createFromProvider({
-            snapshot,
-            source: snapshot.source,
-            tenantId,
-          });
-          newWords.push(newWord);
-
+        for (const newWord of newWords) {
           // Publish aggregate domain events (WordCreatedEvent)
           newWord.domainEvents.forEach((event) => {
             this.eventBus.publish(event);

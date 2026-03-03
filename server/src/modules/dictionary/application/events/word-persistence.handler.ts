@@ -25,7 +25,7 @@ export class WordPersistenceHandler implements IEventHandler<
       this.logger.log(
         `Persisting word aggregate: ${word.normalizedText.value}`,
       );
-      await this.writeRepo.save(word, event.tenantId);
+      await this.writeRepo.save(word);
     } catch (error) {
       const word = event.word;
       this.logger.error(
