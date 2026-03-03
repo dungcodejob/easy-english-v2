@@ -46,6 +46,7 @@ export class AzVocabHttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: '*/*',
+      // Host: 'azvocab.ai',
       Origin: 'https://azvocab.ai',
       Pragma: 'no-cache',
       Connection: 'keep-alive',
@@ -94,9 +95,7 @@ export class AzVocabHttpClient {
       }
 
       // 2. Cache miss, call external API
-      const url = `${this.baseUrl}/api/vocab/search?q=${encodeURIComponent(
-        word,
-      )}`;
+      const url = `${this.baseUrl}/vocab/search?q=${encodeURIComponent(word)}`;
 
       const { data } = await firstValueFrom(
         this.httpService.post<AzVocabSearchResponseDto[]>(url, null, {
