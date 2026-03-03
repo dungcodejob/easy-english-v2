@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBus } from '@nestjs/cqrs';
 import { RequestContextService } from '../context/request-context.service';
 import { DomainEvent } from './domain-event.base';
 import { Entity } from './entity.base';
@@ -15,22 +15,15 @@ export abstract class AggregateRoot extends Entity {
     this._domainEvents = [];
   }
 
-  async publishEvents(
-    logger: Logger,
-    eventEmitter: EventEmitter2,
-  ): Promise<void> {
-    await Promise.all(
-      this.domainEvents.map(async (event) => {
-        logger.debug(
-          `[${RequestContextService.getRequestId()}] "${
-            event.constructor.name
-          }" event published for aggregate ${this.constructor.name} : ${
-            this.id
-          }`,
-        );
-        return eventEmitter.emitAsync(event.constructor.name, event);
-      }),
-    );
+  publishEvents(logger: Logger, eventBus: EventBus): void {
+    for (const event of this.domainEvents) {
+      logger.debug(
+        `[${RequestContextService.getRequestId()}] "${
+          event.constructor.name
+        }" event published for aggregate ${this.constructor.name} : ${this.id}`,
+      );
+      eventBus.publish(event);
+    }
     this.clearEvents();
   }
 

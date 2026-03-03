@@ -10,6 +10,7 @@ import type { Cache } from 'cache-manager';
 import { Word } from '../../domain/entities/word.aggregate';
 import { LookupMissedEvent } from '../../domain/events/lookup-missed.event';
 import { LookupSucceededEvent } from '../../domain/events/lookup-succeeded.event';
+import { WordEnrichmentRequestedEvent } from '../../domain/events/word-enrichment-requested.event';
 import {
   lookupProviderToken,
   type ILookupProvider,
@@ -59,11 +60,11 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
 
     // Provider Fallback
     try {
-      const timeoutMs = 3000;
+      const timeoutMs = 5000;
       const timeoutPromise = new Promise<never>((_, reject) =>
         setTimeout(
           () =>
-            reject(new Error('Dictionary provider timeout exceeded 3000ms')),
+            reject(new Error('Dictionary provider timeout exceeded 5000ms')),
           timeoutMs,
         ),
       );
@@ -107,6 +108,19 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
           }),
         );
 
+        // Schedule background enrichment if provider has remaining defs to fetch
+        if (result.enrichmentContext) {
+          this.logger.log(
+            `Scheduling background enrichment for '${normalizedWord}'`,
+          );
+          this.eventBus.publish(
+            new WordEnrichmentRequestedEvent(
+              normalizedWord,
+              result.enrichmentContext,
+            ),
+          );
+        }
+
         return newWords;
       }
     } catch (error) {
@@ -115,10 +129,10 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
         err &&
         (err.code === 'ECONNABORTED' ||
           err.name === 'TimeoutError' ||
-          err.message === 'Dictionary provider timeout exceeded 3000ms')
+          err.message === 'Dictionary provider timeout exceeded 5000ms')
       ) {
         this.logger.error(
-          `Lookup total budget (3000ms) exceeded for ${normalizedWord}`,
+          `Lookup total budget (5000ms) exceeded for ${normalizedWord}`,
         );
         throw new ServiceUnavailableException(
           'Dictionary provider unavailable or too slow.',

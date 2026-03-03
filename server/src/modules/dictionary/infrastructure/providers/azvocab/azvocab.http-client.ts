@@ -169,7 +169,7 @@ export class AzVocabHttpClient {
         err &&
         (err.code === 'ECONNABORTED' ||
           err.name === 'TimeoutError' ||
-          err.message === 'Dictionary provider timeout exceeded 3000ms')
+          err.message === 'Dictionary provider timeout exceeded 5000ms')
       ) {
         this.logger.warn(`Timeout fetching definition for ${defId}`);
         return null;

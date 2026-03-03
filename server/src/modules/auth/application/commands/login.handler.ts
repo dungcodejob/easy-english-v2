@@ -26,7 +26,7 @@ import {
 
 import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBus } from '@nestjs/cqrs';
 import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type IUserRepository,
@@ -63,7 +63,7 @@ export class LoginHandler implements ICommandHandler<
 
   constructor(
     private readonly em: EntityManager,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: LoginCommand): Promise<AuthResultDto> {
@@ -157,7 +157,7 @@ export class LoginHandler implements ICommandHandler<
 
     await this.em.flush();
 
-    await session.publishEvents(this.logger, this.eventEmitter);
+    session.publishEvents(this.logger, this.eventBus);
 
     const userDto = new UserResponseDto(
       user.id,

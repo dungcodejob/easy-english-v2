@@ -1,7 +1,6 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import {
   AuthIdentity,
   AuthProvider,
@@ -65,7 +64,7 @@ export class RegisterHandler implements ICommandHandler<
     private readonly usernameAvailability: IUsernameAvailabilityService,
 
     // Infrastructure
-    private readonly eventEmitter: EventEmitter2,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: RegisterCommand): Promise<RegisterResponseDto> {
@@ -122,11 +121,9 @@ export class RegisterHandler implements ICommandHandler<
     await this.em.flush();
 
     // Publish all events
-    await Promise.all([
-      tenant.publishEvents(this.logger, this.eventEmitter),
-      user.publishEvents(this.logger, this.eventEmitter),
-      authIdentity.publishEvents(this.logger, this.eventEmitter),
-    ]);
+    tenant.publishEvents(this.logger, this.eventBus);
+    user.publishEvents(this.logger, this.eventBus);
+    authIdentity.publishEvents(this.logger, this.eventBus);
 
     return new RegisterResponseDto(user.id, email, tenant.id);
   }

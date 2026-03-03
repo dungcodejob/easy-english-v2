@@ -6,6 +6,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Word } from 'src/modules/dictionary/domain/entities/word.aggregate';
 import {
+  EnrichmentContext,
   ILookupProvider,
   LookupResult,
 } from '../../../domain/providers/lookup-provider.interface';
@@ -15,6 +16,13 @@ import {
   AzVocabDefinitionResponseDto,
   AzVocabSearchResponseDto,
 } from './azvocab.types';
+
+/** Max definitions to fetch immediately before returning to FE */
+const IMMEDIATE_FETCH_LIMIT = 8;
+/** Delay between immediate definition fetches (ms) */
+const IMMEDIATE_FETCH_DELAY_MS = 200;
+/** Delay between background definition fetches (ms) */
+const BACKGROUND_FETCH_DELAY_MS = 500;
 
 @Injectable()
 export class AzVocabLookupProvider implements ILookupProvider {
@@ -28,8 +36,6 @@ export class AzVocabLookupProvider implements ILookupProvider {
   ) {}
 
   toDomain(raw: unknown): Word[] {
-    // This method is part of ILookupProvider but primarily used for cache hydration from raw JSON
-    // Raw JSON stored in cache should match the structure we return in lookup(): { search: [], definitions: [] }
     const r = raw as {
       search: AzVocabSearchResponseDto;
       definitions: AzVocabDefinitionResponseDto[];
@@ -51,57 +57,39 @@ export class AzVocabLookupProvider implements ILookupProvider {
         return { words: [], raw: null, status: 404 };
       }
 
-      // 2. Fetch full definitions for each definition ID found
-      const definitionPromises: Promise<AzVocabDefinitionResponseDto | null>[] =
-        [];
+      // 2. Collect unique definition IDs
+      const allDefIds = this.collectDefIds(searchResponses);
 
-      // Collect unique definition IDs across all search entries
-      const defIds = new Set<string>();
-      for (const entry of searchResponses) {
-        if (entry.defs) {
-          entry.defs.forEach((def) => {
-            if (def.id && !defIds.has(def.id)) {
-              defIds.add(def.id);
-              definitionPromises.push(
-                this.httpClient.getDefinitionById(def.id),
-              );
-            }
-          });
-        }
-      }
+      // 3. Split: fetch first N immediately, rest goes to background
+      const immediateIds = allDefIds.slice(0, IMMEDIATE_FETCH_LIMIT);
+      const hasRemaining = allDefIds.length > IMMEDIATE_FETCH_LIMIT;
 
-      // Execute all definition fetches in parallel
-      const definitionResultsRaw = await Promise.all(definitionPromises);
-      const definitions = definitionResultsRaw.filter(
-        (d): d is AzVocabDefinitionResponseDto => d !== null,
+      this.logger.log(
+        `Word '${word}': ${allDefIds.length} defs total, fetching ${immediateIds.length} immediately`,
       );
 
-      const words: Word[] = [];
+      // 4. Fetch immediate definitions with rate limiting
+      const definitions = await this.fetchWithDelay(
+        immediateIds,
+        IMMEDIATE_FETCH_DELAY_MS,
+      );
 
-      for (const entry of searchResponses) {
-        if (!entry.defs) {
-          continue;
-        }
-        const definitionsByEntry = definitions.filter(
-          (def) => def.pageProps.def.id === entry.id,
-        );
+      // 5. Map to domain (adapter handles partial senses for defs without full data)
+      const words = this.mapToDomainWords(searchResponses, definitions);
 
-        const wordProps = this.adapter.toDomain(entry, definitionsByEntry);
-        if (wordProps) {
-          words.push(wordProps);
-        }
-      }
+      // 6. Build enrichment context if there are remaining defs
+      const enrichmentContext: EnrichmentContext | undefined = hasRemaining
+        ? {
+            searchData: searchResponses,
+            fetchedDefIds: immediateIds,
+          }
+        : undefined;
 
-      // 3. Map to Domain
-
-      // 4. Construct Result
       return {
         words,
-        raw: {
-          search: searchResponses,
-          definitions,
-        },
-        status: words.length > 0 ? 200 : 404, // If mapped wordProps is null, treat as not found?
+        raw: { search: searchResponses, definitions },
+        status: words.length > 0 ? 200 : 404,
+        enrichmentContext,
       };
     } catch (error) {
       if (error instanceof ServiceUnavailableException) {
@@ -115,8 +103,101 @@ export class AzVocabLookupProvider implements ILookupProvider {
     }
   }
 
+  async enrichRemaining(
+    word: string,
+    context: EnrichmentContext,
+  ): Promise<Word[]> {
+    const searchResponses = context.searchData as AzVocabSearchResponseDto[];
+    const allDefIds = this.collectDefIds(searchResponses);
+    const fetchedSet = new Set(context.fetchedDefIds);
+    const remainingIds = allDefIds.filter((id) => !fetchedSet.has(id));
+
+    if (remainingIds.length === 0) {
+      return [];
+    }
+
+    this.logger.log(
+      `Enriching '${word}': fetching ${remainingIds.length} remaining definitions`,
+    );
+
+    // Fetch remaining definitions with slower rate
+    const remainingDefinitions = await this.fetchWithDelay(
+      remainingIds,
+      BACKGROUND_FETCH_DELAY_MS,
+    );
+
+    // Also re-fetch immediate defs from cache (they should be cached by now)
+    const immediateDefinitions = await this.fetchWithDelay(
+      context.fetchedDefIds,
+      0, // No delay — these should come from cache
+    );
+
+    const allDefinitions = [...immediateDefinitions, ...remainingDefinitions];
+
+    // Map complete Word[] with all definitions
+    return this.mapToDomainWords(searchResponses, allDefinitions);
+  }
+
   async isAvailable(): Promise<boolean> {
     const url = this.configService.get<string>('dictionary.azvocab.url');
     return Promise.resolve(!!url);
+  }
+
+  // ─── Private Helpers ───
+
+  private collectDefIds(searchResponses: AzVocabSearchResponseDto[]): string[] {
+    const defIds = new Set<string>();
+    for (const entry of searchResponses) {
+      if (entry.defs) {
+        entry.defs.forEach((def) => {
+          if (def.id) {
+            defIds.add(def.id);
+          }
+        });
+      }
+    }
+    return Array.from(defIds);
+  }
+
+  private mapToDomainWords(
+    searchResponses: AzVocabSearchResponseDto[],
+    definitions: AzVocabDefinitionResponseDto[],
+  ): Word[] {
+    const words: Word[] = [];
+    for (const entry of searchResponses) {
+      if (!entry.defs) {
+        continue;
+      }
+      const definitionsByEntry = definitions.filter(
+        (def) => def.pageProps.def.id === entry.id,
+      );
+      const word = this.adapter.toDomain(entry, definitionsByEntry);
+      if (word) {
+        words.push(word);
+      }
+    }
+    return words;
+  }
+
+  private async fetchWithDelay(
+    defIds: string[],
+    delayMs: number,
+  ): Promise<AzVocabDefinitionResponseDto[]> {
+    const results: AzVocabDefinitionResponseDto[] = [];
+    for (let i = 0; i < defIds.length; i++) {
+      const def = await this.httpClient.getDefinitionById(defIds[i]);
+      if (def) {
+        results.push(def);
+      }
+      // Add delay between requests (skip after last one)
+      if (delayMs > 0 && i < defIds.length - 1) {
+        await this.delay(delayMs);
+      }
+    }
+    return results;
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

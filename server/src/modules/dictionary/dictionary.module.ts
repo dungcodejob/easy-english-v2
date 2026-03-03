@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
+import { WordEnrichmentHandler } from './application/events/word-enrichment.handler';
 import { WordPersistenceHandler } from './application/events/word-persistence.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
 import { LookupController } from './controllers/lookup.controller';
@@ -29,7 +30,11 @@ const httpControllers = [LookupController];
 const messageControllers = [];
 const commandHandlers = [];
 const queryHandlers = [LookupWordHandler];
-const eventHandlers = [LookupMissedHandler, WordPersistenceHandler];
+const eventHandlers = [
+  LookupMissedHandler,
+  WordPersistenceHandler,
+  WordEnrichmentHandler,
+];
 const repositories = [
   provideWordWriteRepository(WordWriteRepository),
   provideWordReadRepository(WordReadRepository),

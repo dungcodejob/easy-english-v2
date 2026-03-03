@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
+  type EnrichmentContext,
   type ILookupProvider,
   InjectLookupProvider,
   LookupResult,
@@ -34,6 +35,11 @@ export class CachingProviderDecorator implements ILookupProvider {
 
   isAvailable(): Promise<boolean> {
     return this.inner.isAvailable();
+  }
+
+  enrichRemaining(word: string, context: EnrichmentContext): Promise<Word[]> {
+    // Enrichment doesn't need caching — delegate directly to inner provider
+    return this.inner.enrichRemaining(word, context);
   }
 
   async lookup(word: string): Promise<LookupResult> {
