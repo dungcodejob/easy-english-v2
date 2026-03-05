@@ -37,16 +37,14 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
   toDomain(raw: unknown): Word[] {
     const r = raw as {
-      search: AzVocabSearchResponseDto;
+      search: AzVocabSearchResponseDto[];
       definitions: AzVocabDefinitionResponseDto[];
-    }[];
+    };
 
-    if (!r || !r.length) {
+    if (!r || !r.search) {
       return [];
     }
-    return r.map((entry) =>
-      this.adapter.toDomain(entry.search, entry.definitions),
-    );
+    return this.mapToDomainWords(r.search, r.definitions || []);
   }
 
   async lookup(word: string): Promise<LookupResult> {
@@ -164,18 +162,35 @@ export class AzVocabLookupProvider implements ILookupProvider {
     definitions: AzVocabDefinitionResponseDto[],
   ): Word[] {
     const words: Word[] = [];
+
+    // Group search responses by normalized text
+    const groupedResponses = new Map<string, AzVocabSearchResponseDto[]>();
     for (const entry of searchResponses) {
-      if (!entry.defs) {
-        continue;
+      if (!entry.defs) continue;
+
+      const normalizedText = entry.vocab.toLowerCase();
+      if (!groupedResponses.has(normalizedText)) {
+        groupedResponses.set(normalizedText, []);
       }
-      const definitionsByEntry = definitions.filter(
-        (def) => def.pageProps.def.id === entry.id,
+      groupedResponses.get(normalizedText)!.push(entry);
+    }
+
+    // Process each group
+    for (const entriesGroup of groupedResponses.values()) {
+      const allDefIdsForGroup = entriesGroup.flatMap((entry) =>
+        entry.defs ? entry.defs.map((def) => def.id) : [],
       );
-      const word = this.adapter.toDomain(entry, definitionsByEntry);
+
+      const definitionsByGroup = definitions.filter((def) =>
+        allDefIdsForGroup.includes(def.pageProps.def.id),
+      );
+
+      const word = this.adapter.toDomain(entriesGroup, definitionsByGroup);
       if (word) {
         words.push(word);
       }
     }
+
     return words;
   }
 

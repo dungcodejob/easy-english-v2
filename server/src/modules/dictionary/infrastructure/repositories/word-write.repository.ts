@@ -84,6 +84,9 @@ export class WordWriteRepository implements IWordWriteRepository {
 
         wordEntity.senses.add(senseEntity);
       });
+
+      // Bắt buộc Unit of Work theo dõi và cascade persist các entity mới
+      em.persist(wordEntity);
     });
 
     this.logger.debug(`Saved word '${word.normalizedText.value}' to DB.`);

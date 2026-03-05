@@ -95,7 +95,7 @@ export class AzVocabHttpClient {
       }
 
       // 2. Cache miss, call external API
-      const url = `${this.baseUrl}/vocab/search?q=${encodeURIComponent(word)}`;
+      const url = `${this.baseUrl}/api/vocab/search?q=${encodeURIComponent(word)}`;
 
       const { data } = await firstValueFrom(
         this.httpService.post<AzVocabSearchResponseDto[]>(url, null, {
@@ -145,14 +145,14 @@ export class AzVocabHttpClient {
 
       // 2. Cache miss, call external API
       // URL format: /_next/data/{buildId}/vi/definition/{defId}.json?id={defId}
+      const encodeDefId = encodeURIComponent(defId);
       const url = `${this.baseUrl}/_next/data/${
         this.buildId
-      }/vi/definition/${encodeURIComponent(defId)}.json`;
+      }/vi/definition/${encodeDefId}.json?id=${encodeDefId}`;
 
       const { data } = await firstValueFrom(
         this.httpService.get<AzVocabDefinitionResponseDto>(url, {
-          headers: this.buildHeaders(),
-          params: { id: encodeURIComponent(defId) },
+          headers: this.buildHeaders(defId),
           timeout: this.timeout,
         }),
       );

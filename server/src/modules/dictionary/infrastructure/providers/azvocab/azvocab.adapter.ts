@@ -19,12 +19,14 @@ export class AzVocabAdapter {
   private readonly logger = new Logger(AzVocabAdapter.name);
 
   toDomain(
-    searchResponses: AzVocabSearchResponseDto,
+    searchResponseGroup: AzVocabSearchResponseDto[],
     definitions: AzVocabDefinitionResponseDto[],
-  ): Word {
-    // 1. Base Metadata from Primary Search Result
-    const primary = searchResponses;
-    const pronunciations = this.mapPronunciations(primary);
+  ): Word | null {
+    if (!searchResponseGroup || searchResponseGroup.length === 0) return null;
+
+    // 1. Base Metadata from Primary Search Result (use first entry as base)
+    const primary = searchResponseGroup[0];
+    const pronunciations = this.mapPronunciations(searchResponseGroup);
 
     // 2. Aggregate Senses
     const senses: WordSenseVO[] = [];
@@ -34,19 +36,29 @@ export class AzVocabAdapter {
     for (const defResponse of definitions) {
       if (defResponse?.pageProps?.def) {
         const def = defResponse.pageProps.def;
-        senses.push(this.mapFullDefinitionToSense(def, primary.pos));
+        const ownerEntry = searchResponseGroup.find((e) =>
+          e.defs?.some((d) => d.id === def.id),
+        );
+        const fallbackPos = ownerEntry?.pos || primary.pos;
+
+        senses.push(this.mapFullDefinitionToSense(def, fallbackPos));
         processedDefIds.add(def.id);
       }
     }
 
-    for (const partialDef of primary.defs) {
-      if (!processedDefIds.has(partialDef.id)) {
-        // Only map if partialDef has essential fields (id, def)
-        if (partialDef.id && partialDef.def) {
-          senses.push(
-            this.mapPartialDefinitionToSense(partialDef, primary.pos),
-          );
-          processedDefIds.add(partialDef.id);
+    // 2b. Map remaining partial definitions from all entries
+    for (const entry of searchResponseGroup) {
+      if (!entry.defs) continue;
+
+      for (const partialDef of entry.defs) {
+        if (!processedDefIds.has(partialDef.id)) {
+          // Only map if partialDef has essential fields (id, def)
+          if (partialDef.id && partialDef.def) {
+            senses.push(
+              this.mapPartialDefinitionToSense(partialDef, entry.pos),
+            );
+            processedDefIds.add(partialDef.id);
+          }
         }
       }
     }
@@ -72,31 +84,41 @@ export class AzVocabAdapter {
   }
 
   private mapPronunciations(
-    primary: AzVocabSearchResponseDto,
+    entries: AzVocabSearchResponseDto[],
   ): WordPronunciationVO[] {
     const prons: WordPronunciationVO[] = [];
+    const seenMap = new Set<string>();
 
-    // primary or its fields could be missing partially, use safe checks
-    if (!primary) return prons;
+    for (const entry of entries) {
+      if (!entry) continue;
 
-    if (primary.pron_uk || primary.uk) {
-      prons.push(
-        new WordPronunciationVO({
-          ipa: primary.pron_uk || '',
-          audioUrl: primary.uk || null,
-          region: 'UK',
-        }),
-      );
-    }
+      if (entry.pron_uk || entry.uk) {
+        const key = `UK:${entry.pron_uk || ''}:${entry.uk || ''}`;
+        if (!seenMap.has(key)) {
+          prons.push(
+            new WordPronunciationVO({
+              ipa: entry.pron_uk || '',
+              audioUrl: entry.uk || null,
+              region: 'UK',
+            }),
+          );
+          seenMap.add(key);
+        }
+      }
 
-    if (primary.pron_us || primary.us) {
-      prons.push(
-        new WordPronunciationVO({
-          ipa: primary.pron_us || '',
-          audioUrl: primary.us || null,
-          region: 'US',
-        }),
-      );
+      if (entry.pron_us || entry.us) {
+        const key = `US:${entry.pron_us || ''}:${entry.us || ''}`;
+        if (!seenMap.has(key)) {
+          prons.push(
+            new WordPronunciationVO({
+              ipa: entry.pron_us || '',
+              audioUrl: entry.us || null,
+              region: 'US',
+            }),
+          );
+          seenMap.add(key);
+        }
+      }
     }
 
     return prons;
