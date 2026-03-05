@@ -20,6 +20,16 @@ export const routes = rootRoute('root.tsx', [
       './modules/workspace/pages/new-workspace.page.tsx',
     ),
   ]),
+
+  // Public Dictionary Routes
+  route(
+    APP_ROUTES.DICTIONARY.SEARCH,
+    './modules/learning/pages/dictionary-search.page.tsx',
+  ),
+  route(
+    APP_ROUTES.DICTIONARY.SENSE_DETAIL,
+    './modules/learning/pages/word-sense-detail.page.tsx',
+  ),
   // ========== LAYOUT AUTHENTICATED ==========
   // layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
   //   index('./modules/home/pages/home-page.tsx'),

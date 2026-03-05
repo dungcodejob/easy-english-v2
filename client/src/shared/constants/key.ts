@@ -39,6 +39,22 @@ export const wordKeys = {
   byTopic: (topicId: string) => [...wordKeys.all, 'topic', topicId] as const,
 };
 
+export const dictionaryKeys = {
+  all: ['dictionary'] as const,
+  searches: () => [...dictionaryKeys.all, 'search'] as const,
+  search: (query: string, top: number, skip: number) =>
+    [...dictionaryKeys.searches(), { query, top, skip }] as const,
+  details: () => [...dictionaryKeys.all, 'detail'] as const,
+  detail: (senseId: string) => [...dictionaryKeys.details(), senseId] as const,
+};
+
+export const learningKeys = {
+  all: ['learning'] as const,
+  lists: () => [...learningKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) =>
+    [...learningKeys.lists(), filters] as const,
+};
+
 export const API_KEYS = {
   TOPIC: 'topic',
   WORD: 'word',

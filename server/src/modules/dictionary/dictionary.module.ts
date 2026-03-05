@@ -8,8 +8,10 @@ import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { WordEnrichmentHandler } from './application/events/word-enrichment.handler';
 import { WordPersistenceHandler } from './application/events/word-persistence.handler';
+import { GetWordSenseDetailHandler } from './application/queries/get-word-sense-detail.handler';
 import { LookupWordHandler } from './application/queries/lookup-word.handler';
-import { LookupController } from './controllers/lookup.controller';
+import { SearchWordSensesHandler } from './application/queries/search-word-senses.handler';
+import { DictionaryController } from './controllers/dictionary.controller';
 import { lookupProviderToken } from './domain/providers/lookup-provider.interface';
 import { provideProviderCacheRepository } from './domain/repositories/provider-cache.repository.interface';
 import { provideWordReadRepository } from './domain/repositories/word-read.repository.interface';
@@ -26,10 +28,14 @@ import { ProviderCacheRepository } from './infrastructure/repositories/provider-
 import { WordReadRepository } from './infrastructure/repositories/word-read.repository';
 import { WordWriteRepository } from './infrastructure/repositories/word-write.repository';
 
-const httpControllers = [LookupController];
+const httpControllers = [DictionaryController];
 const messageControllers = [];
 const commandHandlers = [];
-const queryHandlers = [LookupWordHandler];
+const queryHandlers = [
+  LookupWordHandler,
+  SearchWordSensesHandler,
+  GetWordSenseDetailHandler,
+];
 const eventHandlers = [
   LookupMissedHandler,
   WordPersistenceHandler,

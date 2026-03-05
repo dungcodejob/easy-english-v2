@@ -11,6 +11,7 @@ import { dictionaryConfig } from './configs/dictionary.config';
 import { jwtConfig } from './configs/jwt.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
+import { LearningModule } from './modules/learning/learning.module';
 import { WorkspaceModule } from './modules/workspace/workspace.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { WorkspaceModule } from './modules/workspace/workspace.module';
     AuthModule,
     WorkspaceModule,
     DictionaryModule,
+    LearningModule,
   ],
 
   controllers: [AppController],

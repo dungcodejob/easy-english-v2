@@ -16,6 +16,10 @@ export const APP_ROUTES = {
     LIST: '/topic',
     DETAIL: '/topic/$topicId',
   },
+  DICTIONARY: {
+    SEARCH: '/dictionary',
+    SENSE_DETAIL: '/dictionary/senses/$senseId',
+  },
   LEARN: 'learn',
   REVIEW: 'review',
   SETTINGS: 'settings',
