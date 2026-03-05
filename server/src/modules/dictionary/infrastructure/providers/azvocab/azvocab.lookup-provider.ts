@@ -181,8 +181,10 @@ export class AzVocabLookupProvider implements ILookupProvider {
         entry.defs ? entry.defs.map((def) => def.id) : [],
       );
 
-      const definitionsByGroup = definitions.filter((def) =>
-        allDefIdsForGroup.includes(def.pageProps.def.id),
+      const definitionsByGroup = definitions.filter(
+        (def) =>
+          def?.pageProps?.def?.id &&
+          allDefIdsForGroup.includes(def.pageProps.def.id),
       );
 
       const word = this.adapter.toDomain(entriesGroup, definitionsByGroup);
