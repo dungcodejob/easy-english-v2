@@ -1,11 +1,14 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import { WordSenseEntity } from '../../domain/entities/word-sense.entity';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   IWordReadRepository,
-  WordSenseSearchResult,
+  type WordSenseSearchItem,
 } from '../../domain/repositories/word-read.repository.interface';
+import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
+import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 import { WordMapper } from './word.mapper';
@@ -46,23 +49,33 @@ export class WordReadRepository implements IWordReadRepository {
     query: string,
     top: number,
     skip: number,
-  ): Promise<{ data: WordSenseSearchResult[]; count: number }> {
+  ): Promise<{ data: WordSenseSearchItem[]; count: number }> {
     const qb = this.em
       .createQueryBuilder(WordSenseOrmEntity, 's')
       .leftJoinAndSelect('s.word', 'w')
-      .where({ 'w.normalizedText': { $ilike: `${query}%` } })
+      .where({ 'w.normalizedText': { $ilike: `%${query}%` } })
       .limit(top)
       .offset(skip);
 
     const [senses, count] = await qb.getResultAndCount();
 
-    const data: WordSenseSearchResult[] = senses.map((s) => ({
-      senseId: s.id,
+    const data: WordSenseSearchItem[] = senses.map((s) => ({
+      sense: new WordSenseEntity({
+        id: s.id,
+        partOfSpeech: PartOfSpeech.from(s.partOfSpeech),
+        definition: s.definition,
+        shortDefinition: s.shortDefinition,
+        cefrLevel: s.cefrLevel ? CefrLevel.from(s.cefrLevel) : null,
+        examples: [], // Empty examples to save memory, detail api will fetch full
+        synonyms: s.synonyms || [],
+        antonyms: s.antonyms || [],
+        definitionVi: s.definitionVi,
+        idioms: s.idioms || [],
+        phrases: s.phrases || [],
+        images: s.images || [],
+      }),
       wordText: s.word.text,
       normalizedText: s.word.normalizedText,
-      partOfSpeech: s.partOfSpeech,
-      shortDefinition: s.shortDefinition,
-      cefrLevel: s.cefrLevel,
     }));
 
     return { data, count };

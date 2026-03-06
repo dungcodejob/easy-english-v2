@@ -15,6 +15,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Public } from '@shared/decorators';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
@@ -52,6 +53,7 @@ export class DictionaryController {
   })
   @ApiResponse({ status: 200, description: 'Search results' })
   @ApiResponse({ status: 400, description: 'Validation error' })
+  @Public()
   async searchWordSenses(
     @Query('q') q: string,
     @Query('$top') topStr?: string,

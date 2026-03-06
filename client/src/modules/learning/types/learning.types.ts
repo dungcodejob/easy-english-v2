@@ -40,15 +40,3 @@ export interface WordSenseSearchResult {
   shortDefinition: string | null;
   cefrLevel: string | null;
 }
-
-export interface PaginatedResult<T> {
-  success: boolean;
-  data: T[];
-  pagination: {
-    top: number;
-    skip: number;
-    count: number;
-    hasMore: boolean;
-  };
-  meta: any;
-}

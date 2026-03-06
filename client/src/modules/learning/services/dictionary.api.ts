@@ -1,8 +1,5 @@
-import { api } from '@/core/api';
-import type {
-  PaginatedResult,
-  WordSenseSearchResult,
-} from '../types/learning.types';
+import { api, apiCall, type ApiSuccessResponse } from '@/core/api';
+import type { WordSenseSearchResult } from '../types/learning.types';
 
 // Using types defined in the search results
 export interface WordSenseDetail {
@@ -42,13 +39,16 @@ export const DictionaryApi = {
    * Search for WordSenses by query.
    */
   searchWordSenses: async (query: string, top = 20, skip = 0) => {
-    const { data } = await api.get<PaginatedResult<WordSenseSearchResult>>(
-      `/api/v1/dictionary/search`,
-      {
-        params: { q: query, $top: top, $skip: skip },
-      },
+    const result = await apiCall(() =>
+      api.get<unknown, ApiSuccessResponse<WordSenseSearchResult[]>>(
+        `/dictionary/search`,
+        {
+          params: { q: query, $top: top, $skip: skip },
+        },
+      ),
     );
-    return data;
+
+    return result;
   },
 
   /**

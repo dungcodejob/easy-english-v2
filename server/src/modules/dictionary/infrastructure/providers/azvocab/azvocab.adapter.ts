@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Word } from 'src/modules/dictionary/domain/entities/word.aggregate';
+import { WordSenseEntity } from '../../../domain/entities/word-sense.entity';
 import { CefrLevel } from '../../../domain/value-objects/cefr-level.vo';
 import { DataSource } from '../../../domain/value-objects/data-source.vo';
 import { Language } from '../../../domain/value-objects/language.vo';
 import { PartOfSpeech } from '../../../domain/value-objects/part-of-speech.vo';
 import { WordExampleVO } from '../../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../../domain/value-objects/word-pronunciation.vo';
-import { WordSenseVO } from '../../../domain/value-objects/word-sense.vo';
 import { WordText } from '../../../domain/value-objects/word-text.vo';
 import {
   AzVocabDefinitionResponseDto,
@@ -29,7 +29,7 @@ export class AzVocabAdapter {
     const pronunciations = this.mapPronunciations(searchResponseGroup);
 
     // 2. Aggregate Senses
-    const senses: WordSenseVO[] = [];
+    const senses: WordSenseEntity[] = [];
     const processedDefIds = new Set<string>();
 
     // 2a. Map full definitions
@@ -127,7 +127,7 @@ export class AzVocabAdapter {
   private mapFullDefinitionToSense(
     def: DefinitionDto,
     fallbackPos: string,
-  ): WordSenseVO {
+  ): WordSenseEntity {
     const examples: WordExampleVO[] = [];
 
     if (def.samples) {
@@ -153,7 +153,7 @@ export class AzVocabAdapter {
       }
     }
 
-    return new WordSenseVO({
+    return WordSenseEntity.create({
       partOfSpeech: PartOfSpeech.from(def.pos || fallbackPos || 'unknown'),
       definition: def.def || '',
       shortDefinition: null,
@@ -173,8 +173,8 @@ export class AzVocabAdapter {
   private mapPartialDefinitionToSense(
     def: Pick<DefinitionDto, 'id' | 'def' | 'vi' | 'pos'>,
     fallbackPos: string,
-  ): WordSenseVO {
-    return new WordSenseVO({
+  ): WordSenseEntity {
+    return WordSenseEntity.create({
       partOfSpeech: PartOfSpeech.from(def.pos || fallbackPos || 'unknown'),
       definition: def.def,
       shortDefinition: null,

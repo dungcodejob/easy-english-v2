@@ -1,6 +1,6 @@
+import { WordSenseEntity } from '../../domain/entities/word-sense.entity';
 import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
-import { WordSenseVO } from '../../domain/value-objects/word-sense.vo';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 
 import { Word } from '../../domain/entities/word.aggregate';
@@ -38,7 +38,8 @@ export class WordMapper {
             }),
         );
 
-      return new WordSenseVO({
+      return new WordSenseEntity({
+        id: s.id,
         partOfSpeech: PartOfSpeech.from(s.partOfSpeech),
         definition: s.definition,
         shortDefinition: s.shortDefinition,

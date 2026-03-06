@@ -16,27 +16,28 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
   async execute(
     query: SearchWordSensesQuery,
   ): Promise<{ data: WordSenseSearchResultResponseDto[]; count: number }> {
-    const { data: dbData, count } = await this.wordRepo.searchByPrefix(
+    const { data: searchItems, count } = await this.wordRepo.searchByPrefix(
       query.query,
       query.top,
       query.skip,
     );
 
-    // Provide some primitive sorting: exact match first, then by frequency/length.
-    // For now we just return from DB and maybe sort by length of text to show exact match first
-    const sortedData = dbData.sort((a, b) => {
-      if (a.normalizedText === query.query.toLowerCase()) return -1;
-      if (b.normalizedText === query.query.toLowerCase()) return 1;
+    // Sort: exact match first, then by text length
+    const sorted = searchItems.sort((a, b) => {
+      const queryLower = query.query.toLowerCase();
+      if (a.normalizedText === queryLower) return -1;
+      if (b.normalizedText === queryLower) return 1;
       return a.normalizedText.length - b.normalizedText.length;
     });
 
-    const data: WordSenseSearchResultResponseDto[] = sortedData.map((d) => ({
-      senseId: d.senseId,
-      wordText: d.wordText,
-      normalizedText: d.normalizedText,
-      partOfSpeech: d.partOfSpeech,
-      shortDefinition: d.shortDefinition,
-      cefrLevel: d.cefrLevel,
+    // Map read-side items → response DTOs
+    const data: WordSenseSearchResultResponseDto[] = sorted.map((item) => ({
+      senseId: item.sense.id,
+      wordText: item.wordText,
+      normalizedText: item.normalizedText,
+      partOfSpeech: item.sense.partOfSpeech.value,
+      shortDefinition: item.sense.shortDefinition,
+      cefrLevel: item.sense.cefrLevel?.value || null,
     }));
 
     return { data, count };

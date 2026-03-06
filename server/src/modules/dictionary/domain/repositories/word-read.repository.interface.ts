@@ -1,13 +1,11 @@
 import { createInjection } from '@shared/utils';
+import { WordSenseEntity } from '../entities/word-sense.entity';
 import { Word } from '../entities/word.aggregate';
 
-export interface WordSenseSearchResult {
-  senseId: string;
+export interface WordSenseSearchItem {
+  sense: WordSenseEntity;
   wordText: string;
   normalizedText: string;
-  partOfSpeech: string;
-  shortDefinition: string | null;
-  cefrLevel: string | null;
 }
 
 export interface IWordReadRepository {
@@ -16,7 +14,7 @@ export interface IWordReadRepository {
     query: string,
     top: number,
     skip: number,
-  ): Promise<{ data: WordSenseSearchResult[]; count: number }>;
+  ): Promise<{ data: WordSenseSearchItem[]; count: number }>;
   findSenseById(senseId: string): Promise<any>;
 }
 

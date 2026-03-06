@@ -15,11 +15,23 @@ export default function DictionarySearchPage() {
   const { debouncedQuery } = useSearchStore();
   const [skip, setSkip] = useState(0);
 
-  const { data, isLoading, isFetching } = useSearchWordSenses({
+  const {
+    data: result,
+    isLoading,
+    isFetching,
+  } = useSearchWordSenses({
     query: debouncedQuery,
     top: PAGE_SIZE,
     skip,
   });
+
+  const data = result?.data || [];
+  const pagination = result?.pagination || {
+    top: PAGE_SIZE,
+    skip: 0,
+    count: 0,
+    hasMore: false,
+  };
 
   // Reset pagination when query changes
   // We use effects purely for reset, UI stays snappy
@@ -27,7 +39,7 @@ export default function DictionarySearchPage() {
     debouncedQuery &&
     skip > 0 &&
     !isFetching &&
-    data?.pagination.count === 0
+    result?.pagination?.count === 0
   ) {
     // Edge case if somehow query changes and skips are mismatched
     setSkip(0);
@@ -53,8 +65,8 @@ export default function DictionarySearchPage() {
         <SearchResultsList
           isLoading={isLoading && isFetching}
           isFetching={isFetching}
-          results={data?.data}
-          pagination={data?.pagination}
+          results={data}
+          pagination={pagination}
           onPageChange={(newSkip) => setSkip(newSkip)}
         />
       </div>

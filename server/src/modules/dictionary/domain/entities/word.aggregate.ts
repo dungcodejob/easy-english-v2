@@ -6,9 +6,9 @@ import { DataSource } from '../value-objects/data-source.vo';
 import { Language } from '../value-objects/language.vo';
 import { WordId } from '../value-objects/word-id.vo';
 import { WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
-import { WordSenseVO } from '../value-objects/word-sense.vo';
 import { WordText } from '../value-objects/word-text.vo';
 import { WordFamily, WordProps } from './word-props.interface';
+import { WordSenseEntity } from './word-sense.entity';
 
 export class Word extends AggregateRoot {
   private _version!: number;
@@ -19,7 +19,7 @@ export class Word extends AggregateRoot {
   private _rank!: number | null;
   private _frequency!: number | null;
   private _pronunciations!: WordPronunciationVO[];
-  private _senses!: WordSenseVO[];
+  private _senses!: WordSenseEntity[];
   private _inflects?: Record<string, string[]>;
   private _wordFamily?: WordFamily;
 
@@ -60,7 +60,7 @@ export class Word extends AggregateRoot {
     return this._pronunciations;
   }
 
-  get senses(): WordSenseVO[] {
+  get senses(): WordSenseEntity[] {
     return this._senses;
   }
 

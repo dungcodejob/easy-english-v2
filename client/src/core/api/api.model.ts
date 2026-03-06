@@ -14,6 +14,7 @@ export interface ApiSuccessResponse<T> {
 }
 
 export enum ErrorType {
+  NETWORK = 'network',
   CLIENT = 'client',
   DOMAIN = 'domain',
   SYSTEM = 'system',
