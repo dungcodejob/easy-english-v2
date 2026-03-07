@@ -46,19 +46,17 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
       }
     }
 
-    const dto = new WordSenseDetailResponseDto();
-    // Bypass strict properties using Object.assign or strict property setting
-    Object.assign(dto, {
+    return {
       senseId: sense.id,
       wordText: wordText,
       normalizedText: normalizedText,
-      partOfSpeech: sense.partOfSpeech,
+      partOfSpeech: sense.partOfSpeech.value,
       definition: sense.definition,
       shortDefinition: sense.shortDefinition,
-      cefrLevel: sense.cefrLevel,
+      cefrLevel: sense.cefrLevel?.value || null,
       definitionVi: sense.definitionVi,
       examples:
-        sense.examples?.map((e: any) => ({
+        sense.examples?.map((e) => ({
           text: e.text,
           translationVi: e.translationVi,
           order: e.order,
@@ -67,16 +65,14 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
       antonyms: sense.antonyms || [],
       idioms: sense.idioms || [],
       phrases: sense.phrases || [],
-      collocations: sense.collocations,
+      collocations: sense.collocations || null,
       pronunciations:
-        pronunciations?.map((p: any) => ({
+        pronunciations?.map((p) => ({
           ipa: p.ipa,
           audioUrl: p.audioUrl,
           region: p.region,
         })) || [],
       learningState: learningState || null,
-    });
-
-    return dto;
+    };
   }
 }

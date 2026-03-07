@@ -13,8 +13,9 @@ export const Route = createFileRoute('/dictionary/senses/$senseId')({
 export default function WordSenseDetailPage() {
   const { senseId } = Route.useParams();
 
-  const { data: detail, isLoading, error } = useWordSenseDetail(senseId);
+  const { data: result, isLoading, error } = useWordSenseDetail(senseId);
 
+  console.log(result);
   return (
     <div className="container max-w-4xl mx-auto px-4 py-8 md:py-12">
       <div className="mb-8">
@@ -63,7 +64,7 @@ export default function WordSenseDetailPage() {
         </div>
       )}
 
-      {detail && <WordSenseDetail detail={detail} />}
+      {result && <WordSenseDetail detail={result.data} />}
     </div>
   );
 }

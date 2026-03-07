@@ -1,7 +1,10 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
-import { WordSenseEntity } from '../../domain/entities/word-sense.entity';
+import {
+  Collocation,
+  WordSenseEntity,
+} from '../../domain/entities/word-sense.entity';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   IWordReadRepository,
@@ -11,6 +14,7 @@ import {
 import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
 import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
 import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
+import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 import { WordMapper } from './word.mapper';
@@ -116,7 +120,7 @@ export class WordReadRepository implements IWordReadRepository {
       synonyms: sense.synonyms || [],
       antonyms: sense.antonyms || [],
       definitionVi: sense.definitionVi,
-      collocations: sense.collocations as any,
+      collocations: sense.collocations as Collocation,
       idioms: sense.idioms || [],
       phrases: sense.phrases || [],
       images: sense.images || [],
@@ -126,7 +130,15 @@ export class WordReadRepository implements IWordReadRepository {
       sense: senseEntity,
       wordText: sense.word.text,
       normalizedText: sense.word.normalizedText,
-      pronunciations: sense.word.pronunciations.getItems() || [],
+      pronunciations:
+        sense.word.pronunciations.getItems()?.map(
+          (p) =>
+            new WordPronunciationVO({
+              ipa: p.ipa,
+              audioUrl: p.audioUrl,
+              region: p.region,
+            }),
+        ) || [],
     };
   }
 }

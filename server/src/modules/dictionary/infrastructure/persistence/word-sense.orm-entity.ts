@@ -36,7 +36,7 @@ export class WordSenseOrmEntity {
   antonyms!: string[] | null;
 
   @Property({ type: 'jsonb', nullable: true })
-  collocations!: string[] | null;
+  collocations!: unknown;
 
   @Property({ type: 'jsonb', nullable: true })
   relatedWords!: string[] | null;

@@ -1,6 +1,7 @@
 import { createInjection } from '@shared/utils';
 import { WordSenseEntity } from '../entities/word-sense.entity';
 import { Word } from '../entities/word.aggregate';
+import { WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
 
 export interface WordSenseSearchItem {
   sense: WordSenseEntity;
@@ -12,7 +13,7 @@ export interface WordSenseDetailItem {
   sense: WordSenseEntity;
   wordText: string;
   normalizedText: string;
-  pronunciations: any[];
+  pronunciations: WordPronunciationVO[];
 }
 
 export interface IWordReadRepository {

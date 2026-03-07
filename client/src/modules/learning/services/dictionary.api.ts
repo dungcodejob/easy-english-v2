@@ -55,9 +55,11 @@ export const DictionaryApi = {
    * Get full details for a specific WordSense.
    */
   getWordSenseDetail: async (senseId: string) => {
-    const { data } = await api.get<{ success: boolean; data: WordSenseDetail }>(
-      `/dictionary/senses/${senseId}`,
+    const result = await apiCall(() =>
+      api.get<unknown, ApiSuccessResponse<WordSenseDetail>>(
+        `/dictionary/senses/${senseId}`,
+      ),
     );
-    return data.data; // Return the inner data object
+    return result; // Return the inner data object
   },
 };
