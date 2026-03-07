@@ -12,6 +12,7 @@ export const Route = createFileRoute('/dictionary/senses/$senseId')({
 
 export default function WordSenseDetailPage() {
   const { senseId } = Route.useParams();
+
   const { data: detail, isLoading, error } = useWordSenseDetail(senseId);
 
   return (

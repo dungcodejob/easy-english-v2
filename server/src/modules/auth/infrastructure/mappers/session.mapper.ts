@@ -16,8 +16,17 @@ export class SessionMapper implements Mapper<
   constructor(private readonly em: EntityManager) {}
 
   toPersistence(entity: Session): SessionOrmEntity {
-    const ormEntity = new SessionOrmEntity();
-    ormEntity.id = entity.id;
+    let ormEntity = this.em
+      .getUnitOfWork()
+      .getById(SessionOrmEntity.name, entity.id) as
+      | SessionOrmEntity
+      | undefined;
+
+    if (!ormEntity) {
+      ormEntity = new SessionOrmEntity();
+      ormEntity.id = entity.id;
+    }
+
     ormEntity.tenant = this.em.getReference(TenantOrmEntity, entity.tenantId);
     ormEntity.user = this.em.getReference(UserOrmEntity, entity.userId);
     ormEntity.authIdentity = entity.authIdentityId

@@ -115,38 +115,41 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
         ))}
       </div>
 
-      {pagination && pagination.count > 20 && (
-        <div className="flex items-center justify-between rounded-lg border bg-muted/10 px-4 py-3 sm:px-6 mt-8">
-          <p className="text-sm text-muted-foreground">
-            Showing <span className="font-medium">{pagination.skip + 1}</span>{' '}
-            to{' '}
-            <span className="font-medium">
-              {Math.min(pagination.skip + 20, pagination.count)}
-            </span>{' '}
-            of <span className="font-medium">{pagination.count}</span> words
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onPageChange(page - 1)}
-              disabled={page === 1}
-              className="bg-background"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onPageChange(page + 1)}
-              disabled={!pagination.hasMore}
-              className="bg-background"
-            >
-              Next
-            </Button>
+      {pagination &&
+        pagination.count !== undefined &&
+        pagination.count > 20 && (
+          <div className="flex items-center justify-between rounded-lg border bg-muted/10 px-4 py-3 sm:px-6 mt-8">
+            <p className="text-sm text-muted-foreground">
+              Showing{' '}
+              <span className="font-medium">{(pagination.skip ?? 0) + 1}</span>{' '}
+              to{' '}
+              <span className="font-medium">
+                {Math.min((pagination.skip ?? 0) + 20, pagination.count)}
+              </span>{' '}
+              of <span className="font-medium">{pagination.count}</span> words
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(page - 1)}
+                disabled={page === 1}
+                className="bg-background"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(page + 1)}
+                disabled={!pagination.hasMore}
+                className="bg-background"
+              >
+                Next
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }

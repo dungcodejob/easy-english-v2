@@ -903,13 +903,12 @@
         },
         "word_family": {
           "name": "word_family",
-          "type": "varchar(255)",
+          "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 255,
-          "mappedType": "string"
+          "mappedType": "json"
         },
         "created_at": {
           "name": "created_at",

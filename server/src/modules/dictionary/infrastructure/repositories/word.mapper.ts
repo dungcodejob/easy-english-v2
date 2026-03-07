@@ -3,6 +3,7 @@ import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 
+import { WordFamily } from '../../domain/entities/word-props.interface';
 import { Word } from '../../domain/entities/word.aggregate';
 import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
 import { DataSource } from '../../domain/value-objects/data-source.vo';
@@ -66,7 +67,7 @@ export class WordMapper {
       pronunciations: pronunciations,
       senses: senses,
       inflects: (entity.inflects as Record<string, string[]>) || undefined,
-      // wordFamily mismatch (string vs object), skip
+      wordFamily: (entity.wordFamily as WordFamily) || undefined,
     };
 
     return Word.createFromProvider({

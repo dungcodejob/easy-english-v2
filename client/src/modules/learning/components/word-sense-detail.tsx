@@ -5,6 +5,7 @@ import { Separator } from '@/shared/ui/shadcn/separator';
 import { Volume2 } from 'lucide-react';
 import { useRef } from 'react';
 import type { WordSenseDetail as WordSenseDetailType } from '../services/dictionary.api';
+import { AddToLearningButton } from './add-to-learning-button';
 
 interface WordSenseDetailProps {
   detail: WordSenseDetailType;
@@ -52,6 +53,12 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
               {detail.cefrLevel}
             </Badge>
           )}
+          <div className="ml-auto mt-2 sm:mt-0">
+            <AddToLearningButton
+              senseId={detail.senseId}
+              isLearning={!!detail.learningState}
+            />
+          </div>
         </div>
 
         {/* Pronunciation */}

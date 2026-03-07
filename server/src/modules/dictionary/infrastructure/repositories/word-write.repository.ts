@@ -47,7 +47,7 @@ export class WordWriteRepository implements IWordWriteRepository {
       wordEntity.rank = word.rank;
       wordEntity.frequency = word.frequency;
       wordEntity.inflects = word.inflects;
-      // wordEntity.wordFamily mapping if necessary
+      wordEntity.wordFamily = word.wordFamily;
 
       // 4. Map and assign pronunciations
       word.pronunciations.forEach((p) => {

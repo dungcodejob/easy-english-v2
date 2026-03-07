@@ -116,10 +116,10 @@
 
 ### Frontend
 
-- [] T042 [P] [US3] Create `useAddToLearning` TanStack Query mutation hook in `client/src/modules/learning/hooks/use-add-to-learning.ts`
-- [ ] T043 [US3] Create `AddToLearningButton` component with "Add" / "Already Learning" states in `client/src/modules/learning/components/add-to-learning-button.tsx`
-- [ ] T044 [US3] Integrate `AddToLearningButton` into `WordSenseDetail` component
-- [ ] T045 [US3] Handle unauthenticated user click → redirect to login
+- [x] T042 [P] [US3] Create `useAddToLearning` TanStack Query mutation hook in `client/src/modules/learning/hooks/use-add-to-learning.ts`
+- [x] T043 [US3] Create `AddToLearningButton` component with "Add" / "Already Learning" states in `client/src/modules/learning/components/add-to-learning-button.tsx`
+- [x] T044 [US3] Integrate `AddToLearningButton` into `WordSenseDetail` component
+- [x] T045 [US3] Handle unauthenticated user click → redirect to login
 
 **Checkpoint**: Core feature complete — search → view → add to learning works end-to-end
 

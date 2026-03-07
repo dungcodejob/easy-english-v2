@@ -73,10 +73,13 @@ export interface CollocationDto {
   };
 }
 
+export type VocabDto = AzVocabSearchResponseDto & {
+  entries: AzVocabSearchResponseDto[];
+};
 export interface AzVocabDefinitionResponseDto {
   pageProps: {
     def: DefinitionDto;
-    vocab: AzVocabSearchResponseDto;
+    vocab: VocabDto;
   };
   __N_SSP: boolean;
 }

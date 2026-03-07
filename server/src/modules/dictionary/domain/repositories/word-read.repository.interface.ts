@@ -8,6 +8,13 @@ export interface WordSenseSearchItem {
   normalizedText: string;
 }
 
+export interface WordSenseDetailItem {
+  sense: WordSenseEntity;
+  wordText: string;
+  normalizedText: string;
+  pronunciations: any[];
+}
+
 export interface IWordReadRepository {
   findByWord(normalizedWord: string): Promise<Word[]>;
   searchByPrefix(
@@ -15,7 +22,7 @@ export interface IWordReadRepository {
     top: number,
     skip: number,
   ): Promise<{ data: WordSenseSearchItem[]; count: number }>;
-  findSenseById(senseId: string): Promise<any>;
+  findSenseById(senseId: string): Promise<WordSenseDetailItem | null>;
 }
 
 const { inject, provider, token } = createInjection<IWordReadRepository>(

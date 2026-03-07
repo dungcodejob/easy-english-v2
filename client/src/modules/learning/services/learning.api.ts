@@ -1,4 +1,4 @@
-import { api, type ApiSuccessResponse } from '@/core/api';
+import { api, apiCall, type ApiSuccessResponse } from '@/core/api';
 import type { LearningListItem } from '../types/learning.types';
 
 export const LearningApi = {
@@ -28,12 +28,14 @@ export const LearningApi = {
    * Get the user's learning list.
    */
   getLearningList: async (top = 20, skip = 0) => {
-    const { data } = await api.get<
-      unknown,
-      ApiSuccessResponse<LearningListItem[]>
-    >(`/api/v1/learning/senses`, {
-      params: { $top: top, $skip: skip },
-    });
-    return data;
+    const result = await apiCall(() =>
+      api.get<unknown, ApiSuccessResponse<LearningListItem[]>>(
+        `/api/v1/learning/senses`,
+        {
+          params: { $top: top, $skip: skip },
+        },
+      ),
+    );
+    return result;
   },
 };

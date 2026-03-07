@@ -36,10 +36,10 @@ export class WordOrmEntity {
   source!: string;
 
   @Property({ type: 'jsonb', nullable: true })
-  inflects!: unknown | null;
+  inflects!: unknown;
 
-  @Property({ nullable: true })
-  wordFamily!: string | null;
+  @Property({ type: 'jsonb', nullable: true })
+  wordFamily!: unknown;
 
   // @Property({ type: 'uuid' }) // Assuming simple uuid storage for tenantId for now, or use relation if Tenant entity works. ERD says FK.
   // @Index()

@@ -20,11 +20,13 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
   async execute(
     query: GetWordSenseDetailQuery,
   ): Promise<WordSenseDetailResponseDto> {
-    const sense = await this.wordRepo.findSenseById(query.senseId);
+    const detail = await this.wordRepo.findSenseById(query.senseId);
 
-    if (!sense) {
+    if (!detail) {
       throw new NotFoundException('WordSense not found');
     }
+
+    const { sense, wordText, normalizedText, pronunciations } = detail;
 
     // Convert WordSenseOrmEntity to DTO
     let learningState: LearningStateDto | undefined = undefined;
@@ -44,14 +46,12 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
       }
     }
 
-    const { word } = sense;
-
     const dto = new WordSenseDetailResponseDto();
     // Bypass strict properties using Object.assign or strict property setting
     Object.assign(dto, {
       senseId: sense.id,
-      wordText: word.text,
-      normalizedText: word.normalizedText,
+      wordText: wordText,
+      normalizedText: normalizedText,
       partOfSpeech: sense.partOfSpeech,
       definition: sense.definition,
       shortDefinition: sense.shortDefinition,
@@ -69,7 +69,7 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
       phrases: sense.phrases || [],
       collocations: sense.collocations,
       pronunciations:
-        word.pronunciations?.map((p: any) => ({
+        pronunciations?.map((p: any) => ({
           ipa: p.ipa,
           audioUrl: p.audioUrl,
           region: p.region,

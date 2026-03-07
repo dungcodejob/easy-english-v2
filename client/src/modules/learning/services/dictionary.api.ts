@@ -56,7 +56,7 @@ export const DictionaryApi = {
    */
   getWordSenseDetail: async (senseId: string) => {
     const { data } = await api.get<{ success: boolean; data: WordSenseDetail }>(
-      `/api/v1/dictionary/senses/${senseId}`,
+      `/dictionary/senses/${senseId}`,
     );
     return data.data; // Return the inner data object
   },

@@ -5,10 +5,12 @@ import { WordSenseEntity } from '../../domain/entities/word-sense.entity';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   IWordReadRepository,
+  WordSenseDetailItem,
   type WordSenseSearchItem,
 } from '../../domain/repositories/word-read.repository.interface';
 import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
 import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
+import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
 import { WordMapper } from './word.mapper';
@@ -81,7 +83,7 @@ export class WordReadRepository implements IWordReadRepository {
     return { data, count };
   }
 
-  async findSenseById(senseId: string): Promise<any> {
+  async findSenseById(senseId: string): Promise<WordSenseDetailItem | null> {
     const sense = await this.em.findOne(
       WordSenseOrmEntity,
       { id: senseId },
@@ -89,6 +91,42 @@ export class WordReadRepository implements IWordReadRepository {
         populate: ['word', 'word.pronunciations', 'examples'],
       },
     );
-    return sense;
+
+    if (!sense) return null;
+
+    const examples = sense.examples
+      .getItems()
+      .sort((a, b) => a.order - b.order)
+      .map(
+        (e) =>
+          new WordExampleVO({
+            text: e.text,
+            translationVi: e.translationVi,
+            order: e.order,
+          }),
+      );
+
+    const senseEntity = new WordSenseEntity({
+      id: sense.id,
+      partOfSpeech: PartOfSpeech.from(sense.partOfSpeech),
+      definition: sense.definition,
+      shortDefinition: sense.shortDefinition,
+      cefrLevel: sense.cefrLevel ? CefrLevel.from(sense.cefrLevel) : null,
+      examples: examples,
+      synonyms: sense.synonyms || [],
+      antonyms: sense.antonyms || [],
+      definitionVi: sense.definitionVi,
+      collocations: sense.collocations as any,
+      idioms: sense.idioms || [],
+      phrases: sense.phrases || [],
+      images: sense.images || [],
+    });
+
+    return {
+      sense: senseEntity,
+      wordText: sense.word.text,
+      normalizedText: sense.word.normalizedText,
+      pronunciations: sense.word.pronunciations.getItems() || [],
+    };
   }
 }

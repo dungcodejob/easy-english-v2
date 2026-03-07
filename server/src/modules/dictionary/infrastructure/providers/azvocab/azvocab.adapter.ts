@@ -12,6 +12,7 @@ import {
   AzVocabDefinitionResponseDto,
   AzVocabSearchResponseDto,
   DefinitionDto,
+  VocabDto,
 } from './azvocab.types';
 
 @Injectable()
@@ -36,12 +37,13 @@ export class AzVocabAdapter {
     for (const defResponse of definitions) {
       if (defResponse?.pageProps?.def) {
         const def = defResponse.pageProps.def;
+        const vocab = defResponse.pageProps.vocab;
         const ownerEntry = searchResponseGroup.find((e) =>
           e.defs?.some((d) => d.id === def.id),
         );
         const fallbackPos = ownerEntry?.pos || primary.pos;
 
-        senses.push(this.mapFullDefinitionToSense(def, fallbackPos));
+        senses.push(this.mapFullDefinitionToSense(def, vocab, fallbackPos));
         processedDefIds.add(def.id);
       }
     }
@@ -126,9 +128,15 @@ export class AzVocabAdapter {
 
   private mapFullDefinitionToSense(
     def: DefinitionDto,
+    vocab: VocabDto,
     fallbackPos: string,
   ): WordSenseEntity {
     const examples: WordExampleVO[] = [];
+
+    const vocalDef = vocab.entries
+      .flatMap((vocabEntity) => vocabEntity.defs || [])
+      .filter(Boolean)
+      .find((vocabDef) => vocabDef.id === def.id);
 
     if (def.samples) {
       def.samples.forEach((sample, index) => {
@@ -162,7 +170,7 @@ export class AzVocabAdapter {
       synonyms: def.synonyms || [],
       antonyms: def.antonyms || [],
       definitionVi: def.vi || null,
-      collocations: def.colloc, // Directly compatible structure
+      collocations: vocalDef?.colloc || def.colloc, // Directly compatible structure
       idioms: def.idioms || [],
       phrases: def.phrases || [],
       verbPhrases: def.verb_phrases || [],
