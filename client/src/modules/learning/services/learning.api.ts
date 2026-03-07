@@ -1,5 +1,5 @@
-import { api } from '@/core/api';
-import type { PaginatedLearningList } from '../types/learning.types';
+import { api, type ApiSuccessResponse } from '@/core/api';
+import type { LearningListItem } from '../types/learning.types';
 
 export const LearningApi = {
   /**
@@ -28,12 +28,12 @@ export const LearningApi = {
    * Get the user's learning list.
    */
   getLearningList: async (top = 20, skip = 0) => {
-    const { data } = await api.get<PaginatedLearningList>(
-      `/api/v1/learning/senses`,
-      {
-        params: { $top: top, $skip: skip },
-      },
-    );
+    const { data } = await api.get<
+      unknown,
+      ApiSuccessResponse<LearningListItem[]>
+    >(`/api/v1/learning/senses`, {
+      params: { $top: top, $skip: skip },
+    });
     return data;
   },
 };

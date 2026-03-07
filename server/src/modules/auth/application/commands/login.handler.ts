@@ -6,15 +6,17 @@ import {
   InjectPasswordHasher,
 } from '../../domain/ports/password-hasher.interface';
 import {
-  type ITokenGenerator,
   ITokenPayload,
-  InjectTokenGenerator,
   TokenType,
 } from '../../domain/ports/token-generator.interface';
 import {
   type ITokenHasher,
   InjectTokenHasher,
 } from '../../domain/ports/token-hasher.interface';
+import {
+  type ITokenService,
+  InjectTokenService,
+} from '../../domain/ports/token-service.interface';
 import {
   type IAuthIdentityRepository,
   InjectAuthIdentityRepository,
@@ -58,8 +60,8 @@ export class LoginHandler implements ICommandHandler<
   @InjectTokenHasher()
   private readonly tokenHasher: ITokenHasher;
 
-  @InjectTokenGenerator()
-  private readonly tokenGenerator: ITokenGenerator;
+  @InjectTokenService()
+  private readonly tokenService: ITokenService;
 
   constructor(
     private readonly em: EntityManager,
@@ -142,8 +144,8 @@ export class LoginHandler implements ICommandHandler<
 
     // Using Promise.all for parallelism
     const [accessToken, refreshToken] = await Promise.all([
-      this.tokenGenerator.sign(payload, TokenType.ACCESS),
-      this.tokenGenerator.sign(payload, TokenType.REFRESH),
+      this.tokenService.sign(TokenType.ACCESS, payload),
+      this.tokenService.sign(TokenType.REFRESH, payload),
     ]);
 
     const refreshTokenHash = await this.tokenHasher.hash(refreshToken);

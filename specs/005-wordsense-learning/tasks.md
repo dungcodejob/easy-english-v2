@@ -141,11 +141,11 @@
 
 ### Frontend
 
-- [ ] T051 [P] [US4] Create `useLearningList` TanStack Query hook in `client/src/modules/learning/hooks/use-learning-list.ts`
-- [ ] T052 [US4] Create `LearningList` component with pagination and empty state in `client/src/modules/learning/components/learning-list.tsx`
-- [ ] T053 [US4] Create `MyLearningPage` page component in `client/src/modules/learning/pages/my-learning.page.tsx`
-- [ ] T054 [US4] Add `/learning` route to TanStack Router configuration
-- [ ] T055 [US4] Add navigation link to "My Learning" in app sidebar/header
+- [x] T051 [P] [US4] Create `useLearningList` TanStack Query hook in `client/src/modules/learning/hooks/use-learning-list.ts`
+- [x] T052 [US4] Create `LearningList` component with pagination and empty state in `client/src/modules/learning/components/learning-list.tsx`
+- [x] T053 [US4] Create `MyLearningPage` page component in `client/src/modules/learning/pages/my-learning.page.tsx`
+- [x] T054 [US4] Add `/learning` route to TanStack Router configuration
+- [x] T055 [US4] Add navigation link to "My Learning" in app sidebar/header
 
 **Checkpoint**: Learning list is viewable — users can see and browse their learning queue
 

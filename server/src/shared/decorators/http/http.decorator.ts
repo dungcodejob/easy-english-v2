@@ -2,6 +2,7 @@ import { applyDecorators, HttpCode, HttpStatus, Type } from '@nestjs/common';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiSecurity,
 } from '@nestjs/swagger';
@@ -26,6 +27,7 @@ type ResponseType = 'single' | 'list' | 'pagination';
 
 interface IApiOptions<T extends Type<unknown>> {
   type?: T;
+  bodyType?: Type<unknown>;
   summary?: string;
   description?: string;
   errorResponses?: ErrorResponseStatus[];
@@ -64,6 +66,10 @@ export const ApiPublic = (options: IApiPublicOptions = {}): MethodDecorator => {
     ApiOperation({ summary: options?.summary }),
     HttpCode(options.statusCode || defaultStatusCode),
   ];
+
+  if (options.bodyType) {
+    decorators.push(ApiBody({ type: options.bodyType }));
+  }
 
   if (options.type) {
     switch (options.responseType) {
@@ -138,6 +144,10 @@ export const ApiAuth = (options: IApiAuthOptions = {}): MethodDecorator => {
     ApiOperation({ summary: options?.summary }),
     HttpCode(options.statusCode || defaultStatusCode),
   ];
+
+  if (options.bodyType) {
+    decorators.push(ApiBody({ type: options.bodyType }));
+  }
 
   const responseType = options.responseType || 'single';
   if (options.type) {

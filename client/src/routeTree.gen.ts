@@ -15,6 +15,7 @@ import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './m
 import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
 import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
 import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
+import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
 import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
 import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page'
 import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
@@ -53,6 +54,12 @@ const DotModulesAuthPagesLoginPageRoute =
     path: '/login',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
   } as any)
+const DotModulesLearningPagesMyLearningDotpageRoute =
+  DotModulesLearningPagesMyLearningDotpageRouteImport.update({
+    id: '/learning',
+    path: '/learning',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+  } as any)
 const DotModulesDashboardPagesDashboardPageRoute =
   DotModulesDashboardPagesDashboardPageRouteImport.update({
     id: '/dashboard',
@@ -76,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/': typeof modulesShellPagesLandingPageRoute
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRouteWithChildren
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -85,6 +93,7 @@ export interface FileRoutesByTo {
   '/': typeof modulesShellPagesLandingPageRoute
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRouteWithChildren
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -97,6 +106,7 @@ export interface FileRoutesById {
   '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRouteWithChildren
   '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dictionary'
     | '/dashboard'
+    | '/learning'
     | '/login'
     | '/register'
     | '/workspace/new'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dictionary'
     | '/dashboard'
+    | '/learning'
     | '/login'
     | '/register'
     | '/workspace/new'
@@ -128,6 +140,7 @@ export interface FileRouteTypes {
     | '/_(unauthenticated)'
     | '/dictionary'
     | '/_(authenticated)/dashboard'
+    | '/_(authenticated)/learning'
     | '/_(unauthenticated)/login'
     | '/_(unauthenticated)/register'
     | '/_(authenticated)/workspace/new'
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport
       parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
+    '/_(authenticated)/learning': {
+      id: '/_(authenticated)/learning'
+      path: '/learning'
+      fullPath: '/learning'
+      preLoaderRoute: typeof DotModulesLearningPagesMyLearningDotpageRouteImport
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+    }
     '/_(authenticated)/dashboard': {
       id: '/_(authenticated)/dashboard'
       path: '/dashboard'
@@ -211,6 +231,7 @@ declare module '@tanstack/react-router' {
 
 interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
+  DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
   DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
 }
 
@@ -218,6 +239,8 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
   {
     DotModulesDashboardPagesDashboardPageRoute:
       DotModulesDashboardPagesDashboardPageRoute,
+    DotModulesLearningPagesMyLearningDotpageRoute:
+      DotModulesLearningPagesMyLearningDotpageRoute,
     DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
       DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
   }

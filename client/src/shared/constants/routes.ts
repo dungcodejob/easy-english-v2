@@ -20,7 +20,7 @@ export const APP_ROUTES = {
     SEARCH: '/dictionary',
     SENSE_DETAIL: '/dictionary/senses/$senseId',
   },
-  LEARN: 'learn',
-  REVIEW: 'review',
-  SETTINGS: 'settings',
+  LEARN: '/learning',
+  REVIEW: '/review',
+  SETTINGS: '/settings',
 } as const;

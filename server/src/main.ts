@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { appConfig, AppConfig, httpConfig, HttpConfig } from './configs';
 import { GlobalExceptionFilter, ResponseInterceptor } from './core/api';
@@ -24,6 +25,8 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization',
   });
   app.setGlobalPrefix(globalPrefix);
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({

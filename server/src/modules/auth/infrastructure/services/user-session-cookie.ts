@@ -7,7 +7,7 @@ import { TokenResultDto } from '../../dto/auth-result.dto';
 export class UserSessionCookie {
   private static readonly COOKIE_NAME = 'easy_english_sid';
   private static readonly COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30; // 30 days
-  private static readonly COOKIE_PATH = '/api/auth';
+  private static readonly COOKIE_PATH = '/api'; // Use /api to support versioning prefix like /api/v1/auth
 
   @InjectAppConfig() appConfig: AppConfig;
 

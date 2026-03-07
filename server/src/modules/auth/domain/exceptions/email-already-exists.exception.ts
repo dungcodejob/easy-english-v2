@@ -5,6 +5,8 @@ export enum AuthErrorCodes {
   EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
   SESSION_NOT_FOUND = 'SESSION_NOT_FOUND',
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  INVALID_REFRESH_TOKEN = 'INVALID_REFRESH_TOKEN',
+  INVALID_TOKEN_PURPOSE = 'INVALID_TOKEN_PURPOSE',
 }
 
 export class AuthDomainException extends DomainException {
@@ -34,5 +36,20 @@ export class SessionNotFoundException extends AuthDomainException {
 export class InvalidCredentialsException extends AuthDomainException {
   constructor() {
     super(`Invalid credentials`, AuthErrorCodes.INVALID_CREDENTIALS);
+  }
+}
+
+export class InvalidRefreshTokenException extends AuthDomainException {
+  constructor() {
+    super(
+      `Invalid or expired refresh token`,
+      AuthErrorCodes.INVALID_REFRESH_TOKEN,
+    );
+  }
+}
+
+export class InvalidTokenPurposeException extends AuthDomainException {
+  constructor() {
+    super(`Invalid token purpose`, AuthErrorCodes.INVALID_TOKEN_PURPOSE);
   }
 }

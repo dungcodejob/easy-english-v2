@@ -10,6 +10,7 @@ interface AuthState {
     login: (user: UserResponseDto, accessToken: TokenResultDto) => void;
     logout: () => void;
     setUser: (user: UserResponseDto | null) => void;
+    updateAccessToken: (accessToken: TokenResultDto) => void;
   };
 }
 
@@ -28,6 +29,9 @@ export const useAuthStore = create<AuthState>()(
         },
         setUser: (user: UserResponseDto | null) => {
           set({ user, isAuthenticated: !!user });
+        },
+        updateAccessToken: (accessToken: TokenResultDto) => {
+          set({ accessToken });
         },
       },
     }),

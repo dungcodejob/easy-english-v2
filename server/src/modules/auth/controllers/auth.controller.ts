@@ -1,9 +1,11 @@
 import { Body, Controller, Ip, Post, Req, Res } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { Public } from '@shared/decorators';
+import { ApiPublic } from '@shared/decorators';
 import type { Request, Response } from 'express';
 import { LoginCommand } from '../application/commands/login.command';
+import { RefreshCommand } from '../application/commands/refresh.command';
 import { RegisterCommand } from '../application/commands/register.command';
+import { InvalidRefreshTokenException } from '../domain/exceptions/email-already-exists.exception';
 import { AuthResultDto } from '../dto/auth-result.dto';
 import { LoginRequestDto } from '../dto/requests/login.request.dto';
 import { RegisterRequestDto } from '../dto/requests/register.request.dto';
@@ -17,7 +19,11 @@ export class AuthController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Public()
+  @ApiPublic({
+    type: RegisterResponseDto,
+    bodyType: RegisterRequestDto,
+    summary: 'Register new user',
+  })
   @Post('register')
   async register(
     @Body() dto: RegisterRequestDto,
@@ -25,7 +31,11 @@ export class AuthController {
     return this.commandBus.execute(new RegisterCommand(dto));
   }
 
-  @Public()
+  @ApiPublic({
+    type: LoginResponseDto,
+    bodyType: LoginRequestDto,
+    summary: 'User login',
+  })
   @Post('login')
   // @Throttle({ default: { limit: 10, ttl: 60000 } }) // TODO: Enable Throttle
   async login(
@@ -51,6 +61,35 @@ export class AuthController {
     // Set only refresh token and session ID in httpOnly cookies
     // Access token is returned in response body for client-side state management
     this.userSessionCookie.set(response, refreshToken);
+
+    return new LoginResponseDto({
+      user,
+      accessToken,
+    });
+  }
+
+  @ApiPublic({
+    type: LoginResponseDto,
+    summary: 'Refresh access token',
+  })
+  @Post('refresh')
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<LoginResponseDto> {
+    const refreshToken = this.userSessionCookie.get(req);
+
+    if (!refreshToken) {
+      throw new InvalidRefreshTokenException();
+    }
+
+    const result: AuthResultDto = await this.commandBus.execute(
+      new RefreshCommand({ refreshToken }),
+    );
+
+    const { accessToken, refreshToken: newRefreshToken, user } = result;
+
+    this.userSessionCookie.set(response, newRefreshToken);
 
     return new LoginResponseDto({
       user,

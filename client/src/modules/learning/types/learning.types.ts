@@ -21,17 +21,6 @@ export interface LearningListItem {
   addedAt: string;
 }
 
-export interface PaginatedLearningList {
-  success: boolean;
-  data: LearningListItem[];
-  pagination: {
-    top: number;
-    skip: number;
-    count: number;
-    hasMore: boolean;
-  };
-}
-
 export interface WordSenseSearchResult {
   senseId: string;
   wordText: string;

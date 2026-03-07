@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {
+  refreshAccessToken,
+  shouldRetryOn401,
+} from '../../modules/auth/services/auth.api';
 import { useAuthStore } from '../../shared/stores/auth-store';
 import {
   ApiRequestError,
@@ -6,14 +10,9 @@ import {
   type ApiResponseEnvelope,
   type ApiSuccessResponse,
 } from './api.model';
+import { bareApi } from './bare-api';
 
-export const api = axios.create({
-  baseURL: import.meta.env.PUBLIC_API_URL || '/api/v1',
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+export const api = axios.create(bareApi.defaults);
 
 api.interceptors.request.use(
   (config) => {
@@ -89,7 +88,28 @@ api.interceptors.response.use(
 
     // Handle 401 - Unauthorized (token expired or invalid)
     if (error.response?.status === 401) {
-      // Clear access token and let UI redirect to login
+      const originalRequest = error.config;
+
+      if (
+        originalRequest &&
+        shouldRetryOn401(originalRequest.url) &&
+        !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+
+        try {
+          const newToken = await refreshAccessToken();
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return api(originalRequest);
+          }
+        } catch (refreshError) {
+          return Promise.reject(refreshError);
+        }
+      }
+
+      // If we shouldn't retry or refresh failed, the token-refresh logic already logged out.
+      // We can also just make sure:
       useAuthStore.getState().actions.logout();
     }
 

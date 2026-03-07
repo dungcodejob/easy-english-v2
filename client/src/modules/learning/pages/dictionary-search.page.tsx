@@ -66,7 +66,12 @@ export default function DictionarySearchPage() {
           isLoading={isLoading && isFetching}
           isFetching={isFetching}
           results={data}
-          pagination={pagination}
+          pagination={{
+            top: pagination.top,
+            skip: pagination.skip ?? skip,
+            count: pagination.count ?? 0,
+            hasMore: pagination.hasMore,
+          }}
           onPageChange={(newSkip) => setSkip(newSkip)}
         />
       </div>
