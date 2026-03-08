@@ -2,13 +2,13 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 import { WordSenseOrmEntity } from '../../../dictionary/infrastructure/persistence/word-sense.orm-entity';
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
-import { ILearningRepository } from '../../domain/repositories/learning.repository.interface';
+import { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { UserWordSenseProgressMapper } from '../mappers/user-word-sense-progress.mapper';
 import { UserWordSenseProgressOrmEntity } from '../persistence/user-word-sense-progress.orm-entity';
 
 @Injectable()
-export class LearningRepository implements ILearningRepository {
-  private readonly logger = new Logger(LearningRepository.name);
+export class LearningWriteRepository implements ILearningWriteRepository {
+  private readonly logger = new Logger(LearningWriteRepository.name);
 
   constructor(private readonly em: EntityManager) {}
 

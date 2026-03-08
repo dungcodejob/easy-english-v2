@@ -1,7 +1,7 @@
 import { createInjection } from '@shared/utils';
 import { UserWordSenseProgress } from '../entities/user-word-sense-progress.entity';
 
-export interface ILearningRepository {
+export interface ILearningWriteRepository {
   /**
    * Finds a UserWordSenseProgress by user and word sense ID.
    */
@@ -16,10 +16,10 @@ export interface ILearningRepository {
   save(progress: UserWordSenseProgress): Promise<void>;
 }
 
-const { inject, provider, token } = createInjection<ILearningRepository>(
-  'ILearningRepository',
+const { inject, provider, token } = createInjection<ILearningWriteRepository>(
+  'ILearningWriteRepository',
 );
 
-export const InjectLearningRepository = inject;
-export const provideLearningRepository = provider;
-export const learningRepositoryToken = token;
+export const InjectLearningWriteRepository = inject;
+export const provideLearningWriteRepository = provider;
+export const learningWriteRepositoryToken = token;

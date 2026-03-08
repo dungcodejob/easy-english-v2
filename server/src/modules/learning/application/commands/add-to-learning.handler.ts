@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
-import type { ILearningRepository } from '../../domain/repositories/learning.repository.interface';
-import { InjectLearningRepository } from '../../domain/repositories/learning.repository.interface';
+import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { AddToLearningCommand } from './add-to-learning.command';
 
 @CommandHandler(AddToLearningCommand)
@@ -10,8 +10,8 @@ export class AddToLearningHandler implements ICommandHandler<AddToLearningComman
   private readonly logger = new Logger(AddToLearningHandler.name);
 
   constructor(
-    @InjectLearningRepository()
-    private readonly learningRepo: ILearningRepository,
+    @InjectLearningWriteRepository()
+    private readonly learningRepo: ILearningWriteRepository,
     private readonly eventBus: EventBus,
   ) {}
 

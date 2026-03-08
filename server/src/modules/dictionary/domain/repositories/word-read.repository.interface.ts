@@ -1,19 +1,31 @@
 import { createInjection } from '@shared/utils';
-import { WordSenseEntity } from '../entities/word-sense.entity';
 import { Word } from '../entities/word.aggregate';
-import { WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
 
-export interface WordSenseSearchItem {
-  sense: WordSenseEntity;
+export interface WordSenseSearchReadModel {
+  senseId: string;
   wordText: string;
   normalizedText: string;
+  partOfSpeech: string;
+  shortDefinition: string | null;
+  cefrLevel: string | null;
 }
 
-export interface WordSenseDetailItem {
-  sense: WordSenseEntity;
+export interface WordSenseDetailReadModel {
+  senseId: string;
   wordText: string;
   normalizedText: string;
-  pronunciations: WordPronunciationVO[];
+  partOfSpeech: string;
+  definition: string;
+  shortDefinition: string | null;
+  cefrLevel: string | null;
+  definitionVi: string | null;
+  examples: { text: string; translationVi: string | null; order: number }[];
+  synonyms: string[];
+  antonyms: string[];
+  idioms: string[];
+  phrases: string[];
+  collocations: any | null;
+  pronunciations: { ipa: string; audioUrl: string | null; region: string }[];
 }
 
 export interface IWordReadRepository {
@@ -22,8 +34,8 @@ export interface IWordReadRepository {
     query: string,
     top: number,
     skip: number,
-  ): Promise<{ data: WordSenseSearchItem[]; count: number }>;
-  findSenseById(senseId: string): Promise<WordSenseDetailItem | null>;
+  ): Promise<{ data: WordSenseSearchReadModel[]; count: number }>;
+  findSenseById(senseId: string): Promise<WordSenseDetailReadModel | null>;
 }
 
 const { inject, provider, token } = createInjection<IWordReadRepository>(

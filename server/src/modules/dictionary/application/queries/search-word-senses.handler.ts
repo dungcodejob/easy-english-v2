@@ -32,12 +32,12 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
 
     // Map read-side items → response DTOs
     const data: WordSenseSearchResultResponseDto[] = sorted.map((item) => ({
-      senseId: item.sense.id,
+      senseId: item.senseId,
       wordText: item.wordText,
       normalizedText: item.normalizedText,
-      partOfSpeech: item.sense.partOfSpeech.value,
-      shortDefinition: item.sense.shortDefinition,
-      cefrLevel: item.sense.cefrLevel?.value || null,
+      partOfSpeech: item.partOfSpeech,
+      shortDefinition: item.shortDefinition,
+      cefrLevel: item.cefrLevel,
     }));
 
     return { data, count };

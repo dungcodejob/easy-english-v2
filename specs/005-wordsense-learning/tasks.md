@@ -133,11 +133,11 @@
 
 ### Backend
 
-- [ ] T046 [P] [US4] Create `GetLearningListQuery` in `server/src/modules/learning/application/queries/get-learning-list.query.ts`
-- [ ] T047 [P] [US4] Create `LearningListItemResponseDto` in `server/src/modules/learning/dto/responses/learning-list-item.response.dto.ts`
-- [ ] T048 [US4] Implement `GetLearningListHandler` with JOIN to `word_senses`/`words`, filtering `archived_at IS NULL`, pagination in `server/src/modules/learning/application/queries/get-learning-list.handler.ts`
-- [ ] T049 [US4] Add `GET /api/v1/learning/senses` endpoint to `LearningController` (JwtAuthGuard)
-- [ ] T050 [US4] Register `GetLearningListHandler` in `LearningModule`
+- [x] T046 [P] [US4] Create `GetLearningListQuery` in `server/src/modules/learning/application/queries/get-learning-list.query.ts`
+- [x] T047 [P] [US4] Create `LearningListItemResponseDto` in `server/src/modules/learning/dto/responses/learning-list-item.response.dto.ts`
+- [x] T048 [US4] Implement `GetLearningListHandler` with JOIN to `word_senses`/`words`, filtering `archived_at IS NULL`, pagination in `server/src/modules/learning/application/queries/get-learning-list.handler.ts`
+- [x] T049 [US4] Add `GET /api/v1/learning/senses` endpoint to `LearningController` (JwtAuthGuard)
+- [x] T050 [US4] Register `GetLearningListHandler` in `LearningModule`
 
 ### Frontend
 
@@ -166,10 +166,10 @@
 
 ### Frontend
 
-- [ ] T060 [P] [US5] Create `useRemoveFromLearning` TanStack Query mutation hook in `client/src/modules/learning/hooks/use-remove-from-learning.ts`
-- [ ] T061 [US5] Add "Remove" button/action to `LearningList` items
-- [ ] T062 [US5] Add confirmation dialog before removal using Shadcn `AlertDialog`
-- [ ] T063 [US5] Invalidate learning list and sense detail queries on remove/re-add
+- [x] T060 [P] [US5] Create `useRemoveFromLearning` TanStack Query mutation hook in `client/src/modules/learning/hooks/use-remove-from-learning.ts`
+- [x] T061 [US5] Add "Remove" button/action to `LearningList` items
+- [x] T062 [US5] Add confirmation dialog before removal using Shadcn `AlertDialog`
+- [x] T063 [US5] Invalidate learning list and sense detail queries on remove/re-add
 
 **Checkpoint**: Full CRUD lifecycle works — add, view, remove, re-add
 

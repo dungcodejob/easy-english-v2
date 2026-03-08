@@ -1,10 +1,22 @@
 import { APP_ROUTES } from '@/shared/constants';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/shared/ui/shadcn/alert-dialog';
 import { Badge } from '@/shared/ui/shadcn/badge';
 import { Button } from '@/shared/ui/shadcn/button';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link } from '@tanstack/react-router';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen, Trash2 } from 'lucide-react';
 import { useLearningList } from '../hooks/use-learning-list';
+import { useRemoveFromLearning } from '../hooks/use-remove-from-learning';
 import type { LearningListItem } from '../types/learning.types';
 
 interface LearningListProps {
@@ -19,6 +31,7 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
     isError,
     error,
   } = useLearningList({ page, limit: 20 });
+  const { mutate: remove, isPending: isRemoving } = useRemoveFromLearning();
 
   if (isLoading) {
     return (
@@ -70,23 +83,62 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((item) => (
-          <Link
-            key={item.wordSenseId}
-            to={APP_ROUTES.DICTIONARY.SENSE_DETAIL}
-            params={{ senseId: item.wordSenseId }}
-            className="group relative flex flex-col justify-between rounded-xl border bg-card p-5 text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          <div
+            key={item.senseId}
+            className="group relative flex flex-col justify-between rounded-xl border bg-card p-5 text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-md"
           >
-            <div>
+            <Link
+              to={APP_ROUTES.DICTIONARY.SENSE_DETAIL}
+              params={{ senseId: item.senseId }}
+              className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+            <div className="relative z-10 pointer-events-none">
               <div className="mb-2 flex items-center justify-between">
                 <h3 className="text-xl font-bold tracking-tight text-foreground">
                   {item.wordText}
                 </h3>
-                <Badge
-                  variant={item.masteryLevel >= 4 ? 'default' : 'secondary'}
-                  className="px-2 py-0.5 text-xs font-medium"
-                >
-                  Level {item.masteryLevel}
-                </Badge>
+                <div className="flex items-center gap-2 pointer-events-auto">
+                  <Badge
+                    variant={item.masteryLevel >= 4 ? 'default' : 'secondary'}
+                    className="px-2 py-0.5 text-xs font-medium"
+                  >
+                    Level {item.masteryLevel}
+                  </Badge>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        disabled={isRemoving}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Remove</span>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Remove from learning?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to remove &quot;{item.wordText}
+                          &quot; from your learning list? Your progress will be
+                          hidden until you add it back.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => remove(item.senseId)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Remove
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
               <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
                 <span className="italic">{item.partOfSpeech}</span>
@@ -97,12 +149,12 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
                   </>
                 )}
               </div>
-              <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+              <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                 {item.shortDefinition || 'No short definition available.'}
               </p>
             </div>
 
-            <div className="mt-5 flex items-center justify-between">
+            <div className="relative z-10 mt-5 flex pointer-events-none items-center justify-between">
               <span className="text-xs text-muted-foreground">
                 Score: {item.reviewCount} reviews
               </span>
@@ -111,7 +163,7 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
                 <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 

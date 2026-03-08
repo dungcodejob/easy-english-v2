@@ -6,11 +6,12 @@ export const LearningApi = {
    * Add a WordSense to the user's learning list.
    */
   addToLearning: async (wordSenseId: string) => {
-    const { data } = await api.post<{
-      success: boolean;
-      data: { id: string };
-      meta?: { alreadyLearning: boolean };
-    }>(`/api/v1/learning/senses`, { wordSenseId });
+    const { data } = await api.post<
+      ApiSuccessResponse<{
+        id: string;
+        alreadyLearning: boolean;
+      }>
+    >(`/learning/senses`, { wordSenseId });
     return data;
   },
 
@@ -18,8 +19,8 @@ export const LearningApi = {
    * Remove a WordSense from the user's learning list.
    */
   removeFromLearning: async (senseId: string) => {
-    const { data } = await api.delete<{ success: boolean; data: null }>(
-      `/api/v1/learning/senses/${senseId}`,
+    const { data } = await api.delete<ApiSuccessResponse<null>>(
+      `/learning/senses/${senseId}`,
     );
     return data;
   },
@@ -30,7 +31,7 @@ export const LearningApi = {
   getLearningList: async (top = 20, skip = 0) => {
     const result = await apiCall(() =>
       api.get<unknown, ApiSuccessResponse<LearningListItem[]>>(
-        `/api/v1/learning/senses`,
+        `/learning/senses`,
         {
           params: { $top: top, $skip: skip },
         },

@@ -1,13 +1,13 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import type { ILearningRepository } from '../../domain/repositories/learning.repository.interface';
-import { InjectLearningRepository } from '../../domain/repositories/learning.repository.interface';
+import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { GetLearningStateQuery } from './get-learning-state.query';
 
 @QueryHandler(GetLearningStateQuery)
 export class GetLearningStateHandler implements IQueryHandler<GetLearningStateQuery> {
   constructor(
-    @InjectLearningRepository()
-    private readonly learningRepo: ILearningRepository,
+    @InjectLearningWriteRepository()
+    private readonly learningRepo: ILearningWriteRepository,
   ) {}
 
   async execute(query: GetLearningStateQuery) {

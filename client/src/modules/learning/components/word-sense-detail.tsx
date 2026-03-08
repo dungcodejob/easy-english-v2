@@ -53,10 +53,11 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
               {detail.cefrLevel}
             </Badge>
           )}
+
           <div className="ml-auto mt-2 sm:mt-0">
             <AddToLearningButton
               senseId={detail.senseId}
-              isLearning={!!detail.learningState}
+              isLearning={!!detail.learningState?.isLearning}
             />
           </div>
         </div>

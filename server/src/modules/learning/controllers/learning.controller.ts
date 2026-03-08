@@ -2,11 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -14,19 +15,30 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import {
+  ApiPaginationParams,
+  PaginationParam,
+  type ParsedPaginationParams,
+} from '../../../core/api/pagination/pagination.decorator';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
+import { createSwaggerPaginationResponseDto } from '../../../shared/decorators/http/api-ok-responses.decorator';
 import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
 import { AddToLearningCommand } from '../application/commands/add-to-learning.command';
 import { RemoveFromLearningCommand } from '../application/commands/remove-from-learning.command';
+import { GetLearningListQuery } from '../application/queries/get-learning-list.query';
 import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request.dto';
+import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
 @ApiTags('Learning')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller({ version: '1', path: 'learning' })
 export class LearningController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @Post('senses')
   @ApiOperation({ summary: 'Add a WordSense to the learning list' })
@@ -84,6 +96,40 @@ export class LearningController {
       data: result,
       meta: {
         timestamp: new Date().toISOString(),
+      },
+    };
+  }
+
+  @Get('senses')
+  @ApiOperation({ summary: 'Get user learning list' })
+  @ApiPaginationParams()
+  @createSwaggerPaginationResponseDto(LearningListItemResponseDto)
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getLearningList(
+    @PaginationParam() pagination: ParsedPaginationParams,
+    @CurrentUser() user: ITokenPayload,
+  ) {
+    const listQuery = new GetLearningListQuery(
+      user.userId,
+      pagination.top,
+      pagination.skip,
+    );
+    const { data, count } = await this.queryBus.execute<
+      GetLearningListQuery,
+      { data: LearningListItemResponseDto[]; count: number }
+    >(listQuery);
+
+    return {
+      success: true,
+      data,
+      meta: {
+        timestamp: new Date().toISOString(),
+      },
+      pagination: {
+        top: pagination.top,
+        skip: pagination.skip,
+        count: count,
+        hasMore: pagination.skip + data.length < count,
       },
     };
   }

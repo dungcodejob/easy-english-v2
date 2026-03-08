@@ -11,7 +11,6 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -23,6 +22,7 @@ import { GetWordSenseDetailQuery } from '../application/queries/get-word-sense-d
 import { LookupWordQuery } from '../application/queries/lookup-word.query';
 import { SearchWordSensesQuery } from '../application/queries/search-word-senses.query';
 import { Word } from '../domain/entities/word.aggregate';
+import { SearchWordSensesRequestDto } from '../dto/requests/search-word-senses.request.dto';
 import { WordSenseDetailResponseDto } from '../dto/responses/word-sense-detail.response.dto';
 import { WordSenseSearchResultResponseDto } from '../dto/responses/word-sense-search-result.response.dto';
 import { WordResponseDto } from '../dto/responses/word.response.dto';
@@ -34,44 +34,13 @@ export class DictionaryController {
 
   @Get('search')
   @ApiOperation({ summary: 'Search for WordSenses by prefix' })
-  @ApiQuery({
-    name: 'q',
-    required: true,
-    description: 'Search term (min 1 char, max 100)',
-  })
-  @ApiQuery({
-    name: '$top',
-    required: false,
-    type: Number,
-    description: 'Page size (default 20, max 50)',
-  })
-  @ApiQuery({
-    name: '$skip',
-    required: false,
-    type: Number,
-    description: 'Offset',
-  })
   @ApiResponse({ status: 200, description: 'Search results' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @Public()
-  async searchWordSenses(
-    @Query('q') q: string,
-    @Query('$top') topStr?: string,
-    @Query('$skip') skipStr?: string,
-  ) {
-    if (!q || q.trim().length === 0 || q.length > 100) {
-      throw new BadRequestException(
-        'Query must be between 1 and 100 characters',
-      );
-    }
+  async searchWordSenses(@Query() queryDto: SearchWordSensesRequestDto) {
+    const { q, $top = 20, $skip = 0 } = queryDto;
 
-    const top = topStr ? parseInt(topStr, 10) : 20;
-    const skip = skipStr ? parseInt(skipStr, 10) : 0;
-
-    const validTop = Math.min(Math.max(1, top), 50);
-    const validSkip = Math.max(0, skip);
-
-    const query = new SearchWordSensesQuery(q.trim(), validTop, validSkip);
+    const query = new SearchWordSensesQuery(q, $top, $skip);
     const result = await this.queryBus.execute<
       SearchWordSensesQuery,
       { data: WordSenseSearchResultResponseDto[]; count: number }
@@ -81,10 +50,10 @@ export class DictionaryController {
       success: true,
       data: result.data,
       pagination: {
-        top: validTop,
-        skip: validSkip,
+        top: $top,
+        skip: $skip,
         count: result.count,
-        hasMore: validSkip + result.data.length < result.count,
+        hasMore: $skip + result.data.length < result.count,
       },
       meta: {
         timestamp: new Date().toISOString(),

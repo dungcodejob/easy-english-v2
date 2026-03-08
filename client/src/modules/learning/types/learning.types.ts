@@ -8,8 +8,8 @@ export interface WordSenseLearningState {
 }
 
 export interface LearningListItem {
-  progressId: string;
-  wordSenseId: string;
+  id: string;
+  senseId: string;
   wordText: string;
   partOfSpeech: string;
   shortDefinition: string | null;
