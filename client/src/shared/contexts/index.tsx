@@ -1,5 +1,5 @@
 import { QueryProvider } from './query-context';
-import { ThemeProvider } from './theme-provider';
+import { theme, ThemeProvider, useTheme, type Theme } from './theme-context';
 
 export const Providers = ({ children }: React.PropsWithChildren) => {
   return (
@@ -8,3 +8,6 @@ export const Providers = ({ children }: React.PropsWithChildren) => {
     </QueryProvider>
   );
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { QueryProvider, theme, ThemeProvider, useTheme, type Theme };
