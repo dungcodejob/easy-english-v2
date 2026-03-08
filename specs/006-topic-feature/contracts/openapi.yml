@@ -1,0 +1,300 @@
+openapi: 3.0.3
+info:
+  title: Easy English v2 - Topic Feature API
+  version: 1.0.0
+  description: API endpoints for managing user vocabulary topics.
+paths:
+  /api/v1/topics:
+    get:
+      summary: List user topics
+      description: Returns a paginated list of topics for the authenticated user.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTopicsResponse'
+    post:
+      summary: Create a new topic
+      description: Creates a new topic (max 50 per user).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTopicRequest'
+      responses:
+        '201':
+          description: Topic created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicResponse'
+
+  /api/v1/topics/{id}:
+    get:
+      summary: Get topic metadata
+      description: Returns the metadata of a specific topic by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicResponse'
+    put:
+      summary: Update topic
+      description: Updates the name and/description of a topic.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTopicRequest'
+      responses:
+        '200':
+          description: Topic updated successfully
+    delete:
+      summary: Delete topic
+      description: Deletes a topic and all its associated words.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Topic deleted successfully              
+
+  /api/v1/topics/{id}/words:
+    get:
+      summary: List topic words
+      description: Returns a paginated list of words associated with a topic.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTopicWordsResponse'
+    post:
+      summary: Add word to topic
+      description: Adds a word sense to the topic (max 200 per topic).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTopicWordRequest'
+      responses:
+        '201':
+          description: Word added successfully
+
+  /api/v1/topics/{topicId}/words/{wordSenseId}:
+    delete:
+      summary: Remove word from topic
+      description: Removes a specific word sense from a topic.
+      parameters:
+        - name: topicId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: wordSenseId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Word removed successfully
+
+components:
+  schemas:
+    TopicDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TopicWordDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        topicId:
+          type: string
+          format: uuid
+        wordSenseId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [NEW, LEARNING, MASTERED]
+        addedAt:
+          type: string
+          format: date-time
+
+    CreateTopicRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+
+    UpdateTopicRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+
+    AddTopicWordRequest:
+      type: object
+      required:
+        - wordSenseId
+      properties:
+        wordSenseId:
+          type: string
+          format: uuid
+          
+    MetaDto:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        itemCount:
+          type: integer
+        pageCount:
+          type: integer
+        hasPreviousPage:
+          type: boolean
+        hasNextPage:
+          type: boolean          
+
+    PaginatedTopicsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: true
+        correlationId:
+          type: string
+          format: uuid
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/TopicDto'
+            meta:
+              $ref: '#/components/schemas/MetaDto'
+
+    TopicResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: true
+        correlationId:
+          type: string
+          format: uuid
+        data:
+          $ref: '#/components/schemas/TopicDto'
+
+    PaginatedTopicWordsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: true
+        correlationId:
+          type: string
+          format: uuid
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/TopicWordDto'
+            meta:
+              $ref: '#/components/schemas/MetaDto'
