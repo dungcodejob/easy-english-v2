@@ -39,4 +39,22 @@ export const LearningApi = {
     );
     return result;
   },
+
+  /**
+   * Get the learning state for a specific WordSense.
+   */
+  getLearningState: async (senseId: string) => {
+    const result = await apiCall(() =>
+      api.get<
+        unknown,
+        ApiSuccessResponse<{
+          isLearning: boolean;
+          masteryLevel: number;
+          reviewCount: number;
+          nextReviewAt: string;
+        } | null>
+      >(`/learning/senses/${senseId}/state`),
+    );
+    return result;
+  },
 };

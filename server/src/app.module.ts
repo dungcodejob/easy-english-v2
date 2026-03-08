@@ -12,7 +12,9 @@ import { dictionaryConfig } from './configs/dictionary.config';
 import { jwtConfig } from './configs/jwt.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
-import { LearningModule } from './modules/learning/learning.module';
+
+import { ProgressModule } from './modules/learning/progress/progress.module';
+import { TopicModule } from './modules/learning/topic/topic.module';
 import { WorkspaceModule } from './modules/workspace/workspace.module';
 
 @Module({
@@ -36,7 +38,8 @@ import { WorkspaceModule } from './modules/workspace/workspace.module';
     AuthModule,
     WorkspaceModule,
     DictionaryModule,
-    LearningModule,
+    ProgressModule,
+    TopicModule,
   ],
 
   controllers: [AppController],

@@ -6,7 +6,7 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
-import { WordSenseOrmEntity } from '../../../dictionary/infrastructure/persistence/word-sense.orm-entity';
+import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persistence/word-sense.orm-entity';
 
 @Entity({ tableName: 'user_word_sense_progress' })
 @Unique({ properties: ['userId', 'wordSense'] })

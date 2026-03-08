@@ -1,14 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, TransformFnParams, Type } from 'class-transformer';
-import {
-  IsInt,
-  IsOptional,
-  IsString,
-  Max,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform, TransformFnParams } from 'class-transformer';
+import { IsString, MaxLength, MinLength } from 'class-validator';
 
 export class SearchWordSensesRequestDto {
   @ApiProperty({
@@ -23,30 +15,4 @@ export class SearchWordSensesRequestDto {
   @MinLength(1)
   @MaxLength(100)
   readonly q!: string;
-
-  @ApiPropertyOptional({
-    name: '$top',
-    description: 'Page size (default 20, max 50)',
-    minimum: 1,
-    maximum: 50,
-    default: 20,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @Max(50)
-  readonly $top?: number = 20;
-
-  @ApiPropertyOptional({
-    name: '$skip',
-    description: 'Offset',
-    minimum: 0,
-    default: 0,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  readonly $skip?: number = 0;
 }

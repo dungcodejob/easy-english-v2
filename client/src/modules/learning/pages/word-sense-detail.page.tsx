@@ -6,7 +6,9 @@ import { ArrowLeft } from 'lucide-react';
 import { WordSenseDetail } from '../components/word-sense-detail';
 import { useWordSenseDetail } from '../hooks/use-word-sense-detail';
 
-export const Route = createFileRoute('/_(authenticated)/dictionary/senses/$senseId')({
+export const Route = createFileRoute(
+  '/_(authenticated)/dictionary/senses/$senseId',
+)({
   component: WordSenseDetailPage,
 });
 
@@ -33,32 +35,45 @@ export default function WordSenseDetailPage() {
       </div>
 
       {isLoading && (
-        <div className="space-y-8 animate-pulse">
+        <div className="space-y-12 animate-pulse mt-4">
           <div className="space-y-4">
-            <div className="flex gap-4">
-              <Skeleton className="h-12 w-48" />
-              <Skeleton className="h-8 w-16 mt-2" />
+            <div className="flex gap-4 items-center">
+              <Skeleton className="h-16 w-64 rounded-xl" />
+              <Skeleton className="h-8 w-24 rounded-full" />
+              <Skeleton className="h-8 w-16 rounded-full" />
             </div>
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-6 w-1/2" />
+            <div className="flex items-center gap-4 mt-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-10 w-10 rounded-full" />
+            </div>
           </div>
-          <Skeleton className="h-[2px] w-full" />
+          <Skeleton className="h-32 w-full rounded-2xl" />
+          <Skeleton className="h-px w-full" />
           <div className="space-y-4">
-            <Skeleton className="h-8 w-32" />
-            <Skeleton className="h-24 w-full rounded-xl" />
-            <Skeleton className="h-24 w-full rounded-xl" />
+            <Skeleton className="h-8 w-40" />
+            <Skeleton className="h-28 w-full rounded-2xl" />
+            <Skeleton className="h-28 w-full rounded-2xl" />
+          </div>
+          <div className="grid grid-cols-2 gap-8">
+            <Skeleton className="h-24 w-full rounded-2xl" />
+            <Skeleton className="h-24 w-full rounded-2xl" />
           </div>
         </div>
       )}
 
       {error && !isLoading && (
-        <div className="text-center py-16 px-4 border rounded-xl bg-destructive/5 text-destructive border-destructive/20">
-          <h2 className="text-2xl font-bold mb-2">Sense Not Found</h2>
-          <p className="mb-6">
+        <div className="text-center py-20 px-4 mt-8 border-2 border-dashed rounded-3xl bg-destructive/5 text-destructive border-destructive/20 shadow-sm">
+          <h2 className="text-3xl font-black mb-3">Sense Not Found</h2>
+          <p className="mb-8 text-lg opacity-80 max-w-md mx-auto">
             The word sense you are looking for does not exist or an error
-            occurred.
+            occurred while fetching it.
           </p>
-          <Button asChild variant="outline">
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="rounded-full font-bold"
+          >
             <Link to={APP_ROUTES.DICTIONARY.SEARCH}>Return to Dictionary</Link>
           </Button>
         </div>

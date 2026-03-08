@@ -13,8 +13,8 @@ export const APP_ROUTES = {
   },
   DASHBOARD: '/dashboard',
   TOPIC: {
-    LIST: '/topic',
-    DETAIL: '/topic/$topicId',
+    LIST: '/learning/topics',
+    DETAIL: '/learning/topics/$topicId',
   },
   DICTIONARY: {
     SEARCH: '/dictionary',

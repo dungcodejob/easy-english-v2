@@ -18,7 +18,9 @@
       "@shared/*": ["src/shared/*"],
       "@shared": ["src/shared"],
       "@core/*": ["src/core/*"],
-      "@core": ["src/core"]
+      "@core": ["src/core"],
+      "@auth/*": ["src/modules/auth/*"],
+      "@auth": ["src/modules/auth"]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -323,11 +323,11 @@ client/src/shared/
 
 ### Backend Core/Shared
 
-N/A - All code resides in feature module (`modules/learning/topic`).
+N/A - All code resides in feature module (`modules/learning`).
 
 ### Frontend Shared
 
-N/A - All feature-specific code resides in `client/src/modules/learning/topic`.
+N/A - All feature-specific code resides in `client/src/modules/learning`.
 
 ---
 

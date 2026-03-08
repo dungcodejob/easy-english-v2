@@ -1,11 +1,30 @@
 import { APP_ROUTES } from '@/shared/constants';
 import { useAuthStore } from '@/shared/stores/auth-store';
 import { Button } from '@/shared/ui/shadcn/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui/shadcn/dropdown-menu';
 import { cn } from '@/shared/utils';
 import { useNavigate } from '@tanstack/react-router';
-import { Bookmark, BookmarkCheck, Loader2 } from 'lucide-react';
+import {
+  ArrowRight,
+  Bookmark,
+  BookmarkCheck,
+  ChevronDown,
+  FolderPlus,
+  Loader2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddToLearning } from '../hooks/use-add-to-learning';
+import {
+  useAddTopicWordMutation,
+  useTopicsQuery,
+} from '../topic/hooks/topic.hooks';
 
 interface AddToLearningButtonProps {
   senseId: string;
@@ -22,7 +41,14 @@ export function AddToLearningButton({
   const navigate = useNavigate();
   const { mutate, isPending } = useAddToLearning();
 
-  const handleClick = () => {
+  const { data: topicsData, isLoading: isLoadingTopics } = useTopicsQuery(
+    1,
+    50,
+  );
+  const { mutate: addWordToTopic } = useAddTopicWordMutation();
+  const topics = topicsData?.data || [];
+
+  const handleAddToLearning = () => {
     if (!isAuthenticated) {
       toast.error('You need to login to save words to your learning list');
       navigate({
@@ -48,35 +74,107 @@ export function AddToLearningButton({
     });
   };
 
+  const handleAddToTopic = (topicId: string, topicName: string) => {
+    if (!isAuthenticated) {
+      toast.error('You need to login to save words to topics');
+      navigate({ to: APP_ROUTES.AUTH.LOGIN });
+      return;
+    }
+
+    addWordToTopic(
+      { topicId, data: { wordSenseId: senseId } },
+      {
+        onSuccess: () => toast.success(`Added to topic "${topicName}"`),
+        onError: () =>
+          toast.error(
+            'Failed to add word to topic. It might already be there.',
+          ),
+      },
+    );
+  };
+
   return (
-    <Button
-      onClick={handleClick}
-      disabled={isPending || (isLearning && !isAuthenticated)}
-      variant={isLearning ? 'secondary' : 'default'}
-      className={cn(
-        'transition-all duration-300 min-w-36',
-        isLearning
-          ? 'bg-primary/10 text-primary border-transparent opacity-100 font-medium hover:bg-primary/20'
-          : 'shadow-md hover:shadow-lg',
-        className,
+    <div className={cn('flex items-center gap-1', className)}>
+      <Button
+        onClick={handleAddToLearning}
+        disabled={isPending || (isLearning && !isAuthenticated)}
+        variant={isLearning ? 'secondary' : 'default'}
+        className={cn(
+          'transition-all duration-300 min-w-36',
+          isLearning
+            ? 'bg-primary/10 text-primary border-transparent opacity-100 font-medium hover:bg-primary/20'
+            : 'shadow-md hover:shadow-lg',
+        )}
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Adding...
+          </>
+        ) : isLearning ? (
+          <>
+            <BookmarkCheck className="mr-2 h-4 w-4 text-primary" />
+            Already Learning
+          </>
+        ) : (
+          <>
+            <Bookmark className="mr-2 h-4 w-4" />
+            Learn This Word
+          </>
+        )}
+      </Button>
+
+      {isAuthenticated && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant={isLearning ? 'secondary' : 'default'}
+              size="icon"
+              className={cn(
+                'transition-all duration-300 w-10 shrink-0',
+                isLearning
+                  ? 'bg-primary/10 text-primary border-transparent opacity-100 hover:bg-primary/20'
+                  : 'shadow-md hover:shadow-lg',
+              )}
+            >
+              <ChevronDown className="h-4 w-4" />
+              <span className="sr-only">Add to Topic</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>Add to Topic</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {isLoadingTopics ? (
+              <div className="p-2 text-sm text-muted-foreground text-center">
+                Loading topics...
+              </div>
+            ) : topics.length > 0 ? (
+              topics.map((topic) => (
+                <DropdownMenuItem
+                  key={topic.id}
+                  onClick={() => handleAddToTopic(topic.id, topic.name)}
+                >
+                  <FolderPlus className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <span className="truncate">{topic.name}</span>
+                </DropdownMenuItem>
+              ))
+            ) : (
+              <div className="p-2 text-sm text-muted-foreground text-center">
+                No topics found
+              </div>
+            )}
+            <DropdownMenuSeparator />
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore - route types not auto-generated yet */}
+            <DropdownMenuItem
+              onClick={() => navigate({ to: '/learning/topics' })}
+            >
+              <ArrowRight className="mr-2 h-4 w-4 text-muted-foreground" />
+              Manage Topics
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
-    >
-      {isPending ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Adding...
-        </>
-      ) : isLearning ? (
-        <>
-          <BookmarkCheck className="mr-2 h-4 w-4 text-primary" />
-          Already Learning
-        </>
-      ) : (
-        <>
-          <Bookmark className="mr-2 h-4 w-4" />
-          Learn This Word
-        </>
-      )}
-    </Button>
+    </div>
   );
 }

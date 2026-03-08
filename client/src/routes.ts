@@ -16,6 +16,11 @@ export const routes = rootRoute('root.tsx', [
   layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
     route(APP_ROUTES.DASHBOARD, './modules/dashboard/pages/dashboard-page.tsx'),
     route(APP_ROUTES.LEARN, './modules/learning/pages/my-learning.page.tsx'),
+    route('/learning/topics', './modules/learning/topic/ui/topics.page.tsx'),
+    route(
+      '/learning/topics/$topicId',
+      './modules/learning/topic/ui/topic-detail.page.tsx',
+    ),
     route(
       APP_ROUTES.WORKSPACE.NEW,
       './modules/workspace/pages/new-workspace.page.tsx',

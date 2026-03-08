@@ -76,10 +76,4 @@ export class WordSenseDetailResponseDto {
     description: 'Pronunciations including audio',
   })
   readonly pronunciations!: PronunciationDto[];
-
-  @ApiPropertyOptional({
-    type: LearningStateDto,
-    description: 'Learning progress state if authenticated',
-  })
-  readonly learningState!: LearningStateDto | null;
 }

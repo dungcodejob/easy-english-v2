@@ -12,7 +12,7 @@ export class UserSessionCookie {
   @InjectAppConfig() appConfig: AppConfig;
 
   get(request: Request): string | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return request.cookies[UserSessionCookie.COOKIE_NAME];
   }
 

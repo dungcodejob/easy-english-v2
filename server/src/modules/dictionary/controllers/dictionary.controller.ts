@@ -16,6 +16,11 @@ import {
 } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { Public } from '@shared/decorators';
+import {
+  ApiPaginationParams,
+  PaginationParam,
+  type ParsedPaginationParams,
+} from '../../../core/api/pagination/pagination.decorator';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import {
   createSwaggerPaginationResponseDto,
@@ -42,12 +47,17 @@ export class DictionaryController {
   @UseGuards(ThrottlerGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @createSwaggerPaginationResponseDto(WordSenseSearchResultResponseDto)
+  @ApiPaginationParams()
   @ApiResponse({ status: 400, description: 'Validation error' })
   @Public()
-  async searchWordSenses(@Query() queryDto: SearchWordSensesRequestDto) {
-    const { q, $top = 20, $skip = 0 } = queryDto;
+  async searchWordSenses(
+    @Query() queryDto: SearchWordSensesRequestDto,
+    @PaginationParam() pagination: ParsedPaginationParams,
+  ) {
+    const { q } = queryDto;
+    const { top = 20, skip = 0 } = pagination;
 
-    const query = new SearchWordSensesQuery(q, $top, $skip);
+    const query = new SearchWordSensesQuery(q, top, skip);
     const result = await this.queryBus.execute<
       SearchWordSensesQuery,
       { data: WordSenseSearchResultResponseDto[]; count: number }
@@ -57,10 +67,10 @@ export class DictionaryController {
       success: true,
       data: result.data,
       pagination: {
-        top: $top,
-        skip: $skip,
+        top,
+        skip,
         count: result.count,
-        hasMore: $skip + result.data.length < result.count,
+        hasMore: skip + result.data.length < result.count,
       },
       meta: {
         timestamp: new Date().toISOString(),

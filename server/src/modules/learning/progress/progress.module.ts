@@ -30,4 +30,4 @@ const httpControllers = [LearningController];
   providers: [...repositories, ...queryHandlers, ...commandHandlers],
   exports: [...repositories],
 })
-export class LearningModule {}
+export class ProgressModule {}

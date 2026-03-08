@@ -1,3 +1,10 @@
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+import {
+  ApiPaginationParams,
+  PaginationParam,
+  type ParsedPaginationParams,
+} from '@core/api';
 import {
   Body,
   Controller,
@@ -16,19 +23,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  ApiPaginationParams,
-  PaginationParam,
-  type ParsedPaginationParams,
-} from '../../../core/api/pagination/pagination.decorator';
-import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
-import { createSwaggerPaginationResponseDto } from '../../../shared/decorators/http/http.decorator';
-import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
+  createSwaggerPaginationResponseDto,
+  CurrentUser,
+} from '@shared/decorators';
 import { AddToLearningCommand } from '../application/commands/add-to-learning.command';
 import { RemoveFromLearningCommand } from '../application/commands/remove-from-learning.command';
 import { GetLearningListQuery } from '../application/queries/get-learning-list.query';
 import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
+
+import { GetLearningStateQuery } from '../application/queries/get-learning-state.query';
 
 @ApiTags('Learning')
 @ApiBearerAuth()
@@ -130,6 +134,34 @@ export class LearningController {
         skip: pagination.skip,
         count: count,
         hasMore: pagination.skip + data.length < count,
+      },
+    };
+  }
+
+  @Get('senses/:senseId/state')
+  @ApiOperation({ summary: 'Get learning state for a specific word sense' })
+  @ApiParam({
+    name: 'senseId',
+    required: true,
+    description: 'ID of the WordSense to get state for',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Learning state retrieved successfully',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getLearningState(
+    @Param('senseId') senseId: string,
+    @CurrentUser() user: ITokenPayload,
+  ) {
+    const query = new GetLearningStateQuery(user.userId, senseId);
+    const result = await this.queryBus.execute(query);
+
+    return {
+      success: true,
+      data: result,
+      meta: {
+        timestamp: new Date().toISOString(),
       },
     };
   }

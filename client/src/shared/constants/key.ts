@@ -53,6 +53,7 @@ export const learningKeys = {
   lists: () => [...learningKeys.all, 'list'] as const,
   list: (filters?: Record<string, unknown>) =>
     [...learningKeys.lists(), filters] as const,
+  state: (senseId: string) => [...learningKeys.all, 'state', senseId] as const,
 };
 
 export const API_KEYS = {
