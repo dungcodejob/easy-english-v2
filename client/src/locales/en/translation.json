@@ -1,1 +1,34 @@
-{}
+{
+  "sidebar": {
+    "priority": "Priority",
+    "today_review": "Today's Review",
+    "learning": "Your Learning",
+    "learn": "My Learning",
+    "topics": "Topics",
+    "add_word": "Add Word",
+    "progress": "Progress",
+    "achievements": "Achievements",
+    "system": "System",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}! 👋",
+    "review_status": "You have <1>{{count}} words</1> pending for review today. Keep your streak alive!",
+    "review_status_zero": "You are all caught up for today! Keep up the good work.",
+    "start_review": "Start Daily Review",
+    "explore_topic": "Explore New Topic",
+    "stats": {
+      "streak": "Current Streak",
+      "words_learned": "Words Learned",
+      "accuracy": "Accuracy Rate",
+      "streak_trend": "+{{count}} from last week",
+      "words_trend": "+{{count}} this week",
+      "accuracy_trend": "+{{count}}% overall"
+    },
+    "daily_goal": "Daily Goal",
+    "completed": "Completed",
+    "goal_progress": "You've learned <1>{{count}}</1> out of {{total}} words today.",
+    "recent_topics": "Recent Topics",
+    "view_all": "View All"
+  }
+}

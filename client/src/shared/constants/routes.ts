@@ -22,5 +22,7 @@ export const APP_ROUTES = {
   },
   LEARN: '/learning',
   REVIEW: '/review',
+  PROGRESS: '/progress',
+  ACHIEVEMENTS: '/achievements',
   SETTINGS: '/settings',
 } as const;

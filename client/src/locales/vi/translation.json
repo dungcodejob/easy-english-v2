@@ -1,1 +1,34 @@
-{}
+{
+  "sidebar": {
+    "priority": "Ưu tiên",
+    "today_review": "Ôn tập hôm nay",
+    "learning": "Học tập",
+    "learn": "Từ vựng của tôi",
+    "topics": "Chủ đề",
+    "add_word": "Thêm từ mới",
+    "progress": "Tiến độ",
+    "achievements": "Thành tựu",
+    "system": "Hệ thống",
+    "settings": "Cài đặt"
+  },
+  "dashboard": {
+    "welcome": "Chào mừng bạn trở lại, {{name}}! 👋",
+    "review_status": "Bạn có <1>{{count}} từ vựng</1> cần ôn tập hôm nay. Duy trì chuỗi của bạn nhé!",
+    "review_status_zero": "Bạn đã hoàn thành mục tiêu hôm nay! Làm tốt lắm.",
+    "start_review": "Bắt đầu ôn tập",
+    "explore_topic": "Khám phá chủ đề mới",
+    "stats": {
+      "streak": "Chuỗi hiện tại",
+      "words_learned": "Từ đã học",
+      "accuracy": "Tỷ lệ chính xác",
+      "streak_trend": "+{{count}} từ tuần trước",
+      "words_trend": "+{{count}} tuần này",
+      "accuracy_trend": "+{{count}}% tổng thể"
+    },
+    "daily_goal": "Mục tiêu hàng ngày",
+    "completed": "Hoàn thành",
+    "goal_progress": "Bạn đã học <1>{{count}}</1> trên {{total}} từ hôm nay.",
+    "recent_topics": "Chủ đề gần đây",
+    "view_all": "Xem tất cả"
+  }
+}

@@ -4,7 +4,6 @@ import { useAuthStore, useIsAuthenticated } from '@/shared/stores/auth-store';
 import { Spinner } from '@/shared/ui/shadcn/spinner';
 import {
   createFileRoute,
-  Link,
   Navigate,
   Outlet,
   redirect,
@@ -14,6 +13,9 @@ import { useEffect, useRef } from 'react';
 
 // Use direct import to avoid circular dependency issues if any, or just use aliased import
 import { useHasWorkspace } from '@/modules/workspace/hooks/use-has-workspace';
+import { SidebarInset, SidebarProvider } from '@/shared/ui/shadcn/sidebar';
+import { AppHeader } from '../components/app-header';
+import { AppSidebar } from '../components/app-sidebar';
 
 export const Route = createFileRoute('/_(authenticated)')({
   component: AuthenticatedLayout,
@@ -77,42 +79,18 @@ export default function AuthenticatedLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Temporary Navigation Header until AppSidebar is fully implemented */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-        <div className="container flex h-14 items-center gap-6 px-4">
-          <Link
-            to={APP_ROUTES.DASHBOARD}
-            className="font-bold tracking-tight text-primary flex justify-center items-center gap-2"
-          >
-            Easy English
-          </Link>
-          <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link
-              to={APP_ROUTES.DASHBOARD}
-              className="transition-colors hover:text-foreground/80 text-foreground/60 [&.active]:text-foreground [&.active]:font-semibold"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to={APP_ROUTES.DICTIONARY.SEARCH}
-              className="transition-colors hover:text-foreground/80 text-foreground/60 [&.active]:text-foreground [&.active]:font-semibold"
-            >
-              Dictionary
-            </Link>
-            <Link
-              to={APP_ROUTES.LEARN}
-              className="transition-colors hover:text-foreground/80 text-foreground/60 [&.active]:text-foreground [&.active]:font-semibold"
-            >
-              My Learning
-            </Link>
-          </nav>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <AppHeader />
+        <div className="flex flex-1 flex-col h-full">
+          <div className="flex-1">
+            <div className="relative z-50 mx-auto flex w-full max-w-[1360px] flex-1 flex-col self-stretch p-4 md:p-6">
+              <Outlet />
+            </div>
+          </div>
         </div>
-      </header>
-
-      <main className="flex-1 w-full flex flex-col">
-        <Outlet />
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
