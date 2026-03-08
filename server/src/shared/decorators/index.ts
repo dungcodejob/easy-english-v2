@@ -1,7 +1,6 @@
 export * from './current-user.decorator';
 export * from './field.decorators';
 export * from './http/api-error-responses.decorator';
-export * from './http/api-ok-responses.decorator';
 export * from './http/http.decorator';
 export * from './public.decorator';
 export * from './transform.decorators';

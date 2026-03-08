@@ -179,12 +179,12 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T064 [P] Add OpenAPI/Swagger decorators to all new endpoints in `DictionaryController` and `LearningController`
-- [ ] T065 [P] Add rate limiting to `GET /api/v1/dictionary/search` endpoint
-- [ ] T066 Run `quickstart.md` validation — verify all curl commands work
-- [ ] T067 [P] Add database index for search performance: `CREATE INDEX idx_words_normalized_text_pattern ON words (normalized_text varchar_pattern_ops)`
-- [ ] T068 Code review: verify CQRS compliance (commands don't return data, queries don't mutate)
-- [ ] T069 Code review: verify all responses use standard envelope from response-schema.md
+- [x] T064 [P] Add OpenAPI/Swagger decorators to all new endpoints in `DictionaryController` and `LearningController`
+- [x] T065 [P] Add rate limiting to `GET /api/v1/dictionary/search` endpoint
+- [x] T066 Run `quickstart.md` validation — verify all curl commands work
+- [x] T067 [P] Add database index for search performance: `CREATE INDEX idx_words_normalized_text_pattern ON words (normalized_text varchar_pattern_ops)`
+- [x] T068 Code review: verify CQRS compliance (commands don't return data, queries don't mutate)
+- [x] T069 Code review: verify all responses use standard envelope from response-schema.md
 
 ---
 

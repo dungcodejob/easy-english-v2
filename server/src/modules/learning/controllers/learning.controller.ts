@@ -21,7 +21,7 @@ import {
   type ParsedPaginationParams,
 } from '../../../core/api/pagination/pagination.decorator';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
-import { createSwaggerPaginationResponseDto } from '../../../shared/decorators/http/api-ok-responses.decorator';
+import { createSwaggerPaginationResponseDto } from '../../../shared/decorators/http/http.decorator';
 import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
 import { AddToLearningCommand } from '../application/commands/add-to-learning.command';
