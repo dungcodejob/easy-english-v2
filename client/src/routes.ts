@@ -20,20 +20,19 @@ export const routes = rootRoute('root.tsx', [
       APP_ROUTES.WORKSPACE.NEW,
       './modules/workspace/pages/new-workspace.page.tsx',
     ),
+    // Dictionary Routes (Now Inside App Shell)
+    route(
+      APP_ROUTES.DICTIONARY.SEARCH,
+      './modules/learning/pages/dictionary-layout.tsx',
+      [
+        index('./modules/learning/pages/dictionary-search.page.tsx'),
+        route(
+          '/senses/$senseId',
+          './modules/learning/pages/word-sense-detail.page.tsx',
+        ),
+      ],
+    ),
   ]),
-
-  // Public Dictionary Routes
-  route(
-    APP_ROUTES.DICTIONARY.SEARCH,
-    './modules/learning/pages/dictionary-layout.tsx',
-    [
-      index('./modules/learning/pages/dictionary-search.page.tsx'),
-      route(
-        '/senses/$senseId',
-        './modules/learning/pages/word-sense-detail.page.tsx',
-      ),
-    ],
-  ),
   // ========== LAYOUT AUTHENTICATED ==========
   // layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
   //   index('./modules/home/pages/home-page.tsx'),

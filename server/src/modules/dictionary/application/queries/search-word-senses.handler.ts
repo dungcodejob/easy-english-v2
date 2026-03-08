@@ -37,6 +37,8 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
       normalizedText: item.normalizedText,
       partOfSpeech: item.partOfSpeech,
       shortDefinition: item.shortDefinition,
+      definition: item.definition,
+      definitionVi: item.definitionVi,
       cefrLevel: item.cefrLevel,
     }));
 

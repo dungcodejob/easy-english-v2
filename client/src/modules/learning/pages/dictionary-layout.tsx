@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/dictionary')({
+export const Route = createFileRoute('/_(authenticated)/dictionary')({
   component: DictionaryLayout,
 });
 

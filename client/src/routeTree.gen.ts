@@ -9,24 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './root'
-import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
 import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
 import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
 import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
 import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
 import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
 import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
+import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
 import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
+import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
 import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page'
 import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page'
-import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
 
-const DotModulesLearningPagesDictionaryLayoutRoute =
-  DotModulesLearningPagesDictionaryLayoutRouteImport.update({
-    id: '/dictionary',
-    path: '/dictionary',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
   DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
     id: '/_(unauthenticated)',
@@ -61,10 +55,22 @@ const DotModulesLearningPagesMyLearningDotpageRoute =
     path: '/learning',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
+const DotModulesLearningPagesDictionaryLayoutRoute =
+  DotModulesLearningPagesDictionaryLayoutRouteImport.update({
+    id: '/dictionary',
+    path: '/dictionary',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+  } as any)
 const DotModulesDashboardPagesDashboardPageRoute =
   DotModulesDashboardPagesDashboardPageRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+  } as any)
+const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
+  DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport.update({
+    id: '/workspace/new',
+    path: '/workspace/new',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
 const DotModulesLearningPagesDictionarySearchDotpageRoute =
@@ -79,31 +85,25 @@ const DotModulesLearningPagesWordSenseDetailDotpageRoute =
     path: '/senses/$senseId',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
   } as any)
-const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
-  DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport.update({
-    id: '/workspace/new',
-    path: '/workspace/new',
-    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof modulesShellPagesLandingPageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
-  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof modulesShellPagesLandingPageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
 }
@@ -112,35 +112,35 @@ export interface FileRoutesById {
   '/': typeof modulesShellPagesLandingPageRoute
   '/_(authenticated)': typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
   '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
-  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
-  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
+  '/_(authenticated)/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dictionary'
-    | '/dictionary/'
     | '/dashboard'
+    | '/dictionary'
     | '/learning'
     | '/login'
     | '/register'
+    | '/dictionary/'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dictionary'
     | '/dashboard'
     | '/learning'
     | '/login'
     | '/register'
+    | '/dictionary'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
   id:
@@ -148,32 +148,24 @@ export interface FileRouteTypes {
     | '/'
     | '/_(authenticated)'
     | '/_(unauthenticated)'
-    | '/dictionary'
-    | '/dictionary/'
     | '/_(authenticated)/dashboard'
+    | '/_(authenticated)/dictionary'
     | '/_(authenticated)/learning'
     | '/_(unauthenticated)/login'
     | '/_(unauthenticated)/register'
+    | '/_(authenticated)/dictionary/'
     | '/_(authenticated)/workspace/new'
-    | '/dictionary/senses/$senseId'
+    | '/_(authenticated)/dictionary/senses/$senseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   modulesShellPagesLandingPageRoute: typeof modulesShellPagesLandingPageRoute
   DotModulesShellPagesAuthenticatedLayoutRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
   DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
-  DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dictionary': {
-      id: '/dictionary'
-      path: '/dictionary'
-      fullPath: '/dictionary'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_(unauthenticated)': {
       id: '/_(unauthenticated)'
       path: ''
@@ -216,26 +208,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesLearningPagesMyLearningDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
+    '/_(authenticated)/dictionary': {
+      id: '/_(authenticated)/dictionary'
+      path: '/dictionary'
+      fullPath: '/dictionary'
+      preLoaderRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteImport
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+    }
     '/_(authenticated)/dashboard': {
       id: '/_(authenticated)/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
-    '/dictionary/': {
-      id: '/dictionary/'
-      path: '/'
-      fullPath: '/dictionary/'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
-    }
-    '/dictionary/senses/$senseId': {
-      id: '/dictionary/senses/$senseId'
-      path: '/senses/$senseId'
-      fullPath: '/dictionary/senses/$senseId'
-      preLoaderRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
     }
     '/_(authenticated)/workspace/new': {
       id: '/_(authenticated)/workspace/new'
@@ -244,11 +229,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
+    '/_(authenticated)/dictionary/': {
+      id: '/_(authenticated)/dictionary/'
+      path: '/'
+      fullPath: '/dictionary/'
+      preLoaderRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRouteImport
+      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
+    }
+    '/_(authenticated)/dictionary/senses/$senseId': {
+      id: '/_(authenticated)/dictionary/senses/$senseId'
+      path: '/senses/$senseId'
+      fullPath: '/dictionary/senses/$senseId'
+      preLoaderRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRouteImport
+      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
+    }
   }
 }
 
+interface DotModulesLearningPagesDictionaryLayoutRouteChildren {
+  DotModulesLearningPagesDictionarySearchDotpageRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRoute
+  DotModulesLearningPagesWordSenseDetailDotpageRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+}
+
+const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPagesDictionaryLayoutRouteChildren =
+  {
+    DotModulesLearningPagesDictionarySearchDotpageRoute:
+      DotModulesLearningPagesDictionarySearchDotpageRoute,
+    DotModulesLearningPagesWordSenseDetailDotpageRoute:
+      DotModulesLearningPagesWordSenseDetailDotpageRoute,
+  }
+
+const DotModulesLearningPagesDictionaryLayoutRouteWithChildren =
+  DotModulesLearningPagesDictionaryLayoutRoute._addFileChildren(
+    DotModulesLearningPagesDictionaryLayoutRouteChildren,
+  )
+
 interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
+  DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
   DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
 }
@@ -257,6 +275,8 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
   {
     DotModulesDashboardPagesDashboardPageRoute:
       DotModulesDashboardPagesDashboardPageRoute,
+    DotModulesLearningPagesDictionaryLayoutRoute:
+      DotModulesLearningPagesDictionaryLayoutRouteWithChildren,
     DotModulesLearningPagesMyLearningDotpageRoute:
       DotModulesLearningPagesMyLearningDotpageRoute,
     DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
@@ -285,32 +305,12 @@ const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =
     DotModulesShellPagesUnauthenticatedLayoutRouteChildren,
   )
 
-interface DotModulesLearningPagesDictionaryLayoutRouteChildren {
-  DotModulesLearningPagesDictionarySearchDotpageRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  DotModulesLearningPagesWordSenseDetailDotpageRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-}
-
-const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPagesDictionaryLayoutRouteChildren =
-  {
-    DotModulesLearningPagesDictionarySearchDotpageRoute:
-      DotModulesLearningPagesDictionarySearchDotpageRoute,
-    DotModulesLearningPagesWordSenseDetailDotpageRoute:
-      DotModulesLearningPagesWordSenseDetailDotpageRoute,
-  }
-
-const DotModulesLearningPagesDictionaryLayoutRouteWithChildren =
-  DotModulesLearningPagesDictionaryLayoutRoute._addFileChildren(
-    DotModulesLearningPagesDictionaryLayoutRouteChildren,
-  )
-
 const rootRouteChildren: RootRouteChildren = {
   modulesShellPagesLandingPageRoute: modulesShellPagesLandingPageRoute,
   DotModulesShellPagesAuthenticatedLayoutRoute:
     DotModulesShellPagesAuthenticatedLayoutRouteWithChildren,
   DotModulesShellPagesUnauthenticatedLayoutRoute:
     DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren,
-  DotModulesLearningPagesDictionaryLayoutRoute:
-    DotModulesLearningPagesDictionaryLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { WordSenseDetail } from '../components/word-sense-detail';
 import { useWordSenseDetail } from '../hooks/use-word-sense-detail';
 
-export const Route = createFileRoute('/dictionary/senses/$senseId')({
+export const Route = createFileRoute('/_(authenticated)/dictionary/senses/$senseId')({
   component: WordSenseDetailPage,
 });
 

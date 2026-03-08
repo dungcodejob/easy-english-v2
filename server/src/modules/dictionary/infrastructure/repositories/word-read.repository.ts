@@ -63,6 +63,8 @@ export class WordReadRepository implements IWordReadRepository {
       normalizedText: s.word.normalizedText,
       partOfSpeech: s.partOfSpeech,
       shortDefinition: s.shortDefinition,
+      definition: s.definition,
+      definitionVi: s.definitionVi,
       cefrLevel: s.cefrLevel || null,
     }));
 

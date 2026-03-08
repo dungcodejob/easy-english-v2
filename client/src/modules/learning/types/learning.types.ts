@@ -26,6 +26,8 @@ export interface WordSenseSearchResult {
   wordText: string;
   normalizedText: string;
   partOfSpeech: string;
+  definition: string;
+  definitionVi: string | null;
   shortDefinition: string | null;
   cefrLevel: string | null;
 }

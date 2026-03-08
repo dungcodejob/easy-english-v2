@@ -5,7 +5,7 @@ import { SearchResultsList } from '../components/search-results-list';
 import { useSearchWordSenses } from '../hooks/use-search-word-senses';
 import { useSearchStore } from '../stores/use-search-store';
 
-export const Route = createFileRoute('/dictionary/')({
+export const Route = createFileRoute('/_(authenticated)/dictionary/')({
   component: DictionarySearchPage,
 });
 
