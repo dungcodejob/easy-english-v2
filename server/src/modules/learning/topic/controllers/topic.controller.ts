@@ -5,6 +5,7 @@ import {
   PaginationParam,
   type ParsedPaginationParams,
 } from '@core/api';
+import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import {
   Body,
   Controller,
@@ -12,6 +13,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -27,18 +29,21 @@ import {
 } from '@shared/decorators';
 import { AddTopicWordCommand } from '../application/commands/add-topic-word.command';
 import { CreateTopicCommand } from '../application/commands/create-topic.command';
+import { DeleteTopicCommand } from '../application/commands/delete-topic.command';
 import { RemoveTopicWordCommand } from '../application/commands/remove-topic-word.command';
+import { UpdateTopicCommand } from '../application/commands/update-topic.command';
 import { GetTopicDetailQuery } from '../application/queries/get-topic-detail.query';
 import { GetTopicsQuery } from '../application/queries/get-topics.query';
 import { ListTopicWordsQuery } from '../application/queries/list-topic-words.query';
 import {
   AddTopicWordRequestDto,
   CreateTopicRequestDto,
+  UpdateTopicRequestDto,
 } from '../dto/requests/topic-requests.dto';
 import { TopicDto, TopicWordDto } from '../dto/responses/topic.dto';
 
 @ApiTags('Topics')
-@Controller('api/v1/topics')
+@Controller('topics')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class TopicController {
@@ -53,7 +58,7 @@ export class TopicController {
   async createTopic(
     @CurrentUser() user: ITokenPayload,
     @Body() dto: CreateTopicRequestDto,
-  ): Promise<TopicDto> {
+  ) {
     const tenantId = user.tenantId;
     const userId = user.userId;
 
@@ -61,13 +66,13 @@ export class TopicController {
       new CreateTopicCommand(tenantId, userId, dto.name, dto.description),
     );
 
-    return {
+    return ApiResponseBuilder.success({
       id: topic.id,
       name: topic.name,
       description: topic.description,
       createdAt: topic.createdAt,
       updatedAt: topic.updatedAt,
-    };
+    });
   }
 
   @Get()
@@ -87,19 +92,12 @@ export class TopicController {
       { data: TopicDto[]; count: number }
     >(new GetTopicsQuery(tenantId, userId, top, skip));
 
-    return {
-      success: true,
-      data: result.data,
-      pagination: {
-        top,
-        skip,
-        count: result.count,
-        hasMore: skip + result.data.length < result.count,
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.paginated(result.data, {
+      top,
+      skip,
+      count: result.count,
+      hasMore: skip + result.data.length < result.count,
+    });
   }
 
   @Get(':id')
@@ -118,19 +116,56 @@ export class TopicController {
       return null;
     }
 
-    return {
-      success: true,
-      data: {
-        id: result.id,
-        name: result.name,
-        description: result.description,
-        createdAt: result.createdAt,
-        updatedAt: result.updatedAt,
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.success({
+      id: result.id,
+      name: result.name,
+      description: result.description,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+    });
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a topic' })
+  async updateTopic(
+    @CurrentUser() user: ITokenPayload,
+    @Param('id') id: string,
+    @Body() dto: UpdateTopicRequestDto,
+  ) {
+    const tenantId = user.tenantId;
+    const userId = user.userId;
+
+    const topic = await this.commandBus.execute<UpdateTopicCommand, TopicDto>(
+      new UpdateTopicCommand(
+        tenantId,
+        userId,
+        id,
+        dto.name ?? '',
+        dto.description,
+      ),
+    );
+
+    return ApiResponseBuilder.success({
+      id: topic.id,
+      name: topic.name,
+      description: topic.description,
+      createdAt: topic.createdAt,
+      updatedAt: topic.updatedAt,
+    });
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a topic' })
+  async deleteTopic(
+    @CurrentUser() user: ITokenPayload,
+    @Param('id') id: string,
+  ) {
+    const tenantId = user.tenantId;
+    const userId = user.userId;
+
+    await this.commandBus.execute(new DeleteTopicCommand(tenantId, userId, id));
+
+    return ApiResponseBuilder.success(true);
   }
 
   @Get(':id/words')
@@ -152,19 +187,12 @@ export class TopicController {
       { data: TopicWordDto[]; count: number }
     >(query);
 
-    return {
-      success: true,
-      data: result.data,
-      pagination: {
-        top,
-        skip,
-        count: result.count,
-        hasMore: skip + result.data.length < result.count,
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.paginated(result.data, {
+      top,
+      skip,
+      count: result.count,
+      hasMore: skip + result.data.length < result.count,
+    });
   }
 
   @Post(':id/words')
@@ -182,12 +210,12 @@ export class TopicController {
       TopicWordDto
     >(new AddTopicWordCommand(tenantId, userId, id, dto.wordSenseId));
 
-    return {
+    return ApiResponseBuilder.success({
       id: topicWord.id,
       wordSenseId: topicWord.wordSenseId,
       status: topicWord.status,
       addedAt: topicWord.addedAt,
-    };
+    });
   }
 
   @Delete(':id/words/:wordId')
@@ -204,6 +232,6 @@ export class TopicController {
       new RemoveTopicWordCommand(tenantId, userId, id, wordId),
     );
 
-    return { success: true };
+    return ApiResponseBuilder.success(true);
   }
 }

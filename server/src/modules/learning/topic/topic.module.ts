@@ -3,7 +3,9 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AddTopicWordHandler } from './application/commands/add-topic-word.handler';
 import { CreateTopicHandler } from './application/commands/create-topic.handler';
+import { DeleteTopicHandler } from './application/commands/delete-topic.handler';
 import { RemoveTopicWordHandler } from './application/commands/remove-topic-word.handler';
+import { UpdateTopicHandler } from './application/commands/update-topic.handler';
 import { GetTopicDetailHandler } from './application/queries/get-topic-detail.handler';
 import { GetTopicsHandler } from './application/queries/get-topics.handler';
 import { ListTopicWordsHandler } from './application/queries/list-topic-words.handler';
@@ -19,6 +21,8 @@ const queryHandlers = [
 
 const commandHandlers = [
   CreateTopicHandler,
+  UpdateTopicHandler,
+  DeleteTopicHandler,
   AddTopicWordHandler,
   RemoveTopicWordHandler,
 ];

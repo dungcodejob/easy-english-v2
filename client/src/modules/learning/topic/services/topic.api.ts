@@ -54,6 +54,21 @@ export const TopicApi = {
       }),
     ),
 
+  /** Update an existing topic. */
+  updateTopic: (id: string, name: string, description?: string) =>
+    apiCall(() =>
+      api.put<unknown, ApiSuccessResponse<Topic>>(`/topics/${id}`, {
+        name,
+        description,
+      }),
+    ),
+
+  /** Delete a topic. */
+  deleteTopic: (id: string) =>
+    apiCall(() =>
+      api.delete<unknown, ApiSuccessResponse<null>>(`/topics/${id}`),
+    ),
+
   /** Paginated list of words inside a topic. */
   getTopicWords: (topicId: string, top = 20, skip = 0) =>
     apiCall(() =>

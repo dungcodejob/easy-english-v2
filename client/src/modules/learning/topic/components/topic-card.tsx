@@ -1,9 +1,18 @@
 import { APP_ROUTES } from '@/shared/constants';
 import { Badge } from '@/shared/ui/shadcn/badge';
+import { Button } from '@/shared/ui/shadcn/button';
 import { Card } from '@/shared/ui/shadcn/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/shadcn/dropdown-menu';
 import { Link } from '@tanstack/react-router';
-import { BookOpen, ChevronRight, Clock } from 'lucide-react';
+import { BookOpen, ChevronRight, Clock, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
+import { UpdateTopicDialog } from './update-topic-dialog';
 
 interface TopicCardProps {
   topic: Topic;
@@ -18,6 +27,14 @@ function formatDate(dateStr: string) {
 }
 
 export function TopicCard({ topic }: TopicCardProps) {
+  const { mutate: deleteTopic } = useDeleteTopic();
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteTopic(topic.id);
+  };
+
   return (
     <Link
       to={APP_ROUTES.TOPIC.DETAIL}
@@ -41,7 +58,41 @@ export function TopicCard({ topic }: TopicCardProps) {
                 </h3>
               </div>
             </div>
-            <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
+            <div className="flex items-center gap-1" onClick={(e) => e.preventDefault()}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-36">
+                  <DropdownMenuItem asChild>
+                    <UpdateTopicDialog
+                      topic={topic}
+                      trigger={
+                        <span className="flex w-full items-center gap-2 cursor-pointer">
+                          <Pencil className="h-4 w-4" />
+                          Edit
+                        </span>
+                      }
+                    />
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleDelete}
+                    className="text-destructive focus:text-destructive cursor-pointer"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
+            </div>
           </div>
 
           {/* Description */}

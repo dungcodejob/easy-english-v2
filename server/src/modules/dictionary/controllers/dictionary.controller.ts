@@ -25,6 +25,7 @@ import {
   ApiAuth,
   ApiPublic,
 } from '../../../shared/decorators/http/http.decorator';
+import { ApiResponse as ApiResponseBuilder } from '../../../core/api/response.builder';
 import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
 import { GetWordSenseDetailQuery } from '../application/queries/get-word-sense-detail.query';
@@ -63,19 +64,12 @@ export class DictionaryController {
       { data: WordSenseSearchResultResponseDto[]; count: number }
     >(query);
 
-    return {
-      success: true,
-      data: result.data,
-      pagination: {
-        top,
-        skip,
-        count: result.count,
-        hasMore: skip + result.data.length < result.count,
-      },
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.paginated(result.data, {
+      top,
+      skip,
+      count: result.count,
+      hasMore: skip + result.data.length < result.count,
+    });
   }
 
   @Get('senses/:senseId')
@@ -109,13 +103,7 @@ export class DictionaryController {
       WordSenseDetailResponseDto
     >(query);
 
-    return {
-      success: true,
-      data: result,
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.success(result);
   }
 
   @Get('lookup/:word')
@@ -137,7 +125,7 @@ export class DictionaryController {
   async lookupWord(
     @Param('word') word: string,
     @CurrentUser() user: ITokenPayload,
-  ): Promise<WordResponseDto> {
+  ) {
     if (!word || word.trim().length === 0 || word.length > 100) {
       throw new BadRequestException(
         'Word must be between 1 and 100 characters.',
@@ -147,6 +135,6 @@ export class DictionaryController {
     const query = new LookupWordQuery(word, user.tenantId, user.userId);
     const result = await this.queryBus.execute<LookupWordQuery, Word[]>(query);
 
-    return new WordResponseDto(result[0]);
+    return ApiResponseBuilder.success(new WordResponseDto(result[0]));
   }
 }

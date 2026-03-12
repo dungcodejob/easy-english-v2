@@ -2,6 +2,7 @@ import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface
 import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
 import {
   ApiPaginationParams,
+  ApiResponse as ApiResponseBuilder,
   PaginationParam,
   type ParsedPaginationParams,
 } from '@core/api';
@@ -32,6 +33,7 @@ import { GetLearningListQuery } from '../application/queries/get-learning-list.q
 import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
+import { LearningStateDto } from 'src/modules/dictionary/dto/responses/word-sense-detail.response.dto';
 import { GetLearningStateQuery } from '../application/queries/get-learning-state.query';
 
 @ApiTags('Learning')
@@ -63,13 +65,7 @@ export class LearningController {
       { id: string; alreadyLearning: boolean }
     >(command);
 
-    return {
-      success: true,
-      data: result,
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.success(result);
   }
 
   @Delete('senses/:senseId')
@@ -95,13 +91,7 @@ export class LearningController {
       { success: boolean; wasLearning: boolean }
     >(command);
 
-    return {
-      success: true,
-      data: result,
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.success(result);
   }
 
   @Get('senses')
@@ -123,19 +113,12 @@ export class LearningController {
       { data: LearningListItemResponseDto[]; count: number }
     >(listQuery);
 
-    return {
-      success: true,
-      data,
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-      pagination: {
-        top: pagination.top,
-        skip: pagination.skip,
-        count: count,
-        hasMore: pagination.skip + data.length < count,
-      },
-    };
+    return ApiResponseBuilder.paginated(data, {
+      top: pagination.top,
+      skip: pagination.skip,
+      count,
+      hasMore: pagination.skip + data.length < count,
+    });
   }
 
   @Get('senses/:senseId/state')
@@ -155,14 +138,11 @@ export class LearningController {
     @CurrentUser() user: ITokenPayload,
   ) {
     const query = new GetLearningStateQuery(user.userId, senseId);
-    const result = await this.queryBus.execute(query);
+    const result = await this.queryBus.execute<
+      GetLearningStateQuery,
+      LearningStateDto
+    >(query);
 
-    return {
-      success: true,
-      data: result,
-      meta: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+    return ApiResponseBuilder.success(result);
   }
 }

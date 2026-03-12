@@ -74,16 +74,16 @@ We will deliver this feature incrementally.
 **Goal**: Provide management capabilities for existing topics.
 **Independent Test**: Edit a topic name, then delete the topic. Verify backend constraints.
 
-- [ ] T027 [US4] Implement `UpdateTopicCommand` and `UpdateTopicHandler` in `server/src/modules/learning/application/commands/`
-- [ ] T028 [P] [US4] Implement `DeleteTopicCommand` and `DeleteTopicHandler` (ensure cascade deletion) in `server/src/modules/learning/application/commands/`
-- [ ] T029 [US4] Add PUT `/api/v1/topics/:id` and DELETE `/api/v1/topics/:id` endpoints in `TopicController`
-- [ ] T030 [P] [US4] Implement frontend hooks `useUpdateTopicMutation` and `useDeleteTopicMutation` in `client/src/modules/learning/topic/hooks/`
-- [ ] T031 [US4] Implement `UpdateTopicDialog` component in `client/src/modules/learning/topic/components/`
-- [ ] T032 [US4] Add Edit/Delete actions in `TopicsPage` and `TopicDetailPage` and integrate mutations
+- [x] T027 [US4] Implement `UpdateTopicCommand` and `UpdateTopicHandler` in `server/src/modules/learning/application/commands/`
+- [x] T028 [P] [US4] Implement `DeleteTopicCommand` and `DeleteTopicHandler` (ensure cascade deletion) in `server/src/modules/learning/application/commands/`
+- [x] T029 [US4] Add PUT `/api/v1/topics/:id` and DELETE `/api/v1/topics/:id` endpoints in `TopicController`
+- [x] T030 [P] [US4] Implement frontend hooks `useUpdateTopicMutation` and `useDeleteTopicMutation` in `client/src/modules/learning/topic/hooks/`
+- [x] T031 [US4] Implement `UpdateTopicDialog` component in `client/src/modules/learning/topic/components/`
+- [x] T032 [US4] Add Edit/Delete actions in `TopicsPage` and `TopicDetailPage` and integrate mutations
 
 ## Phase 7: Polish & Cross-Cutting
 **Goal**: Finalize UX, error handling, and performance.
 
-- [ ] T033 Enhance error handling for domain limits (e.g., max 50 topics user facing toast notifications)
-- [ ] T034 Implement skeleton loaders for `TopicList` and `TopicWordList` while fetching
-- [ ] T035 Ensure all responsive design requirements are met across topic feature UI
+- [x] T033 Enhance error handling for domain limits (e.g., max 50 topics user facing toast notifications)
+- [x] T034 Implement skeleton loaders for `TopicList` and `TopicWordList` while fetching
+- [x] T035 Ensure all responsive design requirements are met across topic feature UI

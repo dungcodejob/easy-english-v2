@@ -17,8 +17,8 @@ export default function TopicsPage() {
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useTopics(page, PAGE_LIMIT);
 
-  const topics = data?.data?.data ?? [];
-  const pagination = data?.data?.pagination;
+  const topics = data?.data ?? [];
+  const pagination = data?.pagination;
   const totalPages = pagination ? Math.ceil(pagination.count / PAGE_LIMIT) : 1;
 
   return (

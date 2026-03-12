@@ -3,10 +3,12 @@ import { Badge } from '@/shared/ui/shadcn/badge';
 import { Button } from '@/shared/ui/shadcn/button';
 import { Separator } from '@/shared/ui/shadcn/separator';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
-import { createFileRoute, Link, useParams } from '@tanstack/react-router';
-import { ArrowLeft, BookOpen, ChevronRight, Hash, Inbox } from 'lucide-react';
+import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router';
+import { ArrowLeft, BookOpen, ChevronRight, Hash, Inbox, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { TopicWordCard } from '../components/topic-word-card';
+import { UpdateTopicDialog } from '../components/update-topic-dialog';
+import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import { useTopicDetail } from '../hooks/use-topic-detail';
 import { useTopicWords } from '../hooks/use-topic-words';
 
@@ -36,9 +38,20 @@ export default function TopicDetailPage() {
     isError: isWordsError,
   } = useTopicWords(topicId, page, WORD_LIMIT);
 
+  const { mutate: deleteTopic } = useDeleteTopic();
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    deleteTopic(topicId, {
+      onSuccess: () => {
+        void navigate({ to: APP_ROUTES.TOPIC.LIST });
+      },
+    });
+  };
+
   const topic = topicResponse?.data;
-  const words = wordsResponse?.data?.data ?? [];
-  const wordPagination = wordsResponse?.data?.pagination;
+  const words = wordsResponse?.data ?? [];
+  const wordPagination = wordsResponse?.pagination;
   const totalPages = wordPagination
     ? Math.ceil(wordPagination.count / WORD_LIMIT)
     : 1;
@@ -89,9 +102,29 @@ export default function TopicDetailPage() {
               <BookOpen className="h-8 w-8" />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-                {topic.name}
-              </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+                  {topic.name}
+                </h1>
+                <div className="flex items-center gap-1">
+                  <UpdateTopicDialog
+                    topic={topic}
+                    trigger={
+                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    }
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 text-muted-foreground hover:text-destructive"
+                    onClick={handleDelete}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
               {topic.description && (
                 <p className="mt-2 text-muted-foreground text-balance leading-relaxed">
                   {topic.description}

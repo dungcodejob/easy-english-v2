@@ -41,7 +41,7 @@ export function AddToLearningButton({
 
   const { data: topicsData, isLoading: isLoadingTopics } = useTopics(1, 50);
   const { mutate: addWordToTopic } = useAddWordToTopic();
-  const topics = topicsData?.data?.data ?? [];
+  const topics = topicsData?.data ?? [];
 
   const handleAddToLearning = () => {
     if (!isAuthenticated) {
