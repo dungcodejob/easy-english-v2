@@ -21,10 +21,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddToLearning } from '../hooks/use-add-to-learning';
-import {
-  useAddTopicWordMutation,
-  useTopicsQuery,
-} from '../topic/hooks/topic.hooks';
+import { useAddWordToTopic } from '../topic/hooks/use-topic-mutations';
+import { useTopics } from '../topic/hooks/use-topics';
 
 interface AddToLearningButtonProps {
   senseId: string;
@@ -41,12 +39,9 @@ export function AddToLearningButton({
   const navigate = useNavigate();
   const { mutate, isPending } = useAddToLearning();
 
-  const { data: topicsData, isLoading: isLoadingTopics } = useTopicsQuery(
-    1,
-    50,
-  );
-  const { mutate: addWordToTopic } = useAddTopicWordMutation();
-  const topics = topicsData?.data || [];
+  const { data: topicsData, isLoading: isLoadingTopics } = useTopics(1, 50);
+  const { mutate: addWordToTopic } = useAddWordToTopic();
+  const topics = topicsData?.data?.data ?? [];
 
   const handleAddToLearning = () => {
     if (!isAuthenticated) {
@@ -82,7 +77,7 @@ export function AddToLearningButton({
     }
 
     addWordToTopic(
-      { topicId, data: { wordSenseId: senseId } },
+      { topicId, wordSenseId: senseId },
       {
         onSuccess: () => toast.success(`Added to topic "${topicName}"`),
         onError: () =>
@@ -164,10 +159,8 @@ export function AddToLearningButton({
               </div>
             )}
             <DropdownMenuSeparator />
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore - route types not auto-generated yet */}
             <DropdownMenuItem
-              onClick={() => navigate({ to: '/learning/topics' })}
+              onClick={() => navigate({ to: '/learning/topics' as any })}
             >
               <ArrowRight className="mr-2 h-4 w-4 text-muted-foreground" />
               Manage Topics

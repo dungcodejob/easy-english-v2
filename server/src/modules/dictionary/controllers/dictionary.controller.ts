@@ -17,14 +17,13 @@ import {
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { Public } from '@shared/decorators';
 import {
-  ApiPaginationParams,
   PaginationParam,
   type ParsedPaginationParams,
 } from '../../../core/api/pagination/pagination.decorator';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import {
-  createSwaggerPaginationResponseDto,
-  createSwaggerResponseDto,
+  ApiAuth,
+  ApiPublic,
 } from '../../../shared/decorators/http/http.decorator';
 import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
@@ -43,12 +42,13 @@ export class DictionaryController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @Get('search')
-  @ApiOperation({ summary: 'Search for WordSenses by prefix' })
   @UseGuards(ThrottlerGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
-  @createSwaggerPaginationResponseDto(WordSenseSearchResultResponseDto)
-  @ApiPaginationParams()
-  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiPublic({
+    type: WordSenseSearchResultResponseDto,
+    responseType: 'pagination',
+    summary: 'Search for WordSenses by prefix',
+  })
   @Public()
   async searchWordSenses(
     @Query() queryDto: SearchWordSensesRequestDto,
@@ -79,14 +79,17 @@ export class DictionaryController {
   }
 
   @Get('senses/:senseId')
-  @ApiOperation({ summary: 'Get full details for a WordSense' })
   @ApiParam({
     name: 'senseId',
     required: true,
     description: 'ID of the WordSense',
   })
-  @createSwaggerResponseDto(WordSenseDetailResponseDto)
-  @ApiResponse({ status: 404, description: 'WordSense not found' })
+  @ApiAuth({
+    auths: ['jwt'],
+    type: WordSenseDetailResponseDto,
+    responseType: 'single',
+    summary: 'Get full details for a WordSense',
+  })
   async getWordSenseDetail(
     @Param('senseId') senseId: string,
     @CurrentUser() user?: ITokenPayload,

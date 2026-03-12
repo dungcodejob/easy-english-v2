@@ -12,6 +12,7 @@ import {
 import { SWAGGER_SCHEME } from '@shared/constants';
 import { STATUS_CODES } from 'http';
 
+import { ApiPaginationParams } from '@core/api';
 import {
   ApiSuccessResponseDto,
   PaginationDto,
@@ -77,6 +78,7 @@ export const ApiPublic = (options: IApiPublicOptions = {}): MethodDecorator => {
     switch (options.responseType) {
       case 'pagination': {
         decorators.push(
+          ApiPaginationParams(),
           ApiOkResponsePagination({
             itemType: options.type,
             description: options?.description ?? 'OK',
