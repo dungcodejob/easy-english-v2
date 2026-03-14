@@ -67,6 +67,9 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.48.0"
   },
+  "optionalDependencies": {
+    "@rspack/binding-linux-x64-gnu": "latest"
+  },
   "engines": {
     "node": ">=20"
   }
