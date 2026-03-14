@@ -1,17 +1,31 @@
-FROM --platform=linux/amd64 node:20-bullseye
-
+# ---------- build stage ----------
+FROM node:20-bullseye AS builder
 
 WORKDIR /app
 
+
+
 COPY package*.json ./
+
 RUN npm install --include=optional
 
 COPY . .
 
 RUN npm run build
 
-RUN npm install -g serve
 
-EXPOSE 3000
+# ---------- production stage ----------
+FROM nginx:alpine
 
-CMD ["serve","-s","dist","-l","3000"]
+# remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
+
+# copy build output
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# nginx config for SPA routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
