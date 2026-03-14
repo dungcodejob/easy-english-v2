@@ -69,7 +69,7 @@
   },
   "optionalDependencies": {
     "@rspack/binding-linux-x64-gnu": "latest",
-    "lightningcss": "^1.25.1"
+    "lightningcss-linux-x64-gnu": "^1.25.1"
   },
   "engines": {
     "node": ">=20"
