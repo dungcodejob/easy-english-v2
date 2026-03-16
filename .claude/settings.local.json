@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:/Users/Pc/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.2/skills/brainstorming/scripts\" && bash start-server.sh --project-dir \"E:/Projects/multi-tenant/easy-english-v2\")",
+      "Bash(cd \"C:/Users/Pc/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.2/skills/brainstorming/scripts\" && bash stop-server.sh \"E:/Projects/multi-tenant/easy-english-v2/.superpowers/brainstorm/1074-1773670885\")",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm install)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/client\" && npm install)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm run test -- --passWithNoTests 2>&1 | head -20)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/client\" && npm run build 2>&1 | tail -20)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npm run test -- --testPathPattern=flashcard.orm-entity 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npm run test -- --testPathPatterns=flashcard.orm-entity 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npx tsc --noEmit --project tsconfig.json 2>&1 | head -30)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npm list @mikroorm/core)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npx tsc --noEmit --project tsconfig.json 2>&1 | grep -E \"\\(flashcard|error TS\\)\")",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && rm -rf node_modules/.cache 2>/dev/null; npx jest --clearCache 2>&1; npm run test -- --testPathPatterns=flashcard.orm-entity 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npm run test -- --testPathPatterns=app.controller 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard && npm run test -- --testPathPatterns=flashcard.orm-entity 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npx ts-node -e \"\nimport { FlashcardOrmEntity } from './src/modules/flashcard/infrastructure/persistence/flashcard.orm-entity';\nconst f = new FlashcardOrmEntity\\('tenant-1', 'user-1', 'Hello', 'Xin chào', 'custom'\\);\nconsole.log\\('front:', f.front\\);\nconsole.log\\('back:', f.back\\);\nconsole.log\\('source:', f.source\\);\nconsole.log\\('id:', f.id\\);\nconsole.log\\('Test passed!'\\);\n\")",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && npx ts-node -e \"\nimport { FlashcardOrmEntity } from './src/modules/flashcard/infrastructure/persistence/flashcard.orm-entity';\nconst f = new FlashcardOrmEntity\\('tenant-1', 'user-1', 'Hello', 'Xin chào', 'custom'\\);\nconsole.log\\('front:', f.front\\);\nconsole.log\\('back:', f.back\\);\nconsole.log\\('source:', f.source\\);\nconsole.log\\('id:', f.id\\);\nconsole.log\\('Test passed!'\\);\n\" 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm run build 2>&1 | head -40)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm run build 2>&1 | tail -30)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npx tsc --noEmit --listFiles 2>&1 | grep -i flashcard | head -20)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npx tsc --noEmit src/modules/learning/topic/application/queries/get-topics.handler.ts 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npm run build 2>&1 | tail -10)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && rm -rf node_modules/.cache && npm run build 2>&1 | tail -10)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && rm -rf node_modules && cp -r \"../server/node_modules\" .)",
+      "Bash(rm -rf \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server/node_modules\" && cp -r \"E:/Projects/multi-tenant/easy-english-v2/server/node_modules\" \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server/\")",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm install 2>&1 | tail -20)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server\" && npm run build 2>&1 | tail -20)",
+      "Bash(rm -rf \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server/node_modules\" && ln -s \"../../../../server/node_modules\" \"E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server/node_modules\")",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && pnpm install 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/.worktrees/flashcard/server && pnpm run build 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && pnpm run build 2>&1)",
+      "mcp__shadcn__list_items_in_registries",
+      "mcp__shadcn__get_add_command_for_items",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && npx shadcn@latest add alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && echo \"y\" | npx shadcn@latest add alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip --yes 2>&1)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && bunx --bun shadcn@latest alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip)"
+    ]
+  }
+}

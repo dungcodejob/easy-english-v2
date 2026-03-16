@@ -16,6 +16,7 @@ import {
   Settings,
   TrendingUp,
   Trophy,
+  Layers,
 } from 'lucide-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       id: useId(),
       title: t('sidebar.today_review'),
-      url: APP_ROUTES.REVIEW,
+      url: APP_ROUTES.STUDY,
       icon: Flame, // 🔥 fire icon
       badge: 3, // pending review count (mock data)
       priority: true, // special styling flag
@@ -58,6 +59,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       title: t('sidebar.topics'),
       url: APP_ROUTES.TOPIC.LIST,
       icon: BookOpen,
+    },
+    {
+      id: useId(),
+      title: t('sidebar.flashcards'),
+      url: APP_ROUTES.FLASHCARDS,
+      icon: Layers,
     },
     {
       id: useId(),

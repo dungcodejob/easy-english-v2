@@ -21,6 +21,9 @@ export const routes = rootRoute('root.tsx', [
       '/learning/topics/$topicId',
       './modules/learning/topic/pages/topic-detail.page.tsx',
     ),
+    route('/flashcards', './modules/flashcard/pages/flashcards.page.tsx'),
+    route('/study', './modules/flashcard/pages/study.page.tsx'),
+    route('/flashcards/stats', './modules/flashcard/pages/stats.page.tsx'),
     route(
       APP_ROUTES.WORKSPACE.NEW,
       './modules/workspace/pages/new-workspace.page.tsx',
