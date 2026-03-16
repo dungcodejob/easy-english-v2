@@ -3,6 +3,10 @@
 *.local
 *.log*
 
+# Superpowers
+.superpowers/
+.worktrees/
+
 # Dist
 node_modules
 dist/
