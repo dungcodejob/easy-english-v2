@@ -1,0 +1,6 @@
+export class GetStudyStatsQuery {
+  constructor(
+    public readonly userId: string,
+    public readonly tenantId: string,
+  ) {}
+}
