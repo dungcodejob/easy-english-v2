@@ -18,3 +18,6 @@ export { DsButton } from './ds-button';
 
 export type { DsInputProps } from './ds-input';
 export { DsInput } from './ds-input';
+
+export type { DsSelectProps } from './ds-select';
+export { DsSelect, DsSelectItem } from './ds-select';

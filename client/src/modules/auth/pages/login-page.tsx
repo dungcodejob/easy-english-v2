@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { LoginForm } from '../components/login-form';
 
 export const Route = createFileRoute('/_(unauthenticated)/login')({
@@ -670,12 +670,12 @@ export default function LoginPage() {
 
           <p className="text-muted-foreground mt-4 text-center">
             Don&apos;t have an account?{' '}
-            <Link
-              to="/register"
+            <a
+              href="/register"
               className="text-card-foreground hover:underline"
             >
               Sign up
-            </Link>
+            </a>
           </p>
         </div>
       </div>

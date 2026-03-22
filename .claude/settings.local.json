@@ -43,7 +43,12 @@
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npx tsc --noEmit 2>&1 | head -60)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | head -80)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/workspace\\)\" | head -40)",
-      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/workspace/components/new-wizard\\)\" | head -20)"
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/workspace/components/new-wizard\\)\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(new-wizard|shared/ui/base|shared/ui/index\\)\" | head -30)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(new-wizard|workspace\\)\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page\\)\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page|new-wizard|shared/ui\\)\" | head -10)"
     ]
   }
 }

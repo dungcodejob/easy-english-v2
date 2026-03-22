@@ -12,9 +12,9 @@ export default function LandingPage() {
         <Link to="/login" className="text-blue-500 hover:underline">
           Login
         </Link>
-        <Link to="/register" className="text-blue-500 hover:underline">
+        <a href="/register" className="text-blue-500 hover:underline">
           Register
-        </Link>
+        </a>
       </div>
     </div>
   );

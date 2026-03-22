@@ -1,11 +1,19 @@
-import { defaultWizardPreferences } from '@/modules/workspace/stores/use-wizard-store';
-import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { Button } from '@/shared/ui/shadcn/button';
+/**
+ * WorkspaceReviewStep — wizard step component
+ *
+ * Migrated to Design System:
+ *  - WizardStepLayout  → WizardStepShell (DS pattern)
+ *  - shadcn Button    → DsButton (DS base) with isLoading prop
+ *  - shadcn Spinner   → removed (isLoading handles this)
+ */
+
+import { DsButton } from '@/shared/ui/base';
 import { Card, CardContent } from '@/shared/ui/shadcn/card';
 import { Separator } from '@/shared/ui/shadcn/separator';
-import { Spinner } from '@/shared/ui/shadcn/spinner';
+import { WizardStepShell } from '@/shared/ui/patterns';
 import { CheckCircle2 } from 'lucide-react';
-import { WizardStepLayout } from '../wizard-step-layout';
+import { defaultWizardPreferences } from '@/modules/workspace/stores/use-wizard-store';
+import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
 
 interface WorkspaceReviewStepProps {
   data: Partial<CreateWorkspaceWizardData>;
@@ -23,7 +31,7 @@ export function WorkspaceReviewStep({
   isError,
 }: WorkspaceReviewStepProps) {
   return (
-    <WizardStepLayout
+    <WizardStepShell
       title="Review & Create"
       description="Everything look good? Ready to start your learning journey."
     >
@@ -122,34 +130,26 @@ export function WorkspaceReviewStep({
         </Card>
 
         <div className="flex justify-between pt-4">
-          <Button
+          <DsButton
             type="button"
             variant="ghost"
             onClick={onBack}
             disabled={isSubmitting}
           >
             Back
-          </Button>
-          <Button
+          </DsButton>
+          <DsButton
             onClick={onSubmit}
-            size="lg"
             disabled={isSubmitting}
+            isLoading={isSubmitting}
+            loadingLabel="Creating workspace..."
+            leftIcon={!isSubmitting ? <CheckCircle2 /> : undefined}
             className="w-full md:w-auto min-w-[150px]"
           >
-            {isSubmitting ? (
-              <>
-                <Spinner className="mr-2 h-4 w-4" />
-                Creating...
-              </>
-            ) : (
-              <>
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                {isError ? 'Retry Create Workspace' : 'Create Workspace'}
-              </>
-            )}
-          </Button>
+            {isError ? 'Retry Create Workspace' : 'Create Workspace'}
+          </DsButton>
         </div>
       </div>
-    </WizardStepLayout>
+    </WizardStepShell>
   );
 }

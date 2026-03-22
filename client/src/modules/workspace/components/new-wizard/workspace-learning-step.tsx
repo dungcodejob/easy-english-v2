@@ -1,12 +1,24 @@
+/**
+ * WorkspaceLearningStep — wizard step component
+ *
+ * Migrated to Design System:
+ *  - WizardStepLayout  → WizardStepShell (DS pattern)
+ *  - shadcn Button    → DsButton (DS base)
+ *
+ * shadcn primitives kept as-is (no DS equivalent needed yet):
+ *  - RadioGroup, RadioGroupItem — complex controlled state
+ *  - LanguagePicker — custom component
+ */
+
 import { LanguagePicker } from '@/modules/workspace/components/language-picker';
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-
-import { Button } from '@/shared/ui/shadcn/button';
+import { DsButton } from '@/shared/ui/base';
+import { FieldLabel } from '@/shared/ui/shadcn/field';
 import { Label } from '@/shared/ui/shadcn/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/shadcn/radio-group';
+import { WizardStepShell } from '@/shared/ui/patterns';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceLearningGoal, WorkspaceLearningLevel } from '../../types';
-import { WizardStepLayout } from '../wizard-step-layout';
 
 interface WorkspaceLearningStepProps {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -25,7 +37,7 @@ export function WorkspaceLearningStep({
     formState: { errors },
   } = useForm<Partial<CreateWorkspaceWizardData>>({
     defaultValues: {
-      language: defaultValues.language || undefined, // Must be explicitly selected
+      language: defaultValues.language || undefined,
       learningGoal:
         defaultValues.learningGoal || WorkspaceLearningGoal.Vocabulary,
       level: defaultValues.level || WorkspaceLearningLevel.Beginner,
@@ -37,16 +49,16 @@ export function WorkspaceLearningStep({
   };
 
   return (
-    <WizardStepLayout
+    <WizardStepShell
       title="Learning Context"
       description="Tell us what you want to learn so we can tailor the experience."
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Language Selection */}
         <div className="space-y-3">
-          <Label>
+          <FieldLabel className="text-sm font-medium">
             Target Language <span className="text-destructive">*</span>
-          </Label>
+          </FieldLabel>
           <Controller
             control={control}
             name="language"
@@ -66,7 +78,7 @@ export function WorkspaceLearningStep({
 
         {/* Learning Goal */}
         <div className="space-y-3">
-          <Label>Main Goal</Label>
+          <FieldLabel className="text-sm font-medium">Main Goal</FieldLabel>
           <Controller
             control={control}
             name="learningGoal"
@@ -119,7 +131,9 @@ export function WorkspaceLearningStep({
 
         {/* Level Selection */}
         <div className="space-y-3">
-          <Label>Current Proficiency</Label>
+          <FieldLabel className="text-sm font-medium">
+            Current Proficiency
+          </FieldLabel>
           <Controller
             control={control}
             name="level"
@@ -185,14 +199,12 @@ export function WorkspaceLearningStep({
         </div>
 
         <div className="flex justify-between pt-4">
-          <Button type="button" variant="outline" onClick={onBack}>
+          <DsButton type="button" variant="outline" onClick={onBack}>
             Back
-          </Button>
-          <Button type="submit" size="lg">
-            Next Step
-          </Button>
+          </DsButton>
+          <DsButton type="submit">Next Step</DsButton>
         </div>
       </form>
-    </WizardStepLayout>
+    </WizardStepShell>
   );
 }

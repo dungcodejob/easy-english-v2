@@ -23,6 +23,9 @@ export { DsButton } from './base/ds-button';
 export type { DsInputProps } from './base/ds-input';
 export { DsInput } from './base/ds-input';
 
+export type { DsSelectProps } from './base/ds-select';
+export { DsSelect, DsSelectItem } from './base/ds-select';
+
 /* ─── Pattern Components ────────────────────────── */
 export { FormWrapper } from './patterns/form-wrapper';
 export { PageHeader, PageLayout } from './patterns/page-layout';
