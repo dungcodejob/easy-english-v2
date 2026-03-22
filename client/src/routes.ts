@@ -16,10 +16,10 @@ export const routes = rootRoute('root.tsx', [
   layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
     route(APP_ROUTES.DASHBOARD, './modules/dashboard/pages/dashboard-page.tsx'),
     route(APP_ROUTES.LEARN, './modules/learning/pages/my-learning.page.tsx'),
-    route('/learning/topics', './modules/learning/topic/pages/topics.page.tsx'),
+    route('/learning/topics', './modules/topic/pages/topics.page.tsx'),
     route(
       '/learning/topics/$topicId',
-      './modules/learning/topic/pages/topic-detail.page.tsx',
+      './modules/topic/pages/topic-detail.page.tsx',
     ),
     route('/flashcards', './modules/flashcard/pages/flashcards.page.tsx'),
     route('/study', './modules/flashcard/pages/study.page.tsx'),

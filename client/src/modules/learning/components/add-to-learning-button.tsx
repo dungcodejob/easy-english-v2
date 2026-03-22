@@ -21,8 +21,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddToLearning } from '../hooks/use-add-to-learning';
-import { useAddWordToTopic } from '../topic/hooks/use-topic-mutations';
-import { useTopics } from '../topic/hooks/use-topics';
+import { useAddWordToTopic } from '../../topic/hooks/use-topic-mutations';
+import { useTopics } from '../../topic/hooks/use-topics';
 
 interface AddToLearningButtonProps {
   senseId: string;

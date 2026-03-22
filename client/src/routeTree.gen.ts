@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './root'
 import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
 import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
 import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
-import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
 import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
 import { Route as DotModulesFlashcardPagesStudyDotpageRouteImport } from './modules/flashcard/pages/study.page'
 import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
@@ -20,10 +19,10 @@ import { Route as DotModulesFlashcardPagesFlashcardsDotpageRouteImport } from '.
 import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
 import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
 import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
-import { Route as DotModulesLearningTopicPagesTopicsDotpageRouteImport } from './modules/learning/topic/pages/topics.page'
+import { Route as DotModulesTopicPagesTopicsDotpageRouteImport } from './modules/topic/pages/topics.page'
 import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page'
 import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page'
-import { Route as DotModulesLearningTopicPagesTopicDetailDotpageRouteImport } from './modules/learning/topic/pages/topic-detail.page'
+import { Route as DotModulesTopicPagesTopicDetailDotpageRouteImport } from './modules/topic/pages/topic-detail.page'
 import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page'
 
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
@@ -41,12 +40,6 @@ const modulesShellPagesLandingPageRoute =
     id: '/',
     path: '/',
     getParentRoute: () => rootRouteImport,
-  } as any)
-const DotModulesAuthPagesRegisterDotpageRoute =
-  DotModulesAuthPagesRegisterDotpageRouteImport.update({
-    id: '/register',
-    path: '/register',
-    getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
   } as any)
 const DotModulesAuthPagesLoginPageRoute =
   DotModulesAuthPagesLoginPageRouteImport.update({
@@ -90,8 +83,8 @@ const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
     path: '/workspace/new',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningTopicPagesTopicsDotpageRoute =
-  DotModulesLearningTopicPagesTopicsDotpageRouteImport.update({
+const DotModulesTopicPagesTopicsDotpageRoute =
+  DotModulesTopicPagesTopicsDotpageRouteImport.update({
     id: '/learning/topics',
     path: '/learning/topics',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
@@ -108,8 +101,8 @@ const DotModulesLearningPagesDictionarySearchDotpageRoute =
     path: '/',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
   } as any)
-const DotModulesLearningTopicPagesTopicDetailDotpageRoute =
-  DotModulesLearningTopicPagesTopicDetailDotpageRouteImport.update({
+const DotModulesTopicPagesTopicDetailDotpageRoute =
+  DotModulesTopicPagesTopicDetailDotpageRouteImport.update({
     id: '/learning/topics/$topicId',
     path: '/learning/topics/$topicId',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
@@ -129,13 +122,12 @@ export interface FileRoutesByFullPath {
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/learning/topics': typeof DotModulesLearningTopicPagesTopicsDotpageRoute
+  '/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/learning/topics/$topicId': typeof DotModulesLearningTopicPagesTopicDetailDotpageRoute
+  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof modulesShellPagesLandingPageRoute
@@ -144,13 +136,12 @@ export interface FileRoutesByTo {
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/learning/topics': typeof DotModulesLearningTopicPagesTopicsDotpageRoute
+  '/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/learning/topics/$topicId': typeof DotModulesLearningTopicPagesTopicDetailDotpageRoute
+  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -163,13 +154,12 @@ export interface FileRoutesById {
   '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
   '/_(authenticated)/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/_(authenticated)/learning/topics': typeof DotModulesLearningTopicPagesTopicsDotpageRoute
+  '/_(authenticated)/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/_(authenticated)/learning/topics/$topicId': typeof DotModulesLearningTopicPagesTopicDetailDotpageRoute
+  '/_(authenticated)/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,7 +171,6 @@ export interface FileRouteTypes {
     | '/learning'
     | '/study'
     | '/login'
-    | '/register'
     | '/dictionary/'
     | '/flashcards/stats'
     | '/learning/topics'
@@ -196,7 +185,6 @@ export interface FileRouteTypes {
     | '/learning'
     | '/study'
     | '/login'
-    | '/register'
     | '/dictionary'
     | '/flashcards/stats'
     | '/learning/topics'
@@ -214,7 +202,6 @@ export interface FileRouteTypes {
     | '/_(authenticated)/learning'
     | '/_(authenticated)/study'
     | '/_(unauthenticated)/login'
-    | '/_(unauthenticated)/register'
     | '/_(authenticated)/dictionary/'
     | '/_(authenticated)/flashcards/stats'
     | '/_(authenticated)/learning/topics'
@@ -251,13 +238,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof modulesShellPagesLandingPageRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_(unauthenticated)/register': {
-      id: '/_(unauthenticated)/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
     '/_(unauthenticated)/login': {
       id: '/_(unauthenticated)/login'
@@ -312,7 +292,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/learning/topics'
       path: '/learning/topics'
       fullPath: '/learning/topics'
-      preLoaderRoute: typeof DotModulesLearningTopicPagesTopicsDotpageRouteImport
+      preLoaderRoute: typeof DotModulesTopicPagesTopicsDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
     '/_(authenticated)/flashcards/stats': {
@@ -333,7 +313,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/learning/topics/$topicId'
       path: '/learning/topics/$topicId'
       fullPath: '/learning/topics/$topicId'
-      preLoaderRoute: typeof DotModulesLearningTopicPagesTopicDetailDotpageRouteImport
+      preLoaderRoute: typeof DotModulesTopicPagesTopicDetailDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
     '/_(authenticated)/dictionary/senses/$senseId': {
@@ -371,9 +351,9 @@ interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
   DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute
   DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute
-  DotModulesLearningTopicPagesTopicsDotpageRoute: typeof DotModulesLearningTopicPagesTopicsDotpageRoute
+  DotModulesTopicPagesTopicsDotpageRoute: typeof DotModulesTopicPagesTopicsDotpageRoute
   DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  DotModulesLearningTopicPagesTopicDetailDotpageRoute: typeof DotModulesLearningTopicPagesTopicDetailDotpageRoute
+  DotModulesTopicPagesTopicDetailDotpageRoute: typeof DotModulesTopicPagesTopicDetailDotpageRoute
 }
 
 const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPagesAuthenticatedLayoutRouteChildren =
@@ -390,12 +370,12 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesFlashcardPagesStudyDotpageRoute,
     DotModulesFlashcardPagesStatsDotpageRoute:
       DotModulesFlashcardPagesStatsDotpageRoute,
-    DotModulesLearningTopicPagesTopicsDotpageRoute:
-      DotModulesLearningTopicPagesTopicsDotpageRoute,
+    DotModulesTopicPagesTopicsDotpageRoute:
+      DotModulesTopicPagesTopicsDotpageRoute,
     DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
       DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
-    DotModulesLearningTopicPagesTopicDetailDotpageRoute:
-      DotModulesLearningTopicPagesTopicDetailDotpageRoute,
+    DotModulesTopicPagesTopicDetailDotpageRoute:
+      DotModulesTopicPagesTopicDetailDotpageRoute,
   }
 
 const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
@@ -405,14 +385,11 @@ const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
 
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
   DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute
-  DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
 }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
   {
     DotModulesAuthPagesLoginPageRoute: DotModulesAuthPagesLoginPageRoute,
-    DotModulesAuthPagesRegisterDotpageRoute:
-      DotModulesAuthPagesRegisterDotpageRoute,
   }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =

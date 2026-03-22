@@ -35,7 +35,15 @@
       "mcp__shadcn__get_add_command_for_items",
       "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && npx shadcn@latest add alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip 2>&1)",
       "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && echo \"y\" | npx shadcn@latest add alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip --yes 2>&1)",
-      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && bunx --bun shadcn@latest alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip)"
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && bunx --bun shadcn@latest alert-dialog alert avatar badge button button-group card collapsible combobox command context-menu dialog dropdown-menu empty field input input-group label pagination popover progress radio-group select separator sheet sidebar skeleton spinner switch table tabs textarea toggle tooltip)",
+      "Bash(git -C \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\" branch --show-current)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npm run routes:generate)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && pnpm run)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && pnpm run build 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npx tsc --noEmit 2>&1 | head -60)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | head -80)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/workspace\\)\" | head -40)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/workspace/components/new-wizard\\)\" | head -20)"
     ]
   }
 }
