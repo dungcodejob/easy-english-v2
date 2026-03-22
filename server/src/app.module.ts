@@ -16,6 +16,7 @@ import { DictionaryModule } from './modules/dictionary/dictionary.module';
 import { ProgressModule } from './modules/learning/progress/progress.module';
 import { TopicModule } from './modules/learning/topic/topic.module';
 import { WorkspaceModule } from './modules/workspace/workspace.module';
+import { FlashcardModule } from './modules/flashcard/flashcard.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { WorkspaceModule } from './modules/workspace/workspace.module';
     DictionaryModule,
     ProgressModule,
     TopicModule,
+    FlashcardModule,
   ],
 
   controllers: [AppController],
