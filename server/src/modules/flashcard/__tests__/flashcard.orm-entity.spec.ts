@@ -1,4 +1,4 @@
-import { FlashcardOrmEntity } from '../../infrastructure/persistence/flashcard.orm-entity';
+import { FlashcardOrmEntity } from '../infrastructure/persistence/flashcard.orm-entity';
 
 describe('FlashcardOrmEntity', () => {
   it('should create a flashcard entity', () => {
