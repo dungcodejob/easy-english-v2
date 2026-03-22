@@ -1,13 +1,21 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { IFlashcardRepository } from '../../domain/repositories/flashcard.repository.interface';
-import { UpdateFlashcardCommand } from './update-flashcard.command';
+import {
+  type IFlashcardRepository,
+  InjectFlashcardRepository,
+} from '../../domain/repositories/flashcard.repository.interface';
 import { FlashcardResponseDto } from '../../dto/responses/flashcard.response.dto';
+import { UpdateFlashcardCommand } from './update-flashcard.command';
 
 @CommandHandler(UpdateFlashcardCommand)
 export class UpdateFlashcardHandler implements ICommandHandler<UpdateFlashcardCommand> {
-  constructor(private readonly flashcardRepo: IFlashcardRepository) {}
+  constructor(
+    @InjectFlashcardRepository()
+    private readonly flashcardRepo: IFlashcardRepository,
+  ) {}
 
-  async execute(command: UpdateFlashcardCommand): Promise<FlashcardResponseDto | null> {
+  async execute(
+    command: UpdateFlashcardCommand,
+  ): Promise<FlashcardResponseDto | null> {
     const flashcard = await this.flashcardRepo.findById(command.id);
     if (!flashcard || flashcard.userId !== command.userId) {
       return null;

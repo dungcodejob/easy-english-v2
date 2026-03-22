@@ -1,14 +1,22 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { FlashcardOrmEntity } from '../../infrastructure/persistence/flashcard.orm-entity';
-import { IFlashcardRepository } from '../../domain/repositories/flashcard.repository.interface';
-import { CreateFlashcardCommand } from './create-flashcard.command';
+import {
+  type IFlashcardRepository,
+  InjectFlashcardRepository,
+} from '../../domain/repositories/flashcard.repository.interface';
 import { FlashcardResponseDto } from '../../dto/responses/flashcard.response.dto';
+import { FlashcardOrmEntity } from '../../infrastructure/persistence/flashcard.orm-entity';
+import { CreateFlashcardCommand } from './create-flashcard.command';
 
 @CommandHandler(CreateFlashcardCommand)
 export class CreateFlashcardHandler implements ICommandHandler<CreateFlashcardCommand> {
-  constructor(private readonly flashcardRepo: IFlashcardRepository) {}
+  constructor(
+    @InjectFlashcardRepository()
+    private readonly flashcardRepo: IFlashcardRepository,
+  ) {}
 
-  async execute(command: CreateFlashcardCommand): Promise<FlashcardResponseDto> {
+  async execute(
+    command: CreateFlashcardCommand,
+  ): Promise<FlashcardResponseDto> {
     const flashcard = new FlashcardOrmEntity(
       command.tenantId,
       command.userId,

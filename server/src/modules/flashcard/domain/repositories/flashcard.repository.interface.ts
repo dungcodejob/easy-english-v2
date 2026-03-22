@@ -1,3 +1,4 @@
+import { createInjection } from '@shared/utils';
 import { FlashcardOrmEntity } from '../../infrastructure/persistence/flashcard.orm-entity';
 
 export interface IFlashcardRepository {
@@ -8,4 +9,10 @@ export interface IFlashcardRepository {
   delete(id: string): Promise<boolean>;
 }
 
-export const IFlashcardRepository = Symbol('IFlashcardRepository');
+const { inject, provider, token } = createInjection<IFlashcardRepository>(
+  'IFlashcardRepository',
+);
+
+export const InjectFlashcardRepository = inject;
+export const provideFlashcardRepository = provider;
+export const FlashcardRepositoryToken = token;

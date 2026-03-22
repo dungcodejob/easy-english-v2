@@ -1,12 +1,18 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { IStudyStatsRepository } from '../../domain/repositories/study-stats.repository.interface';
-import { GetStudyStatsQuery } from './get-study-stats.query';
+import {
+  type IStudyStatsRepository,
+  InjectStudyStatsRepository,
+} from '../../domain/repositories/study-stats.repository.interface';
 import { StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
 import { StudyStatsOrmEntity } from '../../infrastructure/persistence/study-stats.orm-entity';
+import { GetStudyStatsQuery } from './get-study-stats.query';
 
 @QueryHandler(GetStudyStatsQuery)
 export class GetStudyStatsHandler implements IQueryHandler<GetStudyStatsQuery> {
-  constructor(private readonly statsRepo: IStudyStatsRepository) {}
+  constructor(
+    @InjectStudyStatsRepository()
+    private readonly statsRepo: IStudyStatsRepository,
+  ) {}
 
   async execute(query: GetStudyStatsQuery): Promise<StudyStatsResponseDto> {
     let stats = await this.statsRepo.findByUserId(query.userId, query.tenantId);

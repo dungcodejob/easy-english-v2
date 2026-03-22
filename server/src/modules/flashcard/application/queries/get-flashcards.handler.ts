@@ -1,14 +1,23 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { IFlashcardRepository } from '../../domain/repositories/flashcard.repository.interface';
-import { GetFlashcardsQuery } from './get-flashcards.query';
+import {
+  type IFlashcardRepository,
+  InjectFlashcardRepository,
+} from '../../domain/repositories/flashcard.repository.interface';
 import { FlashcardResponseDto } from '../../dto/responses/flashcard.response.dto';
+import { GetFlashcardsQuery } from './get-flashcards.query';
 
 @QueryHandler(GetFlashcardsQuery)
 export class GetFlashcardsHandler implements IQueryHandler<GetFlashcardsQuery> {
-  constructor(private readonly flashcardRepo: IFlashcardRepository) {}
+  constructor(
+    @InjectFlashcardRepository()
+    private readonly flashcardRepo: IFlashcardRepository,
+  ) {}
 
   async execute(query: GetFlashcardsQuery): Promise<FlashcardResponseDto[]> {
-    const flashcards = await this.flashcardRepo.findByUserId(query.userId, query.tenantId);
+    const flashcards = await this.flashcardRepo.findByUserId(
+      query.userId,
+      query.tenantId,
+    );
 
     return flashcards.map((f) => ({
       id: f.id,
