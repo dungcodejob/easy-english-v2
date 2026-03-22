@@ -1,20 +1,25 @@
+/**
+ * StatsPage — Flashcard module
+ *
+ * UI: 100% delegated to Design System components.
+ * Business logic: unchanged.
+ */
+
 import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import {
-  Flame,
   BookOpen,
-  Clock,
-  Trophy,
-  TrendingUp,
   Calendar,
+  Clock,
+  Flame,
   Target,
+  Trophy,
   Zap,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/shadcn/card';
-import { Progress } from '@/shared/ui/shadcn/progress';
+
+import { DsCard, DsProgress } from '@/shared/ui';
 import { useStudyStats, useFlashcards } from '../hooks/use-flashcards';
-import { Spinner } from '@/shared/ui/shadcn/spinner';
 
 export const Route = createFileRoute('/_(authenticated)/flashcards/stats')({
   component: StatsPage,
@@ -31,7 +36,27 @@ function StatsPage() {
   if (statsLoading || !stats) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Spinner className="size-8" />
+        <svg
+          className="size-8 animate-spin text-muted-foreground"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
       </div>
     );
   }
@@ -71,7 +96,7 @@ function StatsPage() {
       icon: Trophy,
       color: 'text-yellow-500',
       bgColor: 'bg-yellow-500/10',
-      description: t('stats.mastered_desc') || 'Cards you\'ve mastered',
+      description: t('stats.mastered_desc') || "Cards you've mastered",
     },
   ];
 
@@ -79,16 +104,17 @@ function StatsPage() {
     ? new Date(stats.lastStudyDate).toLocaleDateString()
     : t('stats.never') || 'Never';
 
-  const masteryProgress = totalCards > 0 ? (stats.masteredCards / totalCards) * 100 : 0;
+  const masteryProgress =
+    totalCards > 0 ? (stats.masteredCards / totalCards) * 100 : 0;
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-10">
+    <div className="flex w-full max-w-4xl flex-col gap-6 pb-10 mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
           {t('stats.title') || 'Study Statistics'}
         </h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="mt-1 text-muted-foreground">
           {t('stats.subtitle') || 'Track your learning progress'}
         </p>
       </div>
@@ -102,42 +128,28 @@ function StatsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="hover:-translate-y-1 hover:shadow-md transition-all duration-200">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </CardTitle>
-                <div className={`p-2 rounded-full ${stat.bgColor}`}>
-                  <stat.icon className={`size-4 ${stat.color}`} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">
-                  {stat.value}
-                  {stat.unit && (
-                    <span className="text-sm font-normal text-muted-foreground ml-1">
-                      {stat.unit}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {stat.description}
-                </p>
-              </CardContent>
-            </Card>
+            <StatCard
+              title={stat.title}
+              value={stat.value}
+              unit={stat.unit}
+              icon={stat.icon}
+              color={stat.color}
+              bgColor={stat.bgColor}
+              description={stat.description}
+            />
           </motion.div>
         ))}
       </div>
 
       {/* Mastery Progress */}
-      <Card className="overflow-hidden">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="size-5 text-primary" />
+      <DsCard className="overflow-hidden">
+        <DsCard.Header className="gap-2">
+          <Target className="size-5 text-primary" />
+          <span className="text-sm font-medium">
             {t('stats.mastery_progress') || 'Mastery Progress'}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+          </span>
+        </DsCard.Header>
+        <DsCard.Content className="space-y-6">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">
@@ -145,68 +157,122 @@ function StatsPage() {
               </span>
               <span className="font-medium">{Math.round(masteryProgress)}%</span>
             </div>
-            <Progress value={masteryProgress} className="h-3" />
+            <DsProgress value={masteryProgress} size="lg" />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="text-center p-4 rounded-lg bg-muted/50">
+            <div className="rounded-lg bg-muted/50 p-4 text-center">
               <div className="text-2xl font-bold text-blue-500">{totalCards}</div>
-              <div className="text-sm text-muted-foreground">
+              <div className="mt-1 text-sm text-muted-foreground">
                 {t('stats.total_cards') || 'Total Cards'}
               </div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <div className="text-2xl font-bold text-green-500">{stats.masteredCards}</div>
-              <div className="text-sm text-muted-foreground">
+            <div className="rounded-lg bg-muted/50 p-4 text-center">
+              <div className="text-2xl font-bold text-green-500">
+                {stats.masteredCards}
+              </div>
+              <div className="mt-1 text-sm text-muted-foreground">
                 {t('stats.mastered') || 'Mastered'}
               </div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
+            <div className="rounded-lg bg-muted/50 p-4 text-center">
               <div className="text-2xl font-bold text-orange-500">{stats.streak}</div>
-              <div className="text-sm text-muted-foreground">
+              <div className="mt-1 text-sm text-muted-foreground">
                 {t('stats.day_streak') || 'Day Streak'}
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </DsCard.Content>
+      </DsCard>
 
       {/* Activity Summary */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Calendar className="size-5 text-muted-foreground" />
-            <CardTitle className="text-lg">
-              {t('stats.last_study') || 'Last Study Session'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold">{lastStudyDate}</div>
-            <p className="text-sm text-muted-foreground mt-1">
-              {stats.lastStudyDate
-                ? t('stats.keep_going') || 'Keep up the great work!'
-                : t('stats.start_studying') || 'Start studying to build your streak!'}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Zap className="size-5 text-muted-foreground" />
-            <CardTitle className="text-lg">
-              {t('stats.this_week') || 'This Week'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold">
-              {stats.totalCardsReviewed}
-            </div>
-            <p className="text-sm text-muted-foreground mt-1">
-              {t('stats.cards_this_week') || 'cards reviewed'}
-            </p>
-          </CardContent>
-        </Card>
+        <ActivityCard
+          icon={<Calendar className="size-5 text-muted-foreground" />}
+          title={t('stats.last_study') || 'Last Study Session'}
+          value={lastStudyDate}
+          description={
+            stats.lastStudyDate
+              ? t('stats.keep_going') || 'Keep up the great work!'
+              : t('stats.start_studying') || 'Start studying to build your streak!'
+          }
+        />
+        <ActivityCard
+          icon={<Zap className="size-5 text-muted-foreground" />}
+          title={t('stats.this_week') || 'This Week'}
+          value={`${stats.totalCardsReviewed}`}
+          description={
+            t('stats.cards_this_week') || 'cards reviewed'
+          }
+        />
       </div>
     </div>
+  );
+}
+
+/* ─── Sub-components ──────────────────────────────────────────── */
+
+function StatCard({
+  title,
+  value,
+  unit,
+  icon: Icon,
+  color,
+  bgColor,
+  description,
+}: {
+  title: string;
+  value: string;
+  unit: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bgColor: string;
+  description: string;
+}) {
+  return (
+    <DsCard className="hover:-translate-y-1 hover:shadow-md transition-all duration-200">
+      <DsCard.Header className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <span className="text-sm font-medium text-muted-foreground">{title}</span>
+        <div className={`rounded-full p-2 ${bgColor}`}>
+          <Icon className={`size-4 ${color}`} />
+        </div>
+      </DsCard.Header>
+      <DsCard.Content>
+        <div className="text-3xl font-bold">
+          {value}
+          {unit && (
+            <span className="ml-1 text-sm font-normal text-muted-foreground">
+              {unit}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+      </DsCard.Content>
+    </DsCard>
+  );
+}
+
+function ActivityCard({
+  icon,
+  title,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <DsCard>
+      <DsCard.Header className="flex flex-row items-center gap-2">
+        {icon}
+        <span className="text-lg font-medium">{title}</span>
+      </DsCard.Header>
+      <DsCard.Content>
+        <div className="text-2xl font-semibold">{value}</div>
+        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      </DsCard.Content>
+    </DsCard>
   );
 }

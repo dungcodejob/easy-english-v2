@@ -1,18 +1,23 @@
+/**
+ * TopicWordCard — Topic module
+ *
+ * UI: DsAlertDialog, DsBadge, DsButton, DsCard.
+ */
+
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/shared/ui/shadcn/alert-dialog';
-import { Badge } from '@/shared/ui/shadcn/badge';
-import { Button } from '@/shared/ui/shadcn/button';
-import { Card } from '@/shared/ui/shadcn/card';
-import { Spinner } from '@/shared/ui/shadcn/spinner';
+  DsAlertDialog,
+  DsAlertDialogAction,
+  DsAlertDialogCancel,
+  DsAlertDialogContent,
+  DsAlertDialogDescription,
+  DsAlertDialogFooter,
+  DsAlertDialogHeader,
+  DsAlertDialogTitle,
+  DsAlertDialogTrigger,
+  DsBadge,
+  DsButton,
+  DsCard,
+} from '@/shared/ui';
 import { BookOpen, Trash2 } from 'lucide-react';
 import { useRemoveTopicWord } from '../hooks/use-topic-mutations';
 import type { TopicWord } from '../services/topic.api';
@@ -39,7 +44,7 @@ export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
     'bg-secondary/40 text-secondary-foreground border-secondary/40';
 
   return (
-    <Card className="group flex items-start justify-between gap-4 border border-border/60 bg-card p-4 transition-all duration-200 hover:border-border hover:shadow-sm">
+    <DsCard className="group flex items-start justify-between gap-4 border border-border/60 bg-card p-4 transition-all duration-200 hover:border-border hover:shadow-sm">
       {/* Word info */}
       <div className="flex min-w-0 items-start gap-3">
         <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
@@ -47,20 +52,20 @@ export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
         </div>
         <div className="min-w-0 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-base font-bold text-foreground lowercase">
+            <span className="text-base font-bold lowercase text-foreground">
               {word.wordText ?? '—'}
             </span>
             {word.partOfSpeech && (
-              <Badge
+              <DsBadge
                 variant="outline"
                 className={`rounded-full px-2 py-0.5 text-xs font-semibold ${posClass}`}
               >
                 {word.partOfSpeech}
-              </Badge>
+              </DsBadge>
             )}
           </div>
           {word.definition && (
-            <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed">
+            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
               {word.definition}
             </p>
           )}
@@ -68,44 +73,41 @@ export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
       </div>
 
       {/* Remove action */}
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button
+      <DsAlertDialog>
+        <DsAlertDialogTrigger asChild>
+          <DsButton
             variant="ghost"
             size="icon"
-            className="shrink-0 rounded-lg text-muted-foreground opacity-0 transition-opacity duration-150 hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100 focus:opacity-100 cursor-pointer"
+            className="group-hover:opacity-100 cursor-pointer opacity-0 shrink-0 rounded-lg text-muted-foreground transition-opacity duration-150 hover:bg-destructive/10 hover:text-destructive focus:opacity-100 disabled:pointer-events-none disabled:opacity-50"
             aria-label="Remove word from topic"
             disabled={isPending}
           >
-            {isPending ? (
-              <Spinner className="h-4 w-4" />
-            ) : (
-              <Trash2 className="h-4 w-4" />
-            )}
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Remove word?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <Trash2 className="h-4 w-4" />
+          </DsButton>
+        </DsAlertDialogTrigger>
+        <DsAlertDialogContent>
+          <DsAlertDialogHeader>
+            <DsAlertDialogTitle>Remove word?</DsAlertDialogTitle>
+            <DsAlertDialogDescription>
               This will remove{' '}
               <strong className="text-foreground">
                 {word.wordText ?? 'this word'}
               </strong>{' '}
               from the topic. The word will still be in your learning list.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            </DsAlertDialogDescription>
+          </DsAlertDialogHeader>
+          <DsAlertDialogFooter>
+            <DsAlertDialogCancel>Cancel</DsAlertDialogCancel>
+            <DsAlertDialogAction
+              isLoading={isPending}
+              loadingLabel="Removing…"
               onClick={() => removeWord(word.id)}
             >
               Remove
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </Card>
+            </DsAlertDialogAction>
+          </DsAlertDialogFooter>
+        </DsAlertDialogContent>
+      </DsAlertDialog>
+    </DsCard>
   );
 }

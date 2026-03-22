@@ -48,7 +48,23 @@
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(new-wizard|workspace\\)\" | head -20)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page\\)\" | head -20)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page\\)\" | head -10)",
-      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page|new-wizard|shared/ui\\)\" | head -10)"
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|landing-page|new-wizard|shared/ui\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(login-page|shared/ui/patterns\\)\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(auth|shared/ui\\)\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(auth|shared/ui\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|auth\\)\" | head -15)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"shared/ui\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"flashcard\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"flashcards\\\\.page\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(shared/ui|modules/auth|modules/flashcard\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"study\\\\.page\" | head -20)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(stats\\\\.page|shared/ui\\)\" | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && ./node_modules/.bin/tsc --noEmit 2>&1 | grep -E \"\\(flashcard|shared/ui\\)\" | head -15)",
+      "Bash(npx tsc:*)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && npm run lint 2>&1 | head -60)",
+      "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && ./node_modules/.bin/tsc --noEmit 2>&1 | head -80)",
+      "Bash(find E:/Projects/multi-tenant/easy-english-v2/server/src/modules -name \"*flashcard*\" -o -name \"*flash*\" 2>/dev/null | head -40)"
     ]
   }
 }

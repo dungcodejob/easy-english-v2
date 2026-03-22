@@ -1,9 +1,14 @@
+/**
+ * UpdateTopicDialog — Topic module
+ *
+ * UI: raw shadcn (Dialog subtree) + shadcn Label.
+ */
+
 import { Button } from '@/shared/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,7 +17,7 @@ import { Input } from '@/shared/ui/shadcn/input';
 import { Label } from '@/shared/ui/shadcn/label';
 import { Textarea } from '@/shared/ui/shadcn/textarea';
 import { Pencil } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useUpdateTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
 
@@ -56,9 +61,7 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            Edit Topic
-          </DialogTitle>
+          <DialogTitle className="text-xl font-bold">Edit Topic</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
             Update your topic name or description.
           </DialogDescription>
@@ -84,9 +87,7 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
           <div className="space-y-1.5">
             <Label htmlFor="topic-desc" className="text-sm font-semibold">
               Description{' '}
-              <span className="text-muted-foreground font-normal">
-                (optional)
-              </span>
+              <span className="text-muted-foreground font-normal">(optional)</span>
             </Label>
             <Textarea
               id="topic-desc"
@@ -99,7 +100,7 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
             />
           </div>
 
-          <DialogFooter className="pt-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
               variant="outline"
@@ -123,7 +124,7 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
                 'Save Changes'
               )}
             </Button>
-          </DialogFooter>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

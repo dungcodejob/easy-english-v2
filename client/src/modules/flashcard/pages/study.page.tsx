@@ -1,34 +1,33 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * StudyPage — Flashcard module
+ *
+ * UI: Standard components delegated to DS.
+ * 3D flip card: raw HTML (no DS abstraction needed — it's a one-off animation).
+ * Business logic: unchanged.
+ */
+
+import { useCallback, useEffect, useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
+  BookOpen,
+  Check,
   ChevronLeft,
   ChevronRight,
-  RotateCcw,
-  Check,
-  X,
   Clock,
   Flame,
-  Target,
-  BookOpen,
   Keyboard,
 } from 'lucide-react';
-import { Button } from '@/shared/ui/shadcn/button';
-import { Card, CardContent } from '@/shared/ui/shadcn/card';
-import { Progress } from '@/shared/ui/shadcn/progress';
+
+import { DsButton, DsCard, DsProgress } from '@/shared/ui';
 import {
   useDueCards,
-  useStudyStats,
 } from '../hooks/use-flashcards';
-import { Spinner } from '@/shared/ui/shadcn/spinner';
-import type { DueCard } from '../types';
 
 export const Route = createFileRoute('/_(authenticated)/study')({
   component: StudyPage,
 });
-
-type StudyMode = 'practice' | 'review';
 
 function StudyPage() {
   const { t } = useTranslation();
@@ -36,15 +35,12 @@ function StudyPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showKeyboardHint, setShowKeyboardHint] = useState(true);
-  const [studyMode, setStudyMode] = useState<StudyMode>('practice');
   const [sessionStats, setSessionStats] = useState({
     reviewed: 0,
-    correct: 0,
     startTime: Date.now(),
   });
 
   const { data: dueCardsData, isLoading } = useDueCards(50);
-  const { data: statsData } = useStudyStats();
 
   const cards = dueCardsData?.data ?? [];
   const currentCard = cards[currentIndex];
@@ -105,48 +101,57 @@ function StudyPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Spinner className="size-8" />
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <svg
+          className="size-8 animate-spin text-muted-foreground"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
       </div>
     );
   }
 
   if (cards.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
         <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-blue-500/20 blur-3xl rounded-full" />
-          <div className="relative size-24 rounded-full bg-gradient-to-br from-green-500/10 to-blue-500/10 border border-green-500/20 flex items-center justify-center">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-500/20 to-blue-500/20 blur-3xl" />
+          <div className="relative flex size-24 items-center justify-center rounded-full border border-green-500/20 bg-gradient-to-br from-green-500/10 to-blue-500/10">
             <Check className="size-12 text-green-500" />
           </div>
         </div>
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold">{t('study.all_done') || 'All caught up!'}</h2>
+        <div className="space-y-2 text-center">
+          <h2 className="text-2xl font-bold">
+            {t('study.all_done') || 'All caught up!'}
+          </h2>
           <p className="text-muted-foreground">
             {t('study.no_cards_due') || 'No cards are due for review right now.'}
           </p>
         </div>
-        <Button onClick={() => navigate({ to: '/flashcards' })}>
-          <BookOpen className="size-4 mr-2" />
+        <DsButton leftIcon={<BookOpen />} onClick={() => navigate({ to: '/flashcards' })}>
           {t('study.go_to_cards') || 'Go to My Flashcards'}
-        </Button>
+        </DsButton>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-180px)] gap-8 w-full max-w-3xl mx-auto py-8">
+    <div className="flex min-h-[calc(100vh-180px)] w-full max-w-3xl flex-col items-center justify-center gap-8 py-8 mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between w-full">
-        <Button
+      <div className="flex w-full items-center justify-between">
+        <DsButton
           variant="ghost"
           size="sm"
+          leftIcon={<ChevronLeft />}
           onClick={() => navigate({ to: '/flashcards' })}
-          className="gap-2"
         >
-          <ChevronLeft className="size-4" />
           {t('study.back') || 'Back'}
-        </Button>
+        </DsButton>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="size-4" />
@@ -154,7 +159,7 @@ function StudyPage() {
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Flame className="size-4 text-orange-500" />
-            <span>{sessionStats.reviewed}</span>
+            {sessionStats.reviewed}
           </div>
         </div>
       </div>
@@ -163,13 +168,15 @@ function StudyPage() {
       <div className="w-full space-y-2">
         <div className="flex justify-between text-sm text-muted-foreground">
           <span>{t('study.progress') || 'Progress'}</span>
-          <span>{currentIndex + 1} / {cards.length}</span>
+          <span>
+            {currentIndex + 1} / {cards.length}
+          </span>
         </div>
-        <Progress value={progress} className="h-2" />
+        <DsProgress value={progress} size="sm" />
       </div>
 
       {/* Flashcard */}
-      <div className="relative w-full aspect-[4/3] max-w-lg">
+      <div className="relative aspect-[4/3] w-full max-w-lg">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentCard.id}
@@ -181,84 +188,34 @@ function StudyPage() {
             onClick={handleFlip}
           >
             <div
-              className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${
+              className={`relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] ${
                 isFlipped ? '[transform:rotateY(180deg)]' : ''
               }`}
             >
               {/* Front */}
-              <Card className="absolute inset-0 [backface-visibility:hidden] border-2 shadow-xl overflow-hidden">
-                <CardContent className="flex flex-col items-center justify-center h-full p-8 text-center">
-                  <div className="absolute top-4 right-4">
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      currentCard.source === 'custom'
-                        ? 'bg-green-500/10 text-green-600'
-                        : 'bg-blue-500/10 text-blue-600'
-                    }`}>
-                      {currentCard.source === 'custom' ? t('study.custom') || 'Custom' : t('study.learning') || 'Learning List'}
-                    </span>
-                  </div>
-                  <div className="text-sm text-muted-foreground mb-4 uppercase tracking-wider">
-                    {t('study.question') || 'Question'}
-                  </div>
-                  <div className="text-3xl font-bold leading-relaxed">
-                    {currentCard.front}
-                  </div>
-                  {currentCard.hint && (
-                    <div className="mt-6 text-sm text-amber-600 dark:text-amber-400 flex items-center gap-2">
-                      <span className="text-amber-500">💡</span>
-                      {currentCard.hint}
-                    </div>
-                  )}
-                  <div className="absolute bottom-4 text-sm text-muted-foreground">
-                    {t('study.click_to_flip') || 'Click or press Space to reveal answer'}
-                  </div>
-                </CardContent>
-              </Card>
+              <FlashcardFace
+                isFlipped={false}
+                source={currentCard.source}
+                content={currentCard.front}
+                hint={currentCard.hint}
+                label={t('study.question') || 'Question'}
+                hintLabel={t('study.click_to_flip') || 'Click or press Space to reveal answer'}
+              />
 
               {/* Back */}
-              <Card className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] border-2 border-primary/30 shadow-xl overflow-hidden bg-primary/5">
-                <CardContent className="flex flex-col items-center justify-center h-full p-8 text-center">
-                  <div className="text-sm text-muted-foreground mb-4 uppercase tracking-wider">
-                    {t('study.answer') || 'Answer'}
-                  </div>
-                  <div className="text-3xl font-bold leading-relaxed text-primary">
-                    {currentCard.back}
-                  </div>
-                  <div className="absolute bottom-4 flex items-center gap-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePrevious();
-                      }}
-                      disabled={currentIndex === 0}
-                    >
-                      <ChevronLeft className="size-4 mr-1" />
-                      {t('study.previous') || 'Previous'}
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNext();
-                      }}
-                    >
-                      {currentIndex === cards.length - 1 ? (
-                        <>
-                          <Check className="size-4 mr-1" />
-                          {t('study.finish') || 'Finish'}
-                        </>
-                      ) : (
-                        <>
-                          {t('study.next') || 'Next'}
-                          <ChevronRight className="size-4 ml-1" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <FlashcardFace
+                isFlipped={true}
+                source={currentCard.source}
+                content={currentCard.back}
+                label={t('study.answer') || 'Answer'}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                isFirst={currentIndex === 0}
+                isLast={currentIndex === cards.length - 1}
+                flipLabel={t('study.next') || 'Next'}
+                finishLabel={t('study.finish') || 'Finish'}
+                prevLabel={t('study.previous') || 'Previous'}
+              />
             </div>
           </motion.div>
         </AnimatePresence>
@@ -270,17 +227,17 @@ function StudyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-muted/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-3 text-sm"
+              className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-muted/90 px-4 py-2 text-sm backdrop-blur-sm"
             >
               <Keyboard className="size-4 text-muted-foreground" />
               <span className="text-muted-foreground">
-                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs font-mono">Space</kbd>
-                {' '}flip
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">Space</kbd>{' '}
+                flip
               </span>
               <span className="text-muted-foreground">
-                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs font-mono">←</kbd>
-                <kbd className="px-1.5 py-0.5 bg-background rounded text-xs font-mono">→</kbd>
-                {' '}navigate
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">&#8592;</kbd>
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">&#8594;</kbd>{' '}
+                navigate
               </span>
             </motion.div>
           )}
@@ -298,9 +255,9 @@ function StudyPage() {
                 setCurrentIndex(actualIndex);
                 setIsFlipped(false);
               }}
-              className={`w-2 h-2 rounded-full transition-all ${
+              className={`h-2 w-2 rounded-full transition-all ${
                 actualIndex === currentIndex
-                  ? 'bg-primary w-6'
+                  ? 'w-6 bg-primary'
                   : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
               }`}
             />
@@ -308,5 +265,117 @@ function StudyPage() {
         })}
       </div>
     </div>
+  );
+}
+
+/* ─── Sub-components ──────────────────────────────────────────── */
+
+function FlashcardFace({
+  isFlipped,
+  source,
+  content,
+  hint,
+  label,
+  hintLabel,
+  onNext,
+  onPrevious,
+  isFirst,
+  isLast,
+  flipLabel,
+  finishLabel,
+  prevLabel,
+}: {
+  isFlipped: boolean;
+  source: string;
+  content: string;
+  hint?: string;
+  label: string;
+  hintLabel?: string;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  isFirst?: boolean;
+  isLast?: boolean;
+  flipLabel?: string;
+  finishLabel?: string;
+  prevLabel?: string;
+}) {
+  return (
+    <DsCard
+      className={`absolute inset-0 overflow-hidden border-2 shadow-xl ${
+        isFlipped ? 'border-primary/30 bg-primary/5' : ''
+      }`}
+    >
+      <DsCard.Content className="flex h-full flex-col items-center justify-center p-8 text-center">
+        {/* Source badge */}
+        <div className="absolute right-4 top-4">
+          <span
+            className={`rounded-full px-2 py-1 text-xs ${
+              source === 'custom'
+                ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+            }`}
+          >
+            {source === 'custom'
+              ? 'Custom'
+              : 'Learning List'}
+          </span>
+        </div>
+
+        {/* Label */}
+        <div className="mb-4 text-sm uppercase tracking-wider text-muted-foreground">
+          {label}
+        </div>
+
+        {/* Content */}
+        <div
+          className={`text-3xl font-bold leading-relaxed ${isFlipped ? 'text-primary' : ''}`}
+        >
+          {content}
+        </div>
+
+        {/* Hint */}
+        {hint && !isFlipped && (
+          <div className="mt-6 flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
+            <span>&#128161;</span>
+            {hint}
+          </div>
+        )}
+
+        {/* Navigation buttons (back face only) */}
+        {isFlipped && onNext && (
+          <div className="absolute bottom-4 flex items-center gap-4">
+            <DsButton
+              variant="outline"
+              size="sm"
+              leftIcon={<ChevronLeft />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onPrevious?.();
+              }}
+              disabled={isFirst}
+            >
+              {prevLabel || 'Previous'}
+            </DsButton>
+            <DsButton
+              size="sm"
+              rightIcon={<ChevronRight />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onNext();
+              }}
+            >
+              {isLast ? finishLabel || 'Finish' : flipLabel || 'Next'}
+            </DsButton>
+          </div>
+        )}
+
+        {/* Flip hint (front face only) */}
+        {!isFlipped && (
+          <div className="absolute bottom-4 text-sm text-muted-foreground">
+            {hintLabel}
+          </div>
+        )}
+      </DsCard.Content>
+    </DsCard>
   );
 }

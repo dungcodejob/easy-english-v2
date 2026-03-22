@@ -1,9 +1,14 @@
+/**
+ * CreateTopicDialog — Topic module
+ *
+ * UI: raw shadcn (Dialog subtree) + shadcn Label.
+ */
+
 import { Button } from '@/shared/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,7 +17,7 @@ import { Input } from '@/shared/ui/shadcn/input';
 import { Label } from '@/shared/ui/shadcn/label';
 import { Textarea } from '@/shared/ui/shadcn/textarea';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useCreateTopic } from '../hooks/use-topic-mutations';
 
 interface CreateTopicDialogProps {
@@ -52,9 +57,7 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            Create New Topic
-          </DialogTitle>
+          <DialogTitle className="text-xl font-bold">Create New Topic</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
             Organise your vocabulary into a named topic for focused study.
           </DialogDescription>
@@ -80,9 +83,7 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
           <div className="space-y-1.5">
             <Label htmlFor="topic-desc" className="text-sm font-semibold">
               Description{' '}
-              <span className="text-muted-foreground font-normal">
-                (optional)
-              </span>
+              <span className="text-muted-foreground font-normal">(optional)</span>
             </Label>
             <Textarea
               id="topic-desc"
@@ -95,7 +96,7 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
             />
           </div>
 
-          <DialogFooter className="pt-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
               variant="outline"
@@ -122,7 +123,7 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
                 </>
               )}
             </Button>
-          </DialogFooter>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

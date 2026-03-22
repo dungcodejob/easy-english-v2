@@ -26,6 +26,47 @@ export { DsInput } from './base/ds-input';
 export type { DsSelectProps } from './base/ds-select';
 export { DsSelect, DsSelectItem } from './base/ds-select';
 
+export type { DsTextareaProps } from './base/ds-textarea';
+export { DsTextarea } from './base/ds-textarea';
+
+export type { DsBadgeProps } from './base/ds-badge';
+export { DsBadge } from './base/ds-badge';
+
+export { DsCard } from './base/ds-card';
+
+export { DsStatCard } from './base/ds-stat-card';
+
+export { DsEmptyState } from './base/ds-empty-state';
+
+export type { DsProgressProps } from './base/ds-progress';
+export { DsProgress } from './base/ds-progress';
+
+export type { DsSpinnerProps } from './base/ds-spinner';
+export { DsSpinner } from './base/ds-spinner';
+
+export {
+  DsAlertDialog,
+  DsAlertDialogAction,
+  DsAlertDialogCancel,
+  DsAlertDialogContent,
+  DsAlertDialogDescription,
+  DsAlertDialogFooter,
+  DsAlertDialogHeader,
+  DsAlertDialogTitle,
+  DsAlertDialogTrigger,
+} from './base/ds-alert-dialog';
+export type {
+  DsAlertDialogProps,
+  DsAlertDialogActionProps,
+  DsAlertDialogCancelProps,
+  DsAlertDialogContentProps,
+  DsAlertDialogDescriptionProps,
+  DsAlertDialogFooterProps,
+  DsAlertDialogHeaderProps,
+  DsAlertDialogTitleProps,
+  DsAlertDialogTriggerProps,
+} from './base/ds-alert-dialog';
+
 /* ─── Pattern Components ────────────────────────── */
 export { FormWrapper } from './patterns/form-wrapper';
 export { PageHeader, PageLayout } from './patterns/page-layout';

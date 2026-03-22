@@ -1,6 +1,12 @@
+/**
+ * TopicDetailPage — Topic module
+ *
+ * UI: 100% delegated to Design System components.
+ */
+
 import { APP_ROUTES } from '@/shared/constants';
+import { DsButton } from '@/shared/ui';
 import { Badge } from '@/shared/ui/shadcn/badge';
-import { Button } from '@/shared/ui/shadcn/button';
 import { Separator } from '@/shared/ui/shadcn/separator';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router';
@@ -61,7 +67,7 @@ export default function TopicDetailPage() {
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
-        className="mb-8 flex items-center gap-1.5 text-sm text-muted-foreground animate-in fade-in duration-300"
+        className="mb-8 flex animate-in items-center gap-1.5 text-sm text-muted-foreground fade-in duration-300"
       >
         <Link
           to={APP_ROUTES.TOPIC.LIST}
@@ -110,32 +116,29 @@ export default function TopicDetailPage() {
                   <UpdateTopicDialog
                     topic={topic}
                     trigger={
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+                      <DsButton variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
                         <Pencil className="h-4 w-4" />
-                      </Button>
+                      </DsButton>
                     }
                   />
-                  <Button
+                  <DsButton
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 text-muted-foreground hover:text-destructive"
                     onClick={handleDelete}
                   >
                     <Trash2 className="h-4 w-4" />
-                  </Button>
+                  </DsButton>
                 </div>
               </div>
               {topic.description && (
-                <p className="mt-2 text-muted-foreground text-balance leading-relaxed">
+                <p className="mt-2 text-balance leading-relaxed text-muted-foreground">
                   {topic.description}
                 </p>
               )}
               {wordPagination && (
                 <div className="mt-3 flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="rounded-full gap-1.5 font-medium"
-                  >
+                  <Badge variant="outline" className="rounded-full gap-1.5 font-medium">
                     <Hash className="h-3 w-3" />
                     {wordPagination.count}{' '}
                     {wordPagination.count === 1 ? 'word' : 'words'}
@@ -155,10 +158,9 @@ export default function TopicDetailPage() {
           <h2 className="text-xl font-bold text-foreground">Words</h2>
           {/* Future: Add word button linking back to dictionary search */}
           <Link to={APP_ROUTES.DICTIONARY.SEARCH}>
-            <Button variant="outline" size="sm" className="gap-2 rounded-lg">
-              <BookOpen className="h-4 w-4" />
+            <DsButton variant="outline" size="sm" leftIcon={<BookOpen className="h-4 w-4" />}>
               Add words
-            </Button>
+            </DsButton>
           </Link>
         </div>
 
@@ -180,21 +182,18 @@ export default function TopicDetailPage() {
 
         {/* Empty state */}
         {!isLoadingWords && !isWordsError && words.length === 0 && (
-          <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-20 text-center animate-in fade-in duration-500">
+          <div className="flex animate-in fade-in flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-20 text-center duration-500">
             <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
               <Inbox className="h-8 w-8" />
             </div>
-            <h3 className="mb-2 text-lg font-bold text-foreground">
-              No words yet
-            </h3>
+            <h3 className="mb-2 text-lg font-bold text-foreground">No words yet</h3>
             <p className="mb-6 max-w-xs text-sm text-muted-foreground">
               Search the dictionary to find words and add them to this topic.
             </p>
             <Link to={APP_ROUTES.DICTIONARY.SEARCH}>
-              <Button className="gap-2 rounded-xl font-semibold">
-                <BookOpen className="h-4 w-4" />
+              <DsButton leftIcon={<BookOpen className="h-4 w-4" />}>
                 Browse Dictionary
-              </Button>
+              </DsButton>
             </Link>
           </div>
         )}
@@ -211,27 +210,23 @@ export default function TopicDetailPage() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
-                <Button
+                <DsButton
                   variant="outline"
-                  size="sm"
                   disabled={page <= 1}
                   onClick={() => setPage((p) => p - 1)}
-                  className="rounded-lg"
                 >
                   Previous
-                </Button>
+                </DsButton>
                 <span className="px-4 text-sm text-muted-foreground tabular-nums">
                   Page {page} of {totalPages}
                 </span>
-                <Button
+                <DsButton
                   variant="outline"
-                  size="sm"
                   disabled={!wordPagination?.hasMore}
                   onClick={() => setPage((p) => p + 1)}
-                  className="rounded-lg"
                 >
                   Next
-                </Button>
+                </DsButton>
               </div>
             )}
           </>

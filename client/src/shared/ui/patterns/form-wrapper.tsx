@@ -14,6 +14,8 @@
  *   <FormWrapper
  *     title="Create your account"
  *     subtitle="Fill in the form below to get started"
+ *     headerTop={<Logo />}
+ *     title="Log in to your account"
  *     footer={<Link to="/login">Already have an account?</Link>}
  *   >
  *     <MyForm />
@@ -29,6 +31,8 @@ interface FormWrapperProps {
   subtitle?: string;
   /** Any React nodes to render below subtitle (badges, alerts, etc.) */
   headerExtra?: ReactNode;
+  /** React nodes rendered above the title (e.g. logo, social buttons, brand mark) */
+  headerTop?: ReactNode;
   /** The form or content to render inside the card */
   children: ReactNode;
   /** Optional footer content below the form (links, legal text, etc.) */
@@ -125,7 +129,9 @@ function CenteredCard({
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className={`w-full ${cardWidthClass}`}>
-        {children}
+        <div className="rounded-2xl border border-border/50 bg-card p-8 shadow-sm">
+          {children}
+        </div>
         {footer && (
           <div className="mt-6 text-center text-sm text-muted-foreground">
             {footer}
@@ -140,26 +146,34 @@ export function FormWrapper({
   title,
   subtitle,
   headerExtra,
+  headerTop,
   children,
   footer,
   className = '',
   cardSize = 'default',
   variant = 'split',
 }: FormWrapperProps & { variant?: 'split' | 'centered' }) {
+  const cardContent = (
+    <>
+      {headerTop && <div className="mb-6">{headerTop}</div>}
+      <div className="mb-6 flex flex-col items-center gap-1 text-center">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="text-muted-foreground text-sm">{subtitle}</p>
+        )}
+        {headerExtra}
+      </div>
+      {children}
+    </>
+  );
+
   if (variant === 'centered') {
     return (
       <div className={className}>
         <CenteredCard footer={footer} cardSize={cardSize}>
-          <div className="mb-6 flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              {title}
-            </h1>
-            {subtitle && (
-              <p className="text-muted-foreground text-sm">{subtitle}</p>
-            )}
-            {headerExtra}
-          </div>
-          {children}
+          {cardContent}
         </CenteredCard>
       </div>
     );
@@ -170,16 +184,7 @@ export function FormWrapper({
       className={`grid min-h-screen lg:grid-cols-[minmax(0,1fr),minmax(0,520px)] xl:grid-cols-[minmax(0,1fr),minmax(0,560px)] ${className}`}
     >
       <FormCard footer={footer} cardSize={cardSize}>
-        <div className="mb-6 flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="text-muted-foreground text-sm">{subtitle}</p>
-          )}
-          {headerExtra}
-        </div>
-        {children}
+        {cardContent}
       </FormCard>
       <AuthSidePanel />
     </div>
