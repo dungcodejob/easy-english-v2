@@ -7,11 +7,16 @@ import {
 } from '../../../domain/repositories/flashcard.repository.interface';
 import { DeleteFlashcardCommand } from '../delete-flashcard.command';
 
+/**
+ * Delete Flashcard Command Handler
+ *
+ * Business logic layer - handles the delete flashcard use case.
+ * Validates ownership before deletion (multi-tenant safety).
+ */
 @CommandHandler(DeleteFlashcardCommand)
-export class DeleteFlashcardHandler implements ICommandHandler<
-  DeleteFlashcardCommand,
-  boolean
-> {
+export class DeleteFlashcardHandler
+  implements ICommandHandler<DeleteFlashcardCommand, boolean>
+{
   private readonly logger = new Logger(DeleteFlashcardHandler.name);
 
   constructor(
@@ -22,7 +27,10 @@ export class DeleteFlashcardHandler implements ICommandHandler<
   ) {}
 
   async execute(command: DeleteFlashcardCommand): Promise<boolean> {
+    // Find the flashcard first
     const flashcard = await this.flashcardRepo.findById(command.id);
+
+    // Check ownership and tenant
     if (
       !flashcard ||
       flashcard.userId !== command.userId ||
@@ -31,15 +39,19 @@ export class DeleteFlashcardHandler implements ICommandHandler<
       return false;
     }
 
+    // Mark as deleted (domain logic)
     flashcard.markDeleted();
-    await this.flashcardRepo.delete(
+
+    // Delete with tenant scope for additional safety
+    const deleted = await this.flashcardRepo.delete(
       command.id,
       command.userId,
       command.tenantId,
     );
-    await this.em.flush();
+
+    // Publish domain events
     flashcard.publishEvents(this.logger, this.eventBus);
 
-    return true;
+    return deleted;
   }
 }
