@@ -29,8 +29,8 @@ import { GetDueCardsHandler } from './application/queries/get-due-cards.handler'
 import { GetFlashcardsHandler } from './application/queries/get-flashcards.handler';
 import { GetStudyStatsHandler } from './application/queries/get-study-stats.handler';
 
+import { StudyStatsInitializerHandler } from './application/events/study-stats-initializer.handler';
 import { UpdateStudyStatsHandler } from './application/events/update-study-stats.handler';
-import { StudyStatsInitializerHandler } from './domain/events/study-stats-initializer.handler';
 
 const CommandHandlers = [
   CreateFlashcardHandler,

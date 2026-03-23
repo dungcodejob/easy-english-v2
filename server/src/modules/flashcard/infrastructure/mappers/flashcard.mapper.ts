@@ -1,11 +1,10 @@
 import { Mapper } from '@core/ddd';
 import { Flashcard } from '../../domain/entities/flashcard.aggregate';
-import { FlashcardOrmEntity } from '../persistence/flashcard.orm-entity';
-import { FlashcardId } from '../../domain/value-objects/flashcard-id.vo';
+import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FlashcardSource } from '../../domain/value-objects/flashcard-source.vo';
 import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
-import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FlashcardSchedulingStateOrmEntity } from '../persistence/flashcard-scheduling-state.orm-entity';
+import { FlashcardOrmEntity } from '../persistence/flashcard.orm-entity';
 
 export class FlashcardMapper implements Mapper<
   Flashcard,
@@ -55,7 +54,8 @@ export class FlashcardMapper implements Mapper<
     );
     orm.id = domain.id;
 
-    const stateOrm = new FlashcardSchedulingStateOrmEntity(domain.id);
+    const stateOrm = new FlashcardSchedulingStateOrmEntity();
+    stateOrm.flashcard = orm;
     stateOrm.stability = domain.schedulingState.stability;
     stateOrm.difficulty = domain.schedulingState.difficulty;
     stateOrm.lapses = domain.schedulingState.lapses;

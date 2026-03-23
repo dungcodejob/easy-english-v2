@@ -45,7 +45,7 @@ export class FlashcardOrmEntity {
     (state) => state.flashcard,
     {
       cascade: [Cascade.ALL],
-      owner: true,
+      mappedBy: 'flashcard',
     },
   )
   schedulingState!: FlashcardSchedulingStateOrmEntity;

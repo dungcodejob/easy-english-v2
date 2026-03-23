@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, OneToOne, Index } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToOne } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
 import { FlashcardOrmEntity } from './flashcard.orm-entity';
 
@@ -7,12 +7,9 @@ export class FlashcardSchedulingStateOrmEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv4();
 
-  @Property({ type: 'uuid' })
-  @Index()
-  flashcardId!: string;
-
   @OneToOne(() => FlashcardOrmEntity, (f) => f.schedulingState, {
-    mappedBy: 'schedulingState',
+    owner: true,
+    fieldName: 'flashcard_id',
   })
   flashcard!: FlashcardOrmEntity;
 
@@ -43,8 +40,7 @@ export class FlashcardSchedulingStateOrmEntity {
   @Property({ type: 'datetime', onUpdate: () => new Date() })
   updatedAt: Date = new Date();
 
-  constructor(flashcardId: string) {
-    this.flashcardId = flashcardId;
+  constructor() {
     this.stability = 0;
     this.difficulty = 0;
     this.lapses = 0;

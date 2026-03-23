@@ -1,8 +1,11 @@
 import { Logger } from '@nestjs/common';
 import { EventsHandler } from '@nestjs/cqrs';
 import { WorkspaceCreatedEvent } from '../../../workspace/domain/events';
-import type { IStudyStatsRepository } from '../repositories/study-stats.repository.interface';
-import { StudyStats } from '../entities/study-stats.aggregate';
+import { StudyStats } from '../../domain/entities/study-stats.aggregate';
+import {
+  InjectStudyStatsRepository,
+  type IStudyStatsRepository,
+} from '../../domain/repositories/study-stats.repository.interface';
 
 /**
  * StudyStats Initializer Handler - Domain Event Listener
@@ -10,11 +13,15 @@ import { StudyStats } from '../entities/study-stats.aggregate';
  * Creates StudyStats when a new workspace is created.
  * This ensures every user has stats initialized when they sign up.
  */
+
 @EventsHandler(WorkspaceCreatedEvent)
 export class StudyStatsInitializerHandler {
   private readonly logger = new Logger(StudyStatsInitializerHandler.name);
 
-  constructor(private readonly statsRepo: IStudyStatsRepository) {}
+  constructor(
+    @InjectStudyStatsRepository()
+    private readonly statsRepo: IStudyStatsRepository,
+  ) {}
 
   async handle(event: WorkspaceCreatedEvent): Promise<void> {
     this.logger.debug(

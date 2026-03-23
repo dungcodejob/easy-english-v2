@@ -12,17 +12,10 @@ export interface FsrsConfig {
 
 @Injectable()
 export class FsrsSchedulerService {
-  private readonly requestRetention: number;
-  private readonly maximumInterval: number;
-  private readonly easyInterval: number;
-  private readonly hardInterval: number;
-
-  constructor(config: Partial<FsrsConfig> = {}) {
-    this.requestRetention = config.requestRetention ?? 0.9;
-    this.maximumInterval = config.maximumInterval ?? 365;
-    this.easyInterval = config.easyInterval ?? 4;
-    this.hardInterval = config.hardInterval ?? 1;
-  }
+  private readonly requestRetention: number = 0.9;
+  private readonly maximumInterval: number = 365;
+  private readonly easyInterval: number = 4;
+  private readonly hardInterval: number = 1;
 
   calculateNext(
     current: FsrsParameters,
