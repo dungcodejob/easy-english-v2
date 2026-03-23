@@ -1,42 +1,41 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
-import { EntityManager } from '@mikro-orm/postgresql';
+import {
+  type IFlashcardRepository,
+  InjectFlashcardRepository,
+} from '../../domain/repositories/flashcard.repository.interface';
+import { FlashcardMapper } from '../../infrastructure/mappers/flashcard.mapper';
+import { DueCardResponseDto } from '../../dto/responses/due-card.response.dto';
 import { GetDueCardsQuery } from './get-due-cards.query';
-import { FlashcardOrmEntity } from '../../infrastructure/persistence/flashcard.orm-entity';
 
-interface DueCard {
-  id: string;
-  front: string;
-  back: string;
-  hint?: string;
-  source: 'learning-list' | 'custom';
-  masteryLevel: number;
-}
-
+@Injectable()
 @QueryHandler(GetDueCardsQuery)
-export class GetDueCardsHandler implements IQueryHandler<GetDueCardsQuery> {
-  constructor(private readonly em: EntityManager) {}
+export class GetDueCardsHandler implements IQueryHandler<GetDueCardsQuery, DueCardResponseDto[]> {
+  constructor(
+    @InjectFlashcardRepository()
+    private readonly flashcardRepo: IFlashcardRepository,
+    private readonly flashcardMapper: FlashcardMapper,
+  ) {}
 
-  async execute(query: GetDueCardsQuery): Promise<DueCard[]> {
+  async execute(query: GetDueCardsQuery): Promise<DueCardResponseDto[]> {
     const limit = query.limit ?? 20;
+    const now = new Date();
 
-    // Get custom flashcards that are due (all custom cards for now)
-    const customCards = await this.em.find(
-      FlashcardOrmEntity,
-      { userId: query.userId, tenantId: query.tenantId },
-      { limit },
+    const dueCards = await this.flashcardRepo.findDueCards(
+      query.userId,
+      query.tenantId,
+      now,
+      limit,
     );
 
-    // Map to response format
-    const customDue: DueCard[] = customCards.map((c) => ({
-      id: c.id,
-      front: c.front,
-      back: c.back,
-      hint: c.hint,
-      source: 'custom' as const,
-      masteryLevel: 0,
-    }));
-
-    return customDue;
+    return dueCards.map((card) => ({
+      id: card.id, // AggregateRoot._id is AggregateID (string)
+      front: card.front,
+      back: card.back,
+      hint: card.hint,
+      source: card.source.value,
+      state: card.schedulingState.state.value,
+      dueDate: (card.schedulingState.dueDate ?? now).toISOString(),
+    })) as DueCardResponseDto[];
   }
 }

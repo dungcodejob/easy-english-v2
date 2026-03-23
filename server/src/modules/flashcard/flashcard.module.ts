@@ -7,23 +7,35 @@ import { StudyController } from './controllers/study.controller';
 
 import { provideFlashcardRepository } from './domain/repositories/flashcard.repository.interface';
 import { provideStudyStatsRepository } from './domain/repositories/study-stats.repository.interface';
+import { provideReviewLogRepository } from './domain/repositories/review-log.repository.interface';
 import { FlashcardOrmEntity } from './infrastructure/persistence/flashcard.orm-entity';
+import { FlashcardSchedulingStateOrmEntity } from './infrastructure/persistence/flashcard-scheduling-state.orm-entity';
 import { StudyStatsOrmEntity } from './infrastructure/persistence/study-stats.orm-entity';
+import { ReviewLogOrmEntity } from './infrastructure/persistence/review-log.orm-entity';
 import { FlashcardRepository } from './infrastructure/repositories/flashcard.repository';
 import { StudyStatsRepository } from './infrastructure/repositories/study-stats.repository';
+import { ReviewLogRepository } from './infrastructure/repositories/review-log.repository';
+import { FlashcardMapper } from './infrastructure/mappers/flashcard.mapper';
+import { StudyStatsMapper } from './infrastructure/mappers/study-stats.mapper';
+import { ReviewLogMapper } from './infrastructure/mappers/review-log.mapper';
+import { FsrsSchedulerService } from './domain/services/fsrs-scheduler.service';
 
-import { CreateFlashcardHandler } from './application/commands/create-flashcard.handler';
-import { DeleteFlashcardHandler } from './application/commands/delete-flashcard.handler';
-import { UpdateFlashcardHandler } from './application/commands/update-flashcard.handler';
+import { CreateFlashcardHandler } from './application/commands/create-flashcard/create-flashcard.handler';
+import { DeleteFlashcardHandler } from './application/commands/delete-flashcard/delete-flashcard.handler';
+import { UpdateFlashcardHandler } from './application/commands/update-flashcard/update-flashcard.handler';
+import { ReviewCardHandler } from './application/commands/review-card/review-card.handler';
 
 import { GetDueCardsHandler } from './application/queries/get-due-cards.handler';
 import { GetFlashcardsHandler } from './application/queries/get-flashcards.handler';
 import { GetStudyStatsHandler } from './application/queries/get-study-stats.handler';
 
+import { UpdateStudyStatsHandler } from './application/events/update-study-stats.handler';
+
 const CommandHandlers = [
   CreateFlashcardHandler,
   UpdateFlashcardHandler,
   DeleteFlashcardHandler,
+  ReviewCardHandler,
 ];
 
 const QueryHandlers = [
@@ -35,15 +47,26 @@ const QueryHandlers = [
 const Repositories = [
   provideFlashcardRepository(FlashcardRepository),
   provideStudyStatsRepository(StudyStatsRepository),
+  provideReviewLogRepository(ReviewLogRepository),
+];
+
+const Mappers = [
+  FlashcardMapper,
+  StudyStatsMapper,
+  ReviewLogMapper,
+];
+
+const Services = [
+  FsrsSchedulerService,
 ];
 
 @Module({
   imports: [
     CqrsModule,
-    MikroOrmModule.forFeature([FlashcardOrmEntity, StudyStatsOrmEntity]),
+    MikroOrmModule.forFeature([FlashcardOrmEntity, FlashcardSchedulingStateOrmEntity, StudyStatsOrmEntity, ReviewLogOrmEntity]),
   ],
   controllers: [FlashcardController, StudyController],
-  providers: [...Repositories, ...CommandHandlers, ...QueryHandlers],
+  providers: [...Repositories, ...Mappers, ...Services, ...CommandHandlers, ...QueryHandlers, UpdateStudyStatsHandler],
   exports: [],
 })
 export class FlashcardModule {}

@@ -20,7 +20,10 @@ export class StudyStatsOrmEntity {
   userId!: string;
 
   @Property({ default: 0 })
-  streak!: number;
+  currentStreak!: number;
+
+  @Property({ default: 0 })
+  longestStreak!: number;
 
   @Property({ default: 0 })
   totalCardsReviewed!: number;

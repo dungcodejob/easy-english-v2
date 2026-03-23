@@ -1,10 +1,12 @@
 import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
 import { ApiResponse as ApiResponseBuilder } from '@core/api';
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@shared/decorators';
+import { ReviewCardRequestDto } from '../dto/requests/review-card.request.dto';
+import { ReviewResultResponseDto } from '../dto/responses/review-result.response.dto';
 import { GetDueCardsQuery } from '../application/queries/get-due-cards.query';
 import { GetStudyStatsQuery } from '../application/queries/get-study-stats.query';
 import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto';
@@ -14,7 +16,10 @@ import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto
 @UseGuards(JwtAuthGuard)
 @Controller({ version: '1', path: 'study' })
 export class StudyController {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   @Get('stats')
   @ApiOperation({ summary: 'Get study statistics' })
@@ -34,5 +39,26 @@ export class StudyController {
     const query = new GetDueCardsQuery(user.userId, user.tenantId, limit);
     const cards = await this.queryBus.execute<GetDueCardsQuery, any[]>(query);
     return ApiResponseBuilder.success(cards);
+  }
+
+  @Post('review')
+  @ApiOperation({ summary: 'Review a flashcard' })
+  @ApiResponse({ status: 201, type: ReviewResultResponseDto })
+  async reviewCard(
+    @Body() dto: ReviewCardRequestDto,
+    @CurrentUser() user: ITokenPayload,
+    @Query('cardId') cardId: string,
+  ): Promise<{ success: true; data: ReviewResultResponseDto }> {
+    // ReviewCardCommand will be created in Chunk 5 — using cast for now
+    const command = {
+      cardId,
+      userId: user.userId,
+      tenantId: user.tenantId,
+      rating: dto.rating,
+      reviewDurationMs: dto.reviewDurationMs,
+    } as any;
+
+    const result = await this.commandBus.execute(command);
+    return ApiResponseBuilder.success(result);
   }
 }

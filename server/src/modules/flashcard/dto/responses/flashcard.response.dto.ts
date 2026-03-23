@@ -27,4 +27,10 @@ export class FlashcardResponseDto {
 
   @ApiProperty()
   updatedAt!: string;
+
+  @ApiProperty()
+  state!: string;
+
+  @ApiProperty()
+  dueDate!: string;
 }

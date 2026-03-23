@@ -1,13 +1,11 @@
 import { createInjection } from '@shared/utils';
-import { StudyStatsOrmEntity } from '../../infrastructure/persistence/study-stats.orm-entity';
+import { StudyStats } from '../entities/study-stats.aggregate';
 
 export interface IStudyStatsRepository {
-  findByUserId(
-    userId: string,
-    tenantId: string,
-  ): Promise<StudyStatsOrmEntity | null>;
-  create(stats: StudyStatsOrmEntity): Promise<StudyStatsOrmEntity>;
-  update(stats: StudyStatsOrmEntity): Promise<StudyStatsOrmEntity>;
+  findByUserId(userId: string, tenantId: string): Promise<StudyStats | null>;
+  findOrCreate(userId: string, tenantId: string): Promise<StudyStats>;
+  persist(stats: StudyStats): Promise<void>;
+  delete(id: string): Promise<boolean>;
 }
 
 const { inject, provider, token } = createInjection<IStudyStatsRepository>(
