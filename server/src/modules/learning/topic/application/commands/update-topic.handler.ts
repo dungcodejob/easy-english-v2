@@ -1,32 +1,55 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
-import { NotFoundException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { Logger, NotFoundException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
+import { TopicDto } from '../../dto/responses/topic.dto';
 import { UpdateTopicCommand } from './update-topic.command';
 
+/**
+ * Update Topic Command Handler
+ *
+ * Business logic layer - handles the update topic use case.
+ * Validates ownership before updating (multi-tenant safety).
+ */
 @CommandHandler(UpdateTopicCommand)
-export class UpdateTopicHandler implements ICommandHandler<UpdateTopicCommand> {
-  constructor(private readonly orm: MikroORM) {}
+export class UpdateTopicHandler implements ICommandHandler<
+  UpdateTopicCommand,
+  TopicDto
+> {
+  private readonly logger = new Logger(UpdateTopicHandler.name);
 
-  @CreateRequestContext()
-  async execute(command: UpdateTopicCommand): Promise<TopicEntity> {
-    const em = this.orm.em;
+  constructor(
+    private readonly em: EntityManager,
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly mapper: TopicMapper,
+    private readonly eventBus: EventBus,
+  ) {}
 
-    const topic = await em.findOne(TopicEntity, {
-      id: command.topicId,
-      tenantId: command.tenantId,
-      userId: command.userId,
-    });
+  async execute(command: UpdateTopicCommand): Promise<TopicDto> {
+    const topic = await this.repo.findById(
+      command.topicId,
+      command.tenantId,
+      command.userId,
+    );
 
     if (!topic) {
       throw new NotFoundException('Topic not found');
     }
 
-    topic.name = command.name;
-    topic.description = command.description;
+    topic.update({
+      name: command.name,
+      description: command.description,
+    });
 
-    await em.persistAndFlush(topic);
+    this.repo.persist(topic);
+    await this.em.flush();
+    topic.publishEvents(this.logger, this.eventBus);
 
-    return topic;
+    return this.mapper.toResponse(topic) as TopicDto;
   }
 }

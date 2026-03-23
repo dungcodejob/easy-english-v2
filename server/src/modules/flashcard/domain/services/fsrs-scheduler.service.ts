@@ -24,7 +24,11 @@ export class FsrsSchedulerService {
     this.hardInterval = config.hardInterval ?? 1;
   }
 
-  calculateNext(current: FsrsParameters, rating: ReviewRating, now: Date): FsrsParameters {
+  calculateNext(
+    current: FsrsParameters,
+    rating: ReviewRating,
+    now: Date,
+  ): FsrsParameters {
     const ratingValue = rating.value; // 1=Again, 2=Hard, 3=Good, 4=Easy
 
     let { stability, difficulty, lapses, reps } = current;

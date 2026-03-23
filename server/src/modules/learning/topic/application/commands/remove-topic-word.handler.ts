@@ -1,40 +1,51 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
-import { NotFoundException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { TopicWordEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { Logger, NotFoundException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
 import { RemoveTopicWordCommand } from './remove-topic-word.command';
 
+/**
+ * Remove Topic Word Command Handler
+ *
+ * Business logic layer - handles removing a word from a topic.
+ * Validates topic ownership before removal.
+ */
 @CommandHandler(RemoveTopicWordCommand)
-export class RemoveTopicWordHandler implements ICommandHandler<RemoveTopicWordCommand> {
-  constructor(private readonly orm: MikroORM) {}
+export class RemoveTopicWordHandler implements ICommandHandler<
+  RemoveTopicWordCommand,
+  void
+> {
+  private readonly logger = new Logger(RemoveTopicWordHandler.name);
 
-  @CreateRequestContext()
+  constructor(
+    private readonly em: EntityManager,
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly eventBus: EventBus,
+  ) {}
+
   async execute(command: RemoveTopicWordCommand): Promise<void> {
-    const em = this.orm.em;
-
-    // 1. Verify topic exists and belongs to user
-    const topic = await em.findOne(TopicEntity, {
-      id: command.topicId,
-      tenantId: command.tenantId,
-      userId: command.userId,
-    });
+    const topic = await this.repo.findById(
+      command.topicId,
+      command.tenantId,
+      command.userId,
+    );
 
     if (!topic) {
       throw new NotFoundException('Topic not found or access denied');
     }
 
-    // 2. Find the word in the topic
-    const topicWord = await em.findOne(TopicWordEntity, {
-      topic: topic.id,
-      wordSenseId: command.wordSenseId,
-    });
+    const result = topic.removeWord(command.wordSenseId);
 
-    if (!topicWord) {
+    if (result.isErr()) {
       throw new NotFoundException('Word not found in this topic');
     }
 
-    // 3. Remove topic word
-    await em.removeAndFlush(topicWord);
+    this.repo.persist(topic);
+    await this.em.flush();
+    topic.publishEvents(this.logger, this.eventBus);
   }
 }

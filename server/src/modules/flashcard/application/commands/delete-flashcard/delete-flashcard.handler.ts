@@ -14,9 +14,10 @@ import { DeleteFlashcardCommand } from '../delete-flashcard.command';
  * Validates ownership before deletion (multi-tenant safety).
  */
 @CommandHandler(DeleteFlashcardCommand)
-export class DeleteFlashcardHandler
-  implements ICommandHandler<DeleteFlashcardCommand, boolean>
-{
+export class DeleteFlashcardHandler implements ICommandHandler<
+  DeleteFlashcardCommand,
+  boolean
+> {
   private readonly logger = new Logger(DeleteFlashcardHandler.name);
 
   constructor(

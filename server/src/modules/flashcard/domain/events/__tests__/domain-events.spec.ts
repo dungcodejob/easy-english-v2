@@ -103,6 +103,5 @@ describe('Flashcard Domain Events', () => {
       expect(event.newState).toBe(newState);
       expect(event.id).toBeDefined();
     });
-
   });
 });

@@ -10,7 +10,10 @@ import { GetFlashcardsQuery } from './get-flashcards.query';
 
 @Injectable()
 @QueryHandler(GetFlashcardsQuery)
-export class GetFlashcardsHandler implements IQueryHandler<GetFlashcardsQuery, FlashcardResponseDto[]> {
+export class GetFlashcardsHandler implements IQueryHandler<
+  GetFlashcardsQuery,
+  FlashcardResponseDto[]
+> {
   constructor(
     @InjectFlashcardRepository()
     private readonly flashcardRepo: IFlashcardRepository,
@@ -18,7 +21,12 @@ export class GetFlashcardsHandler implements IQueryHandler<GetFlashcardsQuery, F
   ) {}
 
   async execute(query: GetFlashcardsQuery): Promise<FlashcardResponseDto[]> {
-    const flashcards = await this.flashcardRepo.findByUserId(query.userId, query.tenantId);
-    return flashcards.map((f) => this.flashcardMapper.toResponse(f) as FlashcardResponseDto);
+    const flashcards = await this.flashcardRepo.findByUserId(
+      query.userId,
+      query.tenantId,
+    );
+    return flashcards.map(
+      (f) => this.flashcardMapper.toResponse(f) as FlashcardResponseDto,
+    );
   }
 }

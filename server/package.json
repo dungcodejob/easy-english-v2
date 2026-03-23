@@ -100,13 +100,15 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"],
     "moduleNameMapper": {
       "^@core/(.*)$": "<rootDir>/core/$1",
       "^@core$": "<rootDir>/core",
       "^@shared/(.*)$": "<rootDir>/shared/$1",
       "^@shared$": "<rootDir>/shared",
       "^@auth/(.*)$": "<rootDir>/modules/auth/$1",
-      "^@auth$": "<rootDir>/modules/auth"
+      "^@auth$": "<rootDir>/modules/auth",
+      "^uuid$": "<rootDir>/src/__mocks__/uuid.ts"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!(uuid)/)"

@@ -32,18 +32,42 @@ export class ReviewLog extends Entity {
   private _reviewDurationMs!: number;
   private _reviewedAt!: Date;
 
-  get cardId(): FlashcardId { return this._cardId; }
-  get userId(): string { return this._userId; }
-  get tenantId(): string { return this._tenantId; }
-  get rating(): ReviewRating { return this._rating; }
-  get previousState(): CardState { return this._previousState; }
-  get newState(): CardState { return this._newState; }
-  get previousStability(): number { return this._previousStability; }
-  get newStability(): number { return this._newStability; }
-  get previousDifficulty(): number { return this._previousDifficulty; }
-  get newDifficulty(): number { return this._newDifficulty; }
-  get reviewDurationMs(): number { return this._reviewDurationMs; }
-  get reviewedAt(): Date { return this._reviewedAt; }
+  get cardId(): FlashcardId {
+    return this._cardId;
+  }
+  get userId(): string {
+    return this._userId;
+  }
+  get tenantId(): string {
+    return this._tenantId;
+  }
+  get rating(): ReviewRating {
+    return this._rating;
+  }
+  get previousState(): CardState {
+    return this._previousState;
+  }
+  get newState(): CardState {
+    return this._newState;
+  }
+  get previousStability(): number {
+    return this._previousStability;
+  }
+  get newStability(): number {
+    return this._newStability;
+  }
+  get previousDifficulty(): number {
+    return this._previousDifficulty;
+  }
+  get newDifficulty(): number {
+    return this._newDifficulty;
+  }
+  get reviewDurationMs(): number {
+    return this._reviewDurationMs;
+  }
+  get reviewedAt(): Date {
+    return this._reviewedAt;
+  }
 
   static create(props: ReviewLogProps): ReviewLog {
     const log = new ReviewLog({

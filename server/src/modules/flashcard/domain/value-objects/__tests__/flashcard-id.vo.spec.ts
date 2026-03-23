@@ -29,7 +29,9 @@ describe('FlashcardId', () => {
     });
 
     it('should throw ArgumentNotProvidedException for whitespace-only string', () => {
-      expect(() => FlashcardId.from('   ')).toThrow(ArgumentNotProvidedException);
+      expect(() => FlashcardId.from('   ')).toThrow(
+        ArgumentNotProvidedException,
+      );
     });
 
     it('should accept any non-empty string as id (validation is up to the caller)', () => {

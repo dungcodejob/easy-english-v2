@@ -8,10 +8,10 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
-import { TopicWordEntity } from './topic-word.orm-entity';
+import { TopicWordOrmEntity } from './topic-word.orm-entity';
 
 @Entity({ tableName: 'topics' })
-export class TopicEntity {
+export class TopicOrmEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv4();
 
@@ -36,14 +36,14 @@ export class TopicEntity {
   updatedAt: Date = new Date();
 
   @OneToMany(
-    () => TopicWordEntity,
-    (topicWord: TopicWordEntity) => topicWord.topic,
+    () => TopicWordOrmEntity,
+    (topicWord: TopicWordOrmEntity) => topicWord.topic,
     {
       cascade: [Cascade.ALL],
       orphanRemoval: true,
     },
   )
-  words = new Collection<TopicWordEntity>(this);
+  words = new Collection<TopicWordOrmEntity>(this);
 
   constructor(
     tenantId: string,

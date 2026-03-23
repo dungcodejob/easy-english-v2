@@ -18,9 +18,10 @@ import { Flashcard } from '../../../domain/entities/flashcard.aggregate';
  * Creates flashcard aggregate and persists via repository.
  */
 @CommandHandler(CreateFlashcardCommand)
-export class CreateFlashcardHandler
-  implements ICommandHandler<CreateFlashcardCommand, FlashcardResponseDto>
-{
+export class CreateFlashcardHandler implements ICommandHandler<
+  CreateFlashcardCommand,
+  FlashcardResponseDto
+> {
   private readonly logger = new Logger(CreateFlashcardHandler.name);
 
   constructor(

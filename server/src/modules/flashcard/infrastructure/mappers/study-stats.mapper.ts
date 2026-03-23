@@ -3,7 +3,11 @@ import { StudyStats } from '../../domain/entities/study-stats.aggregate';
 import { StudyStatsOrmEntity } from '../persistence/study-stats.orm-entity';
 import { StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
 
-export class StudyStatsMapper implements Mapper<StudyStats, StudyStatsOrmEntity, StudyStatsResponseDto> {
+export class StudyStatsMapper implements Mapper<
+  StudyStats,
+  StudyStatsOrmEntity,
+  StudyStatsResponseDto
+> {
   toDomain(orm: StudyStatsOrmEntity): StudyStats {
     return StudyStats.rehydrate({
       id: orm.id,
@@ -38,7 +42,8 @@ export class StudyStatsMapper implements Mapper<StudyStats, StudyStatsOrmEntity,
     return {
       streak: domain.currentStreak,
       totalCardsReviewed: domain.totalCardsReviewed,
-      totalStudyTimeMinutes: Math.round(domain.totalStudyTimeMinutes * 100) / 100,
+      totalStudyTimeMinutes:
+        Math.round(domain.totalStudyTimeMinutes * 100) / 100,
       masteredCards: domain.masteredCards,
       lastStudyDate: domain.lastStudyDate?.toISOString(),
     };

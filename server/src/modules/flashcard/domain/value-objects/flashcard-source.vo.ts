@@ -1,8 +1,12 @@
 import { ValueObject } from '@core/ddd';
 import { ArgumentInvalidException } from '@core/exceptions';
 
-export class FlashcardSource extends ValueObject<{ value: 'dictionary' | 'custom' }> {
-  private static readonly _dictionary = new FlashcardSource({ value: 'dictionary' });
+export class FlashcardSource extends ValueObject<{
+  value: 'dictionary' | 'custom';
+}> {
+  private static readonly _dictionary = new FlashcardSource({
+    value: 'dictionary',
+  });
   private static readonly _custom = new FlashcardSource({ value: 'custom' });
 
   get value(): 'dictionary' | 'custom' {

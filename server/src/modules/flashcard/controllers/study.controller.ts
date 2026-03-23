@@ -3,7 +3,12 @@ import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
 import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CurrentUser } from '@shared/decorators';
 import { ReviewCardRequestDto } from '../dto/requests/review-card.request.dto';
 import { ReviewResultResponseDto } from '../dto/responses/review-result.response.dto';
@@ -26,7 +31,10 @@ export class StudyController {
   @ApiResponse({ type: StudyStatsResponseDto })
   async getStats(@CurrentUser() user: ITokenPayload) {
     const query = new GetStudyStatsQuery(user.userId, user.tenantId);
-    const stats = await this.queryBus.execute<GetStudyStatsQuery, StudyStatsResponseDto>(query);
+    const stats = await this.queryBus.execute<
+      GetStudyStatsQuery,
+      StudyStatsResponseDto
+    >(query);
     return ApiResponseBuilder.success(stats);
   }
 

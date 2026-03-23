@@ -16,9 +16,10 @@ import { UpdateFlashcardCommand } from '../update-flashcard.command';
  * Validates ownership before updating (multi-tenant safety).
  */
 @CommandHandler(UpdateFlashcardCommand)
-export class UpdateFlashcardHandler
-  implements ICommandHandler<UpdateFlashcardCommand, FlashcardResponseDto | null>
-{
+export class UpdateFlashcardHandler implements ICommandHandler<
+  UpdateFlashcardCommand,
+  FlashcardResponseDto | null
+> {
   private readonly logger = new Logger(UpdateFlashcardHandler.name);
 
   constructor(

@@ -7,7 +7,11 @@ import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
 import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FlashcardSchedulingStateOrmEntity } from '../persistence/flashcard-scheduling-state.orm-entity';
 
-export class FlashcardMapper implements Mapper<Flashcard, FlashcardOrmEntity, object> {
+export class FlashcardMapper implements Mapper<
+  Flashcard,
+  FlashcardOrmEntity,
+  object
+> {
   toDomain(orm: FlashcardOrmEntity): Flashcard {
     const state = orm.schedulingState;
     const params = new FsrsParameters({
@@ -58,7 +62,8 @@ export class FlashcardMapper implements Mapper<Flashcard, FlashcardOrmEntity, ob
     stateOrm.reps = domain.schedulingState.reps;
     stateOrm.state = domain.schedulingState.state.value;
     stateOrm.dueDate = domain.schedulingState.dueDate ?? new Date();
-    stateOrm.lastReviewDate = domain.schedulingState.lastReviewDate ?? undefined;
+    stateOrm.lastReviewDate =
+      domain.schedulingState.lastReviewDate ?? undefined;
     orm.schedulingState = stateOrm;
 
     return orm;

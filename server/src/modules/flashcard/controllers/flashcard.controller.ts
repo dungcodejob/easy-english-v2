@@ -42,7 +42,10 @@ export class FlashcardController {
   @ApiOperation({ summary: 'Get all flashcards for user' })
   async getFlashcards(@CurrentUser() user: ITokenPayload) {
     const query = new GetFlashcardsQuery(user.userId, user.tenantId);
-    const flashcards = await this.queryBus.execute<GetFlashcardsQuery, FlashcardResponseDto[]>(query);
+    const flashcards = await this.queryBus.execute<
+      GetFlashcardsQuery,
+      FlashcardResponseDto[]
+    >(query);
     return ApiResponseBuilder.success(flashcards);
   }
 
@@ -63,7 +66,10 @@ export class FlashcardController {
       dto.notes,
       dto.wordSenseId,
     );
-    const flashcard = await this.commandBus.execute<CreateFlashcardCommand, FlashcardResponseDto>(command);
+    const flashcard = await this.commandBus.execute<
+      CreateFlashcardCommand,
+      FlashcardResponseDto
+    >(command);
     return ApiResponseBuilder.success(flashcard);
   }
 
@@ -85,7 +91,10 @@ export class FlashcardController {
       dto.hint,
       dto.notes,
     );
-    const flashcard = await this.commandBus.execute<UpdateFlashcardCommand, FlashcardResponseDto | null>(command);
+    const flashcard = await this.commandBus.execute<
+      UpdateFlashcardCommand,
+      FlashcardResponseDto | null
+    >(command);
     return ApiResponseBuilder.success(flashcard);
   }
 
@@ -98,7 +107,10 @@ export class FlashcardController {
     @CurrentUser() user: ITokenPayload,
   ) {
     const command = new DeleteFlashcardCommand(id, user.userId, user.tenantId);
-    const result = await this.commandBus.execute<DeleteFlashcardCommand, boolean>(command);
+    const result = await this.commandBus.execute<
+      DeleteFlashcardCommand,
+      boolean
+    >(command);
     return ApiResponseBuilder.success(result);
   }
 }

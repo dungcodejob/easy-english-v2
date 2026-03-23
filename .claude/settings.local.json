@@ -64,7 +64,25 @@
       "Bash(npx tsc:*)",
       "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && npm run lint 2>&1 | head -60)",
       "Bash(cd E:/Projects/multi-tenant/easy-english-v2/client && ./node_modules/.bin/tsc --noEmit 2>&1 | head -80)",
-      "Bash(find E:/Projects/multi-tenant/easy-english-v2/server/src/modules -name \"*flashcard*\" -o -name \"*flash*\" 2>/dev/null | head -40)"
+      "Bash(find E:/Projects/multi-tenant/easy-english-v2/server/src/modules -name \"*flashcard*\" -o -name \"*flash*\" 2>/dev/null | head -40)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx jest --testPathPattern=\"learning/topic\" --no-coverage 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx jest --testPathPatterns=\"learning/topic\" --no-coverage 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx jest --testPathPatterns=\"flashcard/domain/events\" --no-coverage 2>&1 | tail -30)",
+      "Bash(grep -r \"MikroORM\\\\|Collection\\\\|defineConfig\\\\|orm.*init\\\\|ORM\" \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" --include=\"*.spec.ts\" -l 2>/dev/null | head -5)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const { MikroORM } = require\\('@mikro-orm/core'\\); console.log\\(typeof MikroORM.init\\); console.log\\(Object.keys\\(MikroORM\\).slice\\(0,20\\)\\);\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const { MikroORM, SqliteDriver } = require\\('@mikro-orm/sqlite'\\); console.log\\('sqlite available'\\);\" 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const { ReflectionHydrator } = require\\('@mikro-orm/core'\\); console.log\\('ReflectionHydrator available'\\);\" 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"\nconst { MetadataDiscovery, TsMorphMetadataProvider } = require\\('@mikro-orm/core'\\);\nconst { PostgreSqlDriver } = require\\('@mikro-orm/postgresql'\\);\nconst provider = new TsMorphMetadataProvider\\(\\);\nconst discovery = new MetadataDiscovery\\(new Map\\(\\), provider, PostgreSqlDriver\\);\nconsole.log\\('MetadataDiscovery:', typeof discovery.discover\\);\n\" 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const c = require\\('@mikro-orm/core'\\); console.log\\(Object.keys\\(c\\).filter\\(k => k.toLowerCase\\(\\).includes\\('driver'\\) || k.toLowerCase\\(\\).includes\\('sqlite'\\) || k.toLowerCase\\(\\).includes\\('mock'\\)\\).join\\('\\\\n'\\)\\);\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const p = require\\('@mikro-orm/postgresql'\\); console.log\\(Object.keys\\(p\\).filter\\(k => !k.startsWith\\('_'\\)\\).join\\('\\\\n'\\)\\);\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const p = require\\('@mikro-orm/postgresql'\\); const keys = Object.keys\\(p\\); console.log\\(keys.join\\('\\\\n'\\)\\);\" 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const r = require\\('@mikro-orm/reflection'\\); console.log\\(Object.keys\\(r\\).join\\('\\\\n'\\)\\);\" 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"\nconst { MikroORM, TsMorphMetadataProvider } = require\\('@mikro-orm/core'\\);\nconst { PostgreSqlDriver } = require\\('@mikro-orm/postgresql'\\);\nconst { TsMorphMetadataProvider: TMP } = require\\('@mikro-orm/reflection'\\);\nconst m = new TMP\\(\\);\nconsole.log\\('TsMorphMetadataProvider works:', typeof m\\);\n\" 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npm run build 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npm run lint 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/learning/topic/**/*.ts\" --fix 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/learning/topic/**/*.ts\" 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/learning/progress/**/*.ts\" 2>&1)"
     ]
   }
 }

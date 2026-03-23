@@ -7,7 +7,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
-import { TopicEntity } from './topic.orm-entity';
+import { TopicOrmEntity } from './topic.orm-entity';
 
 export enum WordLearningStatus {
   NEW = 'NEW',
@@ -17,13 +17,13 @@ export enum WordLearningStatus {
 
 @Entity({ tableName: 'topic_words' })
 @Unique({ properties: ['topic', 'wordSenseId'] })
-export class TopicWordEntity {
+export class TopicWordOrmEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv4();
 
-  @ManyToOne(() => TopicEntity)
+  @ManyToOne(() => TopicOrmEntity)
   @Index()
-  topic!: TopicEntity;
+  topic!: TopicOrmEntity;
 
   @Property({ type: 'uuid' })
   @Index()
@@ -35,7 +35,7 @@ export class TopicWordEntity {
   @Property({ type: 'datetime' })
   addedAt: Date = new Date();
 
-  constructor(topic: TopicEntity, wordSenseId: string) {
+  constructor(topic: TopicOrmEntity, wordSenseId: string) {
     this.topic = topic;
     this.wordSenseId = wordSenseId;
   }

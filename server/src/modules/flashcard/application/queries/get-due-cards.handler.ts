@@ -10,7 +10,10 @@ import { GetDueCardsQuery } from './get-due-cards.query';
 
 @Injectable()
 @QueryHandler(GetDueCardsQuery)
-export class GetDueCardsHandler implements IQueryHandler<GetDueCardsQuery, DueCardResponseDto[]> {
+export class GetDueCardsHandler implements IQueryHandler<
+  GetDueCardsQuery,
+  DueCardResponseDto[]
+> {
   constructor(
     @InjectFlashcardRepository()
     private readonly flashcardRepo: IFlashcardRepository,

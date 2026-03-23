@@ -6,7 +6,11 @@ import { ReviewRating } from '../../domain/value-objects/review-rating.vo';
 import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
 
-export class ReviewLogMapper implements Mapper<ReviewLog, ReviewLogOrmEntity, object> {
+export class ReviewLogMapper implements Mapper<
+  ReviewLog,
+  ReviewLogOrmEntity,
+  object
+> {
   toDomain(orm: ReviewLogOrmEntity): ReviewLog {
     const previousParams = new FsrsParameters({
       stability: orm.previousStability,

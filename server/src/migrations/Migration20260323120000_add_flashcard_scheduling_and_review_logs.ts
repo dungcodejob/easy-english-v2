@@ -1,7 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration20260323120000_AddFlashcardSchedulingAndReviewLogs extends Migration {
-
   override async up(): Promise<void> {
     // Flashcard scheduling states (one-to-one with flashcards)
     this.addSql(`
@@ -19,7 +18,9 @@ export class Migration20260323120000_AddFlashcardSchedulingAndReviewLogs extends
         "updated_at" timestamptz not null default now()
       );
     `);
-    this.addSql(`create index "flashcard_scheduling_states_flashcard_id_index" on "flashcard_scheduling_states" ("flashcard_id");`);
+    this.addSql(
+      `create index "flashcard_scheduling_states_flashcard_id_index" on "flashcard_scheduling_states" ("flashcard_id");`,
+    );
 
     // Review logs (immutable history)
     this.addSql(`
@@ -40,20 +41,34 @@ export class Migration20260323120000_AddFlashcardSchedulingAndReviewLogs extends
         "created_at" timestamptz not null default now()
       );
     `);
-    this.addSql(`create index "review_logs_card_id_index" on "review_logs" ("card_id");`);
-    this.addSql(`create index "review_logs_user_tenant_index" on "review_logs" ("user_id", "tenant_id");`);
+    this.addSql(
+      `create index "review_logs_card_id_index" on "review_logs" ("card_id");`,
+    );
+    this.addSql(
+      `create index "review_logs_user_tenant_index" on "review_logs" ("user_id", "tenant_id");`,
+    );
 
     // Update study_stats: split streak → current_streak + longest_streak
-    this.addSql(`alter table "study_stats" add column if not exists "current_streak" int not null default 1`);
-    this.addSql(`alter table "study_stats" add column if not exists "longest_streak" int not null default 0`);
+    this.addSql(
+      `alter table "study_stats" add column if not exists "current_streak" int not null default 1`,
+    );
+    this.addSql(
+      `alter table "study_stats" add column if not exists "longest_streak" int not null default 0`,
+    );
     // Migrate existing streak value to current_streak, preserve longest_streak as 0
-    this.addSql(`update "study_stats" set "current_streak" = "streak" where "current_streak" = 1 and "streak" > 1`);
+    this.addSql(
+      `update "study_stats" set "current_streak" = "streak" where "current_streak" = 1 and "streak" > 1`,
+    );
   }
 
   override async down(): Promise<void> {
     this.addSql(`drop table if exists "flashcard_scheduling_states" cascade;`);
     this.addSql(`drop table if exists "review_logs" cascade;`);
-    this.addSql(`alter table "study_stats" drop column if exists "current_streak"`);
-    this.addSql(`alter table "study_stats" drop column if exists "longest_streak"`);
+    this.addSql(
+      `alter table "study_stats" drop column if exists "current_streak"`,
+    );
+    this.addSql(
+      `alter table "study_stats" drop column if exists "longest_streak"`,
+    );
   }
 }

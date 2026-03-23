@@ -1,35 +1,39 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicDto } from '../../dto/responses/topic.dto';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
 import { GetTopicDetailQuery } from './get-topic-detail.query';
 
+/**
+ * Get Topic Detail Query Handler
+ *
+ * Read layer - handles retrieving a single topic by ID.
+ * Uses repository interface for data access.
+ */
 @QueryHandler(GetTopicDetailQuery)
-export class GetTopicDetailHandler implements IQueryHandler<GetTopicDetailQuery> {
-  constructor(private readonly orm: MikroORM) {}
+export class GetTopicDetailHandler implements IQueryHandler<
+  GetTopicDetailQuery,
+  TopicDto
+> {
+  constructor(
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly mapper: TopicMapper,
+  ) {}
 
-  @CreateRequestContext()
   async execute(query: GetTopicDetailQuery): Promise<TopicDto> {
-    const em = this.orm.em;
     const { tenantId, userId, id } = query;
 
-    const topic = await em.findOne(TopicEntity, {
-      id,
-      tenantId,
-      userId,
-    });
+    const topic = await this.repo.findById(id, tenantId, userId);
 
     if (!topic) {
       throw new NotFoundException('Topic not found');
     }
 
-    return {
-      id: topic.id,
-      name: topic.name,
-      description: topic.description,
-      createdAt: topic.createdAt,
-      updatedAt: topic.updatedAt,
-    };
+    return this.mapper.toResponse(topic) as TopicDto;
   }
 }

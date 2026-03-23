@@ -40,9 +40,7 @@ describe('FlashcardSource', () => {
     });
 
     it('should throw ArgumentInvalidException for empty string', () => {
-      expect(() => FlashcardSource.from('')).toThrow(
-        ArgumentInvalidException,
-      );
+      expect(() => FlashcardSource.from('')).toThrow(ArgumentInvalidException);
     });
   });
 

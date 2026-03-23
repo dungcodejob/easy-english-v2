@@ -32,15 +32,33 @@ export class Flashcard extends AggregateRoot {
   private _wordSenseId!: string | null;
   private _schedulingState!: FsrsParameters;
 
-  get tenantId(): string { return this._tenantId; }
-  get userId(): string { return this._userId; }
-  get front(): string { return this._front; }
-  get back(): string { return this._back; }
-  get hint(): string | null { return this._hint; }
-  get notes(): string | null { return this._notes; }
-  get source(): FlashcardSource { return this._source; }
-  get wordSenseId(): string | null { return this._wordSenseId; }
-  get schedulingState(): FsrsParameters { return this._schedulingState; }
+  get tenantId(): string {
+    return this._tenantId;
+  }
+  get userId(): string {
+    return this._userId;
+  }
+  get front(): string {
+    return this._front;
+  }
+  get back(): string {
+    return this._back;
+  }
+  get hint(): string | null {
+    return this._hint;
+  }
+  get notes(): string | null {
+    return this._notes;
+  }
+  get source(): FlashcardSource {
+    return this._source;
+  }
+  get wordSenseId(): string | null {
+    return this._wordSenseId;
+  }
+  get schedulingState(): FsrsParameters {
+    return this._schedulingState;
+  }
 
   static create(props: {
     tenantId: string;
@@ -113,10 +131,16 @@ export class Flashcard extends AggregateRoot {
     this._hint = props.hint ?? this._hint;
     this._notes = props.notes ?? this._notes;
     this.updateUpdatedAt();
-    this.addEvent(new FlashcardUpdatedEvent({ aggregateId: this.id, flashcard: this }));
+    this.addEvent(
+      new FlashcardUpdatedEvent({ aggregateId: this.id, flashcard: this }),
+    );
   }
 
-  review(rating: ReviewRating, newParams: FsrsParameters, reviewDurationMs: number): void {
+  review(
+    rating: ReviewRating,
+    newParams: FsrsParameters,
+    reviewDurationMs: number,
+  ): void {
     const previousState = this._schedulingState;
     this._schedulingState = newParams;
     this.updateUpdatedAt();

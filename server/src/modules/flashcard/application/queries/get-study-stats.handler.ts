@@ -11,9 +11,10 @@ import { GetStudyStatsQuery } from './get-study-stats.query';
  */
 @Injectable()
 @QueryHandler(GetStudyStatsQuery)
-export class GetStudyStatsHandler
-  implements IQueryHandler<GetStudyStatsQuery, StudyStatsResponseDto>
-{
+export class GetStudyStatsHandler implements IQueryHandler<
+  GetStudyStatsQuery,
+  StudyStatsResponseDto
+> {
   constructor(
     @InjectStudyStatsRepository()
     private readonly statsRepo: IStudyStatsRepository,

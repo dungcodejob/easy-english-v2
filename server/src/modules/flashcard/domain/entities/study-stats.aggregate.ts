@@ -23,17 +23,37 @@ export class StudyStats extends AggregateRoot {
   private _masteredCards!: number;
   private _lastStudyDate!: Date | null;
 
-  get tenantId(): string { return this._tenantId; }
-  get userId(): string { return this._userId; }
-  get currentStreak(): number { return this._currentStreak; }
-  get longestStreak(): number { return this._longestStreak; }
-  get totalCardsReviewed(): number { return this._totalCardsReviewed; }
-  get totalStudyTimeMinutes(): number { return this._totalStudyTimeMinutes; }
-  get masteredCards(): number { return this._masteredCards; }
-  get lastStudyDate(): Date | null { return this._lastStudyDate; }
+  get tenantId(): string {
+    return this._tenantId;
+  }
+  get userId(): string {
+    return this._userId;
+  }
+  get currentStreak(): number {
+    return this._currentStreak;
+  }
+  get longestStreak(): number {
+    return this._longestStreak;
+  }
+  get totalCardsReviewed(): number {
+    return this._totalCardsReviewed;
+  }
+  get totalStudyTimeMinutes(): number {
+    return this._totalStudyTimeMinutes;
+  }
+  get masteredCards(): number {
+    return this._masteredCards;
+  }
+  get lastStudyDate(): Date | null {
+    return this._lastStudyDate;
+  }
 
   static create(tenantId: string, userId: string): StudyStats {
-    const stats = new StudyStats({ id: v7(), createdAt: new Date(), updatedAt: new Date() });
+    const stats = new StudyStats({
+      id: v7(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
     stats._tenantId = tenantId;
     stats._userId = userId;
     stats._currentStreak = 1;
@@ -67,7 +87,11 @@ export class StudyStats extends AggregateRoot {
     return stats;
   }
 
-  recordReview(rating: ReviewRating, durationMs: number, isMastered: boolean): void {
+  recordReview(
+    rating: ReviewRating,
+    durationMs: number,
+    isMastered: boolean,
+  ): void {
     const now = new Date();
 
     if (this._lastStudyDate) {

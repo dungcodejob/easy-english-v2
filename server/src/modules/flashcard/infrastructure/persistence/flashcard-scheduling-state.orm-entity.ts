@@ -11,7 +11,9 @@ export class FlashcardSchedulingStateOrmEntity {
   @Index()
   flashcardId!: string;
 
-  @OneToOne(() => FlashcardOrmEntity, (f) => f.schedulingState, { mappedBy: 'schedulingState' })
+  @OneToOne(() => FlashcardOrmEntity, (f) => f.schedulingState, {
+    mappedBy: 'schedulingState',
+  })
   flashcard!: FlashcardOrmEntity;
 
   @Property({ type: 'float', default: 0 })
