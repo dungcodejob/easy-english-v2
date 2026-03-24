@@ -79,11 +79,11 @@ export class UserWordSenseProgress extends AggregateRoot {
 export type CardStateValue = 'new' | 'learning' | 'review' | 'relearning' | 'grace';
 
 export class CardState extends ValueObject<{ value: CardStateValue }> {
-  static NEW(): CardState       { return new CardState({ value: 'new' }) }
-  static LEARNING(): CardState   { return new CardState({ value: 'learning' }) }
-  static REVIEW(): CardState     { return new CardState({ value: 'review' }) }
-  static RELEARNING(): CardState { return new CardState({ value: 'relearning' }) }
-  static GRACE(): CardState      { return new CardState({ value: 'grace' }) }
+  static get NEW(): CardState       { return new CardState({ value: 'new' }) }
+  static get LEARNING(): CardState   { return new CardState({ value: 'learning' }) }
+  static get REVIEW(): CardState     { return new CardState({ value: 'review' }) }
+  static get RELEARNING(): CardState { return new CardState({ value: 'relearning' }) }
+  static get GRACE(): CardState      { return new CardState({ value: 'grace' }) }
   static from(value: string): CardState { return new CardState({ value: value as CardStateValue }) }
 }
 
@@ -127,7 +127,7 @@ export class FsrsSchedulerService {
   calculateNext(
     current: FsrsParameters,
     rating: ReviewRating,
-    now?: Date,
+    now: Date,
   ): FsrsParameters
   // Same algorithm as current implementation
   // No ORM dependencies — stateless, pure domain logic
@@ -233,7 +233,9 @@ New handler: `ReviewWordHandler`
 - Loads `UserWordSenseProgress` → calls `applyReview()` → flushes → publishes events
 - `AddToLearningHandler` and `RemoveFromLearningHandler` are **not changed** — they remain the entry/exit points for the learning list
 
-> **ReviewLog for dictionary reviews:** `ReviewWordHandler` also creates a `ReviewLog` entry (linked by `wordSenseId` instead of `cardId`) to maintain a complete review history for study statistics. The `ReviewLog` entity is extended or a variant is created to support `wordSenseId`-based entries alongside the existing `cardId`-based entries. This keeps future Quiz/Typing/Listening handlers consistent — all modes log to the same `ReviewLog` table.
+> **ReviewLog for dictionary reviews:** `ReviewWordHandler` also creates a `ReviewLog` entry to maintain a complete review history for study statistics. `ReviewLog` is extended with a nullable `wordSenseId` column alongside the existing `cardId` column (both nullable, not both set). This keeps all modes logging to the same table. The `ReviewLogMapper` handles both card-based and sense-based entries; `IReviewLogRepository.create()` accepts either.
+>
+> **`UpdateStudyStatsHandler` decorator:** The `@EventsHandler(CardReviewedEvent)` decorator changes to `@EventsHandler(WordReviewedEvent)`. The `stats.recordReview()` call is unchanged — `rating`, `reviewDurationMs`, and `isMastered` all exist on the new event payload.
 
 ### Future Modes (designed, not built)
 
@@ -284,9 +286,12 @@ async execute(query: ListTopicWordsQuery): Promise<TopicWordsResponseDto> {
   });
   const progressMap = new Map(progressRecords.map(r => [r.wordSense.id, r.fsrsParams]));
 
+  // topicMapper.toResponse(topic, progressMap) replaces the inline ORM→DTO mapping
   return this.topicMapper.toResponse(topic, progressMap);
 }
 ```
+
+> **`AddTopicWordHandler` response:** After dropping `TopicWord.status`, the `TopicWordDto` `status` field is derived from `FsrsParameters.state` at response time. When a word is freshly added to a topic, the associated `UserWordSenseProgress` has `state = 'new'` (from `FsrsParameters.newCardDefaults()`), so `status = 'NEW'` in the response — no special case needed. The mapper derives this in `toResponse()` from the `progressMap`.
 
 `TopicWord.updateStatus()` is **removed** from the domain entity — it is no longer called and has no purpose without a stored `status` field.
 
@@ -330,8 +335,9 @@ CREATE UNIQUE INDEX ON flashcards(word_sense_id) WHERE word_sense_id IS NOT NULL
 ### Phase 4 — Cut Over
 
 - Deploy new application code
-- New API writes go to both old and new columns (dual-write) OR go exclusively to new columns with old reads deriving from new
-- Monitor for errors
+- New API writes go exclusively to the new FSRS columns (no dual-write)
+- `UserWordSenseProgress.rehydrate()` reads the new columns; legacy columns (`masteryLevel`, `reviewCount`, `nextReviewAt`, `lastReviewedAt`) are read in `toResponse()` as derived values during the transition window (Phase 5 cleanup drops them)
+- Monitor for errors; rollback if critical regressions occur
 
 ### Phase 5 — Cleanup
 
