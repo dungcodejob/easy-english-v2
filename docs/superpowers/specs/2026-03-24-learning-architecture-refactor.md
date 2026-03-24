@@ -68,7 +68,8 @@ export class UserWordSenseProgress extends AggregateRoot {
   // Derived getters
   get isArchived(): boolean
   get isMastered(): boolean   // from fsrsParams.isMastered
-  get isDue(): boolean        // from fsrsParams.dueDate <= now
+  get isDue(): boolean        // fsrsParams.dueDate !== null && fsrsParams.dueDate <= now
+                             // null dueDate = never reviewed = not due until scheduled
 }
 ```
 
@@ -223,7 +224,7 @@ User interaction → Mode Adapter → ReviewRating → applyReview() → persist
 
 - Endpoint: `POST /study/flashcard/review`
 - Reuses refactored `ReviewCardHandler`
-- Custom cards: no FSRS update, only stats logging
+- Custom cards: no FSRS update, no `ReviewLog` entry, no study stats update — intentionally silent (custom cards are free-form study with no shared mastery state; `UpdateStudyStatsHandler` is not triggered for them)
 
 ### Mode 2: Dictionary Review (implemented in this scope)
 
@@ -250,7 +251,7 @@ New handler: `ReviewWordHandler`
 >   private _previousParams: FsrsParameters;
 >   private _newParams: FsrsParameters;
 >   private _reviewDurationMs: number;
->   private _reviewedAt: Date;
+>   private _reviewedAt: Date;  // when review was logged; distinct from FsrsParameters.lastReviewDate (when card was actually reviewed per FSRS)
 >
 >   static create(props: ReviewLogProps): ReviewLog
 > }
@@ -361,6 +362,7 @@ CREATE UNIQUE INDEX ON flashcards(word_sense_id) WHERE word_sense_id IS NOT NULL
 - New API writes go exclusively to the new FSRS columns (no dual-write)
 - `UserWordSenseProgress.rehydrate()` reads the new columns; legacy columns (`masteryLevel`, `reviewCount`, `nextReviewAt`, `lastReviewedAt`) are read in `toResponse()` as derived values during the transition window (Phase 5 cleanup drops them)
 - Monitor for errors; rollback if critical regressions occur
+- **Rollback procedure:** revert `UserWordSenseProgress.rehydrate()` to read from legacy columns. No migration reversal needed — legacy columns remain in place until Phase 5 cleanup.
 
 ### Phase 5 — Cleanup
 
