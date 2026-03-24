@@ -76,21 +76,29 @@ export class UserWordSenseProgress extends AggregateRoot {
 ```typescript
 // learning/progress/domain/value-objects/fsrs-parameters.vo.ts
 
-export type CardState = 'new' | 'learning' | 'review' | 'relearning' | 'grace';
+export type CardStateValue = 'new' | 'learning' | 'review' | 'relearning' | 'grace';
+
+export class CardState extends ValueObject<{ value: CardStateValue }> {
+  static NEW(): CardState       { return new CardState({ value: 'new' }) }
+  static LEARNING(): CardState   { return new CardState({ value: 'learning' }) }
+  static REVIEW(): CardState     { return new CardState({ value: 'review' }) }
+  static RELEARNING(): CardState { return new CardState({ value: 'relearning' }) }
+  static GRACE(): CardState      { return new CardState({ value: 'grace' }) }
+  static from(value: string): CardState { return new CardState({ value: value as CardStateValue }) }
+}
 
 export class FsrsParameters extends ValueObject<{
-  stability: number;      // recall stability (days)
-  difficulty: number;      // 0–1, ease factor
-  lapses: number;          // number of times card was forgotten
-  reps: number;            // consecutive correct reviews
+  stability: number;        // recall stability (days)
+  difficulty: number;        // 0–1, ease factor
+  lapses: number;            // number of times card was forgotten
+  reps: number;              // consecutive correct reviews
   state: CardState;
-  dueDate: Date;
+  dueDate: Date | null;      // null for new (unreviewed) cards
   lastReviewDate: Date | null;
 }> {
   get isMastered(): boolean  // stability >= 30 && lapses === 0
 
-  static newCardDefaults(): FsrsParameters
-  static fromRecord(record: { stability, difficulty, lapses, reps, state, dueDate, lastReviewDate }): FsrsParameters
+  static newCardDefaults(): FsrsParameters   // dueDate = null, state = 'new', stability = 0
 }
 ```
 
@@ -102,10 +110,10 @@ export class FsrsParameters extends ValueObject<{
 export type ReviewRatingValue = 1 | 2 | 3 | 4;
 
 export class ReviewRating extends ValueObject<{ value: ReviewRatingValue }> {
-  static AGAIN(): ReviewRating    // 1
-  static HARD(): ReviewRating     // 2
-  static GOOD(): ReviewRating     // 3
-  static EASY(): ReviewRating     // 4
+  static get AGAIN(): ReviewRating    { return new ReviewRating({ value: 1 }) }  // 1
+  static get HARD(): ReviewRating     { return new ReviewRating({ value: 2 }) }  // 2
+  static get GOOD(): ReviewRating     { return new ReviewRating({ value: 3 }) }  // 3
+  static get EASY(): ReviewRating     { return new ReviewRating({ value: 4 }) }  // 4
 }
 ```
 
@@ -161,7 +169,7 @@ async execute(command: ReviewCardCommand): Promise<void> {
 
   if (flashcard.wordSenseId) {
     // Dictionary-linked card — update shared FSRS state
-    const progress = await this.writeRepo.findOneByUserAndSense(
+    const progress = await this.progressWriteRepo.findOneByUserAndSense(
       command.userId,
       flashcard.wordSenseId,
     );
@@ -170,7 +178,16 @@ async execute(command: ReviewCardCommand): Promise<void> {
     const result = progress.applyReview(command.rating);
     if (result.isErr()) throw new ConflictException('Word is archived');
 
-    const reviewLog = ReviewLog.create({ cardId, userId, tenantId, rating: command.rating, previousParams, newParams, reviewDurationMs });
+    const { value: newParams } = result;
+    const reviewLog = ReviewLog.create({
+      cardId: flashcard.id,
+      userId: command.userId,
+      tenantId: command.tenantId,
+      rating: command.rating,
+      previousParams: progress.fsrsParams,  // captured before applyReview mutates
+      newParams,
+      reviewDurationMs: command.reviewDurationMs,
+    });
     await this.reviewLogRepo.create(reviewLog);
     await this.em.flush();
     progress.publishEvents(this.logger, this.eventBus);
@@ -179,6 +196,8 @@ async execute(command: ReviewCardCommand): Promise<void> {
   flashcard.publishEvents(this.logger, this.eventBus);
 }
 ```
+
+> **Naming:** `this.progressWriteRepo` is the `ILearningWriteRepository` (already injected into the handler). `ReviewLog` accepts `FlashcardId` (ValueObject) for `cardId`.
 
 ### `FsrsSchedulerService` Move
 
@@ -214,6 +233,8 @@ New handler: `ReviewWordHandler`
 - Loads `UserWordSenseProgress` → calls `applyReview()` → flushes → publishes events
 - `AddToLearningHandler` and `RemoveFromLearningHandler` are **not changed** — they remain the entry/exit points for the learning list
 
+> **ReviewLog for dictionary reviews:** `ReviewWordHandler` also creates a `ReviewLog` entry (linked by `wordSenseId` instead of `cardId`) to maintain a complete review history for study statistics. The `ReviewLog` entity is extended or a variant is created to support `wordSenseId`-based entries alongside the existing `cardId`-based entries. This keeps future Quiz/Typing/Listening handlers consistent — all modes log to the same `ReviewLog` table.
+
 ### Future Modes (designed, not built)
 
 | Mode | Rating derivation | Notes |
@@ -247,7 +268,27 @@ toResponse(topic: Topic, progressMap: Map<string, FsrsParameters>): TopicDto {
 }
 ```
 
-The `ListTopicWordsHandler` query fetches `UserWordSenseProgress` records for all words in the topic and builds the `progressMap`. No separate sync event handler needed.
+**`ListTopicWordsHandler`** — changes to enrich each word with live FSRS status:
+
+```typescript
+async execute(query: ListTopicWordsQuery): Promise<TopicWordsResponseDto> {
+  const topic = await this.topicRepo.findById(query.topicId, query.tenantId, query.userId);
+  if (!topic) throw new NotFoundException('Topic not found');
+
+  // Fetch FSRS params for all words in this topic in one query
+  const wordSenseIds = topic.words.map(w => w.wordSenseId);
+  const progressRecords = await this.em.find(UserWordSenseProgressOrmEntity, {
+    wordSense: { $in: wordSenseIds },
+    userId: query.userId,
+    archivedAt: null,
+  });
+  const progressMap = new Map(progressRecords.map(r => [r.wordSense.id, r.fsrsParams]));
+
+  return this.topicMapper.toResponse(topic, progressMap);
+}
+```
+
+`TopicWord.updateStatus()` is **removed** from the domain entity — it is no longer called and has no purpose without a stored `status` field.
 
 ---
 
@@ -258,12 +299,12 @@ The `ListTopicWordsHandler` query fetches `UserWordSenseProgress` records for al
 **Add FSRS columns to `user_word_sense_progress`:**
 ```sql
 ALTER TABLE user_word_sense_progress
-  ADD COLUMN stability      FLOAT NOT NULL DEFAULT 0,
-  ADD COLUMN difficulty      FLOAT NOT NULL DEFAULT 0,
-  ADD COLUMN lapses          INT   NOT NULL DEFAULT 0,
-  ADD COLUMN reps            INT   NOT NULL DEFAULT 0,
-  ADD COLUMN state           VARCHAR(20) NOT NULL DEFAULT 'new',
-  ADD COLUMN due_date        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  ADD COLUMN stability         FLOAT     NOT NULL DEFAULT 0,
+  ADD COLUMN difficulty       FLOAT     NOT NULL DEFAULT 0,
+  ADD COLUMN lapses           INT       NOT NULL DEFAULT 0,
+  ADD COLUMN reps             INT       NOT NULL DEFAULT 0,
+  ADD COLUMN state            VARCHAR(20) NOT NULL DEFAULT 'new',
+  ADD COLUMN due_date         TIMESTAMPTZ NULL,                          -- null for new/unreviewed cards
   ADD COLUMN last_review_date TIMESTAMPTZ NULL;
 ```
 
@@ -363,3 +404,5 @@ flashcard/application/
 | `FsrsSchedulerService` move breaks `FlashcardModule` | Import via `ProgressModule` export; tested in integration |
 | Custom flashcards (no word Sense) have no FSRS state | Intentional — custom cards are study-only; their review history is in `ReviewLog` only |
 | `CardReviewedEvent` renamed to `WordReviewedEvent` breaks event listeners | Rename + update payload; event listeners updated in same commit |
+| `CardState` ValueObject moved to `progress` creates a reverse dependency | `flashcard` imports `CardState` from `progress` — verify no circular `progress → flashcard` path exists before finalizing module imports |
+| `ReviewLog` needs `wordSenseId`-based entries for dictionary reviews | Extend `ReviewLog` entity or create variant; update mapper and repository accordingly |
