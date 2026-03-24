@@ -60,7 +60,8 @@ export class UserWordSenseProgress extends AggregateRoot {
 
   static create(props: { userId, wordSenseId }): UserWordSenseProgress
   static rehydrate(props: UserWordSenseProgressProps): UserWordSenseProgress
-  applyReview(rating: ReviewRating): Result<FsrsParameters, 'already_archived'>
+  applyReview(rating: ReviewRating, now?: Date): Result<FsrsParameters, 'already_archived'>
+  // Internally calls fsrsScheduler.calculateNext(this._fsrsParams, rating, now ?? new Date())
   archive(): void
   restore(): void
 
@@ -236,6 +237,25 @@ New handler: `ReviewWordHandler`
 > **ReviewLog for dictionary reviews:** `ReviewWordHandler` also creates a `ReviewLog` entry to maintain a complete review history for study statistics. `ReviewLog` is extended with a nullable `wordSenseId` column alongside the existing `cardId` column (both nullable, not both set). This keeps all modes logging to the same table. The `ReviewLogMapper` handles both card-based and sense-based entries; `IReviewLogRepository.create()` accepts either.
 >
 > **`UpdateStudyStatsHandler` decorator:** The `@EventsHandler(CardReviewedEvent)` decorator changes to `@EventsHandler(WordReviewedEvent)`. The `stats.recordReview()` call is unchanged — `rating`, `reviewDurationMs`, and `isMastered` all exist on the new event payload.
+>
+> **`ReviewLog` entity (minimal sketch):**
+> ```typescript
+> // flashcard/domain/entities/review-log.entity.ts
+> export class ReviewLog extends Entity {
+>   private _cardId: FlashcardId | null;   // null when entry is from ReviewWordHandler
+>   private _wordSenseId: string | null;    // null when entry is from ReviewCardHandler
+>   private _userId: string;
+>   private _tenantId: string;
+>   private _rating: ReviewRating;
+>   private _previousParams: FsrsParameters;
+>   private _newParams: FsrsParameters;
+>   private _reviewDurationMs: number;
+>   private _reviewedAt: Date;
+>
+>   static create(props: ReviewLogProps): ReviewLog
+> }
+> ```
+> `cardId` and `wordSenseId` are mutually exclusive. `previousParams` / `newParams` store the serialized `FsrsParameters` primitives (not the VO). The ORM entity maps these to columns.
 
 ### Future Modes (designed, not built)
 
@@ -261,14 +281,17 @@ The `status` field on `TopicWord` is no longer stored. Instead it is derived at 
 toResponse(topic: Topic, progressMap: Map<string, FsrsParameters>): TopicDto {
   const words = topic.words.map(w => {
     const params = progressMap.get(w.wordSenseId);
-    const status = params?.state === 'new' ? 'NEW'
-      : params?.state === 'review' || params?.state === 'learning' ? 'LEARNING'
-      : params?.isMastered ? 'MASTERED' : 'NEW';
+    const status =
+      params?.state === 'relearning' || params?.state === 'learning' ? 'LEARNING'
+      : params?.isMastered ? 'MASTERED'
+      : 'NEW';  // covers 'new', 'review', 'grace' — all treated as NEW/LEARNING for display
     return { ...this.mapWord(w), status };
   });
   return { ... };
 }
 ```
+
+> The `relearning` → `LEARNING` check is ordered before `isMastered` to prevent a freshly relearned card (high stability, zero lapses, but still in `relearning` state) from incorrectly showing `MASTERED`.
 
 **`ListTopicWordsHandler`** — changes to enrich each word with live FSRS status:
 
