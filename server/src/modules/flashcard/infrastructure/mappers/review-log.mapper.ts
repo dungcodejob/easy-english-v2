@@ -1,10 +1,10 @@
 import { Mapper } from '@core/ddd';
+import { CardState } from '../../../learning/progress/domain/value-objects/card-state.vo';
+import { FsrsParameters } from '../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
+import { ReviewRating } from '../../../learning/progress/domain/value-objects/review-rating.vo';
 import { ReviewLog } from '../../domain/entities/review-log.entity';
-import { ReviewLogOrmEntity } from '../persistence/review-log.orm-entity';
 import { FlashcardId } from '../../domain/value-objects/flashcard-id.vo';
-import { ReviewRating } from '../../domain/value-objects/review-rating.vo';
-import { CardState } from '../../domain/value-objects/card-state.vo';
-import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
+import { ReviewLogOrmEntity } from '../persistence/review-log.orm-entity';
 
 export class ReviewLogMapper implements Mapper<
   ReviewLog,
@@ -35,7 +35,8 @@ export class ReviewLogMapper implements Mapper<
     return ReviewLog.rehydrate({
       id: orm.id,
       props: {
-        cardId: FlashcardId.from(orm.cardId),
+        cardId: orm.cardId ? FlashcardId.from(orm.cardId) : null,
+        wordSenseId: orm.wordSenseId,
         userId: orm.userId,
         tenantId: orm.tenantId,
         rating: ReviewRating.from(orm.rating),
@@ -54,7 +55,8 @@ export class ReviewLogMapper implements Mapper<
   toPersistence(domain: ReviewLog): ReviewLogOrmEntity {
     const orm = new ReviewLogOrmEntity();
     orm.id = domain.id;
-    orm.cardId = domain.cardId.value;
+    orm.cardId = domain.cardId?.value ?? '';
+    orm.wordSenseId = domain.wordSenseId;
     orm.userId = domain.userId;
     orm.tenantId = domain.tenantId;
     orm.rating = domain.rating.value;
@@ -72,7 +74,8 @@ export class ReviewLogMapper implements Mapper<
   toResponse(domain: ReviewLog): object {
     return {
       id: domain.id,
-      cardId: domain.cardId.value,
+      cardId: domain.cardId?.value ?? null,
+      wordSenseId: domain.wordSenseId ?? null,
       rating: domain.rating.value,
       previousState: domain.previousState.value,
       newState: domain.newState.value,

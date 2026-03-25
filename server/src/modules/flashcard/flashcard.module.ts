@@ -8,11 +8,9 @@ import { StudyController } from './controllers/study.controller';
 import { provideFlashcardRepository } from './domain/repositories/flashcard.repository.interface';
 import { provideReviewLogRepository } from './domain/repositories/review-log.repository.interface';
 import { provideStudyStatsRepository } from './domain/repositories/study-stats.repository.interface';
-import { FsrsSchedulerService } from './domain/services/fsrs-scheduler.service';
 import { FlashcardMapper } from './infrastructure/mappers/flashcard.mapper';
 import { ReviewLogMapper } from './infrastructure/mappers/review-log.mapper';
 import { StudyStatsMapper } from './infrastructure/mappers/study-stats.mapper';
-import { FlashcardSchedulingStateOrmEntity } from './infrastructure/persistence/flashcard-scheduling-state.orm-entity';
 import { FlashcardOrmEntity } from './infrastructure/persistence/flashcard.orm-entity';
 import { ReviewLogOrmEntity } from './infrastructure/persistence/review-log.orm-entity';
 import { StudyStatsOrmEntity } from './infrastructure/persistence/study-stats.orm-entity';
@@ -31,6 +29,8 @@ import { GetStudyStatsHandler } from './application/queries/get-study-stats.hand
 
 import { StudyStatsInitializerHandler } from './application/events/study-stats-initializer.handler';
 import { UpdateStudyStatsHandler } from './application/events/update-study-stats.handler';
+
+import { ProgressModule } from '../learning/progress/progress.module';
 
 const CommandHandlers = [
   CreateFlashcardHandler,
@@ -55,14 +55,12 @@ const Repositories = [
 
 const Mappers = [FlashcardMapper, StudyStatsMapper, ReviewLogMapper];
 
-const Services = [FsrsSchedulerService];
-
 @Module({
   imports: [
     CqrsModule,
+    ProgressModule, // provides FsrsSchedulerService, ILearningWriteRepository
     MikroOrmModule.forFeature([
       FlashcardOrmEntity,
-      FlashcardSchedulingStateOrmEntity,
       StudyStatsOrmEntity,
       ReviewLogOrmEntity,
     ]),
@@ -71,7 +69,6 @@ const Services = [FsrsSchedulerService];
   providers: [
     ...Repositories,
     ...Mappers,
-    ...Services,
     ...CommandHandlers,
     ...QueryHandlers,
   ],

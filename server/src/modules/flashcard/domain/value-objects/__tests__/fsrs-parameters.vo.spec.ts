@@ -1,5 +1,5 @@
-import { CardState } from '../card-state.vo';
-import { FsrsParameters, FsrsParametersProps } from '../fsrs-parameters.vo';
+import { CardState } from '../../../../../learning/progress/domain/value-objects/card-state.vo';
+import { FsrsParameters } from '../../../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
 
 describe('FsrsParameters', () => {
   describe('constructor and getters', () => {

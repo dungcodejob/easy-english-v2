@@ -40,40 +40,27 @@ export class FlashcardRepository implements IFlashcardRepository {
    * Multi-tenant safe: requires both userId AND tenantId.
    */
   async findByUserId(userId: string, tenantId: string): Promise<Flashcard[]> {
-    const orms = await this.em.find(
-      FlashcardOrmEntity,
-      { userId, tenantId },
-      { populate: ['schedulingState'] },
-    );
+    const orms = await this.em.find(FlashcardOrmEntity, { userId, tenantId });
     return orms.map((orm) => this.mapper.toDomain(orm));
   }
 
   /**
-   * Find flashcards that are due for review.
+   * Find all flashcards for a user (no longer filters by due date — that logic
+   * now lives in GetDueCardsHandler using UserWordSenseProgress).
    * Multi-tenant safe: requires both userId AND tenantId.
-   *
-   * Note: Filtering due cards is business logic and could be moved to the
-   * domain layer or a query object, but keeping here for simplicity.
    */
   async findDueCards(
     userId: string,
     tenantId: string,
-    now: Date,
+    _now: Date,
     limit = 20,
   ): Promise<Flashcard[]> {
     const orms = await this.em.find(
       FlashcardOrmEntity,
       { userId, tenantId },
-      { populate: ['schedulingState'], limit },
+      { limit },
     );
-    // Filter due cards in memory (could be moved to DB query with native SQL)
-    return orms
-      .filter(
-        (orm) =>
-          orm.schedulingState?.dueDate && orm.schedulingState.dueDate <= now,
-      )
-      .slice(0, limit)
-      .map((orm) => this.mapper.toDomain(orm));
+    return orms.map((orm) => this.mapper.toDomain(orm));
   }
 
   /**

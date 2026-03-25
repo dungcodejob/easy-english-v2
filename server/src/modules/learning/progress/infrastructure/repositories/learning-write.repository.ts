@@ -9,6 +9,7 @@ import { UserWordSenseProgressOrmEntity } from '../persistence/user-word-sense-p
 @Injectable()
 export class LearningWriteRepository implements ILearningWriteRepository {
   private readonly logger = new Logger(LearningWriteRepository.name);
+  private readonly mapper = new UserWordSenseProgressMapper();
 
   constructor(private readonly em: EntityManager) {}
 
@@ -29,35 +30,44 @@ export class LearningWriteRepository implements ILearningWriteRepository {
       return null;
     }
 
-    return UserWordSenseProgressMapper.toDomain(ormEntity);
+    return this.mapper.toDomain(ormEntity);
   }
 
   async save(progress: UserWordSenseProgress): Promise<void> {
-    await this.em.transactional(async (em) => {
-      let ormEntity = await em.findOne(UserWordSenseProgressOrmEntity, {
-        id: progress.id,
-      });
-
-      if (!ormEntity) {
-        ormEntity = new UserWordSenseProgressOrmEntity();
-        ormEntity.id = progress.id;
-        ormEntity.userId = progress.userId;
-        ormEntity.wordSense = em.getReference(
-          WordSenseOrmEntity,
-          progress.wordSenseId,
-        );
-      }
-
-      ormEntity.masteryLevel = progress.masteryLevel;
-      ormEntity.reviewCount = progress.reviewCount;
-      ormEntity.nextReviewAt = progress.nextReviewAt;
-      ormEntity.lastReviewedAt = progress.lastReviewedAt;
-      ormEntity.archivedAt = progress.archivedAt;
-      ormEntity.createdAt = progress.createdAt;
-      ormEntity.updatedAt = progress.updatedAt;
-
-      em.persist(ormEntity);
+    let ormEntity = await this.em.findOne(UserWordSenseProgressOrmEntity, {
+      id: progress.id,
     });
+
+    if (!ormEntity) {
+      ormEntity = new UserWordSenseProgressOrmEntity();
+      ormEntity.id = progress.id;
+      ormEntity.userId = progress.userId;
+      ormEntity.tenantId = progress.tenantId;
+      ormEntity.wordSense = this.em.getReference(
+        WordSenseOrmEntity,
+        progress.wordSenseId,
+      );
+    }
+
+    // Map all fields (including new FSRS columns)
+    const mapped = this.mapper.toPersistence(progress);
+    ormEntity.stability = mapped.stability;
+    ormEntity.difficulty = mapped.difficulty;
+    ormEntity.lapses = mapped.lapses;
+    ormEntity.reps = mapped.reps;
+    ormEntity.state = mapped.state;
+    ormEntity.dueDate = mapped.dueDate;
+    ormEntity.lastReviewDate = mapped.lastReviewDate;
+    ormEntity.masteryLevel = mapped.masteryLevel;
+    ormEntity.reviewCount = mapped.reviewCount;
+    ormEntity.nextReviewAt = mapped.nextReviewAt;
+    ormEntity.lastReviewedAt = mapped.lastReviewedAt;
+    ormEntity.archivedAt = mapped.archivedAt;
+    ormEntity.createdAt = mapped.createdAt;
+    ormEntity.updatedAt = mapped.updatedAt;
+
+    this.em.persist(ormEntity);
+    // flush() is called at the handler layer — single UoW boundary
 
     this.logger.debug(
       `Saved UserWordSenseProgress for user ${progress.userId} and sense ${progress.wordSenseId}`,

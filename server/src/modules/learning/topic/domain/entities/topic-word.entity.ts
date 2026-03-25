@@ -1,11 +1,20 @@
 import { v7 as uuid } from 'uuid';
 import { WordLearningStatus } from '../value-objects/word-learning-status.vo';
 
+/**
+ * TopicWord is a child entity managed by the Topic aggregate.
+ *
+ * The `_status` field is a placeholder for ORM rehydration compatibility only.
+ * It is NOT the source of truth — status is derived from UserWordSenseProgress
+ * at read time in TopicMapper.toResponse().
+ */
 export class TopicWord {
   private readonly _id: string;
   private readonly _wordSenseId: string;
-  private _status: WordLearningStatus;
   private readonly _addedAt: Date;
+
+  // Placeholder only — not used as source of truth
+  private readonly _status: WordLearningStatus;
 
   get id(): string {
     return this._id;
@@ -15,6 +24,7 @@ export class TopicWord {
     return this._wordSenseId;
   }
 
+  /** @deprecated Not the source of truth — status is derived at read time from UserWordSenseProgress */
   get status(): WordLearningStatus {
     return this._status;
   }
@@ -36,24 +46,18 @@ export class TopicWord {
   }
 
   static create(wordSenseId: string): TopicWord {
-    return new TopicWord(
-      uuid(),
-      wordSenseId,
-      WordLearningStatus.NEW,
-      new Date(),
-    );
+    return new TopicWord(uuid(), wordSenseId, WordLearningStatus.NEW, new Date());
   }
 
+  /**
+   * @deprecated ORM no longer has a status column — status is always NEW for rehydration.
+   *             The real status comes from UserWordSenseProgress at read time.
+   */
   static rehydrate(
     id: string,
     wordSenseId: string,
-    status: WordLearningStatus,
     addedAt: Date,
   ): TopicWord {
-    return new TopicWord(id, wordSenseId, status, addedAt);
-  }
-
-  updateStatus(status: WordLearningStatus): void {
-    this._status = status;
+    return new TopicWord(id, wordSenseId, WordLearningStatus.NEW, addedAt);
   }
 }

@@ -1,6 +1,11 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  InjectLearningWriteRepository,
+  type ILearningWriteRepository,
+} from '../../../../learning/progress/domain/repositories/learning-write.repository.interface';
+import { FsrsSchedulerService } from '../../../../learning/progress/domain/services/fsrs-scheduler.service';
 import { ReviewLog } from '../../../domain/entities/review-log.entity';
 import {
   InjectFlashcardRepository,
@@ -10,7 +15,6 @@ import {
   InjectReviewLogRepository,
   type IReviewLogRepository,
 } from '../../../domain/repositories/review-log.repository.interface';
-import { FsrsSchedulerService } from '../../../domain/services/fsrs-scheduler.service';
 import { FlashcardId } from '../../../domain/value-objects/flashcard-id.vo';
 import { ReviewRating } from '../../../domain/value-objects/review-rating.vo';
 import { ReviewResultResponseDto } from '../../../dto/responses/review-result.response.dto';
@@ -29,6 +33,8 @@ export class ReviewCardHandler implements ICommandHandler<
     private readonly flashcardRepo: IFlashcardRepository,
     @InjectReviewLogRepository()
     private readonly reviewLogRepo: IReviewLogRepository,
+    @InjectLearningWriteRepository()
+    private readonly progressWriteRepo: ILearningWriteRepository,
     private readonly fsrsService: FsrsSchedulerService,
     private readonly eventBus: EventBus,
   ) {}
@@ -45,45 +51,73 @@ export class ReviewCardHandler implements ICommandHandler<
 
     const now = new Date();
     const rating = ReviewRating.from(command.rating);
-    const previousParams = flashcard.schedulingState;
 
-    const newParams = this.fsrsService.calculateNext(
-      previousParams,
-      rating,
-      now,
-    );
+    // For dictionary-linked cards: update shared UserWordSenseProgress FSRS state
+    if (flashcard.wordSenseId) {
+      const progress = await this.progressWriteRepo.findOneByUserAndSense(
+        command.userId,
+        flashcard.wordSenseId,
+      );
 
-    flashcard.review(rating, newParams, command.reviewDurationMs);
+      if (!progress) {
+        throw new NotFoundException(
+          'Word not in learning list. Add it to your learning list first.',
+        );
+      }
 
-    const reviewLog = ReviewLog.create({
-      cardId: FlashcardId.from(flashcard.id),
-      userId: command.userId,
-      tenantId: command.tenantId,
-      rating,
-      previousState: previousParams.state,
-      newState: newParams.state,
-      previousParams,
-      newParams,
-      reviewDurationMs: command.reviewDurationMs,
-      reviewedAt: now,
-    });
+      const previousParams = progress.fsrsParams;
 
-    await this.flashcardRepo.persist(flashcard);
-    await this.reviewLogRepo.create(reviewLog);
-    await this.em.flush();
+      const newParams = this.fsrsService.calculateNext(
+        previousParams,
+        rating,
+        now,
+      );
+
+      // Throws AlreadyArchivedException if archived — let it bubble up
+      progress.applyReview(rating, newParams, command.reviewDurationMs);
+
+      const reviewLog = ReviewLog.create({
+        cardId: FlashcardId.from(flashcard.id),
+        wordSenseId: flashcard.wordSenseId,
+        userId: command.userId,
+        tenantId: command.tenantId,
+        rating,
+        previousState: previousParams.state,
+        newState: newParams.state,
+        previousParams,
+        newParams,
+        reviewDurationMs: command.reviewDurationMs,
+        reviewedAt: now,
+      });
+
+      await this.progressWriteRepo.save(progress);
+      await this.reviewLogRepo.create(reviewLog);
+      await this.em.flush();
+      progress.publishEvents(this.logger, this.eventBus);
+
+      const dueDate = newParams.dueDate ?? new Date();
+      const intervalDays = Math.round(
+        (dueDate.getTime() - now.getTime()) / (24 * 60 * 60 * 1000),
+      );
+
+      return {
+        cardId: flashcard.id,
+        newState: newParams.state.value,
+        nextDueDate: dueDate.toISOString(),
+        intervalDays,
+        isMastered: newParams.isMastered,
+      };
+    }
+
+    // Custom card — no UserWordSenseProgress to update
     flashcard.publishEvents(this.logger, this.eventBus);
-
-    const dueDate = newParams.dueDate ?? new Date();
-    const intervalDays = Math.round(
-      (dueDate.getTime() - now.getTime()) / (24 * 60 * 60 * 1000),
-    );
 
     return {
       cardId: flashcard.id,
-      newState: newParams.state.value,
-      nextDueDate: dueDate.toISOString(),
-      intervalDays,
-      isMastered: newParams.isMastered,
+      newState: 'new',
+      nextDueDate: now.toISOString(),
+      intervalDays: 0,
+      isMastered: false,
     };
   }
 }

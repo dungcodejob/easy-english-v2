@@ -73,7 +73,9 @@ export class AddTopicWordHandler implements ICommandHandler<
       id: topicWord.id,
       topicId: command.topicId,
       wordSenseId: topicWord.wordSenseId,
-      status: topicWord.status.value,
+      // Status is derived from UserWordSenseProgress at read time.
+      // A freshly added word has no progress record yet — status is 'NEW'.
+      status: 'NEW' as const,
       addedAt: topicWord.addedAt,
     };
   }

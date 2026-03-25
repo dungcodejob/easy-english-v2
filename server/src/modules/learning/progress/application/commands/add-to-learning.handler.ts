@@ -42,8 +42,8 @@ export class AddToLearningHandler implements ICommandHandler<
       if (existing.isArchived) {
         this.logger.debug(`Restoring archived progress ${existing.id}`);
         existing.restore();
-        // writeRepo.save() already handles transactional internally
         await this.writeRepo.save(existing);
+        await this.em.flush();
         existing.publishEvents(this.logger, this.eventBus);
         return { id: existing.id, alreadyLearning: false };
       }
@@ -53,11 +53,12 @@ export class AddToLearningHandler implements ICommandHandler<
 
     const progress = UserWordSenseProgress.create({
       userId: command.userId,
+      tenantId: command.tenantId,
       wordSenseId: command.wordSenseId,
     });
 
-    // writeRepo.save() already handles em.transactional internally — no em.flush() needed
     await this.writeRepo.save(progress);
+    await this.em.flush();
     progress.publishEvents(this.logger, this.eventBus);
 
     this.logger.log(

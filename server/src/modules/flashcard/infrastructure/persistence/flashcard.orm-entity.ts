@@ -1,13 +1,10 @@
 import {
-  Cascade,
   Entity,
   Index,
-  OneToOne,
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
-import { FlashcardSchedulingStateOrmEntity } from './flashcard-scheduling-state.orm-entity';
 
 @Entity({ tableName: 'flashcards' })
 export class FlashcardOrmEntity {
@@ -37,18 +34,9 @@ export class FlashcardOrmEntity {
   @Property({ length: 50 })
   source!: 'dictionary' | 'custom';
 
+  /** ID of the linked WordSense. Null for custom flashcards. */
   @Property({ type: 'uuid', nullable: true })
   wordSenseId?: string;
-
-  @OneToOne(
-    () => FlashcardSchedulingStateOrmEntity,
-    (state) => state.flashcard,
-    {
-      cascade: [Cascade.ALL],
-      mappedBy: 'flashcard',
-    },
-  )
-  schedulingState!: FlashcardSchedulingStateOrmEntity;
 
   @Property({ type: 'datetime' })
   createdAt: Date = new Date();

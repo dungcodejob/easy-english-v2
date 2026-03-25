@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { EventBus, EventsHandler } from '@nestjs/cqrs';
-import { CardReviewedEvent } from '../../domain/events/card-reviewed.event';
+import { WordReviewedEvent } from '../../../learning/progress/domain/events/word-reviewed.event';
 import {
   InjectStudyStatsRepository,
   type IStudyStatsRepository,
@@ -9,8 +9,11 @@ import {
 
 /**
  * Update Study Stats Event Handler
+ *
+ * Listens to WordReviewedEvent (emitted by UserWordSenseProgress.applyReview()).
+ * Records the review in study statistics (streak, total reviews, mastery).
  */
-@EventsHandler(CardReviewedEvent)
+@EventsHandler(WordReviewedEvent)
 export class UpdateStudyStatsHandler {
   private readonly logger = new Logger(UpdateStudyStatsHandler.name);
 
@@ -22,9 +25,9 @@ export class UpdateStudyStatsHandler {
     private readonly eventBus: EventBus,
   ) {}
 
-  async handle(event: CardReviewedEvent): Promise<void> {
+  async handle(event: WordReviewedEvent): Promise<void> {
     this.logger.debug(
-      `Updating study stats for user ${event.userId}, card ${event.cardId}`,
+      `Updating study stats for user ${event.userId}, word ${event.wordSenseId}`,
     );
 
     // Stats always exists (seeded on workspace creation)

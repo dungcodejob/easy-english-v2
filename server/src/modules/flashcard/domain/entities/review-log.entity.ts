@@ -1,12 +1,18 @@
 import { Entity } from '@core/ddd';
 import { v7 } from 'uuid';
 import { FlashcardId } from '../value-objects/flashcard-id.vo';
-import { ReviewRating } from '../value-objects/review-rating.vo';
-import { CardState } from '../value-objects/card-state.vo';
-import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
+import { ReviewRating } from '../../../learning/progress/domain/value-objects/review-rating.vo';
+import { CardState } from '../../../learning/progress/domain/value-objects/card-state.vo';
+import { FsrsParameters } from '../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
 
+/**
+ * cardId and wordSenseId are mutually exclusive.
+ * - Card review: cardId set, wordSenseId undefined
+ * - Dictionary review (ReviewWordHandler): wordSenseId set, cardId null
+ */
 export interface ReviewLogProps {
-  cardId: FlashcardId;
+  cardId: FlashcardId | null;
+  wordSenseId?: string;
   userId: string;
   tenantId: string;
   rating: ReviewRating;
@@ -19,7 +25,8 @@ export interface ReviewLogProps {
 }
 
 export class ReviewLog extends Entity {
-  private _cardId!: FlashcardId;
+  private _cardId!: FlashcardId | null;
+  private _wordSenseId?: string;
   private _userId!: string;
   private _tenantId!: string;
   private _rating!: ReviewRating;
@@ -32,39 +39,54 @@ export class ReviewLog extends Entity {
   private _reviewDurationMs!: number;
   private _reviewedAt!: Date;
 
-  get cardId(): FlashcardId {
+  get cardId(): FlashcardId | null {
     return this._cardId;
   }
+
+  get wordSenseId(): string | undefined {
+    return this._wordSenseId;
+  }
+
   get userId(): string {
     return this._userId;
   }
+
   get tenantId(): string {
     return this._tenantId;
   }
+
   get rating(): ReviewRating {
     return this._rating;
   }
+
   get previousState(): CardState {
     return this._previousState;
   }
+
   get newState(): CardState {
     return this._newState;
   }
+
   get previousStability(): number {
     return this._previousStability;
   }
+
   get newStability(): number {
     return this._newStability;
   }
+
   get previousDifficulty(): number {
     return this._previousDifficulty;
   }
+
   get newDifficulty(): number {
     return this._newDifficulty;
   }
+
   get reviewDurationMs(): number {
     return this._reviewDurationMs;
   }
+
   get reviewedAt(): Date {
     return this._reviewedAt;
   }
@@ -76,6 +98,7 @@ export class ReviewLog extends Entity {
       updatedAt: new Date(),
     });
     log._cardId = props.cardId;
+    log._wordSenseId = props.wordSenseId;
     log._userId = props.userId;
     log._tenantId = props.tenantId;
     log._rating = props.rating;
@@ -102,6 +125,7 @@ export class ReviewLog extends Entity {
       updatedAt: props.updatedAt,
     });
     log._cardId = props.props.cardId;
+    log._wordSenseId = props.props.wordSenseId;
     log._userId = props.props.userId;
     log._tenantId = props.props.tenantId;
     log._rating = props.props.rating;

@@ -4,12 +4,24 @@ import { v4 as uuidv4 } from 'uuid';
 @Entity({ tableName: 'review_logs' })
 @Index({ properties: ['cardId'] })
 @Index({ properties: ['userId', 'tenantId'] })
+@Index({ properties: ['wordSenseId'] })
 export class ReviewLogOrmEntity {
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv4();
 
+  /**
+   * ID of the flashcard reviewed. Null for dictionary-mode reviews.
+   * Existing records always have this set.
+   */
   @Property({ type: 'uuid' })
   cardId!: string;
+
+  /**
+   * ID of the word sense reviewed (dictionary mode). Null for card reviews.
+   * Added in Migration20260325000101.
+   */
+  @Property({ type: 'uuid', nullable: true })
+  wordSenseId?: string;
 
   @Property({ type: 'uuid' })
   userId!: string;

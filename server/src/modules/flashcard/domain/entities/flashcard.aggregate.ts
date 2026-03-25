@@ -1,10 +1,6 @@
 import { AggregateRoot } from '@core/ddd';
 import { v7 } from 'uuid';
-import { FlashcardId } from '../value-objects/flashcard-id.vo';
 import { FlashcardSource } from '../value-objects/flashcard-source.vo';
-import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
-import { ReviewRating } from '../value-objects/review-rating.vo';
-import { CardReviewedEvent } from '../events/card-reviewed.event';
 import { FlashcardCreatedEvent } from '../events/flashcard-created.event';
 import { FlashcardUpdatedEvent } from '../events/flashcard-updated.event';
 import { FlashcardDeletedEvent } from '../events/flashcard-deleted.event';
@@ -18,7 +14,6 @@ export interface FlashcardProps {
   notes: string | null;
   source: FlashcardSource;
   wordSenseId: string | null;
-  schedulingState: FsrsParameters;
 }
 
 export class Flashcard extends AggregateRoot {
@@ -30,34 +25,37 @@ export class Flashcard extends AggregateRoot {
   private _notes!: string | null;
   private _source!: FlashcardSource;
   private _wordSenseId!: string | null;
-  private _schedulingState!: FsrsParameters;
 
   get tenantId(): string {
     return this._tenantId;
   }
+
   get userId(): string {
     return this._userId;
   }
+
   get front(): string {
     return this._front;
   }
+
   get back(): string {
     return this._back;
   }
+
   get hint(): string | null {
     return this._hint;
   }
+
   get notes(): string | null {
     return this._notes;
   }
+
   get source(): FlashcardSource {
     return this._source;
   }
+
   get wordSenseId(): string | null {
     return this._wordSenseId;
-  }
-  get schedulingState(): FsrsParameters {
-    return this._schedulingState;
   }
 
   static create(props: {
@@ -83,7 +81,6 @@ export class Flashcard extends AggregateRoot {
     flashcard._notes = props.notes ?? null;
     flashcard._source = props.source;
     flashcard._wordSenseId = props.wordSenseId ?? null;
-    flashcard._schedulingState = FsrsParameters.newCardDefaults();
 
     flashcard.addEvent(
       new FlashcardCreatedEvent({ aggregateId: flashcard.id, flashcard }),
@@ -102,7 +99,6 @@ export class Flashcard extends AggregateRoot {
       notes: string | null;
       source: FlashcardSource;
       wordSenseId: string | null;
-      schedulingState: FsrsParameters;
     },
     createdAt: Date,
     updatedAt: Date,
@@ -116,7 +112,6 @@ export class Flashcard extends AggregateRoot {
     flashcard._notes = props.notes;
     flashcard._source = props.source;
     flashcard._wordSenseId = props.wordSenseId;
-    flashcard._schedulingState = props.schedulingState;
     return flashcard;
   }
 
@@ -133,29 +128,6 @@ export class Flashcard extends AggregateRoot {
     this.updateUpdatedAt();
     this.addEvent(
       new FlashcardUpdatedEvent({ aggregateId: this.id, flashcard: this }),
-    );
-  }
-
-  review(
-    rating: ReviewRating,
-    newParams: FsrsParameters,
-    reviewDurationMs: number,
-  ): void {
-    const previousState = this._schedulingState;
-    this._schedulingState = newParams;
-    this.updateUpdatedAt();
-    this.addEvent(
-      new CardReviewedEvent({
-        aggregateId: this.id,
-        cardId: this.id,
-        userId: this._userId,
-        tenantId: this._tenantId,
-        rating,
-        newParams,
-        reviewDurationMs,
-        previousState: previousState.state,
-        newState: newParams.state,
-      }),
     );
   }
 

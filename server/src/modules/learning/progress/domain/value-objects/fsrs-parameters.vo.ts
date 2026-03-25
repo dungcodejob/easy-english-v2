@@ -13,7 +13,7 @@ export interface FsrsParametersProps {
 
 /**
  * FSRS (Free Spaced Repetition Scheduler) parameters value object.
- * Encapsulates scheduling state for a flashcard.
+ * Encapsulates scheduling state for a word in the learning progress.
  */
 export class FsrsParameters extends ValueObject<FsrsParametersProps> {
   get stability(): number {

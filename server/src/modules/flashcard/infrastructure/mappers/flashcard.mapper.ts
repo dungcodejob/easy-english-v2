@@ -1,9 +1,6 @@
 import { Mapper } from '@core/ddd';
 import { Flashcard } from '../../domain/entities/flashcard.aggregate';
-import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FlashcardSource } from '../../domain/value-objects/flashcard-source.vo';
-import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
-import { FlashcardSchedulingStateOrmEntity } from '../persistence/flashcard-scheduling-state.orm-entity';
 import { FlashcardOrmEntity } from '../persistence/flashcard.orm-entity';
 
 export class FlashcardMapper implements Mapper<
@@ -12,17 +9,6 @@ export class FlashcardMapper implements Mapper<
   object
 > {
   toDomain(orm: FlashcardOrmEntity): Flashcard {
-    const state = orm.schedulingState;
-    const params = new FsrsParameters({
-      stability: state?.stability ?? 0,
-      difficulty: state?.difficulty ?? 0,
-      lapses: state?.lapses ?? 0,
-      reps: state?.reps ?? 0,
-      state: CardState.from(state?.state ?? 'new'),
-      dueDate: state?.dueDate ?? null,
-      lastReviewDate: state?.lastReviewDate ?? null,
-    });
-
     return Flashcard.rehydrate(
       {
         id: orm.id,
@@ -34,7 +20,6 @@ export class FlashcardMapper implements Mapper<
         notes: orm.notes ?? null,
         source: FlashcardSource.from(orm.source),
         wordSenseId: orm.wordSenseId ?? null,
-        schedulingState: params,
       },
       orm.createdAt,
       orm.updatedAt,
@@ -53,23 +38,13 @@ export class FlashcardMapper implements Mapper<
       domain.wordSenseId ?? undefined,
     );
     orm.id = domain.id;
-
-    const stateOrm = new FlashcardSchedulingStateOrmEntity();
-    stateOrm.flashcard = orm;
-    stateOrm.stability = domain.schedulingState.stability;
-    stateOrm.difficulty = domain.schedulingState.difficulty;
-    stateOrm.lapses = domain.schedulingState.lapses;
-    stateOrm.reps = domain.schedulingState.reps;
-    stateOrm.state = domain.schedulingState.state.value;
-    stateOrm.dueDate = domain.schedulingState.dueDate ?? new Date();
-    stateOrm.lastReviewDate =
-      domain.schedulingState.lastReviewDate ?? undefined;
-    orm.schedulingState = stateOrm;
-
     return orm;
   }
 
   toResponse(domain: Flashcard): object {
+    // Note: scheduling state (state, dueDate) is no longer stored on Flashcard.
+    // Review result (newState, nextDueDate, isMastered) is returned separately
+    // by ReviewCardHandler in ReviewResultResponseDto.
     return {
       id: domain.id,
       front: domain.front,
@@ -78,8 +53,6 @@ export class FlashcardMapper implements Mapper<
       notes: domain.notes,
       source: domain.source.value,
       wordSenseId: domain.wordSenseId,
-      state: domain.schedulingState.state.value,
-      dueDate: domain.schedulingState.dueDate?.toISOString() ?? null,
       createdAt: domain.createdAt.toISOString(),
       updatedAt: domain.updatedAt.toISOString(),
     };

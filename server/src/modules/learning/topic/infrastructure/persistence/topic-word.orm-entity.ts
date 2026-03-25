@@ -9,12 +9,6 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { TopicOrmEntity } from './topic.orm-entity';
 
-export enum WordLearningStatus {
-  NEW = 'NEW',
-  LEARNING = 'LEARNING',
-  MASTERED = 'MASTERED',
-}
-
 @Entity({ tableName: 'topic_words' })
 @Unique({ properties: ['topic', 'wordSenseId'] })
 export class TopicWordOrmEntity {
@@ -29,9 +23,9 @@ export class TopicWordOrmEntity {
   @Index()
   wordSenseId!: string;
 
-  @Property({ type: 'string', default: WordLearningStatus.NEW })
-  status: WordLearningStatus = WordLearningStatus.NEW;
-
+  /** Note: status column was dropped — status is now derived at read time
+   *  from UserWordSenseProgress.fsrsParams via TopicMapper.toResponse()
+   */
   @Property({ type: 'datetime' })
   addedAt: Date = new Date();
 

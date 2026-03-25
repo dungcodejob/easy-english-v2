@@ -1,38 +1,34 @@
 import { DomainEvent, DomainEventProps } from '@core/ddd';
 import { ReviewRating } from '../value-objects/review-rating.vo';
-import { CardState } from '../value-objects/card-state.vo';
 import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
 
-export interface CardReviewedEventPayload {
-  cardId: string;
+export interface WordReviewedEventPayload {
   userId: string;
   tenantId: string;
+  wordSenseId: string;
   rating: ReviewRating;
+  previousParams: FsrsParameters;
   newParams: FsrsParameters;
   reviewDurationMs: number;
-  previousState: CardState;
-  newState: CardState;
 }
 
-export class CardReviewedEvent extends DomainEvent {
-  public readonly cardId: string;
+export class WordReviewedEvent extends DomainEvent {
   public readonly userId: string;
   public readonly tenantId: string;
+  public readonly wordSenseId: string;
   public readonly rating: ReviewRating;
+  public readonly previousParams: FsrsParameters;
   public readonly newParams: FsrsParameters;
   public readonly reviewDurationMs: number;
-  public readonly previousState: CardState;
-  public readonly newState: CardState;
 
-  constructor(props: DomainEventProps<CardReviewedEventPayload>) {
+  constructor(props: DomainEventProps<WordReviewedEventPayload>) {
     super(props);
-    this.cardId = props.cardId;
     this.userId = props.userId;
     this.tenantId = props.tenantId;
+    this.wordSenseId = props.wordSenseId;
     this.rating = props.rating;
+    this.previousParams = props.previousParams;
     this.newParams = props.newParams;
     this.reviewDurationMs = props.reviewDurationMs;
-    this.previousState = props.previousState;
-    this.newState = props.newState;
   }
 }

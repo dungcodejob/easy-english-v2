@@ -44,10 +44,10 @@ export class RemoveFromLearningHandler implements ICommandHandler<
       return { success: true, wasLearning: false };
     }
 
-    // archive() is a domain method — preserve it
+    // archive() is a domain method — preserves it
     progress.archive();
-    // writeRepo.save() already handles em.transactional internally — no em.flush() needed
     await this.writeRepo.save(progress);
+    await this.em.flush();
     progress.publishEvents(this.logger, this.eventBus);
 
     this.logger.log(

@@ -29,8 +29,10 @@ import {
 } from '@shared/decorators';
 import { AddToLearningCommand } from '../application/commands/add-to-learning.command';
 import { RemoveFromLearningCommand } from '../application/commands/remove-from-learning.command';
+import { ReviewWordCommand } from '../application/commands/review-word.command';
 import { GetLearningListQuery } from '../application/queries/get-learning-list.query';
 import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request.dto';
+import { ReviewWordRequestDto } from '../dto/requests/review-word.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
 import { LearningStateDto } from 'src/modules/dictionary/dto/responses/word-sense-detail.response.dto';
@@ -58,7 +60,7 @@ export class LearningController {
     @Body() dto: AddToLearningRequestDto,
     @CurrentUser() user: ITokenPayload,
   ) {
-    const command = new AddToLearningCommand(user.userId, dto.wordSenseId);
+    const command = new AddToLearningCommand(user.userId, user.tenantId, dto.wordSenseId);
 
     const result = await this.commandBus.execute<
       AddToLearningCommand,
@@ -142,6 +144,37 @@ export class LearningController {
       GetLearningStateQuery,
       LearningStateDto
     >(query);
+
+    return ApiResponseBuilder.success(result);
+  }
+
+  @Post('senses/:senseId/review')
+  @ApiOperation({ summary: 'Review a word in the learning list (dictionary mode)' })
+  @ApiParam({
+    name: 'senseId',
+    required: true,
+    description: 'ID of the WordSense to review',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Review recorded successfully',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Word not found in learning list' })
+  @ApiResponse({ status: 409, description: 'Word is archived' })
+  async reviewWord(
+    @Param('senseId') senseId: string,
+    @Body() dto: ReviewWordRequestDto,
+    @CurrentUser() user: ITokenPayload,
+  ) {
+    const command = new ReviewWordCommand(
+      user.userId,
+      senseId,
+      dto.rating,
+      dto.reviewDurationMs,
+    );
+
+    const result = await this.commandBus.execute(command);
 
     return ApiResponseBuilder.success(result);
   }

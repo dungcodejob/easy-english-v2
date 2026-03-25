@@ -2,11 +2,7 @@ import {
   FlashcardCreatedEvent,
   FlashcardUpdatedEvent,
   FlashcardDeletedEvent,
-  CardReviewedEvent,
 } from '../index';
-import { CardState } from '../../value-objects/card-state.vo';
-import { ReviewRating } from '../../value-objects/review-rating.vo';
-import { FsrsParameters } from '../../value-objects/fsrs-parameters.vo';
 
 describe('Flashcard Domain Events', () => {
   const aggregateId = 'flashcard-123';
@@ -65,42 +61,6 @@ describe('Flashcard Domain Events', () => {
       expect(event.flashcardId).toBe(aggregateId);
       expect(event.userId).toBe('user-456');
       expect(event.tenantId).toBe('tenant-789');
-      expect(event.id).toBeDefined();
-    });
-  });
-
-  describe('CardReviewedEvent', () => {
-    it('should create event with all review payload fields', () => {
-      const cardId = aggregateId;
-      const userId = 'user-456';
-      const tenantId = 'tenant-789';
-      const rating = ReviewRating.Good;
-      const newParams = FsrsParameters.newCardDefaults();
-      const reviewDurationMs = 2500;
-      const previousState = CardState.NEW;
-      const newState = CardState.LEARNING;
-
-      const event = new CardReviewedEvent({
-        aggregateId: cardId,
-        cardId,
-        userId,
-        tenantId,
-        rating,
-        newParams,
-        reviewDurationMs,
-        previousState,
-        newState,
-      });
-
-      expect(event.aggregateId).toBe(cardId);
-      expect(event.cardId).toBe(cardId);
-      expect(event.userId).toBe(userId);
-      expect(event.tenantId).toBe(tenantId);
-      expect(event.rating).toBe(rating);
-      expect(event.newParams).toBe(newParams);
-      expect(event.reviewDurationMs).toBe(reviewDurationMs);
-      expect(event.previousState).toBe(previousState);
-      expect(event.newState).toBe(newState);
       expect(event.id).toBeDefined();
     });
   });

@@ -3,19 +3,12 @@ import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
 import { ReviewRating } from '../value-objects/review-rating.vo';
 import { CardState } from '../value-objects/card-state.vo';
 
-export interface FsrsConfig {
-  requestRetention: number;
-  maximumInterval: number;
-  easyInterval: number;
-  hardInterval: number;
-}
-
 @Injectable()
 export class FsrsSchedulerService {
-  private readonly requestRetention: number = 0.9;
-  private readonly maximumInterval: number = 365;
-  private readonly easyInterval: number = 4;
-  private readonly hardInterval: number = 1;
+  private readonly requestRetention = 0.9;
+  private readonly maximumInterval = 365;
+  private readonly easyInterval = 4;
+  private readonly hardInterval = 1;
 
   calculateNext(
     current: FsrsParameters,
@@ -26,7 +19,8 @@ export class FsrsSchedulerService {
 
     let { stability, difficulty, lapses, reps } = current;
     let state = current.state;
-    let dueDate = new Date(now);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-initializer
+    let dueDate: Date = new Date();
 
     if (state.value === 'new' || state.value === 'learning') {
       if (ratingValue >= 3) {
