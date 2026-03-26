@@ -20,6 +20,7 @@ import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './m
 import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
 import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
 import { Route as DotModulesTopicPagesTopicsDotpageRouteImport } from './modules/topic/pages/topics.page'
+import { Route as DotModulesLearningPagesStudySessionDotpageRouteImport } from './modules/learning/pages/study-session.page'
 import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page'
 import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page'
 import { Route as DotModulesTopicPagesTopicDetailDotpageRouteImport } from './modules/topic/pages/topic-detail.page'
@@ -89,6 +90,12 @@ const DotModulesTopicPagesTopicsDotpageRoute =
     path: '/learning/topics',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
+const DotModulesLearningPagesStudySessionDotpageRoute =
+  DotModulesLearningPagesStudySessionDotpageRouteImport.update({
+    id: '/learning/study',
+    path: '/learning/study',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+  } as any)
 const DotModulesFlashcardPagesStatsDotpageRoute =
   DotModulesFlashcardPagesStatsDotpageRouteImport.update({
     id: '/flashcards/stats',
@@ -124,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
+  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
@@ -138,6 +146,7 @@ export interface FileRoutesByTo {
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
+  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
@@ -156,6 +165,7 @@ export interface FileRoutesById {
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
   '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
+  '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/_(authenticated)/learning/topics': typeof DotModulesTopicPagesTopicsDotpageRoute
   '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/dictionary/'
     | '/flashcards/stats'
+    | '/learning/study'
     | '/learning/topics'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/dictionary'
     | '/flashcards/stats'
+    | '/learning/study'
     | '/learning/topics'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
@@ -204,6 +216,7 @@ export interface FileRouteTypes {
     | '/_(unauthenticated)/login'
     | '/_(authenticated)/dictionary/'
     | '/_(authenticated)/flashcards/stats'
+    | '/_(authenticated)/learning/study'
     | '/_(authenticated)/learning/topics'
     | '/_(authenticated)/workspace/new'
     | '/_(authenticated)/dictionary/senses/$senseId'
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesTopicPagesTopicsDotpageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
+    '/_(authenticated)/learning/study': {
+      id: '/_(authenticated)/learning/study'
+      path: '/learning/study'
+      fullPath: '/learning/study'
+      preLoaderRoute: typeof DotModulesLearningPagesStudySessionDotpageRouteImport
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+    }
     '/_(authenticated)/flashcards/stats': {
       id: '/_(authenticated)/flashcards/stats'
       path: '/flashcards/stats'
@@ -351,6 +371,7 @@ interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
   DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute
   DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute
+  DotModulesLearningPagesStudySessionDotpageRoute: typeof DotModulesLearningPagesStudySessionDotpageRoute
   DotModulesTopicPagesTopicsDotpageRoute: typeof DotModulesTopicPagesTopicsDotpageRoute
   DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   DotModulesTopicPagesTopicDetailDotpageRoute: typeof DotModulesTopicPagesTopicDetailDotpageRoute
@@ -370,6 +391,8 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesFlashcardPagesStudyDotpageRoute,
     DotModulesFlashcardPagesStatsDotpageRoute:
       DotModulesFlashcardPagesStatsDotpageRoute,
+    DotModulesLearningPagesStudySessionDotpageRoute:
+      DotModulesLearningPagesStudySessionDotpageRoute,
     DotModulesTopicPagesTopicsDotpageRoute:
       DotModulesTopicPagesTopicsDotpageRoute,
     DotModulesWorkspacePagesNewWorkspaceDotpageRoute:

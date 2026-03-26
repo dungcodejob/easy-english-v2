@@ -1,7 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { BookMarked } from 'lucide-react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { BookMarked, Play, Zap } from 'lucide-react';
 import { useState } from 'react';
+import { APP_ROUTES } from '@/shared/constants';
+import { DsBadge, DsButton } from '@/shared/ui';
+import { useDueCards } from '../hooks/use-due-cards';
 import { LearningList } from '../components/learning-list';
+import { useTopics } from '@/modules/topic/hooks/use-topics';
 
 export const Route = createFileRoute('/_(authenticated)/learning')({
   component: MyLearningPage,
@@ -9,6 +13,20 @@ export const Route = createFileRoute('/_(authenticated)/learning')({
 
 export default function MyLearningPage() {
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const { data: dueData, isLoading: loadingDue } = useDueCards();
+  const { data: topicsData, isLoading: loadingTopics } = useTopics(1, 6);
+
+  const dueCount = dueData?.data?.total ?? 0;
+  const topics = topicsData?.data?.data ?? [];
+
+  const handleStartReview = () => {
+    navigate({ to: APP_ROUTES.LEARNING_STUDY, search: { mode: 'due', index: 0 } });
+  };
+
+  const handleStudyTopic = (topicId: string) => {
+    navigate({ to: APP_ROUTES.LEARNING_STUDY, search: { mode: 'topic', topicId, index: 0 } });
+  };
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 md:py-16">
@@ -28,6 +46,92 @@ export default function MyLearningPage() {
         </div>
       </div>
 
+      {/* Study entry section */}
+      <section className="mb-10 grid gap-6 sm:grid-cols-2 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 fill-mode-both">
+        {/* Start Review */}
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
+              <Zap className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-foreground">Start Review</h2>
+              <p className="text-sm text-muted-foreground">
+                Review all due cards now
+              </p>
+            </div>
+          </div>
+          <div className="flex items-end justify-between">
+            <div>
+              {loadingDue ? (
+                <span className="text-3xl font-extrabold text-muted-foreground tabular-nums">—</span>
+              ) : (
+                <span className="text-3xl font-extrabold text-foreground tabular-nums">
+                  {dueCount}
+                </span>
+              )}
+              <span className="ml-2 text-sm text-muted-foreground">cards due</span>
+            </div>
+            <DsButton
+              leftIcon={<Play className="size-4" />}
+              onClick={handleStartReview}
+              disabled={loadingDue || dueCount === 0}
+            >
+              {dueCount > 0 ? 'Start Review' : 'All caught up'}
+            </DsButton>
+          </div>
+        </div>
+
+        {/* Study by Topic */}
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+              <BookMarked className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-foreground">Study by Topic</h2>
+              <p className="text-sm text-muted-foreground">
+                Practice words from a specific topic
+              </p>
+            </div>
+          </div>
+
+          {loadingTopics ? (
+            <div className="space-y-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-10 w-full animate-pulse rounded-lg bg-muted" />
+              ))}
+            </div>
+          ) : topics.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No topics yet.{' '}
+              <a href={APP_ROUTES.TOPIC.LIST} className="underline underline-offset-2">
+                Create one
+              </a>{' '}
+              to start studying.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {topics.map((topic) => (
+                <DsButton
+                  key={topic.id}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleStudyTopic(topic.id)}
+                  className="gap-1.5"
+                >
+                  {topic.name}
+                  <DsBadge variant="secondary" className="ml-1 text-xs">
+                    Study
+                  </DsBadge>
+                </DsButton>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Existing learning list */}
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 fill-mode-both">
         <LearningList page={page} onPageChange={setPage} />
       </div>

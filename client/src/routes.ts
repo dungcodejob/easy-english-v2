@@ -16,6 +16,7 @@ export const routes = rootRoute('root.tsx', [
   layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
     route(APP_ROUTES.DASHBOARD, './modules/dashboard/pages/dashboard-page.tsx'),
     route(APP_ROUTES.LEARN, './modules/learning/pages/my-learning.page.tsx'),
+    route(APP_ROUTES.LEARNING_STUDY, './modules/learning/pages/study-session.page.tsx'),
     route('/learning/topics', './modules/topic/pages/topics.page.tsx'),
     route(
       '/learning/topics/$topicId',

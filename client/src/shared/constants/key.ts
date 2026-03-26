@@ -56,6 +56,12 @@ export const learningKeys = {
   state: (senseId: string) => [...learningKeys.all, 'state', senseId] as const,
 };
 
+export const studyKeys = {
+  all: ['study'] as const,
+  due: () => [...studyKeys.all, 'due'] as const,
+  topic: (topicId: string) => [...studyKeys.all, 'topic', topicId] as const,
+};
+
 export const API_KEYS = {
   TOPIC: 'topic',
   WORD: 'word',

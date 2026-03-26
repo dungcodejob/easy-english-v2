@@ -129,7 +129,13 @@
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/learning/progress/**/*.ts\" \"src/modules/flashcard/**/*.ts\" \"src/modules/learning/topic/**/*.ts\" 2>&1 | grep \"error\" | grep -v \"prettier\" | grep -v \"no-unsafe\" | grep -v \"require-await\" | grep -v \"eslint-disable\" | wc -l)",
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/flashcard/**/*.ts\" 2>&1 | grep \"error\" | grep -v \"prettier\" | grep -v \"no-unsafe\" | grep -v \"require-await\" | grep -v \"eslint\" | head -5)",
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint \"src/modules/flashcard/domain/value-objects/__tests__/fsrs-parameters.vo.spec.ts\" --fix 2>&1 | head -5 && npm run build 2>&1 | grep -c \"error TS\")",
-      "Bash(npx gitnexus:*)"
+      "Bash(npx gitnexus:*)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && node -e \"const pkg = require\\('./package.json'\\); console.log\\(JSON.stringify\\(pkg.jest, null, 2\\)\\)\")",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && rm -f src/modules/learning/study/application/queries/get-due-cards.handler.spec.ts src/modules/learning/study/application/queries/get-topic-cards.handler.spec.ts src/modules/learning/study/controllers/study.controller.spec.ts)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint src/modules/learning/study/ --fix && npm run build 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && node -e \"const ui = require\\('./src/shared/ui'\\); console.log\\(Object.keys\\(ui\\).join\\(', '\\)\\)\" 2>&1 | head -5)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && npx eslint src/modules/learning/ src/routes.ts src/shared/constants/key.ts src/shared/constants/routes.ts 2>&1)",
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && npx eslint src/modules/learning/components/session-complete-card.tsx src/modules/learning/hooks/use-due-cards.ts src/modules/learning/hooks/use-review-card.ts src/modules/learning/services/study.api.ts src/modules/learning/pages/study-session.page.tsx src/modules/learning/pages/my-learning.page.tsx src/modules/learning/components/study-progress.tsx src/modules/learning/components/flashcard-view.tsx src/modules/learning/components/rating-buttons.tsx 2>&1)"
     ]
   }
 }

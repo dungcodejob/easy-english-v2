@@ -21,6 +21,7 @@ export const APP_ROUTES = {
     SENSE_DETAIL: '/dictionary/senses/$senseId',
   },
   LEARN: '/learning',
+  LEARNING_STUDY: '/learning/study',
   FLASHCARDS: '/flashcards',
   STUDY: '/study',
   FLASHCARD_STATS: '/flashcards/stats',
