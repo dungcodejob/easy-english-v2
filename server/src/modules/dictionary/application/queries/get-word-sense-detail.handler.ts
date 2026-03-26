@@ -3,6 +3,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import type { IWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
 import { InjectWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseDetailResponseDto } from '../../dto/responses/word-sense-detail.response.dto';
+import { CollocationDto } from '../../dto/responses/word.response.dto';
 import { GetWordSenseDetailQuery } from './get-word-sense-detail.query';
 
 @QueryHandler(GetWordSenseDetailQuery)
@@ -40,7 +41,7 @@ export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDeta
       antonyms: detail.antonyms,
       idioms: detail.idioms,
       phrases: detail.phrases,
-      collocations: detail.collocations,
+      collocations: detail.collocations as CollocationDto,
       pronunciations: detail.pronunciations.map((p) => ({
         ipa: p.ipa,
         audioUrl: p.audioUrl || null,

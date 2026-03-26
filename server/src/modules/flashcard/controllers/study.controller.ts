@@ -10,10 +10,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from '@shared/decorators';
-import { ReviewCardRequestDto } from '../dto/requests/review-card.request.dto';
-import { ReviewResultResponseDto } from '../dto/responses/review-result.response.dto';
+import { ReviewCardCommand } from '../application/commands/review-card/review-card.command';
 import { GetDueCardsQuery } from '../application/queries/get-due-cards.query';
 import { GetStudyStatsQuery } from '../application/queries/get-study-stats.query';
+import { ReviewCardRequestDto } from '../dto/requests/review-card.request.dto';
+import { ReviewResultResponseDto } from '../dto/responses/review-result.response.dto';
 import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto';
 
 @ApiTags('Study')
@@ -56,17 +57,21 @@ export class StudyController {
     @Body() dto: ReviewCardRequestDto,
     @CurrentUser() user: ITokenPayload,
     @Query('cardId') cardId: string,
-  ): Promise<{ success: true; data: ReviewResultResponseDto }> {
+  ) {
     // ReviewCardCommand will be created in Chunk 5 — using cast for now
-    const command = {
+    const command: ReviewCardCommand = {
       cardId,
       userId: user.userId,
       tenantId: user.tenantId,
       rating: dto.rating,
       reviewDurationMs: dto.reviewDurationMs,
-    } as any;
+    };
 
-    const result = await this.commandBus.execute(command);
+    const result = await this.commandBus.execute<
+      ReviewCardCommand,
+      ReviewResultResponseDto
+    >(command);
+
     return ApiResponseBuilder.success(result);
   }
 }

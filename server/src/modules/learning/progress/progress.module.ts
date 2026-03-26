@@ -34,7 +34,12 @@ const services = [FsrsSchedulerService];
     MikroOrmModule.forFeature([UserWordSenseProgressOrmEntity]),
   ],
   controllers: [...httpControllers],
-  providers: [...repositories, ...services, ...queryHandlers, ...commandHandlers],
+  providers: [
+    ...repositories,
+    ...services,
+    ...queryHandlers,
+    ...commandHandlers,
+  ],
   exports: [...repositories, ...services],
 })
 export class ProgressModule {}

@@ -36,6 +36,7 @@ import { ReviewWordRequestDto } from '../dto/requests/review-word.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
 import { LearningStateDto } from 'src/modules/dictionary/dto/responses/word-sense-detail.response.dto';
+import { ReviewWordResponse } from '../application/commands/review-word.handler';
 import { GetLearningStateQuery } from '../application/queries/get-learning-state.query';
 
 @ApiTags('Learning')
@@ -60,7 +61,11 @@ export class LearningController {
     @Body() dto: AddToLearningRequestDto,
     @CurrentUser() user: ITokenPayload,
   ) {
-    const command = new AddToLearningCommand(user.userId, user.tenantId, dto.wordSenseId);
+    const command = new AddToLearningCommand(
+      user.userId,
+      user.tenantId,
+      dto.wordSenseId,
+    );
 
     const result = await this.commandBus.execute<
       AddToLearningCommand,
@@ -149,7 +154,9 @@ export class LearningController {
   }
 
   @Post('senses/:senseId/review')
-  @ApiOperation({ summary: 'Review a word in the learning list (dictionary mode)' })
+  @ApiOperation({
+    summary: 'Review a word in the learning list (dictionary mode)',
+  })
   @ApiParam({
     name: 'senseId',
     required: true,
@@ -174,7 +181,10 @@ export class LearningController {
       dto.reviewDurationMs,
     );
 
-    const result = await this.commandBus.execute(command);
+    const result = await this.commandBus.execute<
+      ReviewWordCommand,
+      ReviewWordResponse
+    >(command);
 
     return ApiResponseBuilder.success(result);
   }

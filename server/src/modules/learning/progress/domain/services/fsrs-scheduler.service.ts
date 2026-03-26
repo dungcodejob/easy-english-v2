@@ -19,7 +19,6 @@ export class FsrsSchedulerService {
 
     let { stability, difficulty, lapses, reps } = current;
     let state = current.state;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-initializer
     let dueDate: Date = new Date();
 
     if (state.value === 'new' || state.value === 'learning') {

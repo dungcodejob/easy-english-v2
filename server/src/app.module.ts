@@ -14,6 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
 
 import { ProgressModule } from './modules/learning/progress/progress.module';
+import { StudyModule } from './modules/learning/study/study.module';
 import { TopicModule } from './modules/learning/topic/topic.module';
 import { WorkspaceModule } from './modules/workspace/workspace.module';
 import { FlashcardModule } from './modules/flashcard/flashcard.module';
@@ -41,6 +42,7 @@ import { FlashcardModule } from './modules/flashcard/flashcard.module';
     DictionaryModule,
     ProgressModule,
     TopicModule,
+    StudyModule,
     FlashcardModule,
   ],
 

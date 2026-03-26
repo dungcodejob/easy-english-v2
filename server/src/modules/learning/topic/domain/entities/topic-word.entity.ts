@@ -46,18 +46,19 @@ export class TopicWord {
   }
 
   static create(wordSenseId: string): TopicWord {
-    return new TopicWord(uuid(), wordSenseId, WordLearningStatus.NEW, new Date());
+    return new TopicWord(
+      uuid(),
+      wordSenseId,
+      WordLearningStatus.NEW,
+      new Date(),
+    );
   }
 
   /**
    * @deprecated ORM no longer has a status column — status is always NEW for rehydration.
    *             The real status comes from UserWordSenseProgress at read time.
    */
-  static rehydrate(
-    id: string,
-    wordSenseId: string,
-    addedAt: Date,
-  ): TopicWord {
+  static rehydrate(id: string, wordSenseId: string, addedAt: Date): TopicWord {
     return new TopicWord(id, wordSenseId, WordLearningStatus.NEW, addedAt);
   }
 }

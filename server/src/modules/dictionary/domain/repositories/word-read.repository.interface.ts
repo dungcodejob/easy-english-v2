@@ -26,7 +26,7 @@ export interface WordSenseDetailReadModel {
   antonyms: string[];
   idioms: string[];
   phrases: string[];
-  collocations: any | null;
+  collocations: unknown;
   pronunciations: { ipa: string; audioUrl: string | null; region: string }[];
 }
 

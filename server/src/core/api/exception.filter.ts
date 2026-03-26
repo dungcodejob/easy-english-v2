@@ -51,6 +51,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       if (typeof responseBody === 'object' && responseBody !== null) {
         const body = responseBody as Record<string, unknown>;
         message = (body.message as string) || exception.message;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         details = body.error ? { error: body.error } : undefined;
       } else {
         message = exception.message;

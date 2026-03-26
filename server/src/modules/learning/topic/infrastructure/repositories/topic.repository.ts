@@ -1,9 +1,13 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { Topic } from '../../domain/entities/topic.aggregate';
-import { ITopicRepository } from '../../domain/repositories/topic.repository.interface';
+import {
+  ITopicRepository,
+  TopicWordRef,
+} from '../../domain/repositories/topic.repository.interface';
 import { TopicMapper } from '../mappers/topic.mapper';
 import { TopicOrmEntity } from '../persistence/topic.orm-entity';
+import { TopicWordOrmEntity } from '../persistence/topic-word.orm-entity';
 
 /**
  * Topic Repository - Infrastructure Layer
@@ -58,6 +62,36 @@ export class TopicRepository implements ITopicRepository {
       data: orms.map((orm) => this.mapper.toDomain(orm)),
       count,
     };
+  }
+
+  /**
+   * Find words for a specific topic scoped by tenant and user ownership.
+   * Returns lightweight word references in deterministic addedAt order.
+   */
+  async findWordsByTopic(
+    topicId: string,
+    tenantId: string,
+    userId: string,
+  ): Promise<TopicWordRef[]> {
+    const words = await this.em.find(
+      TopicWordOrmEntity,
+      {
+        topic: {
+          id: topicId,
+          tenantId,
+          userId,
+        },
+      },
+      {
+        orderBy: { addedAt: 'ASC' },
+      },
+    );
+
+    return words.map((word) => ({
+      topicWordId: word.id,
+      wordSenseId: word.wordSenseId,
+      addedAt: word.addedAt,
+    }));
   }
 
   /**

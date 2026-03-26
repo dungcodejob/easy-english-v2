@@ -14,7 +14,6 @@ import { TopicOrmEntity } from './infrastructure/persistence/topic.orm-entity';
 import { TopicRepository } from './infrastructure/repositories/topic.repository';
 
 // Progress module ORM entities (needed for ListTopicWordsHandler progressMap query)
-import { UserWordSenseProgressOrmEntity } from '../progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
 
 // Application
 import { AddTopicWordHandler } from './application/commands/add-topic-word.handler';
@@ -47,7 +46,7 @@ const Mappers = [TopicMapper];
 @Module({
   imports: [
     CqrsModule,
-    MikroOrmModule.forFeature([TopicOrmEntity, TopicWordOrmEntity, UserWordSenseProgressOrmEntity]),
+    MikroOrmModule.forFeature([TopicOrmEntity, TopicWordOrmEntity]),
   ],
   controllers: [TopicController],
   providers: [

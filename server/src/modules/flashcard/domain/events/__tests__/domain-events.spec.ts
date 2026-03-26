@@ -1,7 +1,8 @@
+import { Flashcard } from '../../entities/flashcard.aggregate';
 import {
   FlashcardCreatedEvent,
-  FlashcardUpdatedEvent,
   FlashcardDeletedEvent,
+  FlashcardUpdatedEvent,
 } from '../index';
 
 describe('Flashcard Domain Events', () => {
@@ -9,7 +10,7 @@ describe('Flashcard Domain Events', () => {
 
   describe('FlashcardCreatedEvent', () => {
     it('should create event with aggregateId and flashcard data', () => {
-      const flashcard = { id: aggregateId } as any;
+      const flashcard = { id: aggregateId } as Partial<Flashcard>;
       const event = new FlashcardCreatedEvent({
         aggregateId,
         flashcard,
@@ -25,8 +26,13 @@ describe('Flashcard Domain Events', () => {
     it('should accept metadata like correlationId', () => {
       const event = new FlashcardCreatedEvent({
         aggregateId,
-        flashcard: {} as any,
-        metadata: { correlationId: 'corr-1', userId: 'user-1' },
+        flashcard: {} as Partial<Flashcard>,
+        metadata: {
+          correlationId: 'corr-1',
+          userId: 'user-1',
+          causationId: 'causation-1',
+          timestamp: new Date().getTime(),
+        },
       });
 
       expect(event.metadata.correlationId).toBe('corr-1');
@@ -36,7 +42,7 @@ describe('Flashcard Domain Events', () => {
 
   describe('FlashcardUpdatedEvent', () => {
     it('should create event with aggregateId and flashcard data', () => {
-      const flashcard = { id: aggregateId } as any;
+      const flashcard = { id: aggregateId } as Partial<Flashcard>;
       const event = new FlashcardUpdatedEvent({
         aggregateId,
         flashcard,
