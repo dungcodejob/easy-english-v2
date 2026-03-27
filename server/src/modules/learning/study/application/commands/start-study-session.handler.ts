@@ -1,6 +1,11 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { BadRequestException, Logger } from '@nestjs/common';
-import { CommandHandler, EventBus, ICommandHandler, QueryBus } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+  QueryBus,
+} from '@nestjs/cqrs';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
@@ -20,9 +25,10 @@ export interface StartStudySessionResponse {
 }
 
 @CommandHandler(StartStudySessionCommand)
-export class StartStudySessionHandler
-  implements ICommandHandler<StartStudySessionCommand, StartStudySessionResponse>
-{
+export class StartStudySessionHandler implements ICommandHandler<
+  StartStudySessionCommand,
+  StartStudySessionResponse
+> {
   private readonly logger = new Logger(StartStudySessionHandler.name);
 
   constructor(

@@ -1,14 +1,7 @@
 import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
 import { ApiResponse } from '@core/api';
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBearerAuth,
@@ -43,7 +36,11 @@ export class StudySessionController {
 
   @Post('start')
   @ApiOperation({ summary: 'Start a new study session' })
-  @SwaggerResponse({ status: 201, description: 'Session started', type: Object })
+  @SwaggerResponse({
+    status: 201,
+    description: 'Session started',
+    type: Object,
+  })
   async startSession(
     @Body() dto: StartStudySessionRequestDto,
     @CurrentUser() user: ITokenPayload,
@@ -65,7 +62,11 @@ export class StudySessionController {
 
   @Post('review')
   @ApiOperation({ summary: 'Review a card within an active study session' })
-  @SwaggerResponse({ status: 201, description: 'Review recorded', type: Object })
+  @SwaggerResponse({
+    status: 201,
+    description: 'Review recorded',
+    type: Object,
+  })
   async reviewCard(
     @Body() dto: StudySessionReviewRequestDto,
     @CurrentUser() user: ITokenPayload,
@@ -114,12 +115,20 @@ export class StudySessionController {
   @Get(':sessionId')
   @ApiOperation({ summary: 'Get summary for a study session' })
   @ApiParam({ name: 'sessionId', format: 'uuid' })
-  @SwaggerResponse({ status: 200, description: 'Session summary', type: SessionSummaryResponseDto })
+  @SwaggerResponse({
+    status: 200,
+    description: 'Session summary',
+    type: SessionSummaryResponseDto,
+  })
   async getSessionSummary(
     @Param('sessionId') sessionId: string,
     @CurrentUser() user: ITokenPayload,
   ) {
-    const query = new GetSessionSummaryQuery(sessionId, user.userId, user.tenantId);
+    const query = new GetSessionSummaryQuery(
+      sessionId,
+      user.userId,
+      user.tenantId,
+    );
 
     const result = await this.queryBus.execute<
       GetSessionSummaryQuery,

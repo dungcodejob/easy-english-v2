@@ -57,7 +57,12 @@ export class ReviewWordHandler implements ICommandHandler<
     );
 
     // Throws AlreadyArchivedException if archived — let it bubble up
-    progress.applyReview(rating, newParams, command.reviewDurationMs, command.sessionId);
+    progress.applyReview(
+      rating,
+      newParams,
+      command.reviewDurationMs,
+      command.sessionId,
+    );
 
     await this.writeRepo.save(progress);
     await this.em.flush();

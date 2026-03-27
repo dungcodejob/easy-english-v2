@@ -19,7 +19,13 @@ beforeAll(async () => {
     dbName: ':memory:',
     metadataProvider: TsMorphMetadataProvider,
     // Only discover Topic-related entities to avoid broken imports in unrelated modules
-    entities: [Topic, TopicWord, StudySessionOrmEntity, StudyReviewLogOrmEntity, UserWordSenseProgressOrmEntity],
+    entities: [
+      Topic,
+      TopicWord,
+      StudySessionOrmEntity,
+      StudyReviewLogOrmEntity,
+      UserWordSenseProgressOrmEntity,
+    ],
   });
   // Keep orm reference for the test session
   (global as any).__MikroORM__ = orm;

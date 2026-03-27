@@ -4,9 +4,7 @@ import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persis
 import { StudyReviewLog } from '../../domain/entities/study-review-log.entity';
 import {
   StudySession,
-  StudySessionScope,
-  StudySessionStatus,
-  StudySessionType,
+  type StudySessionType,
 } from '../../domain/entities/study-session.entity';
 import { StudyReviewLogOrmEntity } from '../persistence/study-review-log.orm-entity';
 import { StudySessionOrmEntity } from '../persistence/study-session.orm-entity';
@@ -25,7 +23,7 @@ export class StudySessionRepository {
       id: orm.id,
       userId: orm.userId,
       tenantId: orm.tenantId,
-      scope: orm.scope as StudySessionScope,
+      scope: orm.scope,
       studyType: orm.studyType as StudySessionType,
       topicId: orm.topicId,
       enrolledCardIds: orm.enrolledCardIds,
@@ -34,7 +32,7 @@ export class StudySessionRepository {
       hardCount: orm.hardCount,
       goodCount: orm.goodCount,
       easyCount: orm.easyCount,
-      status: orm.status as StudySessionStatus,
+      status: orm.status,
       startedAt: orm.startedAt,
       completedAt: orm.completedAt,
       abandonedAt: orm.abandonedAt,
@@ -75,8 +73,14 @@ export class StudySessionRepository {
   async createReviewLog(reviewLog: StudyReviewLog): Promise<void> {
     const orm = new StudyReviewLogOrmEntity();
     orm.id = reviewLog.id;
-    orm.session = this.em.getReference(StudySessionOrmEntity, reviewLog.sessionId);
-    orm.wordSense = this.em.getReference(WordSenseOrmEntity, reviewLog.wordSenseId);
+    orm.session = this.em.getReference(
+      StudySessionOrmEntity,
+      reviewLog.sessionId,
+    );
+    orm.wordSense = this.em.getReference(
+      WordSenseOrmEntity,
+      reviewLog.wordSenseId,
+    );
     orm.userId = reviewLog.userId;
     orm.tenantId = reviewLog.tenantId;
     orm.rating = reviewLog.rating;

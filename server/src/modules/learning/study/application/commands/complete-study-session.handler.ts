@@ -11,10 +11,10 @@ export interface CompleteStudySessionResponse {
 }
 
 @CommandHandler(CompleteStudySessionCommand)
-export class CompleteStudySessionHandler
-  implements
-    ICommandHandler<CompleteStudySessionCommand, CompleteStudySessionResponse>
-{
+export class CompleteStudySessionHandler implements ICommandHandler<
+  CompleteStudySessionCommand,
+  CompleteStudySessionResponse
+> {
   private readonly logger = new Logger(CompleteStudySessionHandler.name);
 
   constructor(
@@ -26,13 +26,18 @@ export class CompleteStudySessionHandler
   async execute(
     command: CompleteStudySessionCommand,
   ): Promise<CompleteStudySessionResponse> {
-    const session = await this.sessionRepository.findSessionById(command.sessionId);
+    const session = await this.sessionRepository.findSessionById(
+      command.sessionId,
+    );
 
     if (!session) {
       throw new NotFoundException('Study session not found');
     }
 
-    if (session.userId !== command.userId || session.tenantId !== command.tenantId) {
+    if (
+      session.userId !== command.userId ||
+      session.tenantId !== command.tenantId
+    ) {
       throw new NotFoundException('Study session not found');
     }
 
@@ -49,7 +54,8 @@ export class CompleteStudySessionHandler
     return {
       sessionId: session.id,
       status: 'COMPLETED',
-      completedAt: session.completedAt?.toISOString() ?? new Date().toISOString(),
+      completedAt:
+        session.completedAt?.toISOString() ?? new Date().toISOString(),
     };
   }
 }

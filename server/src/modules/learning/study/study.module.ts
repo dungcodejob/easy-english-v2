@@ -50,7 +50,12 @@ const controllers = [StudyController, StudySessionController];
     ]),
   ],
   controllers,
-  providers: [...queryHandlers, ...commandHandlers, ...listeners, StudySessionRepository],
+  providers: [
+    ...queryHandlers,
+    ...commandHandlers,
+    ...listeners,
+    StudySessionRepository,
+  ],
   exports: [StudySessionRepository],
 })
 export class StudyModule {}
