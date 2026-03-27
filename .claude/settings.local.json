@@ -142,7 +142,13 @@
       "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPattern=\"study-session|review-word|learning\" --passWithNoTests 2>&1 | tail -40)",
       "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPatterns=\"study-session|review-word|learning\" --passWithNoTests 2>&1 | tail -50)",
       "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPatterns=\"study|progress|review\" --passWithNoTests 2>&1 | tail -60)",
-      "Bash(npm_config_cache=\"/tmp/npm-cache-gitnexus\" npx --yes gitnexus@1.4.9 status)"
+      "Bash(npm_config_cache=\"/tmp/npm-cache-gitnexus\" npx --yes gitnexus@1.4.9 status)",
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test 2>&1 | tail -20)",
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test 2>&1 | tail -30)",
+      "Bash(npx --yes gitnexus@1.4.9 impact --target \"StudyModule\" --direction upstream)",
+      "Bash(npx --yes gitnexus@1.4.9 impact --target \"ReviewWordHandler\" --direction upstream)",
+      "Bash(find server/src -name \"*.ts\" | xargs grep -l \"ApiResponseBuilder\" 2>/dev/null | head -5)",
+      "Bash(find server/src -name \"*.ts\" | xargs grep -l \"export.*ApiResponseBuilder\" 2>/dev/null | head -3; find server/src -name \"api*\" -type f 2>/dev/null)"
     ]
   }
 }

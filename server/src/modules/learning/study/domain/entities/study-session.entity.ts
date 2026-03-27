@@ -1,11 +1,29 @@
 import { AggregateRoot } from '@core/ddd';
+import { ObjectValues } from '@shared/utils';
 import { v7 as uuid } from 'uuid';
 import { StudySessionCompletedEvent } from '../events/study-session-completed.event';
 import { StudySessionStartedEvent } from '../events/study-session-started.event';
 
-export type StudySessionScope = 'DUE' | 'TOPIC';
-export type StudySessionType = 'FLASHCARD';
-export type StudySessionStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED';
+export const studySessionScope = {
+  Due: 'Due',
+  Topic: 'Topic',
+} as const;
+
+export type StudySessionScope = ObjectValues<typeof studySessionScope>;
+
+export const studySessionType = {
+  Flashcard: 'Flashcard',
+} as const;
+
+export type StudySessionType = ObjectValues<typeof studySessionType>;
+
+export const studySessionStatus = {
+  InProgress: 'InProgress',
+  Completed: 'Completed',
+  Abandoned: 'Abandoned',
+} as const;
+
+export type StudySessionStatus = ObjectValues<typeof studySessionStatus>;
 
 export class StudySession extends AggregateRoot {
   private _userId!: string;
@@ -85,7 +103,7 @@ export class StudySession extends AggregateRoot {
   }
 
   get isInProgress(): boolean {
-    return this._status === 'IN_PROGRESS';
+    return this._status === studySessionStatus.InProgress;
   }
 
   static create(props: {
@@ -93,7 +111,7 @@ export class StudySession extends AggregateRoot {
     tenantId: string;
     scope: StudySessionScope;
     topicId: string | null;
-    studyType?: StudySessionType;
+    studyType: StudySessionType;
     enrolledCardIds: string[];
   }): StudySession {
     const now = new Date();
@@ -106,7 +124,7 @@ export class StudySession extends AggregateRoot {
     session._userId = props.userId;
     session._tenantId = props.tenantId;
     session._scope = props.scope;
-    session._studyType = props.studyType ?? 'FLASHCARD';
+    session._studyType = props.studyType;
     session._topicId = props.topicId;
     session._enrolledCardIds = [...new Set(props.enrolledCardIds)];
     session._reviewedCount = 0;
@@ -114,7 +132,7 @@ export class StudySession extends AggregateRoot {
     session._hardCount = 0;
     session._goodCount = 0;
     session._easyCount = 0;
-    session._status = 'IN_PROGRESS';
+    session._status = studySessionStatus.InProgress;
     session._startedAt = now;
     session._completedAt = null;
     session._abandonedAt = null;
@@ -196,7 +214,7 @@ export class StudySession extends AggregateRoot {
   }
 
   complete(now: Date = new Date()): void {
-    this._status = 'COMPLETED';
+    this._status = studySessionStatus.Completed;
     this._completedAt = now;
     this._abandonedAt = null;
     this.updateUpdatedAt();

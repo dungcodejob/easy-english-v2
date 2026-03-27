@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
+  ConflictException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -42,6 +43,15 @@ export class StudySessionReviewHandler
 
     if (!session.includesCard(command.wordSenseId)) {
       throw new BadRequestException('Word is not enrolled in this study session');
+    }
+
+    const existingLog = await this.em.findOne('StudyReviewLogOrmEntity', {
+      session: this.em.getReference('StudySessionOrmEntity', command.sessionId),
+      wordSense: this.em.getReference('WordSenseOrmEntity', command.wordSenseId),
+    });
+
+    if (existingLog) {
+      throw new ConflictException('Card has already been reviewed in this session');
     }
 
     const reviewResult = await this.commandBus.execute<ReviewWordCommand, ReviewWordResponse>(

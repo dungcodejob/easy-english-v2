@@ -1,8 +1,11 @@
 import { Entity, Index, PrimaryKey, Property } from '@mikro-orm/core';
-
-export type StudySessionScope = 'DUE' | 'TOPIC';
-export type StudySessionType = 'FLASHCARD';
-export type StudySessionStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED';
+import {
+  studySessionStatus,
+  studySessionType,
+  type StudySessionScope,
+  type StudySessionStatus,
+  type StudySessionType,
+} from '../../domain/entities/study-session.entity';
 
 @Entity({ tableName: 'study_sessions' })
 @Index({ properties: ['userId', 'tenantId', 'status'] })
@@ -21,7 +24,11 @@ export class StudySessionOrmEntity {
   @Property({ type: 'varchar', length: 20 })
   scope!: StudySessionScope;
 
-  @Property({ type: 'varchar', length: 20, default: 'FLASHCARD' })
+  @Property({
+    type: 'varchar',
+    length: 20,
+    default: studySessionType.Flashcard,
+  })
   studyType!: StudySessionType;
 
   @Property({ type: 'uuid', nullable: true })
@@ -45,7 +52,11 @@ export class StudySessionOrmEntity {
   @Property({ type: 'int', default: 0 })
   easyCount!: number;
 
-  @Property({ type: 'varchar', length: 20, default: 'IN_PROGRESS' })
+  @Property({
+    type: 'varchar',
+    length: 20,
+    default: studySessionStatus.InProgress,
+  })
   status!: StudySessionStatus;
 
   @Property({ defaultRaw: 'now()' })

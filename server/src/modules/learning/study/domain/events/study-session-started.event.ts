@@ -1,11 +1,15 @@
 import { DomainEvent, DomainEventProps } from '@core/ddd';
+import {
+  StudySessionScope,
+  StudySessionType,
+} from '../entities/study-session.entity';
 
 export interface StudySessionStartedEventPayload {
   sessionId: string;
   userId: string;
   tenantId: string;
-  scope: 'DUE' | 'TOPIC';
-  studyType: 'FLASHCARD';
+  scope: StudySessionScope;
+  studyType: StudySessionType;
   topicId: string | null;
   enrolledCardCount: number;
 }
@@ -14,8 +18,8 @@ export class StudySessionStartedEvent extends DomainEvent {
   public readonly sessionId: string;
   public readonly userId: string;
   public readonly tenantId: string;
-  public readonly scope: 'DUE' | 'TOPIC';
-  public readonly studyType: 'FLASHCARD';
+  public readonly scope: StudySessionScope;
+  public readonly studyType: StudySessionType;
   public readonly topicId: string | null;
   public readonly enrolledCardCount: number;
 
