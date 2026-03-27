@@ -1,11 +1,12 @@
 import { ICommand } from '@nestjs/cqrs';
 
-export class ReviewWordCommand implements ICommand {
+export class StudySessionReviewCommand implements ICommand {
   constructor(
+    public readonly sessionId: string,
     public readonly userId: string,
+    public readonly tenantId: string,
     public readonly wordSenseId: string,
     public readonly rating: 1 | 2 | 3 | 4,
     public readonly reviewDurationMs: number,
-    public readonly sessionId?: string,
   ) {}
 }

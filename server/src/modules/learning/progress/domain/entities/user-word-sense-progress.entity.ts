@@ -162,6 +162,7 @@ export class UserWordSenseProgress extends AggregateRoot {
     rating: ReviewRating,
     newParams: FsrsParameters,
     reviewDurationMs: number,
+    sessionId?: string,
   ): void {
     if (this._archivedAt !== null) {
       throw new AlreadyArchivedException();
@@ -187,6 +188,7 @@ export class UserWordSenseProgress extends AggregateRoot {
         previousParams,
         newParams,
         reviewDurationMs,
+        sessionId,
       }),
     );
 

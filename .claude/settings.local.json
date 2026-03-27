@@ -135,7 +135,14 @@
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/server\" && npx eslint src/modules/learning/study/ --fix && npm run build 2>&1)",
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && node -e \"const ui = require\\('./src/shared/ui'\\); console.log\\(Object.keys\\(ui\\).join\\(', '\\)\\)\" 2>&1 | head -5)",
       "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && npx eslint src/modules/learning/ src/routes.ts src/shared/constants/key.ts src/shared/constants/routes.ts 2>&1)",
-      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && npx eslint src/modules/learning/components/session-complete-card.tsx src/modules/learning/hooks/use-due-cards.ts src/modules/learning/hooks/use-review-card.ts src/modules/learning/services/study.api.ts src/modules/learning/pages/study-session.page.tsx src/modules/learning/pages/my-learning.page.tsx src/modules/learning/components/study-progress.tsx src/modules/learning/components/flashcard-view.tsx src/modules/learning/components/rating-buttons.tsx 2>&1)"
+      "Bash(cd \"E:/Projects/multi-tenant/easy-english-v2/client\" && npx eslint src/modules/learning/components/session-complete-card.tsx src/modules/learning/hooks/use-due-cards.ts src/modules/learning/hooks/use-review-card.ts src/modules/learning/services/study.api.ts src/modules/learning/pages/study-session.page.tsx src/modules/learning/pages/my-learning.page.tsx src/modules/learning/components/study-progress.tsx src/modules/learning/components/flashcard-view.tsx src/modules/learning/components/rating-buttons.tsx 2>&1)",
+      "Bash(set npm_config_cache=E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\.npm-cache && npx gitnexus status)",
+      "Bash(gitnexus status:*)",
+      "Bash(npx --yes gitnexus@1.4.9 status)",
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPattern=\"study-session|review-word|learning\" --passWithNoTests 2>&1 | tail -40)",
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPatterns=\"study-session|review-word|learning\" --passWithNoTests 2>&1 | tail -50)",
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server && npm test -- --testPathPatterns=\"study|progress|review\" --passWithNoTests 2>&1 | tail -60)",
+      "Bash(npm_config_cache=\"/tmp/npm-cache-gitnexus\" npx --yes gitnexus@1.4.9 status)"
     ]
   }
 }

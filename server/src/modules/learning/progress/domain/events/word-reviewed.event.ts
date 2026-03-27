@@ -10,6 +10,7 @@ export interface WordReviewedEventPayload {
   previousParams: FsrsParameters;
   newParams: FsrsParameters;
   reviewDurationMs: number;
+  sessionId?: string;
 }
 
 export class WordReviewedEvent extends DomainEvent {
@@ -20,6 +21,7 @@ export class WordReviewedEvent extends DomainEvent {
   public readonly previousParams: FsrsParameters;
   public readonly newParams: FsrsParameters;
   public readonly reviewDurationMs: number;
+  public readonly sessionId?: string;
 
   constructor(props: DomainEventProps<WordReviewedEventPayload>) {
     super(props);
@@ -30,5 +32,6 @@ export class WordReviewedEvent extends DomainEvent {
     this.previousParams = props.previousParams;
     this.newParams = props.newParams;
     this.reviewDurationMs = props.reviewDurationMs;
+    this.sessionId = props.sessionId;
   }
 }
