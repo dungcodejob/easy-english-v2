@@ -3,7 +3,12 @@ import { studyKeys } from '@/shared/constants';
 import { StudyApi } from '../services/study.api';
 import type { ReviewPayload, ReviewResult } from '../types/study.types';
 
-export const useReviewCard = () => {
+/**
+ * Review mutation hook.
+ * - When `sessionId` is absent: calls standalone POST /learning/senses/:id/review
+ * - When `sessionId` is present: calls session-scoped POST /learning/study/session/review
+ */
+export const useReviewCard = (sessionId?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation<
@@ -11,9 +16,11 @@ export const useReviewCard = () => {
     Error,
     ReviewPayload
   >({
-    mutationFn: (payload) => StudyApi.reviewCard(payload),
+    mutationFn: (payload) =>
+      sessionId
+        ? StudyApi.reviewCardSession({ ...payload, sessionId })
+        : StudyApi.reviewCard(payload),
     onSuccess: () => {
-      // Invalidate due list in background after review
       queryClient.invalidateQueries({ queryKey: studyKeys.due() });
     },
   });

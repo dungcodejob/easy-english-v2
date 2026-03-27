@@ -60,6 +60,9 @@ export const studyKeys = {
   all: ['study'] as const,
   due: () => [...studyKeys.all, 'due'] as const,
   topic: (topicId: string) => [...studyKeys.all, 'topic', topicId] as const,
+  session: (sessionId: string) => [...studyKeys.all, 'session', sessionId] as const,
+  sessionSummary: (sessionId: string) =>
+    [...studyKeys.all, 'session', sessionId, 'summary'] as const,
 };
 
 export const API_KEYS = {

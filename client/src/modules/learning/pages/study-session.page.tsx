@@ -4,15 +4,16 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, Clock } from 'lucide-react';
 import { APP_ROUTES } from '@/shared/constants';
 import { DsButton } from '@/shared/ui';
-import { useDueCards } from '../hooks/use-due-cards';
-import { useTopicCards } from '../hooks/use-topic-cards';
+import { useStartSession } from '../hooks/use-start-session';
+import { useCompleteSession } from '../hooks/use-complete-session';
+import { useSessionSummary } from '../hooks/use-session-summary';
 import { useReviewCard } from '../hooks/use-review-card';
 import { useStudySessionStore } from '../stores/use-study-session-store';
 import { FlashcardView } from '../components/flashcard-view';
 import { RatingButtons } from '../components/rating-buttons';
 import { StudyProgress } from '../components/study-progress';
 import { SessionCompleteCard } from '../components/session-complete-card';
-import type { ReviewResult } from '../types/study.types';
+import type { ReviewResult, StudyScope } from '../types/study.types';
 
 const FEEDBACK_DURATION_MS = 800;
 
@@ -26,36 +27,69 @@ function StudySessionPage() {
   const navigate = useNavigate();
   const search = useSearch<typeof Route['useSearch']>();
 
+  // URL search params
+  const sessionId = search.sessionId as string | undefined;
+  const completed = search.completed === 'true';
   const mode = (search.mode as 'due' | 'topic') || 'due';
   const topicId = search.topicId as string | undefined;
 
-  const [showKeyboardHint, setShowKeyboardHint] = useState(true);
-  const [feedback, setFeedback] = useState<ReviewResult | null>(null);
+  // Server session summary (for completed sessions)
+  const { data: summaryData } = useSessionSummary(sessionId ?? '');
 
   const store = useStudySessionStore();
-  const reviewMutation = useReviewCard();
+  const startMutation = useStartSession();
+  const completeMutation = useCompleteSession();
 
-  const { data: dueData, isLoading: loadingDue } = useDueCards();
-  const { data: topicData, isLoading: loadingTopic, isError: topicError } = useTopicCards(
-    mode === 'topic' ? (topicId ?? null) : null,
-  );
+  // Review card with optional sessionId context
+  const reviewMutation = useReviewCard(sessionId);
 
-  // Determine which data source and start session once loaded
-  const isLoading = mode === 'topic' ? loadingTopic : loadingDue;
-  const cards = mode === 'topic'
-    ? (topicData?.data?.cards ?? [])
-    : (dueData?.data?.cards ?? []);
-  const dataTopicId = topicData?.data?.topicId;
+  // Derived state
+  const currentCard = store.cards[store.currentIndex];
+  const isSessionComplete = store.currentIndex >= store.cards.length && store.cards.length > 0;
 
-  // Start session when cards are loaded
+  // Show server summary if this is a completed navigation
+  if (completed && sessionId) {
+    const summary = summaryData?.data;
+    if (summary) {
+      return (
+        <SessionCompleteCard
+          sessionSummary={summary}
+        />
+      );
+    }
+    // Summary still loading — show a spinner
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <svg className="size-8 animate-spin text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+      </div>
+    );
+  }
+
+  // If we have a sessionId in URL but no cards loaded yet, start the session
+  // This handles page refresh mid-session (URL resumption)
+  const [pendingAutoStart, setPendingAutoStart] = useState(false);
+
   useEffect(() => {
-    if (isLoading || store.cards.length > 0) return;
-    if (cards.length === 0) return;
-    store.startSession(cards, mode, topicId ?? dataTopicId ?? undefined);
+    if (!sessionId || store.sessionId === sessionId) return;
+    if (store.cards.length > 0) return; // Already have cards
+
+    // Trigger start — server will return the enrolled card set
+    setPendingAutoStart(true);
+    const scope: StudyScope = mode === 'topic' && topicId ? 'TOPIC' : 'DUE';
+    startMutation.mutate(
+      { scope, topicId },
+      {
+        onSettled: () => setPendingAutoStart(false),
+      },
+    );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, cards.length]);
+  }, [sessionId, mode, topicId]);
 
   // Hide keyboard hint after first interaction
+  const [showKeyboardHint, setShowKeyboardHint] = useState(true);
   useEffect(() => {
     if (!showKeyboardHint) return;
     const timer = setTimeout(() => setShowKeyboardHint(false), 5000);
@@ -108,8 +142,16 @@ function StudySessionPage() {
         setFeedback(null);
         store.goNext();
         store.setSubmittingRating(false);
+
         if (store.currentIndex >= store.cards.length) {
-          store.finishSession();
+          // All cards reviewed — call complete and redirect to summary
+          if (store.sessionId) {
+            store.finishSession();
+            store.setSessionCompleted();
+            completeMutation.mutate(store.sessionId);
+          } else {
+            store.finishSession();
+          }
         }
       }, FEEDBACK_DURATION_MS);
     } catch {
@@ -117,18 +159,10 @@ function StudySessionPage() {
     }
   };
 
-  const currentCard = store.cards[store.currentIndex];
-  const isSessionComplete = store.currentIndex >= store.cards.length && store.cards.length > 0;
+  const [feedback, setFeedback] = useState<ReviewResult | null>(null);
 
-  // Topic error redirect
-  useEffect(() => {
-    if (topicError && mode === 'topic') {
-      store.resetSession();
-      navigate({ to: APP_ROUTES.LEARN });
-    }
-  }, [topicError, mode]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (isLoading) {
+  // Loading states
+  if (startMutation.isPending || pendingAutoStart) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <svg className="size-8 animate-spin text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -139,7 +173,8 @@ function StudySessionPage() {
     );
   }
 
-  if (cards.length === 0) {
+  // No cards (empty due/topic set)
+  if (store.cards.length === 0 && !sessionId) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
         <div className="space-y-2 text-center">
@@ -157,11 +192,15 @@ function StudySessionPage() {
     );
   }
 
-  if (isSessionComplete) {
+  // Session complete (non-redirect path — e.g. completed session still in store)
+  if (isSessionComplete && !completed) {
     return (
       <SessionCompleteCard
+        sessionSummary={undefined}
         reviewedCount={store.reviewedCount}
-        correctLikeCount={store.correctLikeCount}
+        correctLikeCount={
+          store.ratingBreakdown.good + store.ratingBreakdown.easy
+        }
         elapsedMs={store.elapsedMs}
       />
     );
@@ -226,7 +265,7 @@ function StudySessionPage() {
         </div>
       )}
 
-      {/* Flip button (when not flipped) */}
+      {/* Flip / Rating */}
       {!store.flipped ? (
         <DsButton
           variant="outline"
