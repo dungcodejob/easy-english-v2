@@ -1,9 +1,11 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
+
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
 import { LoginHandler } from './application/commands/login.handler';
 import { RefreshHandler } from './application/commands/refresh.handler';
 import { RegisterHandler } from './application/commands/register.handler';
@@ -22,7 +24,6 @@ import {
   provideTokenService,
   tokenServiceToken,
 } from './domain/ports/token-service.interface';
-
 import { provideTokenStrategies } from './domain/ports/token-strategy.interface';
 import {
   provideUsernameAvailability,

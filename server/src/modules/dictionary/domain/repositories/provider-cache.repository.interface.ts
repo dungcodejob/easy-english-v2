@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { ProviderResponseCacheOrmEntity } from '../../infrastructure/persistence/provider-response-cache.orm-entity';
+
+import { type ProviderResponseCacheOrmEntity } from '../../infrastructure/persistence/provider-response-cache.orm-entity';
 
 export interface IProviderCacheRepository {
   findByWord(

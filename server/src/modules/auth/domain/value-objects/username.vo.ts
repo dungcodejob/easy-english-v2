@@ -34,6 +34,7 @@ export class Username extends ValueObject<string> {
    */
   static create(raw: string): Username {
     const normalized = Username.normalize(raw);
+
     return new Username(normalized);
   }
 
@@ -49,6 +50,7 @@ export class Username extends ValueObject<string> {
       // Truncate base to fit suffix
       const maxBase = Username.MAX_LENGTH - `_${suffix}`.length;
       const truncatedBase = base.substring(0, maxBase);
+
       return Username.create(`${truncatedBase}_${suffix}`);
     }
 
@@ -73,6 +75,7 @@ export class Username extends ValueObject<string> {
    * - Remove invalid characters
    * - Ensure starts with letter
    */
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static normalize(raw: string): string {
     let value = raw
       .trim()

@@ -1,7 +1,8 @@
 import { createInjection } from '@shared/utils';
-import { Word } from '../entities/word.aggregate';
 
-export type RawResponse = any;
+import { type Word } from '../entities/word.aggregate';
+
+export type RawResponse = unknown;
 
 /**
  * Generic enrichment context — domain knows enrichment is a capability,
@@ -23,7 +24,7 @@ export interface ILookupProvider {
   readonly name: string;
   lookup(word: string): Promise<LookupResult>;
   enrichRemaining(word: string, context: EnrichmentContext): Promise<Word[]>;
-  toDomain(raw: any): Word[];
+  toDomain(raw: unknown): Word[];
   isAvailable(): Promise<boolean>;
 }
 

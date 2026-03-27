@@ -1,5 +1,7 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import {
   ILearningReadRepository,
   LearningListItemReadModel,

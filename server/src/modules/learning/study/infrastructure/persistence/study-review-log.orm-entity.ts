@@ -8,6 +8,7 @@ import {
 } from '@mikro-orm/core';
 import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persistence/word-sense.orm-entity';
 import { ReviewRating } from 'src/modules/learning/progress/domain/value-objects/review-rating.vo';
+
 import { StudySessionOrmEntity } from './study-session.orm-entity';
 
 @Entity({ tableName: 'study_review_logs' })

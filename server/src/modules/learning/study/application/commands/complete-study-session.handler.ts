@@ -1,8 +1,10 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { CompleteStudySessionCommand } from './complete-study-session.command';
+import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
 
 export interface CompleteStudySessionResponse {
   sessionId: string;

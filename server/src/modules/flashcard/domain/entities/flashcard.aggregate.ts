@@ -1,9 +1,11 @@
-import { AggregateRoot } from '@core/ddd';
 import { v7 } from 'uuid';
-import { FlashcardSource } from '../value-objects/flashcard-source.vo';
+
+import { AggregateRoot } from '@core/ddd';
+
 import { FlashcardCreatedEvent } from '../events/flashcard-created.event';
-import { FlashcardUpdatedEvent } from '../events/flashcard-updated.event';
 import { FlashcardDeletedEvent } from '../events/flashcard-deleted.event';
+import { FlashcardUpdatedEvent } from '../events/flashcard-updated.event';
+import { type FlashcardSource } from '../value-objects/flashcard-source.vo';
 
 export interface FlashcardProps {
   tenantId: string;
@@ -73,6 +75,7 @@ export class Flashcard extends AggregateRoot {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
     flashcard._tenantId = props.tenantId;
     flashcard._userId = props.userId;
     flashcard._front = props.front;
@@ -85,6 +88,7 @@ export class Flashcard extends AggregateRoot {
     flashcard.addEvent(
       new FlashcardCreatedEvent({ aggregateId: flashcard.id, flashcard }),
     );
+
     return flashcard;
   }
 
@@ -104,6 +108,7 @@ export class Flashcard extends AggregateRoot {
     updatedAt: Date,
   ): Flashcard {
     const flashcard = new Flashcard({ id: props.id, createdAt, updatedAt });
+
     flashcard._tenantId = props.tenantId;
     flashcard._userId = props.userId;
     flashcard._front = props.front;
@@ -112,6 +117,7 @@ export class Flashcard extends AggregateRoot {
     flashcard._notes = props.notes;
     flashcard._source = props.source;
     flashcard._wordSenseId = props.wordSenseId;
+
     return flashcard;
   }
 

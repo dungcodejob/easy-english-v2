@@ -1,4 +1,3 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
   ConflictException,
@@ -11,10 +10,13 @@ import {
   EventBus,
   ICommandHandler,
 } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { ReviewWordCommand } from 'src/modules/learning/progress/application/commands/review-word.command';
 import { ReviewWordResponse } from 'src/modules/learning/progress/application/commands/review-word.handler';
-import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
+
 import { StudySessionReviewCommand } from './study-session-review.command';
+import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
 
 @CommandHandler(StudySessionReviewCommand)
 export class StudySessionReviewHandler implements ICommandHandler<

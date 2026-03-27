@@ -37,7 +37,7 @@ export const isEmpty = (value: unknown): boolean => {
 export const isNotEmpty = (value: unknown): boolean => !isEmpty(value);
 
 export const lengthIsBetween = (
-  value: number | string | Array<unknown>,
+  value: number | string | unknown[],
   min: number,
   max: number,
 ): boolean => {
@@ -46,8 +46,10 @@ export const lengthIsBetween = (
   }
   const valueLength =
     typeof value === 'number' ? Number(value).toString().length : value.length;
+
   if (valueLength >= min && valueLength <= max) {
     return true;
   }
+
   return false;
 };

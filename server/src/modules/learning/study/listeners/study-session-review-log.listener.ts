@@ -1,7 +1,9 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { EventsHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { WordReviewedEvent } from 'src/modules/learning/progress/domain/events/word-reviewed.event';
+
 import { StudyReviewLog } from '../domain/entities/study-review-log.entity';
 import { StudySessionRepository } from '../infrastructure/repositories/study-session.repository';
 
@@ -38,12 +40,14 @@ export class StudySessionReviewLogListener {
       await this.em.flush();
     } catch (error) {
       const pgError = error as PgErrorLike;
+
       if (pgError.code === '23505') {
         // Silently skip — another path already recorded this review log.
         // For an event handler, throwing would destabilize the event bus.
         this.logger.debug(
           `Skipping duplicate study review log for session ${event.sessionId} and word ${event.wordSenseId}`,
         );
+
         return;
       }
       throw error;

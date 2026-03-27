@@ -1,9 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
 import {
   CollocationDto,
   ExampleDto,
   PronunciationDto,
 } from './word.response.dto';
+
 export class LearningStateDto {
   @ApiProperty({
     description: 'Whether the user is currently learning this word sense',

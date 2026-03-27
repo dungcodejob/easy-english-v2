@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+
 import { Session, SessionStatus } from '../../domain/entities/session.entity';
 import { ISessionRepository } from '../../domain/repositories/session.repository.interface';
 import { SessionMapper } from '../mappers/session.mapper';
@@ -16,6 +18,7 @@ export class SessionRepository implements ISessionRepository {
 
   persist(session: Session): void {
     const ormEntity = this.mapper.toPersistence(session);
+
     this.repo.getEntityManager().persist(ormEntity);
   }
 
@@ -29,6 +32,7 @@ export class SessionRepository implements ISessionRepository {
         populate: ['tenant', 'user', 'authIdentity'],
       },
     );
+
     return records.map((record) => this.mapper.toDomain(record));
   }
 
@@ -41,6 +45,7 @@ export class SessionRepository implements ISessionRepository {
 
   async findById(id: string): Promise<Session | null> {
     const entity = await this.repo.findOne({ id });
+
     return entity ? this.mapper.toDomain(entity) : null;
   }
 }

@@ -1,4 +1,4 @@
-import { EnrichmentContext } from '../providers/lookup-provider.interface';
+import { type EnrichmentContext } from '../providers/lookup-provider.interface';
 
 /**
  * Application event (not a domain aggregate event).

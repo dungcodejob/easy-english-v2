@@ -1,4 +1,5 @@
 import { v7 as uuid } from 'uuid';
+
 import { WordLearningStatus } from '../value-objects/word-learning-status.vo';
 
 /**

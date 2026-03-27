@@ -7,6 +7,7 @@ export class WordLearningStatus extends ValueObject<{
   private static readonly _LEARNING = new WordLearningStatus({
     value: 'LEARNING',
   });
+
   private static readonly _MASTERED = new WordLearningStatus({
     value: 'MASTERED',
   });

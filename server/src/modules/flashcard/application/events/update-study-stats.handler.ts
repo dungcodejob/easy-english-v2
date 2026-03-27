@@ -1,6 +1,8 @@
-import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { EventBus, EventsHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/core';
+
 import { WordReviewedEvent } from '../../../learning/progress/domain/events/word-reviewed.event';
 import {
   InjectStudyStatsRepository,
@@ -38,6 +40,7 @@ export class UpdateStudyStatsHandler {
 
     if (!stats) {
       this.logger.error(`StudyStats not found for user ${event.userId}`);
+
       return;
     }
 

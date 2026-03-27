@@ -7,6 +7,7 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
+
 import { WordPronunciationOrmEntity } from './word-pronunciation.orm-entity';
 import { WordSenseOrmEntity } from './word-sense.orm-entity';
 

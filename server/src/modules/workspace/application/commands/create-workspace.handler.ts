@@ -1,13 +1,15 @@
-import { EntityManager } from '@mikro-orm/core';
 import { ConflictException, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { CreateWorkspaceCommand } from './create-workspace.command';
 import { WorkspaceEntity } from '../../domain/entities/workspace.entity';
 import {
   InjectWorkspaceRepository,
   type IWorkspaceRepository,
 } from '../../domain/repositories/workspace.repository.interface';
 import { WorkspaceResponseDto } from '../../dto/responses/workspace.response.dto';
-import { CreateWorkspaceCommand } from './create-workspace.command';
 
 @CommandHandler(CreateWorkspaceCommand)
 export class CreateWorkspaceHandler implements ICommandHandler<
@@ -44,6 +46,7 @@ export class CreateWorkspaceHandler implements ICommandHandler<
       name,
       userId,
     );
+
     if (existing) {
       throw new ConflictException('Workspace with this name already exists');
     }

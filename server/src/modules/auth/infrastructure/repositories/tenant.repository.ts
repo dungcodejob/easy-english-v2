@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Injectable } from '@nestjs/common';
+
 import { Tenant } from '../../domain/entities';
 import { ITenantRepository } from '../../domain/repositories/tenant.repository.interface';
 import { TenantMapper } from '../mappers/tenant.mapper';
@@ -17,6 +19,7 @@ export class TenantRepository implements ITenantRepository {
 
   persist(tenant: Tenant): void {
     const ormEntity = this.mapper.toPersistence(tenant);
+
     this.em.persist(ormEntity);
   }
 }

@@ -4,18 +4,20 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
 import { Word } from 'src/modules/dictionary/domain/entities/word.aggregate';
-import {
-  EnrichmentContext,
-  ILookupProvider,
-  LookupResult,
-} from '../../../domain/providers/lookup-provider.interface';
+
 import { AzVocabAdapter } from './azvocab.adapter';
 import { AzVocabHttpClient } from './azvocab.http-client';
 import {
   AzVocabDefinitionResponseDto,
   AzVocabSearchResponseDto,
 } from './azvocab.types';
+import {
+  EnrichmentContext,
+  ILookupProvider,
+  LookupResult,
+} from '../../../domain/providers/lookup-provider.interface';
 
 /** Max definitions to fetch immediately before returning to FE */
 const IMMEDIATE_FETCH_LIMIT = 8;
@@ -41,9 +43,10 @@ export class AzVocabLookupProvider implements ILookupProvider {
       definitions: AzVocabDefinitionResponseDto[];
     };
 
-    if (!r || !r.search) {
+    if (!r?.search) {
       return [];
     }
+
     return this.mapToDomainWords(r.search, r.definitions || []);
   }
 
@@ -51,6 +54,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
     try {
       // 1. Search for the word
       const searchResponses = await this.httpClient.search(word);
+
       if (!searchResponses || searchResponses.length === 0) {
         return { words: [], raw: null, status: 404 };
       }
@@ -138,6 +142,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
   async isAvailable(): Promise<boolean> {
     const url = this.configService.get<string>('dictionary.azvocab.url');
+
     return Promise.resolve(!!url);
   }
 
@@ -145,6 +150,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
   private collectDefIds(searchResponses: AzVocabSearchResponseDto[]): string[] {
     const defIds = new Set<string>();
+
     for (const entry of searchResponses) {
       if (entry.defs) {
         entry.defs.forEach((def) => {
@@ -154,6 +160,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
         });
       }
     }
+
     return Array.from(defIds);
   }
 
@@ -165,10 +172,12 @@ export class AzVocabLookupProvider implements ILookupProvider {
 
     // Group search responses by normalized text
     const groupedResponses = new Map<string, AzVocabSearchResponseDto[]>();
+
     for (const entry of searchResponses) {
       if (!entry.defs) continue;
 
       const normalizedText = entry.vocab.toLowerCase();
+
       if (!groupedResponses.has(normalizedText)) {
         groupedResponses.set(normalizedText, []);
       }
@@ -188,6 +197,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
       );
 
       const word = this.adapter.toDomain(entriesGroup, definitionsByGroup);
+
       if (word) {
         words.push(word);
       }
@@ -201,8 +211,10 @@ export class AzVocabLookupProvider implements ILookupProvider {
     delayMs: number,
   ): Promise<AzVocabDefinitionResponseDto[]> {
     const results: AzVocabDefinitionResponseDto[] = [];
+
     for (let i = 0; i < defIds.length; i++) {
       const def = await this.httpClient.getDefinitionById(defIds[i]);
+
       if (def) {
         results.push(def);
       }
@@ -211,6 +223,7 @@ export class AzVocabLookupProvider implements ILookupProvider {
         await this.delay(delayMs);
       }
     }
+
     return results;
   }
 

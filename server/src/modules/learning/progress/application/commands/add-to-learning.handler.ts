@@ -1,10 +1,13 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
-import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
-import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { AddToLearningCommand } from './add-to-learning.command';
+import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
+import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+
+import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 
 /**
  * Add To Learning Command Handler
@@ -45,9 +48,11 @@ export class AddToLearningHandler implements ICommandHandler<
         await this.writeRepo.save(existing);
         await this.em.flush();
         existing.publishEvents(this.logger, this.eventBus);
+
         return { id: existing.id, alreadyLearning: false };
       }
       this.logger.debug(`Word sense already in learning list: ${existing.id}`);
+
       return { id: existing.id, alreadyLearning: true };
     }
 
@@ -64,6 +69,7 @@ export class AddToLearningHandler implements ICommandHandler<
     this.logger.log(
       `Created new progress ${progress.id} for user ${command.userId}`,
     );
+
     return { id: progress.id, alreadyLearning: false };
   }
 }

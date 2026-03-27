@@ -1,9 +1,11 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerModule } from '@nestjs/throttler';
+
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { appConfig, AppConfig, httpConfig } from './configs';
@@ -12,12 +14,11 @@ import { dictionaryConfig } from './configs/dictionary.config';
 import { jwtConfig } from './configs/jwt.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
-
+import { FlashcardModule } from './modules/flashcard/flashcard.module';
 import { ProgressModule } from './modules/learning/progress/progress.module';
 import { StudyModule } from './modules/learning/study/study.module';
 import { TopicModule } from './modules/learning/topic/topic.module';
 import { WorkspaceModule } from './modules/workspace/workspace.module';
-import { FlashcardModule } from './modules/flashcard/flashcard.module';
 
 @Module({
   imports: [

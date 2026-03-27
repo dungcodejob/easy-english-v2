@@ -1,4 +1,3 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { BadRequestException, Logger } from '@nestjs/common';
 import {
   CommandHandler,
@@ -6,16 +5,19 @@ import {
   ICommandHandler,
   QueryBus,
 } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { StartStudySessionCommand } from './start-study-session.command';
+import { StudySession } from '../../domain/entities/study-session.entity';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
   TopicStudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
-import { StudySession } from '../../domain/entities/study-session.entity';
 import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
 import { GetDueCardsQuery } from '../queries/get-due-cards.query';
 import { GetTopicCardsQuery } from '../queries/get-topic-cards.query';
-import { StartStudySessionCommand } from './start-study-session.command';
 
 export interface StartStudySessionResponse {
   sessionId: string;
@@ -55,7 +57,7 @@ export class StartStudySessionHandler implements ICommandHandler<
         new GetTopicCardsQuery(
           command.userId,
           command.tenantId,
-          command.topicId as string,
+          command.topicId!,
         ),
       );
     } else {
@@ -69,7 +71,7 @@ export class StartStudySessionHandler implements ICommandHandler<
       userId: command.userId,
       tenantId: command.tenantId,
       scope: command.scope,
-      topicId: command.scope === 'TOPIC' ? (command.topicId as string) : null,
+      topicId: command.scope === 'TOPIC' ? command.topicId! : null,
       enrolledCardIds: cardsEnvelope.cards.map((card) => card.wordSenseId),
     });
 

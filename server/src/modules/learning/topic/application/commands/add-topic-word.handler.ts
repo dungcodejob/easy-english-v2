@@ -1,4 +1,3 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import {
   Logger,
   NotFoundException,
@@ -6,13 +5,16 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { TopicWordOrmEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { AddTopicWordCommand } from './add-topic-word.command';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
 import { TopicWordDto } from '../../dto/responses/topic.dto';
-import { AddTopicWordCommand } from './add-topic-word.command';
+import { TopicWordOrmEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
 
 /**
  * Add Topic Word Command Handler

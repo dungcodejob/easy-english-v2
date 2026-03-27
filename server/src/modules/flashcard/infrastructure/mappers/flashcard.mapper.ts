@@ -1,4 +1,5 @@
-import { Mapper } from '@core/ddd';
+import { type Mapper } from '@core/ddd';
+
 import { Flashcard } from '../../domain/entities/flashcard.aggregate';
 import { FlashcardSource } from '../../domain/value-objects/flashcard-source.vo';
 import { FlashcardOrmEntity } from '../persistence/flashcard.orm-entity';
@@ -37,7 +38,9 @@ export class FlashcardMapper implements Mapper<
       domain.notes ?? undefined,
       domain.wordSenseId ?? undefined,
     );
+
     orm.id = domain.id;
+
     return orm;
   }
 

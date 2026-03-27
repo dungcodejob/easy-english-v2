@@ -1,4 +1,4 @@
-import { Inject, Provider, Type } from '@nestjs/common';
+import { Inject, type Provider, type Type } from '@nestjs/common';
 
 export const createInjection = <T>(name: string) => {
   const token = Symbol.for(name);

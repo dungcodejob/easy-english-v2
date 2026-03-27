@@ -1,9 +1,12 @@
-import { ArgumentNotProvidedException } from '@core/exceptions';
-import { isEmpty } from '@shared/utils';
 import { v7 as uuid } from 'uuid';
+
+import { ArgumentNotProvidedException } from '@core/exceptions';
+
+import { isEmpty } from '@shared/utils';
+
 import { RequestContextService } from '../context/request-context.service';
 
-type DomainEventMetadata = {
+interface DomainEventMetadata {
   /** Timestamp when this domain event occurred */
   readonly timestamp: number;
 
@@ -20,7 +23,7 @@ type DomainEventMetadata = {
    * User ID for debugging and logging purposes
    */
   readonly userId?: string;
-};
+}
 
 export type DomainEventProps<T> = Omit<T, 'id' | 'metadata'> & {
   aggregateId: string;

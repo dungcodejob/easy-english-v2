@@ -7,6 +7,7 @@ export class FlashcardSource extends ValueObject<{
   private static readonly _dictionary = new FlashcardSource({
     value: 'dictionary',
   });
+
   private static readonly _custom = new FlashcardSource({ value: 'custom' });
 
   get value(): 'dictionary' | 'custom' {

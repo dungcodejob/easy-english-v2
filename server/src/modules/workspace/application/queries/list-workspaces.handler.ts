@@ -1,10 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { ListWorkspacesQuery } from './list-workspaces.query';
 import {
   InjectWorkspaceRepository,
   type IWorkspaceRepository,
 } from '../../domain/repositories/workspace.repository.interface';
 import { WorkspaceResponseDto } from '../../dto/responses/workspace.response.dto';
-import { ListWorkspacesQuery } from './list-workspaces.query';
 
 @QueryHandler(ListWorkspacesQuery)
 export class ListWorkspacesHandler implements IQueryHandler<
@@ -19,6 +20,7 @@ export class ListWorkspacesHandler implements IQueryHandler<
   async execute(query: ListWorkspacesQuery): Promise<WorkspaceResponseDto[]> {
     const { userId } = query;
     const workspaces = await this.workspaceRepo.findAllByUserId(userId);
+
     return workspaces.map(
       (workspace) =>
         new WorkspaceResponseDto(

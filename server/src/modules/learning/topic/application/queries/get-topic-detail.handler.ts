@@ -1,12 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { GetTopicDetailQuery } from './get-topic-detail.query';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
-import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicDto } from '../../dto/responses/topic.dto';
-import { GetTopicDetailQuery } from './get-topic-detail.query';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
 /**
  * Get Topic Detail Query Handler

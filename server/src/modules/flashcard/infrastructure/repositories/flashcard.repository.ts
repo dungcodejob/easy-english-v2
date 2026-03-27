@@ -1,5 +1,7 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { Flashcard } from '../../domain/entities/flashcard.aggregate';
 import { IFlashcardRepository } from '../../domain/repositories/flashcard.repository.interface';
 import { FlashcardMapper } from '../mappers/flashcard.mapper';
@@ -32,6 +34,7 @@ export class FlashcardRepository implements IFlashcardRepository {
    */
   async findById(id: string): Promise<Flashcard | null> {
     const orm = await this.em.findOne(FlashcardOrmEntity, { id });
+
     return orm ? this.mapper.toDomain(orm) : null;
   }
 
@@ -41,6 +44,7 @@ export class FlashcardRepository implements IFlashcardRepository {
    */
   async findByUserId(userId: string, tenantId: string): Promise<Flashcard[]> {
     const orms = await this.em.find(FlashcardOrmEntity, { userId, tenantId });
+
     return orms.map((orm) => this.mapper.toDomain(orm));
   }
 
@@ -60,6 +64,7 @@ export class FlashcardRepository implements IFlashcardRepository {
       { userId, tenantId },
       { limit },
     );
+
     return orms.map((orm) => this.mapper.toDomain(orm));
   }
 
@@ -71,6 +76,7 @@ export class FlashcardRepository implements IFlashcardRepository {
 
   async persist(flashcard: Flashcard): Promise<void> {
     const orm = this.mapper.toPersistence(flashcard);
+
     this.em.persist(orm);
   }
 
@@ -86,6 +92,7 @@ export class FlashcardRepository implements IFlashcardRepository {
       userId,
       tenantId,
     });
+
     return deleted > 0;
   }
 }

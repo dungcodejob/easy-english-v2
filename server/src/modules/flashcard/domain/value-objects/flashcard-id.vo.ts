@@ -1,6 +1,7 @@
+import { v7 as uuid } from 'uuid';
+
 import { ValueObject } from '@core/ddd';
 import { ArgumentNotProvidedException } from '@core/exceptions';
-import { v7 as uuid } from 'uuid';
 
 export class FlashcardId extends ValueObject<{ value: string }> {
   get value(): string {
@@ -15,6 +16,7 @@ export class FlashcardId extends ValueObject<{ value: string }> {
     if (!id || id.trim().length === 0) {
       throw new ArgumentNotProvidedException('FlashcardId cannot be empty');
     }
+
     return new FlashcardId({ value: id });
   }
 }

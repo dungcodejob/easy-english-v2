@@ -10,10 +10,10 @@ export class TenantOrmEntity {
   name!: string;
 
   @Property({ default: 'ACTIVE' })
-  status: string = 'ACTIVE';
+  status = 'ACTIVE';
 
   @Property({ default: 'FREE' })
-  plan: string = 'FREE';
+  plan = 'FREE';
 
   @Property({ onCreate: () => new Date() })
   createdAt: Date = new Date();

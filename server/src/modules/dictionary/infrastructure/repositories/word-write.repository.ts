@@ -1,5 +1,7 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { Word } from '../../domain/entities/word.aggregate';
 import { IWordWriteRepository } from '../../domain/repositories/word-write.repository.interface';
 import { WordExampleOrmEntity } from '../persistence/word-example.orm-entity';
@@ -52,6 +54,7 @@ export class WordWriteRepository implements IWordWriteRepository {
       // 4. Map and assign pronunciations
       word.pronunciations.forEach((p) => {
         const pronEntity = new WordPronunciationOrmEntity();
+
         pronEntity.ipa = p.ipa;
         pronEntity.audioUrl = p.audioUrl;
         pronEntity.region = p.region;
@@ -61,6 +64,7 @@ export class WordWriteRepository implements IWordWriteRepository {
       // 5. Map and assign senses and examples
       word.senses.forEach((s, senseIndex) => {
         const senseEntity = new WordSenseOrmEntity();
+
         senseEntity.partOfSpeech = s.partOfSpeech.value;
         senseEntity.definition = s.definition;
         senseEntity.shortDefinition = s.shortDefinition;
@@ -76,6 +80,7 @@ export class WordWriteRepository implements IWordWriteRepository {
 
         s.examples.forEach((e) => {
           const exampleEntity = new WordExampleOrmEntity();
+
           exampleEntity.text = e.text;
           exampleEntity.translationVi = e.translationVi;
           exampleEntity.order = e.order;

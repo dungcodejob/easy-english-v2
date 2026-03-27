@@ -1,5 +1,10 @@
+import {
+  type EntityManager,
+  type EntityName,
+  type FilterQuery,
+} from '@mikro-orm/core';
+
 import { EntityNotFoundException } from '@core/exceptions';
-import { EntityManager, EntityName, FilterQuery } from '@mikro-orm/core';
 
 export abstract class BaseRepository {
   constructor(protected readonly em: EntityManager) {}
@@ -20,6 +25,7 @@ export abstract class BaseRepository {
     where: FilterQuery<T>,
   ): Promise<boolean> {
     const affected = await this.em.nativeDelete(entity, where);
+
     return affected > 0;
   }
 
@@ -38,7 +44,9 @@ export abstract class BaseRepository {
     error?: Error,
   ): Promise<T> {
     const result = await this.em.findOne(entity, where);
+
     if (!result) throw error ?? new EntityNotFoundException('Entity not found');
+
     return result;
   }
 

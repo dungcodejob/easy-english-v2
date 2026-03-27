@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { ReviewLog } from '../entities/review-log.entity';
+
+import { type ReviewLog } from '../entities/review-log.entity';
 
 export interface IReviewLogRepository {
   create(log: ReviewLog): Promise<ReviewLog>;

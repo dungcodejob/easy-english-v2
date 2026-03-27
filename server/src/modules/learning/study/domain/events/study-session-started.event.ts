@@ -1,7 +1,8 @@
-import { DomainEvent, DomainEventProps } from '@core/ddd';
+import { DomainEvent, type DomainEventProps } from '@core/ddd';
+
 import {
-  StudySessionScope,
-  StudySessionType,
+  type StudySessionScope,
+  type StudySessionType,
 } from '../entities/study-session.entity';
 
 export interface StudySessionStartedEventPayload {

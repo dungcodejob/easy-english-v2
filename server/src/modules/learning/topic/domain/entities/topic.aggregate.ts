@@ -1,11 +1,13 @@
-import { AggregateRoot } from '@core/ddd';
 import { Collection } from '@mikro-orm/core';
-import { err, ok, Result } from 'neverthrow';
+import { err, ok, type Result } from 'neverthrow';
 import { v7 as uuid } from 'uuid';
+
+import { AggregateRoot } from '@core/ddd';
+
 import { TopicWord } from './topic-word.entity';
 import { TopicCreatedEvent } from '../events/topic-created.event';
-import { TopicUpdatedEvent } from '../events/topic-updated.event';
 import { TopicDeletedEvent } from '../events/topic-deleted.event';
+import { TopicUpdatedEvent } from '../events/topic-updated.event';
 import { TopicWordAddedEvent } from '../events/topic-word-added.event';
 import { TopicWordRemovedEvent } from '../events/topic-word-removed.event';
 
@@ -59,6 +61,7 @@ export class Topic extends AggregateRoot {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
     topic._tenantId = props.tenantId;
     topic._userId = props.userId;
     topic._name = props.name;
@@ -83,6 +86,7 @@ export class Topic extends AggregateRoot {
     words: TopicWord[],
   ): Topic {
     const topic = new Topic({ id: props.id, createdAt, updatedAt });
+
     topic._tenantId = props.tenantId;
     topic._userId = props.userId;
     topic._name = props.name;
@@ -91,6 +95,7 @@ export class Topic extends AggregateRoot {
     for (const word of words) {
       topic._words.add(word);
     }
+
     return topic;
   }
 
@@ -134,6 +139,7 @@ export class Topic extends AggregateRoot {
     }
 
     const topicWord = TopicWord.create(wordSenseId);
+
     this._words.add(topicWord);
 
     this.addEvent(

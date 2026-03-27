@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { IsInt, IsIn, Min, Max } from 'class-validator';
 
 export class ReviewWordRequestDto {

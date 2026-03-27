@@ -1,4 +1,5 @@
-import { Mapper } from '@core/ddd';
+import { type Mapper } from '@core/ddd';
+
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
 import { CardState } from '../../domain/value-objects/card-state.vo';
 import { FsrsParameters } from '../../domain/value-objects/fsrs-parameters.vo';
@@ -39,6 +40,7 @@ export class UserWordSenseProgressMapper implements Mapper<
 
   toPersistence(domain: UserWordSenseProgress): UserWordSenseProgressOrmEntity {
     const orm = new UserWordSenseProgressOrmEntity();
+
     orm.id = domain.id;
     orm.userId = domain.userId;
     // wordSense FK is set by the repository layer (see LearningWriteRepository)
@@ -57,6 +59,7 @@ export class UserWordSenseProgressMapper implements Mapper<
     orm.archivedAt = domain.archivedAt;
     orm.createdAt = domain.createdAt;
     orm.updatedAt = domain.updatedAt;
+
     return orm;
   }
 

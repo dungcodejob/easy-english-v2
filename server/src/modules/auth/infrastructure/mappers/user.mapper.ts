@@ -1,6 +1,9 @@
-import { Mapper } from '@core/ddd';
-import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { Mapper } from '@core/ddd';
+
 import { User, UserRole } from '../../domain/entities';
 import { Email, Username } from '../../domain/value-objects';
 import { TenantOrmEntity } from '../persistence/tenant.orm-entity';
@@ -12,6 +15,7 @@ export class UserMapper implements Mapper<User, UserOrmEntity, UserOrmEntity> {
 
   toPersistence(entity: User): UserOrmEntity {
     const ormEntity = new UserOrmEntity();
+
     ormEntity.id = entity.id;
     ormEntity.tenant = this.em.getReference(TenantOrmEntity, entity.tenantId);
     ormEntity.email = entity.email.value;
@@ -20,6 +24,7 @@ export class UserMapper implements Mapper<User, UserOrmEntity, UserOrmEntity> {
     ormEntity.role = entity.role as string;
     ormEntity.createdAt = entity.createdAt;
     ormEntity.updatedAt = entity.updatedAt;
+
     return ormEntity;
   }
 

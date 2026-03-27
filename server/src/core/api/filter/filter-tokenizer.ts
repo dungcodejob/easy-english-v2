@@ -59,6 +59,7 @@ export class Tokenizer {
         );
       }
     }
+
     return this.tokens;
   }
 
@@ -86,10 +87,13 @@ export class Tokenizer {
 
   private readString() {
     const start = this.pos;
+
     this.pos++; // skip opening quote
     let value = '';
+
     while (this.pos < this.input.length) {
       const char = this.input[this.pos];
+
       if (char === "'") {
         if (this.peek(1) === "'") {
           // escaped quote
@@ -98,6 +102,7 @@ export class Tokenizer {
         } else {
           this.pos++; // skip closing quote
           this.tokens.push({ type: 'string', value, position: start });
+
           return;
         }
       } else {
@@ -111,6 +116,7 @@ export class Tokenizer {
   private readNumber() {
     const start = this.pos;
     let value = '';
+
     if (this.input[this.pos] === '-') {
       value += '-';
       this.pos++;
@@ -136,6 +142,7 @@ export class Tokenizer {
   private readIdentifier() {
     const start = this.pos;
     let value = '';
+
     while (
       this.pos < this.input.length &&
       this.isIdentifierChar(this.input[this.pos])

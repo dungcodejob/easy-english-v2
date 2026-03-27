@@ -1,7 +1,7 @@
-import { DomainEvent, DomainEventProps } from '@core/ddd';
+import { DomainEvent, type DomainEventProps } from '@core/ddd';
 
 export interface FlashcardCreatedEventPayload {
-  flashcard: any;
+  flashcard: unknown;
 }
 
 export class FlashcardCreatedEvent extends DomainEvent {

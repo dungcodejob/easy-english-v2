@@ -1,5 +1,9 @@
-import { Inject, Provider, Type } from '@nestjs/common';
-import { TokenType } from './token-generator.interface';
+import { Inject, type Provider, type Type } from '@nestjs/common';
+
+import {
+  type ITokenPayload,
+  type TokenType,
+} from './token-generator.interface';
 
 export interface ITokenStrategy<TPayload = Record<string, unknown>> {
   readonly type: TokenType;
@@ -14,14 +18,14 @@ export const InjectTokenStrategy = () => {
   return Inject(tokenStrategyToken);
 };
 export const provideTokenStrategies = (
-  providerClasses: Type<ITokenStrategy<any>>[],
+  providerClasses: Type<ITokenStrategy<ITokenPayload>>[],
 ): Provider[] => {
-  console.log(providerClasses);
   return [
     ...providerClasses,
     {
       provide: tokenStrategyToken,
-      useFactory: (...strategies: ITokenStrategy<any>[]) => strategies,
+      useFactory: (...strategies: ITokenStrategy<ITokenPayload>[]) =>
+        strategies,
 
       inject: providerClasses,
     },

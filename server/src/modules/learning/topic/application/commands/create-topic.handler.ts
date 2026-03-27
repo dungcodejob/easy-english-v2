@@ -1,14 +1,16 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, BadRequestException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { CreateTopicCommand } from './create-topic.command';
 import { Topic } from '../../domain/entities/topic.aggregate';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
-import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicDto } from '../../dto/responses/topic.dto';
-import { CreateTopicCommand } from './create-topic.command';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
 /**
  * Create Topic Command Handler

@@ -1,6 +1,8 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import {
   InjectFlashcardRepository,
   type IFlashcardRepository,
@@ -33,8 +35,7 @@ export class DeleteFlashcardHandler implements ICommandHandler<
 
     // Check ownership and tenant
     if (
-      !flashcard ||
-      flashcard.userId !== command.userId ||
+      flashcard?.userId !== command.userId ||
       flashcard.tenantId !== command.tenantId
     ) {
       return false;

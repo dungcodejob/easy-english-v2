@@ -1,4 +1,4 @@
-import { DomainEvent, DomainEventProps } from '@core/ddd';
+import { DomainEvent, type DomainEventProps } from '@core/ddd';
 
 export class LookupSucceededEvent extends DomainEvent {
   public readonly words: string[];

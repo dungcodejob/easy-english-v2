@@ -1,10 +1,12 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { GetSessionSummaryQuery } from './get-session-summary.query';
 import { SessionSummaryResponseDto } from '../../dto/responses/session-summary.response.dto';
 import { StudyReviewLogOrmEntity } from '../../infrastructure/persistence/study-review-log.orm-entity';
 import { StudySessionOrmEntity } from '../../infrastructure/persistence/study-session.orm-entity';
-import { GetSessionSummaryQuery } from './get-session-summary.query';
 
 @QueryHandler(GetSessionSummaryQuery)
 export class GetSessionSummaryHandler implements IQueryHandler<

@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import type { Request, Response } from 'express';
+
 import { type AppConfig, InjectAppConfig } from 'src/configs';
+
 import { TokenResultDto } from '../../dto/auth-result.dto';
+
+import type { Request, Response } from 'express';
 
 @Injectable()
 export class UserSessionCookie {
@@ -12,7 +15,6 @@ export class UserSessionCookie {
   @InjectAppConfig() appConfig: AppConfig;
 
   get(request: Request): string | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return request.cookies[UserSessionCookie.COOKIE_NAME];
   }
 

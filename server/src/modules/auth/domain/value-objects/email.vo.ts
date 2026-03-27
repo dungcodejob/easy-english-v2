@@ -17,6 +17,7 @@ export class Email extends ValueObject<string> {
 
   protected validate({ value }: { value: string }): void {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(value)) {
       throw new ArgumentInvalidException('Invalid email format');
     }

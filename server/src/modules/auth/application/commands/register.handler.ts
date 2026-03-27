@@ -1,6 +1,9 @@
-import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { RegisterCommand } from './register.command';
 import {
   AuthIdentity,
   AuthProvider,
@@ -35,7 +38,6 @@ import {
 } from '../../domain/repositories/user.repository.interface';
 import { Email, Password, Username } from '../../domain/value-objects';
 import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
-import { RegisterCommand } from './register.command';
 
 @CommandHandler(RegisterCommand)
 export class RegisterHandler implements ICommandHandler<
@@ -76,6 +78,7 @@ export class RegisterHandler implements ICommandHandler<
         AuthProvider.LOCAL,
         email,
       );
+
     if (existingAuthIdentity) {
       throw new EmailAlreadyExistsException(email);
     }

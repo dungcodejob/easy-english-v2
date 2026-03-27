@@ -1,10 +1,12 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
-import type { IStudyStatsRepository } from '../../domain/repositories/study-stats.repository.interface';
-import { InjectStudyStatsRepository } from '../../domain/repositories/study-stats.repository.interface';
-import { StudyStatsMapper } from '../../infrastructure/mappers/study-stats.mapper';
-import { StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
 import { GetStudyStatsQuery } from './get-study-stats.query';
+import { InjectStudyStatsRepository } from '../../domain/repositories/study-stats.repository.interface';
+import { StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
+import { StudyStatsMapper } from '../../infrastructure/mappers/study-stats.mapper';
+
+import type { IStudyStatsRepository } from '../../domain/repositories/study-stats.repository.interface';
 
 /**
  * Get Study Stats Query Handler
@@ -26,6 +28,7 @@ export class GetStudyStatsHandler implements IQueryHandler<
       query.userId,
       query.tenantId,
     );
+
     return this.statsMapper.toResponse(stats!);
   }
 }

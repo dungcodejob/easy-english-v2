@@ -1,6 +1,7 @@
-import { DomainEvent, DomainEventProps } from '@core/ddd';
-import { ReviewRating } from '../value-objects/review-rating.vo';
-import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
+import { DomainEvent, type DomainEventProps } from '@core/ddd';
+
+import { type FsrsParameters } from '../value-objects/fsrs-parameters.vo';
+import { type ReviewRating } from '../value-objects/review-rating.vo';
 
 export interface WordReviewedEventPayload {
   userId: string;

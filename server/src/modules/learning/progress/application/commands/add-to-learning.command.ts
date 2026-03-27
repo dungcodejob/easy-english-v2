@@ -1,4 +1,4 @@
-import { ICommand } from '@nestjs/cqrs';
+import { type ICommand } from '@nestjs/cqrs';
 
 export class AddToLearningCommand implements ICommand {
   constructor(

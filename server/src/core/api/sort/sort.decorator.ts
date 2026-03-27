@@ -1,12 +1,14 @@
 import {
   applyDecorators,
   createParamDecorator,
-  ExecutionContext,
+  type ExecutionContext,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Request } from 'express';
+
+import { type Request } from 'express';
+
 import { parseOrderBy } from './sort-parser';
-import { SortEntry } from './sort.types';
+import { type SortEntry } from './sort.types';
 
 /**
  * Parsed sort result for use in controller methods
@@ -35,13 +37,14 @@ export interface SortParams {
 export const SortParam = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): SortParams => {
     const request = ctx.switchToHttp().getRequest<Request>();
-    const orderbyStr = request.query['$orderby'] as string | undefined;
+    const orderbyStr = request.query.$orderby as string | undefined;
 
     if (!orderbyStr) {
       return { sort: [] };
     }
 
     const sort = parseOrderBy(orderbyStr);
+
     return {
       sort,
       sortRaw: orderbyStr,

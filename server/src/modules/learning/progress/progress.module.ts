@@ -1,6 +1,8 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
 import { AddToLearningHandler } from './application/commands/add-to-learning.handler';
 import { RemoveFromLearningHandler } from './application/commands/remove-from-learning.handler';
 import { ReviewWordHandler } from './application/commands/review-word.handler';

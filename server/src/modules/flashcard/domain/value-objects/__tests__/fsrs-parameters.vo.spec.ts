@@ -37,6 +37,7 @@ describe('FsrsParameters', () => {
         lastReviewDate: new Date(),
       };
       const params = new FsrsParameters(props);
+
       expect(params.isMastered).toBe(true);
     });
 
@@ -51,6 +52,7 @@ describe('FsrsParameters', () => {
         lastReviewDate: new Date(),
       };
       const params = new FsrsParameters(props);
+
       expect(params.isMastered).toBe(true);
     });
 
@@ -65,6 +67,7 @@ describe('FsrsParameters', () => {
         lastReviewDate: new Date(),
       };
       const params = new FsrsParameters(props);
+
       expect(params.isMastered).toBe(false);
     });
 
@@ -79,6 +82,7 @@ describe('FsrsParameters', () => {
         lastReviewDate: new Date(),
       };
       const params = new FsrsParameters(props);
+
       expect(params.isMastered).toBe(false);
     });
 
@@ -93,6 +97,7 @@ describe('FsrsParameters', () => {
         lastReviewDate: new Date(),
       };
       const params = new FsrsParameters(props);
+
       expect(params.isMastered).toBe(false);
     });
   });
@@ -135,6 +140,7 @@ describe('FsrsParameters', () => {
       };
       const p1 = new FsrsParameters(props1);
       const p2 = new FsrsParameters(props2);
+
       expect(p1.equals(p2)).toBe(true);
     });
 
@@ -159,6 +165,7 @@ describe('FsrsParameters', () => {
       };
       const p1 = new FsrsParameters(props1);
       const p2 = new FsrsParameters(props2);
+
       expect(p1.equals(p2)).toBe(false);
     });
 
@@ -183,6 +190,7 @@ describe('FsrsParameters', () => {
       };
       const p1 = new FsrsParameters(props1);
       const p2 = new FsrsParameters(props2);
+
       expect(p1.equals(p2)).toBe(false);
     });
   });

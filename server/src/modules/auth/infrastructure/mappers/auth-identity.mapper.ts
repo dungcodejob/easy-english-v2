@@ -1,6 +1,9 @@
-import { Mapper } from '@core/ddd';
-import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { Mapper } from '@core/ddd';
+
 import { AuthIdentity, AuthProvider } from '../../domain/entities';
 import { Password } from '../../domain/value-objects';
 import { AuthIdentityOrmEntity } from '../persistence/auth-identity.orm-entity';
@@ -16,6 +19,7 @@ export class AuthIdentityMapper implements Mapper<
 
   toPersistence(entity: AuthIdentity): AuthIdentityOrmEntity {
     const ormEntity = new AuthIdentityOrmEntity();
+
     ormEntity.id = entity.id;
     ormEntity.user = this.em.getReference(UserOrmEntity, entity.userId);
     ormEntity.provider = entity.provider as string;
@@ -23,6 +27,7 @@ export class AuthIdentityMapper implements Mapper<
     ormEntity.passwordHash = entity.password?.getHashedValue();
     ormEntity.createdAt = entity.createdAt;
     ormEntity.updatedAt = entity.updatedAt;
+
     return ormEntity;
   }
 

@@ -1,4 +1,5 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+
 import { WordSenseOrmEntity } from './word-sense.orm-entity';
 
 @Entity({ tableName: 'word_examples' })

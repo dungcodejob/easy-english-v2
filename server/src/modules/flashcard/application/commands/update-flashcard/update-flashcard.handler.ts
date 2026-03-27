@@ -1,12 +1,14 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import {
   InjectFlashcardRepository,
   type IFlashcardRepository,
 } from '../../../domain/repositories/flashcard.repository.interface';
-import { FlashcardMapper } from '../../../infrastructure/mappers/flashcard.mapper';
 import { FlashcardResponseDto } from '../../../dto/responses/flashcard.response.dto';
+import { FlashcardMapper } from '../../../infrastructure/mappers/flashcard.mapper';
 import { UpdateFlashcardCommand } from '../update-flashcard.command';
 
 /**
@@ -38,8 +40,7 @@ export class UpdateFlashcardHandler implements ICommandHandler<
 
     // Validate ownership and tenant
     if (
-      !flashcard ||
-      flashcard.userId !== command.userId ||
+      flashcard?.userId !== command.userId ||
       flashcard.tenantId !== command.tenantId
     ) {
       throw new NotFoundException('Flashcard not found');

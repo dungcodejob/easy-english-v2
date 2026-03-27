@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   type EnrichmentContext,
@@ -29,7 +30,7 @@ export class CachingProviderDecorator implements ILookupProvider {
     return this.inner.name;
   }
 
-  toDomain(raw: any): Word[] {
+  toDomain(raw: unknown): Word[] {
     return this.inner.toDomain(raw);
   }
 
@@ -57,8 +58,8 @@ export class CachingProviderDecorator implements ILookupProvider {
         if (cached.httpStatus === 404) {
           return {
             words: [],
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            raw: cached.rawResponse as unknown as any,
+
+            raw: cached.rawResponse as unknown,
             status: 404,
           };
         }
@@ -66,10 +67,11 @@ export class CachingProviderDecorator implements ILookupProvider {
         // Only treat as valid hit if we can map it or it's a known raw response
         if (cached.httpStatus >= 200 && cached.httpStatus < 300) {
           const words = this.toDomain(cached.rawResponse);
+
           return {
             words: words,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            raw: cached.rawResponse as unknown as any,
+
+            raw: cached.rawResponse,
             status: cached.httpStatus,
           };
         }
@@ -122,9 +124,10 @@ export class CachingProviderDecorator implements ILookupProvider {
     }
 
     const entity = new ProviderResponseCacheOrmEntity();
+
     entity.normalizedWord = normalizedWord;
     entity.provider = provider;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     entity.rawResponse = result.raw || {};
     entity.httpStatus = result.status;
     entity.expiresAt = expiresAt;

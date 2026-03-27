@@ -1,6 +1,9 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { ReviewCardCommand } from './review-card.command';
 import {
   InjectLearningWriteRepository,
   type ILearningWriteRepository,
@@ -18,7 +21,6 @@ import {
 import { FlashcardId } from '../../../domain/value-objects/flashcard-id.vo';
 import { ReviewRating } from '../../../domain/value-objects/review-rating.vo';
 import { ReviewResultResponseDto } from '../../../dto/responses/review-result.response.dto';
-import { ReviewCardCommand } from './review-card.command';
 
 @CommandHandler(ReviewCardCommand)
 export class ReviewCardHandler implements ICommandHandler<
@@ -41,9 +43,9 @@ export class ReviewCardHandler implements ICommandHandler<
 
   async execute(command: ReviewCardCommand): Promise<ReviewResultResponseDto> {
     const flashcard = await this.flashcardRepo.findById(command.cardId);
+
     if (
-      !flashcard ||
-      flashcard.userId !== command.userId ||
+      flashcard?.userId !== command.userId ||
       flashcard.tenantId !== command.tenantId
     ) {
       throw new NotFoundException('Flashcard not found');

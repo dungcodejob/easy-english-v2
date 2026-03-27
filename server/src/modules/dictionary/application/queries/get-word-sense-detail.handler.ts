@@ -1,10 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import type { IWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
+
+import { GetWordSenseDetailQuery } from './get-word-sense-detail.query';
 import { InjectWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseDetailResponseDto } from '../../dto/responses/word-sense-detail.response.dto';
 import { CollocationDto } from '../../dto/responses/word.response.dto';
-import { GetWordSenseDetailQuery } from './get-word-sense-detail.query';
+
+import type { IWordReadRepository } from '../../domain/repositories/word-read.repository.interface';
 
 @QueryHandler(GetWordSenseDetailQuery)
 export class GetWordSenseDetailHandler implements IQueryHandler<GetWordSenseDetailQuery> {

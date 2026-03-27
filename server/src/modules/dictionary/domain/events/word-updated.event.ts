@@ -1,5 +1,6 @@
-import { DomainEvent, DomainEventProps } from '@core/ddd';
-import { Word } from '../entities/word.aggregate';
+import { DomainEvent, type DomainEventProps } from '@core/ddd';
+
+import { type Word } from '../entities/word.aggregate';
 
 export class WordUpdatedEvent extends DomainEvent {
   public readonly word: Word;

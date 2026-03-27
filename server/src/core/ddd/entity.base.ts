@@ -14,16 +14,6 @@ export type CreateEntityProps<T> = {
 } & T;
 
 export abstract class Entity {
-  constructor({ id, createdAt, updatedAt }: BaseEntityProps) {
-    this.setId(id);
-    // this.validateProps(props);
-    const now = new Date();
-    this._createdAt = createdAt || now;
-    this._updatedAt = updatedAt || now;
-    // this.props = props;
-    // this.validate();
-  }
-
   /**
    * ID is set in the concrete entity implementation to support
    * different ID types depending on your needs.
@@ -38,12 +28,19 @@ export abstract class Entity {
 
   private _updatedAt: Date;
 
-  get id(): AggregateID {
-    return this._id;
+  constructor({ id, createdAt, updatedAt }: BaseEntityProps) {
+    this.setId(id);
+    // this.validateProps(props);
+    const now = new Date();
+
+    this._createdAt = createdAt || now;
+    this._updatedAt = updatedAt || now;
+    // this.props = props;
+    // this.validate();
   }
 
-  private setId(id: AggregateID): void {
-    this._id = id;
+  get id(): AggregateID {
+    return this._id;
   }
 
   get createdAt(): Date {
@@ -80,6 +77,10 @@ export abstract class Entity {
 
   public updateUpdatedAt(): void {
     this._updatedAt = new Date();
+  }
+
+  private setId(id: AggregateID): void {
+    this._id = id;
   }
 
   /**

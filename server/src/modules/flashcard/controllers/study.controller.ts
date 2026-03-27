@@ -1,6 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
@@ -9,13 +6,22 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ApiResponse as ApiResponseBuilder } from '@core/api';
+
 import { CurrentUser } from '@shared/decorators';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
 import { ReviewCardCommand } from '../application/commands/review-card/review-card.command';
 import { GetDueCardsQuery } from '../application/queries/get-due-cards.query';
 import { GetStudyStatsQuery } from '../application/queries/get-study-stats.query';
 import { ReviewCardRequestDto } from '../dto/requests/review-card.request.dto';
+import { DueCardResponseDto } from '../dto/responses/due-card.response.dto';
 import { ReviewResultResponseDto } from '../dto/responses/review-result.response.dto';
 import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto';
+
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Study')
 @ApiBearerAuth()
@@ -36,6 +42,7 @@ export class StudyController {
       GetStudyStatsQuery,
       StudyStatsResponseDto
     >(query);
+
     return ApiResponseBuilder.success(stats);
   }
 
@@ -46,7 +53,11 @@ export class StudyController {
     @Query('limit') limit?: number,
   ) {
     const query = new GetDueCardsQuery(user.userId, user.tenantId, limit);
-    const cards = await this.queryBus.execute<GetDueCardsQuery, any[]>(query);
+    const cards = await this.queryBus.execute<
+      GetDueCardsQuery,
+      DueCardResponseDto[]
+    >(query);
+
     return ApiResponseBuilder.success(cards);
   }
 

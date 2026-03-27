@@ -1,7 +1,8 @@
-import { Mapper } from '@core/ddd';
+import { type Mapper } from '@core/ddd';
+
 import { StudyStats } from '../../domain/entities/study-stats.aggregate';
+import { type StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
 import { StudyStatsOrmEntity } from '../persistence/study-stats.orm-entity';
-import { StudyStatsResponseDto } from '../../dto/responses/study-stats.response.dto';
 
 export class StudyStatsMapper implements Mapper<
   StudyStats,
@@ -28,6 +29,7 @@ export class StudyStatsMapper implements Mapper<
 
   toPersistence(domain: StudyStats): StudyStatsOrmEntity {
     const orm = new StudyStatsOrmEntity(domain.tenantId, domain.userId);
+
     orm.id = domain.id;
     orm.currentStreak = domain.currentStreak;
     orm.longestStreak = domain.longestStreak;
@@ -35,6 +37,7 @@ export class StudyStatsMapper implements Mapper<
     orm.totalStudyTimeMinutes = domain.totalStudyTimeMinutes;
     orm.masteredCards = domain.masteredCards;
     orm.lastStudyDate = domain.lastStudyDate ?? undefined;
+
     return orm;
   }
 

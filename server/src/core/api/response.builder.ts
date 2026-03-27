@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { PaginationParams } from './pagination/pagination.types';
+
+import { type PaginationParams } from './pagination/pagination.types';
 import {
-  ApiErrorResponse,
-  ApiSuccessResponse,
-  ErrorDetail,
+  type ApiErrorResponse,
+  type ApiSuccessResponse,
+  type ErrorDetail,
   ErrorType,
 } from './response.types';
 

@@ -1,6 +1,12 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { LoginCommand } from './login.command';
 import { AuthProvider } from '../../domain/entities/auth-identity.entity';
 import { Session } from '../../domain/entities/session.entity';
+import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type IPasswordHasher,
   InjectPasswordHasher,
@@ -25,18 +31,12 @@ import {
   type ISessionRepository,
   InjectSessionRepository,
 } from '../../domain/repositories/session.repository.interface';
-
-import { EntityManager } from '@mikro-orm/core';
-import { Logger } from '@nestjs/common';
-import { EventBus } from '@nestjs/cqrs';
-import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type IUserRepository,
   InjectUserRepository,
 } from '../../domain/repositories/user.repository.interface';
 import { AuthResultDto } from '../../dto/auth-result.dto';
 import { UserResponseDto } from '../../dto/responses/user.response.dto';
-import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<
@@ -70,9 +70,10 @@ export class LoginHandler implements ICommandHandler<
 
   async execute(command: LoginCommand): Promise<AuthResultDto> {
     const { email, password, ipAddress, userAgent, deviceId } = command.props;
-    console.log('LoginCommand');
+
     // 1. Find User
     const user = await this.userRepo.findByEmail(email);
+
     if (!user) {
       throw new InvalidCredentialsException();
     }
@@ -93,6 +94,7 @@ export class LoginHandler implements ICommandHandler<
       password,
       this.passwordHasher,
     );
+
     if (!isValid) {
       throw new InvalidCredentialsException();
     }

@@ -1,6 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import {
@@ -10,13 +7,21 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ApiResponse as ApiResponseBuilder } from '@core/api';
+
 import { CurrentUser } from '@shared/decorators';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
 import { GetDueCardsQuery } from '../application/queries/get-due-cards.query';
 import { GetTopicCardsQuery } from '../application/queries/get-topic-cards.query';
 import {
   StudyCardsEnvelopeDto,
   TopicStudyCardsEnvelopeDto,
 } from '../dto/responses/study-card.response.dto';
+
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Learning Study')
 @ApiBearerAuth()

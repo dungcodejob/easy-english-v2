@@ -1,6 +1,9 @@
+import { Injectable } from '@nestjs/common';
+
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { Injectable } from '@nestjs/common';
+
+import { WordMapper } from './word.mapper';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   IWordReadRepository,
@@ -9,7 +12,6 @@ import {
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
-import { WordMapper } from './word.mapper';
 
 @Injectable()
 export class WordReadRepository implements IWordReadRepository {
@@ -33,6 +35,7 @@ export class WordReadRepository implements IWordReadRepository {
 
     return words.map((wordOrm) => {
       const wordProps = WordMapper.toDomain(wordOrm);
+
       return Word.rehydrate({
         id: wordOrm.id,
         wordProps,

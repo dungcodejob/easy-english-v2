@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+
 import { LoginAttemptTracker } from '../../domain/entities/login-attempt-tracker.entity';
 import { ILoginAttemptTrackerRepository } from '../../domain/repositories/login-attempt-tracker.repository.interface';
 import { LoginAttemptTrackerMapper } from '../mappers/login-attempt-tracker.mapper';
@@ -16,6 +18,7 @@ export class LoginAttemptTrackerRepository implements ILoginAttemptTrackerReposi
 
   persist(tracker: LoginAttemptTracker): void {
     const ormEntity = this.mapper.toPersistence(tracker);
+
     this.repo.getEntityManager().persist(ormEntity);
   }
 
@@ -34,6 +37,7 @@ export class LoginAttemptTrackerRepository implements ILoginAttemptTrackerReposi
         populate: ['tenant'],
       },
     );
+
     return record ? this.mapper.toDomain(record) : null;
   }
 }

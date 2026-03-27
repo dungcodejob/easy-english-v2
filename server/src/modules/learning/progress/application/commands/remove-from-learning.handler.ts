@@ -1,9 +1,12 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
-import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { RemoveFromLearningCommand } from './remove-from-learning.command';
+import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+
+import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 
 /**
  * Remove From Learning Command Handler
@@ -41,6 +44,7 @@ export class RemoveFromLearningHandler implements ICommandHandler<
       this.logger.debug(
         `No active progress found for word sense ${command.wordSenseId}`,
       );
+
       return { success: true, wasLearning: false };
     }
 
@@ -53,6 +57,7 @@ export class RemoveFromLearningHandler implements ICommandHandler<
     this.logger.log(
       `Archived progress ${progress.id} for user ${command.userId}`,
     );
+
     return { success: true, wasLearning: true };
   }
 }

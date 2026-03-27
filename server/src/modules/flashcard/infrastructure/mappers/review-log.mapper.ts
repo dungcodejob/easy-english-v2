@@ -1,4 +1,5 @@
-import { Mapper } from '@core/ddd';
+import { type Mapper } from '@core/ddd';
+
 import { CardState } from '../../../learning/progress/domain/value-objects/card-state.vo';
 import { FsrsParameters } from '../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
 import { ReviewRating } from '../../../learning/progress/domain/value-objects/review-rating.vo';
@@ -54,6 +55,7 @@ export class ReviewLogMapper implements Mapper<
 
   toPersistence(domain: ReviewLog): ReviewLogOrmEntity {
     const orm = new ReviewLogOrmEntity();
+
     orm.id = domain.id;
     orm.cardId = domain.cardId?.value ?? '';
     orm.wordSenseId = domain.wordSenseId;
@@ -68,6 +70,7 @@ export class ReviewLogMapper implements Mapper<
     orm.newDifficulty = domain.newDifficulty;
     orm.reviewDurationMs = domain.reviewDurationMs;
     orm.reviewedAt = domain.reviewedAt;
+
     return orm;
   }
 

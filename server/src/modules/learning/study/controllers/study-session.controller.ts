@@ -1,6 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import { ApiResponse } from '@core/api';
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
@@ -11,18 +8,27 @@ import {
   ApiResponse as SwaggerResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ReviewWordResponse } from 'src/modules/learning/progress/application/commands/review-word.handler';
+
+import { ApiResponse } from '@core/api';
+
 import { CurrentUser } from '@shared/decorators';
-import { StartStudySessionRequestDto } from '../dto/requests/start-study-session.request.dto';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
+import { CompleteStudySessionCommand } from '../application/commands/complete-study-session.command';
+import { CompleteStudySessionResponse } from '../application/commands/complete-study-session.handler';
+import { StartStudySessionCommand } from '../application/commands/start-study-session.command';
+import { StartStudySessionResponse } from '../application/commands/start-study-session.handler';
+import { StudySessionReviewCommand } from '../application/commands/study-session-review.command';
+import { GetSessionSummaryQuery } from '../application/queries/get-session-summary.query';
 import { CompleteStudySessionRequestDto } from '../dto/requests/complete-study-session.request.dto';
+import { StartStudySessionRequestDto } from '../dto/requests/start-study-session.request.dto';
 import { StudySessionReviewRequestDto } from '../dto/requests/study-session-review.request.dto';
 import { SessionSummaryResponseDto } from '../dto/responses/session-summary.response.dto';
-import { StartStudySessionResponse } from '../application/commands/start-study-session.handler';
-import { CompleteStudySessionResponse } from '../application/commands/complete-study-session.handler';
-import { ReviewWordResponse } from 'src/modules/learning/progress/application/commands/review-word.handler';
-import { StartStudySessionCommand } from '../application/commands/start-study-session.command';
-import { StudySessionReviewCommand } from '../application/commands/study-session-review.command';
-import { CompleteStudySessionCommand } from '../application/commands/complete-study-session.command';
-import { GetSessionSummaryQuery } from '../application/queries/get-session-summary.query';
+
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Learning Study Session')
 @ApiBearerAuth()

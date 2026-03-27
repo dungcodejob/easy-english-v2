@@ -1,14 +1,16 @@
-import { AggregateRoot } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot } from '@core/ddd';
+
+import { type WordFamily, type WordProps } from './word-props.interface';
+import { type WordSenseEntity } from './word-sense.entity';
 import { WordCreatedEvent } from '../events/word-created.event';
 import { WordUpdatedEvent } from '../events/word-updated.event';
-import { DataSource } from '../value-objects/data-source.vo';
-import { Language } from '../value-objects/language.vo';
+import { type DataSource } from '../value-objects/data-source.vo';
+import { type Language } from '../value-objects/language.vo';
 import { WordId } from '../value-objects/word-id.vo';
-import { WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
-import { WordText } from '../value-objects/word-text.vo';
-import { WordFamily, WordProps } from './word-props.interface';
-import { WordSenseEntity } from './word-sense.entity';
+import { type WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
+import { type WordText } from '../value-objects/word-text.vo';
 
 export class Word extends AggregateRoot {
   private _version!: number;
@@ -82,6 +84,7 @@ export class Word extends AggregateRoot {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
     word.assignProps(props.wordProps);
     word._version = 1;
 
@@ -108,8 +111,10 @@ export class Word extends AggregateRoot {
       createdAt: props.createdAt,
       updatedAt: props.updatedAt,
     });
+
     word.assignProps(props.wordProps);
     word._version = props.version;
+
     return word;
   }
 
@@ -120,6 +125,7 @@ export class Word extends AggregateRoot {
     }
 
     const previousVersion = this._version;
+
     this.assignProps(newProps);
     this._version += 1;
     this.updateUpdatedAt();

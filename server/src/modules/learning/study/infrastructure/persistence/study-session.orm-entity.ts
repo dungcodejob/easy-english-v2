@@ -1,4 +1,5 @@
 import { Entity, Index, PrimaryKey, Property } from '@mikro-orm/core';
+
 import {
   studySessionStatus,
   studySessionType,

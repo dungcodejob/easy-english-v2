@@ -1,14 +1,16 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { UserWordSenseProgressOrmEntity } from 'src/modules/learning/progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
+
+import { GetDueCardsQuery } from './get-due-cards.query';
 import {
   type IFlashcardRepository,
   InjectFlashcardRepository,
 } from '../../domain/repositories/flashcard.repository.interface';
 import { DueCardResponseDto } from '../../dto/responses/due-card.response.dto';
 import { FlashcardMapper } from '../../infrastructure/mappers/flashcard.mapper';
-import { GetDueCardsQuery } from './get-due-cards.query';
 
 @Injectable()
 @QueryHandler(GetDueCardsQuery)
@@ -44,6 +46,7 @@ export class GetDueCardsHandler implements IQueryHandler<
       string,
       { state: string; dueDate: Date | null }
     >();
+
     if (wordSenseIds.length > 0) {
       const progressRecords = await this.em.find(
         UserWordSenseProgressOrmEntity,
@@ -55,6 +58,7 @@ export class GetDueCardsHandler implements IQueryHandler<
         { populate: ['wordSense'] },
       );
       const records = progressRecords as UserWordSenseProgressOrmEntity[];
+
       progressMap = new Map<string, { state: string; dueDate: Date | null }>(
         records.map((r) => [
           r.wordSense.id,
@@ -67,6 +71,7 @@ export class GetDueCardsHandler implements IQueryHandler<
       // Dictionary-linked cards: read scheduling state from UserWordSenseProgress
       if (card.wordSenseId) {
         const progress = progressMap.get(card.wordSenseId);
+
         return {
           id: card.id,
           front: card.front,
@@ -77,6 +82,7 @@ export class GetDueCardsHandler implements IQueryHandler<
           dueDate: (progress?.dueDate ?? now).toISOString(),
         } as DueCardResponseDto;
       }
+
       // Custom cards: no UserWordSenseProgress — treat as always available for study
       return {
         id: card.id,

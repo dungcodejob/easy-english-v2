@@ -1,9 +1,9 @@
 import {
-  Language,
-  LearningGoal,
-  LearningMode,
-  Level,
-  WorkspaceType,
+  type Language,
+  type LearningGoal,
+  type LearningMode,
+  type Level,
+  type WorkspaceType,
 } from '../../domain/enums/workspace-enums';
 
 export class WorkspaceResponseDto {

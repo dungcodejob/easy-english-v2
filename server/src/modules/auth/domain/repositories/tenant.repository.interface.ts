@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Tenant } from '../entities';
+
+import { type Tenant } from '../entities';
 
 export interface ITenantRepository {
   persist(tenant: Tenant): void;

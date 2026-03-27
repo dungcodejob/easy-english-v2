@@ -1,13 +1,15 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { UpdateTopicCommand } from './update-topic.command';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
-import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicDto } from '../../dto/responses/topic.dto';
-import { UpdateTopicCommand } from './update-topic.command';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
 /**
  * Update Topic Command Handler

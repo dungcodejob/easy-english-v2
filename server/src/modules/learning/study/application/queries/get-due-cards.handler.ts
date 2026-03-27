@@ -1,11 +1,13 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { UserWordSenseProgressOrmEntity } from 'src/modules/learning/progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
+
+import { GetDueCardsQuery } from './get-due-cards.query';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
-import { GetDueCardsQuery } from './get-due-cards.query';
 
 const PHASE1_CARD_CAP = 100;
 
@@ -38,6 +40,7 @@ export class GetDueCardsHandler implements IQueryHandler<
       .filter((card): card is StudyCardResponseDto => card !== null);
 
     const deduped = this.dedupeByWordSense(mapped);
+
     deduped.sort((a, b) => {
       const aTime = a.dueDate
         ? new Date(a.dueDate).getTime()
@@ -45,7 +48,9 @@ export class GetDueCardsHandler implements IQueryHandler<
       const bTime = b.dueDate
         ? new Date(b.dueDate).getTime()
         : Number.MAX_SAFE_INTEGER;
+
       if (aTime !== bTime) return aTime - bTime;
+
       return a.wordSenseId.localeCompare(b.wordSenseId);
     });
 
@@ -63,11 +68,13 @@ export class GetDueCardsHandler implements IQueryHandler<
     cards: StudyCardResponseDto[],
   ): StudyCardResponseDto[] {
     const map = new Map<string, StudyCardResponseDto>();
+
     for (const card of cards) {
       if (!map.has(card.wordSenseId)) {
         map.set(card.wordSenseId, card);
       }
     }
+
     return [...map.values()];
   }
 
@@ -107,8 +114,10 @@ export class GetDueCardsHandler implements IQueryHandler<
     progress: UserWordSenseProgressOrmEntity,
   ): 0 | 1 | 2 | 3 | 4 | 5 {
     const level = progress.masteryLevel;
+
     if (level < 0) return 0;
     if (level > 5) return 5;
+
     return level as 0 | 1 | 2 | 3 | 4 | 5;
   }
 }

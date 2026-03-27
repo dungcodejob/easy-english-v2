@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npm install --save-dev eslint-plugin-import)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx eslint \"src/**/*.ts\" --max-warnings=0 2>&1 | head -60)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx eslint \"src/**/*.ts\" --max-warnings=0 2>&1 | head -80)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const t = require\\('typescript-eslint'\\); console.log\\(JSON.stringify\\(Object.keys\\(t\\).slice\\(0,10\\)\\)\\)\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npm list typescript-eslint 2>&1)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const p = require\\('typescript-eslint'\\); const rules = p.plugin.rules; const keys = Object.keys\\(rules\\); console.log\\(keys.filter\\(k => k.includes\\('unknown'\\) || k.includes\\('catch'\\) || k.includes\\('parameter'\\)\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && node -e \"const p = require\\('typescript-eslint'\\); const rules = p.plugin.rules; const keys = Object.keys\\(rules\\); console.log\\(keys.filter\\(k => k.includes\\('no-base'\\) || k.includes\\('no-array'\\) || k.includes\\('no-misused'\\) || k.includes\\('no-redundant'\\) || k.includes\\('prefer-nullish'\\) || k.includes\\('prefer-optional'\\) || k.includes\\('no-extraneous'\\)\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npm install --save-dev @eslint/compat 2>&1 | tail -5)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\" && npx eslint \"src/**/*.ts\" --max-warnings=0 2>&1 | head -20)"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Flashcard } from '../entities/flashcard.aggregate';
+
+import { type Flashcard } from '../entities/flashcard.aggregate';
 
 export interface IFlashcardRepository {
   findById(id: string): Promise<Flashcard | null>;

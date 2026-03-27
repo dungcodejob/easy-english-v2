@@ -1,5 +1,7 @@
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
+
 import { SessionCreatedEvent } from '../events';
 
 export enum SessionStatus {
@@ -70,16 +72,17 @@ export class Session extends AggregateRoot {
     });
 
     session.addEvent(event);
+
     return session;
+  }
+
+  static rehydrate(props: CreateEntityProps<SessionProps>): Session {
+    return new Session(props);
   }
 
   public setRefreshTokenHash(refreshTokenHash: string): void {
     this.refreshTokenHash = refreshTokenHash;
     this.updateUpdatedAt();
-  }
-
-  static rehydrate(props: CreateEntityProps<SessionProps>): Session {
-    return new Session(props);
   }
 
   public isExpired(): boolean {

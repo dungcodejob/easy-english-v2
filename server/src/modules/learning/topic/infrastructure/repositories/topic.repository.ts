@@ -1,13 +1,15 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { Topic } from '../../domain/entities/topic.aggregate';
 import {
   ITopicRepository,
   TopicWordRef,
 } from '../../domain/repositories/topic.repository.interface';
 import { TopicMapper } from '../mappers/topic.mapper';
-import { TopicOrmEntity } from '../persistence/topic.orm-entity';
 import { TopicWordOrmEntity } from '../persistence/topic-word.orm-entity';
+import { TopicOrmEntity } from '../persistence/topic.orm-entity';
 
 /**
  * Topic Repository - Infrastructure Layer
@@ -40,6 +42,7 @@ export class TopicRepository implements ITopicRepository {
     userId: string,
   ): Promise<Topic | null> {
     const orm = await this.em.findOne(TopicOrmEntity, { id, tenantId, userId });
+
     return orm ? this.mapper.toDomain(orm) : null;
   }
 
@@ -58,6 +61,7 @@ export class TopicRepository implements ITopicRepository {
       { tenantId, userId },
       { limit: top, offset: skip, orderBy: { createdAt: 'DESC' } },
     );
+
     return {
       data: orms.map((orm) => this.mapper.toDomain(orm)),
       count,
@@ -101,6 +105,7 @@ export class TopicRepository implements ITopicRepository {
    */
   persist(topic: Topic): void {
     const orm = this.mapper.toPersistence(topic);
+
     this.em.persist(orm);
   }
 
@@ -116,6 +121,7 @@ export class TopicRepository implements ITopicRepository {
       tenantId,
       userId,
     });
+
     return deleted > 0;
   }
 }

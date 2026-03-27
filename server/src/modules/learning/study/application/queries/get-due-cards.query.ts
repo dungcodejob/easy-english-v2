@@ -1,4 +1,4 @@
-import { IQuery } from '@nestjs/cqrs';
+import { type IQuery } from '@nestjs/cqrs';
 
 export class GetDueCardsQuery implements IQuery {
   constructor(

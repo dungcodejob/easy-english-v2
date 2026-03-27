@@ -1,12 +1,14 @@
-import { AggregateRoot } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot } from '@core/ddd';
+
 import { WordLearningRemovedEvent } from '../events/word-learning-removed.event';
 import { WordLearningStartedEvent } from '../events/word-learning-started.event';
 import { WordMasteredEvent } from '../events/word-mastered.event';
 import { WordReviewedEvent } from '../events/word-reviewed.event';
 import { AlreadyArchivedException } from '../exceptions/already-archived.exception';
 import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
-import { ReviewRating } from '../value-objects/review-rating.vo';
+import { type ReviewRating } from '../value-objects/review-rating.vo';
 
 export class UserWordSenseProgress extends AggregateRoot {
   private _userId!: string;
@@ -93,6 +95,7 @@ export class UserWordSenseProgress extends AggregateRoot {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
     entity._userId = props.userId;
     entity._tenantId = props.tenantId;
     entity._wordSenseId = props.wordSenseId;
@@ -136,6 +139,7 @@ export class UserWordSenseProgress extends AggregateRoot {
       createdAt: props.createdAt,
       updatedAt: props.updatedAt,
     });
+
     entity._userId = props.userId;
     entity._tenantId = props.tenantId;
     entity._wordSenseId = props.wordSenseId;
@@ -145,6 +149,7 @@ export class UserWordSenseProgress extends AggregateRoot {
     entity._nextReviewAt = props.nextReviewAt;
     entity._lastReviewedAt = props.lastReviewedAt;
     entity._archivedAt = props.archivedAt;
+
     return entity;
   }
 
@@ -169,6 +174,7 @@ export class UserWordSenseProgress extends AggregateRoot {
     }
 
     const previousParams = this._fsrsParams;
+
     this._fsrsParams = newParams;
     this.updateUpdatedAt();
 

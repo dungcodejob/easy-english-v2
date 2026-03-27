@@ -2,7 +2,7 @@ import {
   PaginationInvalidSkipException,
   PaginationInvalidTopException,
 } from './pagination.exception';
-import { PaginationInput } from './pagination.types';
+import { type PaginationInput } from './pagination.types';
 
 /**
  * Default values
@@ -25,6 +25,7 @@ export function parsePagination(input: PaginationInput): {
 } {
   // Parse pagination
   const top = input.top ?? QUERY_DEFAULTS.TOP;
+
   if (top < QUERY_DEFAULTS.MIN_TOP || top > QUERY_DEFAULTS.MAX_TOP) {
     throw new PaginationInvalidTopException(
       `$top must be between ${QUERY_DEFAULTS.MIN_TOP} and ${QUERY_DEFAULTS.MAX_TOP}`,
@@ -32,6 +33,7 @@ export function parsePagination(input: PaginationInput): {
   }
 
   const skip = input.skip ?? QUERY_DEFAULTS.SKIP;
+
   if (skip < 0) {
     throw new PaginationInvalidSkipException('$skip must be >= 0');
   }

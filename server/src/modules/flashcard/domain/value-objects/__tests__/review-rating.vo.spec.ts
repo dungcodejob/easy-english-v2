@@ -1,4 +1,5 @@
 import { ArgumentInvalidException } from '@core/exceptions';
+
 import { ReviewRating } from '../review-rating.vo';
 
 describe('ReviewRating', () => {
@@ -10,6 +11,7 @@ describe('ReviewRating', () => {
     it('should return the same instance for multiple calls', () => {
       const r1 = ReviewRating.Again;
       const r2 = ReviewRating.Again;
+
       expect(r1).toBe(r2);
     });
   });
@@ -35,21 +37,25 @@ describe('ReviewRating', () => {
   describe('from', () => {
     it('should create Again from 1', () => {
       const rating = ReviewRating.from(1);
+
       expect(rating.value).toBe(1);
     });
 
     it('should create Hard from 2', () => {
       const rating = ReviewRating.from(2);
+
       expect(rating.value).toBe(2);
     });
 
     it('should create Good from 3', () => {
       const rating = ReviewRating.from(3);
+
       expect(rating.value).toBe(3);
     });
 
     it('should create Easy from 4', () => {
       const rating = ReviewRating.from(4);
+
       expect(rating.value).toBe(4);
     });
 
@@ -82,12 +88,14 @@ describe('ReviewRating', () => {
     it('should be equal when values match', () => {
       const r1 = ReviewRating.from(1);
       const r2 = ReviewRating.from(1);
+
       expect(r1.equals(r2)).toBe(true);
     });
 
     it('should not be equal when values differ', () => {
       const r1 = ReviewRating.from(1);
       const r2 = ReviewRating.from(3);
+
       expect(r1.equals(r2)).toBe(false);
     });
   });

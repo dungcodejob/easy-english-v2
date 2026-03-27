@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { ErrorType } from '../response.types';
 
 export class PaginationDto {

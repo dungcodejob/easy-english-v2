@@ -1,6 +1,8 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persistence/word-sense.orm-entity';
+
 import { StudyReviewLog } from '../../domain/entities/study-review-log.entity';
 import {
   StudySession,
@@ -15,6 +17,7 @@ export class StudySessionRepository {
 
   async findSessionById(sessionId: string): Promise<StudySession | null> {
     const orm = await this.em.findOne(StudySessionOrmEntity, { id: sessionId });
+
     if (!orm) {
       return null;
     }
@@ -72,6 +75,7 @@ export class StudySessionRepository {
 
   async createReviewLog(reviewLog: StudyReviewLog): Promise<void> {
     const orm = new StudyReviewLogOrmEntity();
+
     orm.id = reviewLog.id;
     orm.session = this.em.getReference(
       StudySessionOrmEntity,

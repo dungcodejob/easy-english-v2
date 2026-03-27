@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { User } from '../entities';
+
+import { type User } from '../entities';
 
 export interface IUserRepository {
   persist(user: User): void;

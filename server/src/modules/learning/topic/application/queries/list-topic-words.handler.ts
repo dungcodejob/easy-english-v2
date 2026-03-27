@@ -1,7 +1,9 @@
-import type { FilterQuery } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/postgresql';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { ListTopicWordsQuery } from './list-topic-words.query';
 import { CardState } from '../../../../learning/progress/domain/value-objects/card-state.vo';
 import { FsrsParameters } from '../../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
 import { UserWordSenseProgressOrmEntity } from '../../../../learning/progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
@@ -9,7 +11,8 @@ import { TopicWordDto } from '../../dto/responses/topic.dto';
 import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicWordOrmEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
 import { TopicOrmEntity } from '../../infrastructure/persistence/topic.orm-entity';
-import { ListTopicWordsQuery } from './list-topic-words.query';
+
+import type { FilterQuery } from '@mikro-orm/core';
 
 export interface PaginatedTopicWordsResponse {
   data: TopicWordDto[];
@@ -95,6 +98,7 @@ export class ListTopicWordsHandler implements IQueryHandler<
     const data: TopicWordDto[] = words.map((w) => {
       const params = progressMap.get(w.wordSenseId);
       let status: 'NEW' | 'LEARNING' | 'MASTERED' = 'NEW';
+
       if (params) {
         if (
           params.state.value === 'relearning' ||
@@ -105,6 +109,7 @@ export class ListTopicWordsHandler implements IQueryHandler<
           status = 'MASTERED';
         }
       }
+
       return {
         id: w.id,
         topicId,

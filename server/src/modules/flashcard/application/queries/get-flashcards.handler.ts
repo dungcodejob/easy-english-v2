@@ -1,12 +1,13 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { GetFlashcardsQuery } from './get-flashcards.query';
 import {
   type IFlashcardRepository,
   InjectFlashcardRepository,
 } from '../../domain/repositories/flashcard.repository.interface';
-import { FlashcardMapper } from '../../infrastructure/mappers/flashcard.mapper';
 import { FlashcardResponseDto } from '../../dto/responses/flashcard.response.dto';
-import { GetFlashcardsQuery } from './get-flashcards.query';
+import { FlashcardMapper } from '../../infrastructure/mappers/flashcard.mapper';
 
 @Injectable()
 @QueryHandler(GetFlashcardsQuery)
@@ -25,6 +26,7 @@ export class GetFlashcardsHandler implements IQueryHandler<
       query.userId,
       query.tenantId,
     );
+
     return flashcards.map(
       (f) => this.flashcardMapper.toResponse(f) as FlashcardResponseDto,
     );

@@ -1,11 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import {
-  ApiPaginationParams,
-  ApiResponse as ApiResponseBuilder,
-  PaginationParam,
-  type ParsedPaginationParams,
-} from '@core/api';
 import {
   Body,
   Controller,
@@ -23,21 +15,34 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { LearningStateDto } from 'src/modules/dictionary/dto/responses/word-sense-detail.response.dto';
+
+import {
+  ApiPaginationParams,
+  ApiResponse as ApiResponseBuilder,
+  PaginationParam,
+  type ParsedPaginationParams,
+} from '@core/api';
+
 import {
   createSwaggerPaginationResponseDto,
   CurrentUser,
 } from '@shared/decorators';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
 import { AddToLearningCommand } from '../application/commands/add-to-learning.command';
 import { RemoveFromLearningCommand } from '../application/commands/remove-from-learning.command';
 import { ReviewWordCommand } from '../application/commands/review-word.command';
+import { ReviewWordResponse } from '../application/commands/review-word.handler';
 import { GetLearningListQuery } from '../application/queries/get-learning-list.query';
+import { GetLearningStateQuery } from '../application/queries/get-learning-state.query';
 import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request.dto';
 import { ReviewWordRequestDto } from '../dto/requests/review-word.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
-import { LearningStateDto } from 'src/modules/dictionary/dto/responses/word-sense-detail.response.dto';
-import { ReviewWordResponse } from '../application/commands/review-word.handler';
-import { GetLearningStateQuery } from '../application/queries/get-learning-state.query';
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Learning')
 @ApiBearerAuth()

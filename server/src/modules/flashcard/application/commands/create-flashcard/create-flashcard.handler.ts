@@ -1,15 +1,17 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { Flashcard } from '../../../domain/entities/flashcard.aggregate';
 import {
   InjectFlashcardRepository,
   type IFlashcardRepository,
 } from '../../../domain/repositories/flashcard.repository.interface';
-import { FlashcardMapper } from '../../../infrastructure/mappers/flashcard.mapper';
 import { FlashcardSource } from '../../../domain/value-objects/flashcard-source.vo';
 import { FlashcardResponseDto } from '../../../dto/responses/flashcard.response.dto';
+import { FlashcardMapper } from '../../../infrastructure/mappers/flashcard.mapper';
 import { CreateFlashcardCommand } from '../create-flashcard.command';
-import { Flashcard } from '../../../domain/entities/flashcard.aggregate';
 
 /**
  * Create Flashcard Command Handler

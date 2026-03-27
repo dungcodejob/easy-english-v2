@@ -1,5 +1,6 @@
-import { Entity } from '@core/ddd';
 import { v7 as uuid } from 'uuid';
+
+import { Entity } from '@core/ddd';
 
 export class StudyReviewLog extends Entity {
   private _sessionId!: string;

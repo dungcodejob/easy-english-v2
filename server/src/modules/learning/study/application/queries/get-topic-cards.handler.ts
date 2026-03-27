@@ -1,6 +1,7 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { UserWordSenseProgressOrmEntity } from 'src/modules/learning/progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
 import {
   InjectTopicRepository,
@@ -8,11 +9,12 @@ import {
 } from 'src/modules/learning/topic/domain/repositories/topic.repository.interface';
 import { TopicOrmEntity } from 'src/modules/learning/topic/infrastructure/persistence/topic.orm-entity';
 import { validate as isUuid } from 'uuid';
+
+import { GetTopicCardsQuery } from './get-topic-cards.query';
 import {
   StudyCardResponseDto,
   TopicStudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
-import { GetTopicCardsQuery } from './get-topic-cards.query';
 
 const PHASE1_CARD_CAP = 100;
 
@@ -74,15 +76,17 @@ export class GetTopicCardsHandler implements IQueryHandler<
     );
 
     const now = new Date();
-    const cards: Array<StudyCardResponseDto & { __addedAt: Date }> = [];
+    const cards: (StudyCardResponseDto & { __addedAt: Date })[] = [];
 
     for (const topicWord of topicWords) {
       const progress = progressBySense.get(topicWord.wordSenseId);
+
       if (!progress) {
         continue;
       }
 
       const mapped = this.mapToCard(progress, now);
+
       if (!mapped) {
         continue;
       }
@@ -94,14 +98,16 @@ export class GetTopicCardsHandler implements IQueryHandler<
 
     deduped.sort((a, b) => {
       const timeDiff = a.__addedAt.getTime() - b.__addedAt.getTime();
+
       if (timeDiff !== 0) return timeDiff;
+
       return a.wordSenseId.localeCompare(b.wordSenseId);
     });
 
     const total = deduped.length;
     const finalCards = deduped
       .slice(0, PHASE1_CARD_CAP)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       .map(({ __addedAt: _, ...card }) => card);
 
     return {
@@ -113,8 +119,8 @@ export class GetTopicCardsHandler implements IQueryHandler<
   }
 
   private dedupeByWordSenseWithAddedAt(
-    cards: Array<StudyCardResponseDto & { __addedAt: Date }>,
-  ): Array<StudyCardResponseDto & { __addedAt: Date }> {
+    cards: (StudyCardResponseDto & { __addedAt: Date })[],
+  ): (StudyCardResponseDto & { __addedAt: Date })[] {
     const bySense = new Map<
       string,
       StudyCardResponseDto & { __addedAt: Date }
@@ -122,6 +128,7 @@ export class GetTopicCardsHandler implements IQueryHandler<
 
     for (const card of cards) {
       const existing = bySense.get(card.wordSenseId);
+
       if (!existing || card.__addedAt < existing.__addedAt) {
         bySense.set(card.wordSenseId, card);
       }
@@ -164,8 +171,10 @@ export class GetTopicCardsHandler implements IQueryHandler<
     progress: UserWordSenseProgressOrmEntity,
   ): 0 | 1 | 2 | 3 | 4 | 5 {
     const level = progress.masteryLevel;
+
     if (level < 0) return 0;
     if (level > 5) return 5;
+
     return level as 0 | 1 | 2 | 3 | 4 | 5;
   }
 }

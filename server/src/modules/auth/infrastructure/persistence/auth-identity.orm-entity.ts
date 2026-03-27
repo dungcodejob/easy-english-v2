@@ -7,6 +7,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { v4 } from 'uuid';
+
 import { UserOrmEntity } from './user.orm-entity';
 
 @Entity({ tableName: 'auth_identities' })

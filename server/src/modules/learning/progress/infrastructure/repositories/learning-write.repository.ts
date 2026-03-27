@@ -1,6 +1,8 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
 import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persistence/word-sense.orm-entity';
+
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
 import { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { UserWordSenseProgressMapper } from '../mappers/user-word-sense-progress.mapper';
@@ -51,6 +53,7 @@ export class LearningWriteRepository implements ILearningWriteRepository {
 
     // Map all fields (including new FSRS columns)
     const mapped = this.mapper.toPersistence(progress);
+
     ormEntity.stability = mapped.stability;
     ormEntity.difficulty = mapped.difficulty;
     ormEntity.lapses = mapped.lapses;

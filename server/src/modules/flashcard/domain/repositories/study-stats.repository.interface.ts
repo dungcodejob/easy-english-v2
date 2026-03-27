@@ -1,4 +1,5 @@
 import { createInjection } from '@shared/utils';
+
 import type { StudyStats } from '../entities/study-stats.aggregate';
 
 /**

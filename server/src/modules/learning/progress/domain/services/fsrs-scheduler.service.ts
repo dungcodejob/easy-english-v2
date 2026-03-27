@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
+import { CardState } from '../value-objects/card-state.vo';
 import { FsrsParameters } from '../value-objects/fsrs-parameters.vo';
 import { ReviewRating } from '../value-objects/review-rating.vo';
-import { CardState } from '../value-objects/card-state.vo';
 
 @Injectable()
 export class FsrsSchedulerService {
@@ -67,11 +68,13 @@ export class FsrsSchedulerService {
 
   private computeInitialStability(rating: number): number {
     const score = this.ratingToScore(rating);
+
     return Math.max(1, 4 * score + 1);
   }
 
   private computeInitialDifficulty(rating: number): number {
     const score = this.ratingToScore(rating);
+
     return Math.min(1, Math.max(0, 0.3 + 0.7 * (1 - score)));
   }
 
@@ -82,6 +85,7 @@ export class FsrsSchedulerService {
   private updateStability(s: number, d: number, rating: number): number {
     const score = this.ratingToScore(rating);
     const factor = rating === 4 ? 1.3 : rating === 2 ? 0.8 : 1.0;
+
     return Math.max(
       0.1,
       s * (1 + Math.exp(8 - 1.3 * (1 - d)) * (1 - score) * factor),
@@ -90,6 +94,7 @@ export class FsrsSchedulerService {
 
   private updateDifficulty(d: number, rating: number): number {
     const score = this.ratingToScore(rating);
+
     return Math.min(1, Math.max(0, d - 0.14 + 0.27 * (score - 0.5)));
   }
 
@@ -97,6 +102,7 @@ export class FsrsSchedulerService {
     const rawInterval = s * (1 / this.requestRetention - 1);
     const intervalDays = Math.min(rawInterval, this.maximumInterval);
     const msPerDay = 24 * 60 * 60 * 1000;
+
     return new Date(now.getTime() + intervalDays * msPerDay);
   }
 }

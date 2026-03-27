@@ -1,6 +1,9 @@
-import { Mapper } from '@core/ddd';
-import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { Mapper } from '@core/ddd';
+
 import { Session, SessionStatus } from '../../domain/entities/session.entity';
 import { AuthIdentityOrmEntity } from '../../infrastructure/persistence/auth-identity.orm-entity';
 import { SessionOrmEntity } from '../../infrastructure/persistence/session.orm-entity';
@@ -40,6 +43,7 @@ export class SessionMapper implements Mapper<
     ormEntity.userAgent = entity.userAgent;
     ormEntity.createdAt = entity.createdAt;
     ormEntity.updatedAt = entity.updatedAt;
+
     return ormEntity;
   }
 
@@ -58,6 +62,7 @@ export class SessionMapper implements Mapper<
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });
+
     return entity;
   }
 

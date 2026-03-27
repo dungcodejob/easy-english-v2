@@ -1,4 +1,11 @@
-import { applyDecorators, HttpCode, HttpStatus, Type } from '@nestjs/common';
+import { STATUS_CODES } from 'http';
+
+import {
+  applyDecorators,
+  HttpCode,
+  HttpStatus,
+  type Type,
+} from '@nestjs/common';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
@@ -9,10 +16,11 @@ import {
   ApiSecurity,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SWAGGER_SCHEME } from '@shared/constants';
-import { STATUS_CODES } from 'http';
 
 import { ApiPaginationParams } from '@core/api';
+
+import { SWAGGER_SCHEME } from '@shared/constants';
+
 import {
   ApiSuccessResponseDto,
   PaginationDto,
@@ -20,7 +28,7 @@ import {
 import { Public } from '../public.decorator';
 import {
   ApiErrorResponses,
-  ErrorResponseConfig,
+  type ErrorResponseConfig,
 } from './api-error-responses.decorator';
 
 type ErrorResponseStatus = number;
@@ -154,6 +162,7 @@ export const ApiAuth = (options: IApiAuthOptions = {}): MethodDecorator => {
   }
 
   const responseType = options.responseType || 'single';
+
   if (options.type) {
     switch (responseType) {
       case 'pagination': {
@@ -290,6 +299,7 @@ export const ApiOkResponsePagination = <
     itemType,
     description = `Successful paginated response with ${itemType.name} items`,
   } = options;
+
   return applyDecorators(
     ApiExtraModels(ApiSuccessResponseDto, itemType, PaginationDto),
     ApiOkResponse({

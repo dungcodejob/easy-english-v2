@@ -1,6 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import {
   Body,
   Controller,
@@ -19,14 +16,22 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ApiResponse as ApiResponseBuilder } from '@core/api';
+
 import { CurrentUser } from '@shared/decorators';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
 import { CreateFlashcardCommand } from '../application/commands/create-flashcard.command';
-import { UpdateFlashcardCommand } from '../application/commands/update-flashcard.command';
 import { DeleteFlashcardCommand } from '../application/commands/delete-flashcard.command';
+import { UpdateFlashcardCommand } from '../application/commands/update-flashcard.command';
 import { GetFlashcardsQuery } from '../application/queries/get-flashcards.query';
 import { CreateFlashcardRequestDto } from '../dto/requests/create-flashcard.request.dto';
 import { UpdateFlashcardRequestDto } from '../dto/requests/update-flashcard.request.dto';
 import { FlashcardResponseDto } from '../dto/responses/flashcard.response.dto';
+
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Flashcards')
 @ApiBearerAuth()
@@ -46,6 +51,7 @@ export class FlashcardController {
       GetFlashcardsQuery,
       FlashcardResponseDto[]
     >(query);
+
     return ApiResponseBuilder.success(flashcards);
   }
 
@@ -70,6 +76,7 @@ export class FlashcardController {
       CreateFlashcardCommand,
       FlashcardResponseDto
     >(command);
+
     return ApiResponseBuilder.success(flashcard);
   }
 
@@ -95,6 +102,7 @@ export class FlashcardController {
       UpdateFlashcardCommand,
       FlashcardResponseDto | null
     >(command);
+
     return ApiResponseBuilder.success(flashcard);
   }
 
@@ -111,6 +119,7 @@ export class FlashcardController {
       DeleteFlashcardCommand,
       boolean
     >(command);
+
     return ApiResponseBuilder.success(result);
   }
 }

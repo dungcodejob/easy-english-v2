@@ -8,21 +8,23 @@ export function IsBothOrNonePresent(
   property: string,
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (object: any, propertyName: string) => {
     registerDecorator({
       name: 'IsBothOrNonePresent',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
       target: object.constructor,
       propertyName: propertyName,
       constraints: [property],
       options: validationOptions,
       validator: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         validate(value: any, args: ValidationArguments) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const [relatedPropertyName] = args.constraints;
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const relatedValue = (args.object as any)[relatedPropertyName];
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
           return (value && relatedValue) || (!value && !relatedValue);
         },
         defaultMessage(args: ValidationArguments) {

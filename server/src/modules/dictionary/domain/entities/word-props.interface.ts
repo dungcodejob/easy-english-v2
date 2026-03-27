@@ -1,8 +1,8 @@
-import { DataSource } from '../value-objects/data-source.vo';
-import { Language } from '../value-objects/language.vo';
-import { WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
-import { WordText } from '../value-objects/word-text.vo';
-import { WordSenseEntity } from './word-sense.entity';
+import { type WordSenseEntity } from './word-sense.entity';
+import { type DataSource } from '../value-objects/data-source.vo';
+import { type Language } from '../value-objects/language.vo';
+import { type WordPronunciationVO } from '../value-objects/word-pronunciation.vo';
+import { type WordText } from '../value-objects/word-text.vo';
 
 export interface WordFamily {
   n?: string[];

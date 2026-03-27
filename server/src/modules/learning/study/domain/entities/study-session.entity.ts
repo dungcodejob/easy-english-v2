@@ -1,6 +1,9 @@
-import { AggregateRoot } from '@core/ddd';
-import { ObjectValues } from '@shared/utils';
 import { v7 as uuid } from 'uuid';
+
+import { AggregateRoot } from '@core/ddd';
+
+import { type ObjectValues } from '@shared/utils';
+
 import { StudySessionCompletedEvent } from '../events/study-session-completed.event';
 import { StudySessionStartedEvent } from '../events/study-session-started.event';
 

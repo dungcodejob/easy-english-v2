@@ -1,11 +1,13 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
+import { DeleteTopicCommand } from './delete-topic.command';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
-import { DeleteTopicCommand } from './delete-topic.command';
 
 /**
  * Delete Topic Command Handler

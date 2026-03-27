@@ -1,17 +1,11 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { TopicController } from './controllers/topic.controller';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 // Domain repositories (interfaces + DI tokens)
-import { provideTopicRepository } from './domain/repositories/topic.repository.interface';
 
 // Infrastructure
-import { TopicMapper } from './infrastructure/mappers';
-import { TopicWordOrmEntity } from './infrastructure/persistence/topic-word.orm-entity';
-import { TopicOrmEntity } from './infrastructure/persistence/topic.orm-entity';
-import { TopicRepository } from './infrastructure/repositories/topic.repository';
 
 // Progress module ORM entities (needed for ListTopicWordsHandler progressMap query)
 
@@ -24,6 +18,12 @@ import { UpdateTopicHandler } from './application/commands/update-topic.handler'
 import { GetTopicDetailHandler } from './application/queries/get-topic-detail.handler';
 import { GetTopicsHandler } from './application/queries/get-topics.handler';
 import { ListTopicWordsHandler } from './application/queries/list-topic-words.handler';
+import { TopicController } from './controllers/topic.controller';
+import { provideTopicRepository } from './domain/repositories/topic.repository.interface';
+import { TopicMapper } from './infrastructure/mappers';
+import { TopicWordOrmEntity } from './infrastructure/persistence/topic-word.orm-entity';
+import { TopicOrmEntity } from './infrastructure/persistence/topic.orm-entity';
+import { TopicRepository } from './infrastructure/repositories/topic.repository';
 
 const CommandHandlers = [
   CreateTopicHandler,

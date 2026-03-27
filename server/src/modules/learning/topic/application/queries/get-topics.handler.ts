@@ -1,11 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { GetTopicsQuery } from './get-topics.query';
 import {
   InjectTopicRepository,
   type ITopicRepository,
 } from '../../domain/repositories/topic.repository.interface';
-import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 import { TopicDto } from '../../dto/responses/topic.dto';
-import { GetTopicsQuery } from './get-topics.query';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
 export interface PaginatedTopicsResponse {
   data: TopicDto[];

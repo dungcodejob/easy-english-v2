@@ -52,7 +52,7 @@ export interface SetDto {
 export interface SampleDto {
   id: string;
   text: string;
-  sets?: any[];
+  sets?: Record<string, unknown>[];
 }
 
 export interface WordFamilyDto {

@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Topic } from '../entities/topic.aggregate';
+
+import { type Topic } from '../entities/topic.aggregate';
 
 export interface TopicWordRef {
   topicWordId: string;

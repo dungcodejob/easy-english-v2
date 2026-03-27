@@ -1,9 +1,11 @@
-import { Entity } from '@core/ddd';
 import { v7 } from 'uuid';
-import { FlashcardId } from '../value-objects/flashcard-id.vo';
-import { ReviewRating } from '../../../learning/progress/domain/value-objects/review-rating.vo';
-import { CardState } from '../../../learning/progress/domain/value-objects/card-state.vo';
-import { FsrsParameters } from '../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
+
+import { Entity } from '@core/ddd';
+
+import { type CardState } from '../../../learning/progress/domain/value-objects/card-state.vo';
+import { type FsrsParameters } from '../../../learning/progress/domain/value-objects/fsrs-parameters.vo';
+import { type ReviewRating } from '../../../learning/progress/domain/value-objects/review-rating.vo';
+import { type FlashcardId } from '../value-objects/flashcard-id.vo';
 
 /**
  * cardId and wordSenseId are mutually exclusive.
@@ -97,6 +99,7 @@ export class ReviewLog extends Entity {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
     log._cardId = props.cardId;
     log._wordSenseId = props.wordSenseId;
     log._userId = props.userId;
@@ -110,6 +113,7 @@ export class ReviewLog extends Entity {
     log._newDifficulty = props.newParams.difficulty;
     log._reviewDurationMs = props.reviewDurationMs;
     log._reviewedAt = props.reviewedAt;
+
     return log;
   }
 
@@ -124,6 +128,7 @@ export class ReviewLog extends Entity {
       createdAt: props.createdAt,
       updatedAt: props.updatedAt,
     });
+
     log._cardId = props.props.cardId;
     log._wordSenseId = props.props.wordSenseId;
     log._userId = props.props.userId;
@@ -137,6 +142,7 @@ export class ReviewLog extends Entity {
     log._newDifficulty = props.props.newParams.difficulty;
     log._reviewDurationMs = props.props.reviewDurationMs;
     log._reviewedAt = props.props.reviewedAt;
+
     return log;
   }
 }

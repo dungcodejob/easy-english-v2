@@ -7,6 +7,7 @@ import {
   Unique,
 } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
+
 import { TopicOrmEntity } from './topic.orm-entity';
 
 @Entity({ tableName: 'topic_words' })

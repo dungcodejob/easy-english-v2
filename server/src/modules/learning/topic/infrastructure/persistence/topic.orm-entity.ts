@@ -8,6 +8,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4 as uuidv4 } from 'uuid';
+
 import { TopicWordOrmEntity } from './topic-word.orm-entity';
 
 @Entity({ tableName: 'topics' })

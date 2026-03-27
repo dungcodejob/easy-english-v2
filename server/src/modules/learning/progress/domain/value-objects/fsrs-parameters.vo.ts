@@ -1,4 +1,5 @@
 import { ValueObject } from '@core/ddd';
+
 import { CardState } from './card-state.vo';
 
 export interface FsrsParametersProps {

@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { EventsHandler } from '@nestjs/cqrs';
+
 import { WorkspaceCreatedEvent } from '../../../workspace/domain/events';
 import { StudyStats } from '../../domain/entities/study-stats.aggregate';
 import {
@@ -29,6 +30,7 @@ export class StudyStatsInitializerHandler {
     );
 
     const stats = StudyStats.create(event.tenantId, event.userId);
+
     await this.statsRepo.persist(stats);
 
     this.logger.log(`StudyStats initialized for user ${event.userId}`);

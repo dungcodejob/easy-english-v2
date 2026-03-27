@@ -1,4 +1,4 @@
-import { Flashcard } from '../../entities/flashcard.aggregate';
+import { type Flashcard } from '../../entities/flashcard.aggregate';
 import {
   FlashcardCreatedEvent,
   FlashcardDeletedEvent,

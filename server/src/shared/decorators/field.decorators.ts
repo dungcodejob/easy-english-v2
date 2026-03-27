@@ -1,7 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
-import { UUID_VERSION } from '@shared/constants';
-import { Constructor } from '@shared/utils';
+
 import { Type } from 'class-transformer';
 import {
   IsArray,
@@ -26,6 +25,10 @@ import {
   NotEquals,
   ValidateNested,
 } from 'class-validator';
+
+import { UUID_VERSION } from '@shared/constants';
+import { type Constructor } from '@shared/utils';
+
 import { ToBoolean, ToLowerCase, ToUpperCase } from './transform.decorators';
 import { IsNullable } from './validators/is-nullable.decorator';
 import { IsPassword } from './validators/is-password.decorator';
@@ -77,6 +80,7 @@ export function NumberField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({ type: Number, required: !!required, ...restOptions }),
     );
@@ -129,6 +133,7 @@ export function StringField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({
         type: String,
@@ -191,6 +196,7 @@ export function TokenField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({
         type: String,
@@ -252,6 +258,7 @@ export function BooleanField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({ type: Boolean, required: !!required, ...restOptions }),
     );
@@ -286,6 +293,7 @@ export function EmailField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({ type: String, required: !!required, ...restOptions }),
     );
@@ -320,6 +328,7 @@ export function UUIDField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({
         type: options.each ? [String] : String,
@@ -401,6 +410,7 @@ export function DateField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({ type: Date, required: !!required, ...restOptions }),
     );
@@ -433,6 +443,7 @@ export function EnumField<TEnum extends object>(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({
         enum: getEnum(),
@@ -479,6 +490,7 @@ export function ClassField<TClass extends Constructor>(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+
     decorators.push(
       ApiProperty({
         type: () => getClass(),
@@ -502,6 +514,6 @@ export function ClassFieldOptional<TClass extends Constructor>(
   );
 }
 
-function getVariableName(variableFunction: () => any) {
+function getVariableName(variableFunction: () => unknown) {
   return variableFunction.toString().split('.').pop();
 }

@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
 import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 
 export enum StudyScopeDto {

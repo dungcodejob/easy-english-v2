@@ -1,6 +1,9 @@
-import { Mapper } from '@core/ddd';
-import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { Mapper } from '@core/ddd';
+
 import {
   IdentifierType,
   LoginAttemptTracker,
@@ -18,6 +21,7 @@ export class LoginAttemptTrackerMapper implements Mapper<
 
   toPersistence(entity: LoginAttemptTracker): LoginAttemptTrackerOrmEntity {
     const ormEntity = new LoginAttemptTrackerOrmEntity();
+
     ormEntity.id = entity.id;
     ormEntity.tenant = this.em.getReference(TenantOrmEntity, entity.tenantId);
     ormEntity.identifier = entity.identifier;
@@ -27,6 +31,7 @@ export class LoginAttemptTrackerMapper implements Mapper<
     ormEntity.lockExpiresAt = entity.lockExpiresAt;
     ormEntity.createdAt = entity.createdAt;
     ormEntity.updatedAt = entity.updatedAt;
+
     return ormEntity;
   }
 
