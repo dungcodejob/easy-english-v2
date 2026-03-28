@@ -8,8 +8,10 @@ import {
 
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { StartStudySessionCommand } from './start-study-session.command';
-import { StudySession } from '../../domain/entities/study-session.entity';
+import {
+  StudySession,
+  studySessionScope,
+} from '../../domain/entities/study-session.entity';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
@@ -18,6 +20,7 @@ import {
 import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
 import { GetDueCardsQuery } from '../queries/get-due-cards.query';
 import { GetTopicCardsQuery } from '../queries/get-topic-cards.query';
+import { StartStudySessionCommand } from './start-study-session.command';
 
 export interface StartStudySessionResponse {
   sessionId: string;
@@ -43,13 +46,13 @@ export class StartStudySessionHandler implements ICommandHandler<
   async execute(
     command: StartStudySessionCommand,
   ): Promise<StartStudySessionResponse> {
-    if (command.scope === 'TOPIC' && !command.topicId) {
+    if (command.scope === studySessionScope.Topic && !command.topicId) {
       throw new BadRequestException('topicId is required for TOPIC scope');
     }
 
     let cardsEnvelope: StudyCardsEnvelopeDto | TopicStudyCardsEnvelopeDto;
 
-    if (command.scope === 'TOPIC') {
+    if (command.scope === studySessionScope.Topic) {
       cardsEnvelope = await this.queryBus.execute<
         GetTopicCardsQuery,
         TopicStudyCardsEnvelopeDto
@@ -71,7 +74,9 @@ export class StartStudySessionHandler implements ICommandHandler<
       userId: command.userId,
       tenantId: command.tenantId,
       scope: command.scope,
-      topicId: command.scope === 'TOPIC' ? command.topicId! : null,
+      studyType: command.studyType,
+      topicId:
+        command.scope === studySessionScope.Topic ? command.topicId! : null,
       enrolledCardIds: cardsEnvelope.cards.map((card) => card.wordSenseId),
     });
 
