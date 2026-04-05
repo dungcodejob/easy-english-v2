@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+client/node_modules
+server/node_modules
+
+# Build
+dist
+build
+client/dist
+server/dist
+
+# Env
+.env
+.env.*
+client/.env
+server/.env
+
+# Git
+.git
+
+# Cache
+.cache
+.next
+.turbo
+
+# Logs
+*.log
+logs
