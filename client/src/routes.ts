@@ -1,8 +1,10 @@
 import { index, layout, rootRoute, route } from '@tanstack/virtual-file-routes';
 import {
   AuthRoutes,
+  DashboardRoutes,
   DictionaryRoutes,
   FlashcardsRoutes,
+  LearnRoutes,
   TopicRoutes,
   WorkspaceRoutes,
 } from './shared/constants';
@@ -20,10 +22,13 @@ export const routes = rootRoute('root.tsx', [
   ),
 
   layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
-    route(APP_ROUTES.DASHBOARD, './modules/dashboard/pages/dashboard-page.tsx'),
-    route(APP_ROUTES.LEARN, './modules/learning/pages/my-learning.page.tsx'),
     route(
-      APP_ROUTES.LEARNING_STUDY,
+      DashboardRoutes.list(),
+      './modules/dashboard/pages/dashboard-page.tsx',
+    ),
+    route(LearnRoutes.base(), './modules/learning/pages/my-learning.page.tsx'),
+    route(
+      LearnRoutes.study(),
       './modules/learning/pages/study-session.page.tsx',
     ),
     route(TopicRoutes.list(), './modules/topic/pages/topics.page.tsx'),

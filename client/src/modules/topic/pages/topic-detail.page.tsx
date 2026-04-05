@@ -4,18 +4,31 @@
  * UI: 100% delegated to Design System components.
  */
 
-import { APP_ROUTES } from '@/shared/constants';
+import { DictionaryRoutes, TopicRoutes } from '@/shared/constants';
 import { DsButton } from '@/shared/ui';
 import { Badge } from '@/shared/ui/shadcn/badge';
 import { Separator } from '@/shared/ui/shadcn/separator';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
-import { createFileRoute, Link, useNavigate, useParams } from '@tanstack/react-router';
-import { ArrowLeft, BookOpen, ChevronRight, Hash, Inbox, Pencil, Trash2 } from 'lucide-react';
+import {
+  createFileRoute,
+  Link,
+  useNavigate,
+  useParams,
+} from '@tanstack/react-router';
+import {
+  ArrowLeft,
+  BookOpen,
+  ChevronRight,
+  Hash,
+  Inbox,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { TopicWordCard } from '../components/topic-word-card';
 import { UpdateTopicDialog } from '../components/update-topic-dialog';
-import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import { useTopicDetail } from '../hooks/use-topic-detail';
+import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import { useTopicWords } from '../hooks/use-topic-words';
 
 export const Route = createFileRoute(
@@ -50,7 +63,7 @@ export default function TopicDetailPage() {
   const handleDelete = () => {
     deleteTopic(topicId, {
       onSuccess: () => {
-        void navigate({ to: APP_ROUTES.TOPIC.LIST });
+        void navigate({ to: TopicRoutes.list() });
       },
     });
   };
@@ -70,7 +83,7 @@ export default function TopicDetailPage() {
         className="mb-8 flex animate-in items-center gap-1.5 text-sm text-muted-foreground fade-in duration-300"
       >
         <Link
-          to={APP_ROUTES.TOPIC.LIST}
+          to={TopicRoutes.list()}
           className="flex items-center gap-1 transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -116,7 +129,11 @@ export default function TopicDetailPage() {
                   <UpdateTopicDialog
                     topic={topic}
                     trigger={
-                      <DsButton variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
+                      <DsButton
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                      >
                         <Pencil className="h-4 w-4" />
                       </DsButton>
                     }
@@ -138,7 +155,10 @@ export default function TopicDetailPage() {
               )}
               {wordPagination && (
                 <div className="mt-3 flex items-center gap-2">
-                  <Badge variant="outline" className="rounded-full gap-1.5 font-medium">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full gap-1.5 font-medium"
+                  >
                     <Hash className="h-3 w-3" />
                     {wordPagination.count}{' '}
                     {wordPagination.count === 1 ? 'word' : 'words'}
@@ -157,8 +177,12 @@ export default function TopicDetailPage() {
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-xl font-bold text-foreground">Words</h2>
           {/* Future: Add word button linking back to dictionary search */}
-          <Link to={APP_ROUTES.DICTIONARY.SEARCH}>
-            <DsButton variant="outline" size="sm" leftIcon={<BookOpen className="h-4 w-4" />}>
+          <Link to={DictionaryRoutes.search()}>
+            <DsButton
+              variant="outline"
+              size="sm"
+              leftIcon={<BookOpen className="h-4 w-4" />}
+            >
               Add words
             </DsButton>
           </Link>
@@ -186,11 +210,13 @@ export default function TopicDetailPage() {
             <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
               <Inbox className="h-8 w-8" />
             </div>
-            <h3 className="mb-2 text-lg font-bold text-foreground">No words yet</h3>
+            <h3 className="mb-2 text-lg font-bold text-foreground">
+              No words yet
+            </h3>
             <p className="mb-6 max-w-xs text-sm text-muted-foreground">
               Search the dictionary to find words and add them to this topic.
             </p>
-            <Link to={APP_ROUTES.DICTIONARY.SEARCH}>
+            <Link to={DictionaryRoutes.search()}>
               <DsButton leftIcon={<BookOpen className="h-4 w-4" />}>
                 Browse Dictionary
               </DsButton>

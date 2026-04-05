@@ -7,6 +7,13 @@
 
 ---
 
+> ⚠️ **Routing Note:** Có 2 `StudyController` riêng biệt:
+> - `learning/study/` → base `/api/v1/learning/study` (dictionary-based)
+> - `flashcard/` → base `/api/v1/study` (custom flashcards)
+> Xem thêm: [Flashcard Module](../domain/flashcard/README.md)
+
+---
+
 ## 1. GET `/study/due`
 
 Get due study cards for the current user and workspace.
@@ -285,7 +292,108 @@ Content-Type: application/json
 
 ---
 
-## 7. Standard Error Response
+## 7. Study Session Endpoints
+
+### Start Session
+
+```json
+POST /api/v1/learning/study/session/start
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "scope": "DUE" | "TOPIC",
+  "studyType": "FLASHCARD" | "QUIZ",
+  "topicId": "uuid"  // required if scope=TOPIC
+}
+```
+
+### Review in Session
+
+```json
+POST /api/v1/learning/study/session/review
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "sessionId": "uuid",
+  "wordSenseId": "uuid",
+  "rating": 1 | 2 | 3 | 4,
+  "reviewDurationMs": 3500
+}
+```
+
+### Complete Session
+
+```json
+POST /api/v1/learning/study/session/:sessionId/complete
+Authorization: Bearer <access_token>
+```
+
+### Get Session Summary
+
+```json
+GET /api/v1/learning/study/session/:sessionId
+Authorization: Bearer <access_token>
+```
+
+**Response:**
+
+```json
+{
+  "data": {
+    "sessionId": "uuid",
+    "scope": "DUE",
+    "studyType": "FLASHCARD",
+    "status": "Completed",
+    "reviewedCount": 25,
+    "enrolledCount": 25,
+    "ratingBreakdown": { "again": 3, "hard": 5, "good": 12, "easy": 5 },
+    "accuracy": 0.88,
+    "timeSpentMs": 540000,
+    "startedAt": "2026-04-06T10:00:00.000Z",
+    "completedAt": "2026-04-06T10:09:00.000Z"
+  }
+}
+```
+
+---
+
+## 8. Flashcard Study Endpoints (`/api/v1/study`)
+
+> Base: `/api/v1` — Custom flashcards (standalone module)
+
+### Get Study Stats
+
+```json
+GET /api/v1/study/stats
+Authorization: Bearer <access_token>
+```
+
+### Get Due Flashcards
+
+```json
+GET /api/v1/study/due?limit=20
+Authorization: Bearer <access_token>
+```
+
+### Review Flashcard
+
+```json
+POST /api/v1/study/review
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "cardId": "uuid",
+  "rating": 1 | 2 | 3 | 4,
+  "durationMs": 3500
+}
+```
+
+---
+
+## 9. Standard Error Response
 
 ```json
 {

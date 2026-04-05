@@ -1,5 +1,5 @@
 import { ApiRequestError } from '@/core/api';
-import { APP_ROUTES, workspaceKeys } from '@/shared/constants';
+import { AppRoutes, workspaceKeys } from '@/shared/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
@@ -30,7 +30,7 @@ export const useCreateWorkspace = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: workspaceKeys.all });
       reset();
-      navigate({ to: APP_ROUTES.DASHBOARD });
+      navigate({ to: AppRoutes.root() });
     },
   });
 

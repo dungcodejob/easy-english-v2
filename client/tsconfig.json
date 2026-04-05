@@ -30,7 +30,9 @@
       "@core/*": ["./src/core/*"],
       "@core": ["./src/core"],
       "@modules/*": ["./src/modules/*"],
-      "@modules": ["./src/modules"]
+      "@modules": ["./src/modules"],
+      "@features/*": ["./src/features/*"],
+      "@features": ["./src/features"]
     }
   },
   "include": ["src"]

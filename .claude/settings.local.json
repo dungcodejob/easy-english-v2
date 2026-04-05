@@ -153,7 +153,37 @@
       "Bash(git worktree:*)",
       "Bash(ls /e/Projects/multi-tenant/easy-english-v2/server/ 2>/dev/null || ls /mnt/e/Projects/multi-tenant/easy-english-v2/server/ 2>/dev/null || echo \"checking env\" && echo $PATH)",
       "Bash(find \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\\\\src\" -name \"routeTree.gen.ts\" 2>/dev/null; find \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\\\\src\" -name \"*.route.ts\" 2>/dev/null | head -10)",
-      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npm install react-hotkeys-hook)"
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npm install react-hotkeys-hook)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:unpkg.com)",
+      "Bash(grep -A 20 '\"paths\"' \"E:/Projects/multi-tenant/easy-english-v2/client/tsconfig.json\" 2>/dev/null || grep -A 20 'paths' \"E:/Projects/multi-tenant/easy-english-v2/client/tsconfig.json\")",
+      "Bash(ls \"E:/Projects/multi-tenant/easy-english-v2/client/node_modules/@tanstack/\" && npm show @tanstack/react-hotkeys 2>&1 | head -10)",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__read_multiple_files",
+      "Bash(ls \"E:/Projects/multi-tenant/easy-english-v2/server/src/modules/learning/progress/controllers/\" 2>/dev/null || find \"E:/Projects/multi-tenant/easy-english-v2/server/src/modules/learning/progress\" -name \"*.controller.ts\" | head -5)",
+      "mcp__filesystem__create_directory",
+      "mcp__filesystem__write_file",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -name \"*.ts\" | xargs grep -n \"type: \\(\\) => \\\\[\" 2>/dev/null)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -name \"*.ts\" | xargs grep -n 'ApiProperty.*type:' 2>/dev/null | head -100)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -name \"*.ts\" | xargs grep -n \"& {\" 2>/dev/null | head -30)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -l \"ApiProperty\" 2>/dev/null | sort)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"type: \\\\[\" 2>/dev/null | grep -v node_modules)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -l \"ApiProperty\\\\|ApiResponse\\\\|ApiExtraModels\" 2>/dev/null | grep -v node_modules | sort)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"readonly _\" 2>/dev/null | grep -v node_modules)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"@ApiExtraModels\\\\|extraModels\" 2>/dev/null | grep -v node_modules)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"class.*Controller\" 2>/dev/null | grep -v node_modules | grep -v \"implements\\\\|extends\")",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"Record<string\\\\|Record<number\" 2>/dev/null | grep -v node_modules | head -30)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"extends Entity\\\\|extends Aggregate\\\\|extends BaseRepository\" 2>/dev/null | grep -v node_modules)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"implements.*Repository\" 2>/dev/null | grep -v node_modules)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*response.dto.ts\" -print 2>/dev/null | xargs grep -l \".\" 2>/dev/null)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"swagger\\\\|Swagger\\\\|@nestjs/swagger\" 2>/dev/null | grep -v node_modules | grep -v \".spec.ts\" | grep -v \".test.ts\")"
     ]
+  },
+  "enabledPlugins": {
+    "everything-claude-code@everything-claude-code": true
   }
 }

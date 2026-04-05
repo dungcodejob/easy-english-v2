@@ -11,7 +11,6 @@ import { RatingButtons } from '../components/rating-buttons';
 import { SessionCompleteCard } from '../components/session-complete-card';
 import { StudyProgress } from '../components/study-progress';
 import { useCompleteSession } from '../hooks/use-complete-session';
-import { useKeyboardShortcuts } from '../hooks/use-keyboard-shortcuts';
 import { useReviewCard } from '../hooks/use-review-card';
 import { useSessionSummary } from '../hooks/use-session-summary';
 import { useStartSession } from '../hooks/use-start-session';
@@ -40,10 +39,7 @@ function StudySessionPage() {
   const navigate = useNavigate();
 
   const { filters, setSearch } = useFilters(Route.id);
-  const { showKeyboardHint, setShowKeyboardHint } = useKeyboardShortcuts({
-    onRate: handleRate,
-    onReset: handleReset,
-  });
+
   // URL search params
   const sessionId = filters.sessionId;
   const completed = filters.completed === 'true';

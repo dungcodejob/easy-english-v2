@@ -1,8 +1,8 @@
-import { APP_ROUTES } from '@/shared/constants';
+import { AppRoutes } from '@/shared/constants';
 import { useAuthStore } from '@/shared/stores';
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
-const fallback = APP_ROUTES.ROOT;
+const fallback = AppRoutes.root();
 
 export const Route = createFileRoute('/_(unauthenticated)')({
   component: RouteComponent,

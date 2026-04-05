@@ -4,7 +4,8 @@ export const RouteGroups = {
 } as const;
 
 export const AuthRoutes = {
-  login: () => '/login',
+  login: (redirect?: string) =>
+    `/login${redirect ? `?redirect=${redirect}` : ''}`,
   register: () => '/register',
 };
 
@@ -30,7 +31,7 @@ export const LearnRoutes = {
 
 export const FlashcardsRoutes = {
   list: () => '/flashcards',
-  study: () => '/study',
+  study: () => '/flashcards/study',
   stats: () => '/flashcards/stats',
 };
 
@@ -48,6 +49,10 @@ export const AchievementsRoutes = {
 
 export const SettingsRoutes = {
   list: () => '/settings',
+};
+
+export const DashboardRoutes = {
+  list: () => '/dashboard',
 };
 
 export const AppRoutes = {

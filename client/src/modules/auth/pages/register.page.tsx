@@ -1,7 +1,13 @@
-import { Link } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { FormWrapper } from '@/shared/ui/patterns';
 import { RegisterForm } from '../components/register-form';
+
+export const Route = createFileRoute(
+  '/_(unauthenticated)/register',
+)({
+  component: RegisterPage,
+});
 
 export default function RegisterPage() {
   return (

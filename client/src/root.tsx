@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useTheme } from 'next-themes';
 import { Providers } from './shared/contexts/index.tsx';
 import { Toaster } from './shared/ui/shadcn/sonner';
+import { HotkeysProvider } from '@features/hotkeys';
 // import { Providers } from './providers/providers';
 
 export const ToasterProvider = () => {
@@ -20,8 +21,10 @@ function RootComponent() {
   return (
     <React.Fragment>
       <Providers>
-        <ToasterProvider />
-        <Outlet />
+        <HotkeysProvider>
+          <ToasterProvider />
+          <Outlet />
+        </HotkeysProvider>
         {/* <TanStackRouterDevtools position="bottom-left" /> */}
       </Providers>
     </React.Fragment>

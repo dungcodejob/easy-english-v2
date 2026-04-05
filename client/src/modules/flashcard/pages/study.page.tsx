@@ -25,7 +25,7 @@ import {
   useDueCards,
 } from '../hooks/use-flashcards';
 
-export const Route = createFileRoute('/_(authenticated)/study')({
+export const Route = createFileRoute('/_(authenticated)/flashcards/study')({
   component: StudyPage,
 });
 

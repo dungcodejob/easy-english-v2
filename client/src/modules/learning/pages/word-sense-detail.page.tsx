@@ -1,4 +1,4 @@
-import { APP_ROUTES } from '@/shared/constants';
+import { DictionaryRoutes } from '@/shared/constants';
 import { Button } from '@/shared/ui/shadcn/button';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link, createFileRoute } from '@tanstack/react-router';
@@ -27,7 +27,7 @@ export default function WordSenseDetailPage() {
           asChild
           className="text-muted-foreground hover:text-foreground"
         >
-          <Link to={APP_ROUTES.DICTIONARY.SEARCH}>
+          <Link to={DictionaryRoutes.search()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Search
           </Link>
@@ -74,7 +74,7 @@ export default function WordSenseDetailPage() {
             size="lg"
             className="rounded-full font-bold"
           >
-            <Link to={APP_ROUTES.DICTIONARY.SEARCH}>Return to Dictionary</Link>
+            <Link to={DictionaryRoutes.search()}>Return to Dictionary</Link>
           </Button>
         </div>
       )}

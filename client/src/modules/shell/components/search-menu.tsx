@@ -1,5 +1,5 @@
 import { useSearchWordSenses } from '@/modules/learning/hooks/use-search-word-senses';
-import { APP_ROUTES } from '@/shared/constants';
+import { DictionaryRoutes } from '@/shared/constants';
 import {
   RiArrowDownLine,
   RiArrowUpLine,
@@ -95,8 +95,7 @@ export function SearchMenu() {
   const handleSelectSense = (senseId: string) => {
     setSearchMenuOpen(false);
     navigate({
-      to: APP_ROUTES.DICTIONARY.SENSE_DETAIL,
-      params: { senseId },
+      to: DictionaryRoutes.senseDetail(senseId),
     });
   };
 

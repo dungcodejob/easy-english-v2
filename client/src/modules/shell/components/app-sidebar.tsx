@@ -1,6 +1,14 @@
 import { WorkspaceSwitcher } from '@/modules/workspace/components/workspace-switcher';
 import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
-import { APP_ROUTES } from '@/shared/constants';
+import {
+  AchievementsRoutes,
+  DictionaryRoutes,
+  FlashcardsRoutes,
+  LearnRoutes,
+  ProgressRoutes,
+  SettingsRoutes,
+  TopicRoutes,
+} from '@/shared/constants';
 import { Separator } from '@shared/ui/shadcn/separator';
 import {
   Sidebar,
@@ -12,11 +20,11 @@ import {
 import {
   BookOpen,
   Flame,
+  Layers,
   Plus,
   Settings,
   TrendingUp,
   Trophy,
-  Layers,
 } from 'lucide-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +47,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       id: useId(),
       title: t('sidebar.today_review'),
-      url: APP_ROUTES.STUDY,
+      url: LearnRoutes.study(),
       icon: Flame, // 🔥 fire icon
       badge: 3, // pending review count (mock data)
       priority: true, // special styling flag
@@ -51,25 +59,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       id: useId(),
       title: t('sidebar.learn'),
-      url: APP_ROUTES.LEARN,
+      url: LearnRoutes.base(),
       icon: BookOpen,
     },
     {
       id: useId(),
       title: t('sidebar.topics'),
-      url: APP_ROUTES.TOPIC.LIST,
+      url: TopicRoutes.list(),
       icon: BookOpen,
     },
     {
       id: useId(),
       title: t('sidebar.flashcards'),
-      url: APP_ROUTES.FLASHCARDS,
+      url: FlashcardsRoutes.list(),
       icon: Layers,
     },
     {
       id: useId(),
       title: t('sidebar.add_word'),
-      url: APP_ROUTES.DICTIONARY.SEARCH, // for now redirect to dictionary to search and add
+      url: DictionaryRoutes.search(), // for now redirect to dictionary to search and add
       icon: Plus,
     },
   ];
@@ -79,13 +87,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       id: useId(),
       title: t('sidebar.progress'),
-      url: APP_ROUTES.PROGRESS,
+      url: ProgressRoutes.list(),
       icon: TrendingUp,
     },
     {
       id: useId(),
       title: t('sidebar.achievements'),
-      url: APP_ROUTES.ACHIEVEMENTS,
+      url: AchievementsRoutes.list(),
       icon: Trophy,
     },
   ];
@@ -95,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     {
       id: useId(),
       title: t('sidebar.settings'),
-      url: APP_ROUTES.SETTINGS,
+      url: SettingsRoutes.list(),
       icon: Settings,
     },
   ];

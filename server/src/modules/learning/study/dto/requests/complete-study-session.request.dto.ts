@@ -1,8 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 export class CompleteStudySessionRequestDto {
-  @ApiProperty({
-    description: 'Placeholder — sessionId comes from route param',
-  })
+  // Placeholder — sessionId comes from route param, not request body
   readonly _?: never;
 }

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import type { Rating } from '../pages/study-session.page';
+import { useHotkey } from '@features/hotkeys';
+import { useHotkeyScope } from '@features/hotkeys';
 import { useStudySessionStore } from '../stores/use-study-session-store';
 
 const KEYBOARD_HINT_DURATION_MS = 5000;
+
+type Rating = 1 | 2 | 3 | 4;
 
 export function useKeyboardShortcuts({
   onRate,
@@ -13,8 +15,10 @@ export function useKeyboardShortcuts({
   onReset: () => void;
 }) {
   const [showKeyboardHint, setShowKeyboardHint] = useState(true);
-
   const store = useStudySessionStore();
+
+  // Push 'study-session' scope on mount, pop on unmount
+  useHotkeyScope('study-session', { onMount: 'push' });
 
   // Auto-hide keyboard hint
   useEffect(() => {
@@ -26,6 +30,17 @@ export function useKeyboardShortcuts({
     return () => clearTimeout(timer);
   }, [showKeyboardHint]);
 
+  // Space — flip card
+  useHotkey('Space', () => {
+    store.flipCard();
+    setShowKeyboardHint(false);
+  }, {
+    description: 'Flip card',
+    group: 'Study',
+    scope: 'study-session',
+  });
+
+  // 1/2/3/4 — rate card
   const handleRate = useCallback(
     (rating: Rating) => {
       onRate(rating);
@@ -33,35 +48,26 @@ export function useKeyboardShortcuts({
     [onRate],
   );
 
-  useHotkeys(
-    'space',
-    () => {
-      store.flipCard();
-      setShowKeyboardHint(false);
-    },
-    {
-      preventDefault: true,
-      enableOnFormTags: false,
-    },
-  );
-
-  useHotkeys(
-    '1, 2, 3, 4',
-    (_, handler) => {
-      handler.preventDefault?.();
-      const rating = Number(handler.key) as Rating;
+  for (const rating of [1, 2, 3, 4] as const) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useHotkey(String(rating), (event) => {
+      event.preventDefault();
       handleRate(rating);
-    },
-    { enableOnFormTags: false },
-  );
+    }, {
+      description: `Rate ${rating}`,
+      group: 'Study',
+      scope: 'study-session',
+    });
+  }
 
-  useHotkeys(
-    'esc',
-    () => {
-      onReset();
-    },
-    { preventDefault: true, enableOnFormTags: false },
-  );
+  // Escape — reset session
+  useHotkey('Escape', () => {
+    onReset();
+  }, {
+    description: 'Exit session',
+    group: 'Study',
+    scope: 'study-session',
+  });
 
   return { showKeyboardHint, setShowKeyboardHint };
 }

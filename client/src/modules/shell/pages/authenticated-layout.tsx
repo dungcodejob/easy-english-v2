@@ -1,5 +1,4 @@
 import { refreshAccessToken } from '@/modules/auth/services/auth.api';
-import { APP_ROUTES } from '@/shared/constants';
 import { useAuthStore, useIsAuthenticated } from '@/shared/stores/auth-store';
 import { Spinner } from '@/shared/ui/shadcn/spinner';
 import {
@@ -13,6 +12,7 @@ import { useEffect, useRef } from 'react';
 
 // Use direct import to avoid circular dependency issues if any, or just use aliased import
 import { useHasWorkspace } from '@/modules/workspace/hooks/use-has-workspace';
+import { AuthRoutes, WorkspaceRoutes } from '@/shared/constants';
 import { SidebarInset, SidebarProvider } from '@/shared/ui/shadcn/sidebar';
 import { AppHeader } from '../components/app-header';
 import { AppSidebar } from '../components/app-sidebar';
@@ -25,8 +25,7 @@ export const Route = createFileRoute('/_(authenticated)')({
     if (!isAuthenticated) {
       // Redirect to login with redirect param
       throw redirect({
-        to: APP_ROUTES.AUTH.LOGIN,
-        search: { redirect: location.pathname },
+        to: AuthRoutes.login(location.pathname),
         replace: true,
       });
     }
@@ -54,13 +53,7 @@ export default function AuthenticatedLayout() {
   }, []);
 
   if (!isAuthenticated) {
-    return (
-      <Navigate
-        to={APP_ROUTES.AUTH.LOGIN}
-        replace
-        search={{ redirect: location.pathname }}
-      />
-    );
+    return <Navigate to={AuthRoutes.login(location.pathname)} replace />;
   }
 
   if (isLoading) {
@@ -74,8 +67,8 @@ export default function AuthenticatedLayout() {
   const hasWorkspace = hasWorkspaceData?.hasWorkspace;
 
   // If user has no workspace and is not on the onboarding page, redirect to onboarding
-  if (!hasWorkspace && location.pathname !== APP_ROUTES.WORKSPACE.NEW) {
-    return <Navigate to={APP_ROUTES.WORKSPACE.NEW} />;
+  if (!hasWorkspace && location.pathname !== WorkspaceRoutes.new()) {
+    return <Navigate to={WorkspaceRoutes.new()} />;
   }
 
   return (

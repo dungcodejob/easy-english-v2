@@ -5,7 +5,7 @@
  * DropdownMenu kept raw (no DS abstraction needed).
  */
 
-import { APP_ROUTES } from '@/shared/constants';
+import { TopicRoutes } from '@/shared/constants';
 import { DsBadge, DsButton, DsCard } from '@/shared/ui';
 import {
   DropdownMenu,
@@ -14,7 +14,14 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { Link } from '@tanstack/react-router';
-import { BookOpen, ChevronRight, Clock, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import {
+  BookOpen,
+  ChevronRight,
+  Clock,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
 import { UpdateTopicDialog } from './update-topic-dialog';
@@ -42,8 +49,7 @@ export function TopicCard({ topic }: TopicCardProps) {
 
   return (
     <Link
-      to={APP_ROUTES.TOPIC.DETAIL}
-      params={{ topicId: topic.id }}
+      to={TopicRoutes.detail(topic.id)}
       className="group block focus:outline-none"
     >
       <DsCard className="relative h-full overflow-hidden border border-border/60 bg-card transition-all duration-200 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 cursor-pointer focus-within:ring-2 focus-within:ring-primary/40">
@@ -63,7 +69,10 @@ export function TopicCard({ topic }: TopicCardProps) {
                 </h3>
               </div>
             </div>
-            <div className="flex items-center gap-1" onClick={(e) => e.preventDefault()}>
+            <div
+              className="flex items-center gap-1"
+              onClick={(e) => e.preventDefault()}
+            >
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <DsButton
