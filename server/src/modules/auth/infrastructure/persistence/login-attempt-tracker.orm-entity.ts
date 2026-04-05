@@ -6,6 +6,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4 } from 'uuid';
+
 import { TenantOrmEntity } from './tenant.orm-entity';
 
 @Entity({ tableName: 'login_attempt_trackers' })
@@ -24,7 +25,7 @@ export class LoginAttemptTrackerOrmEntity {
   identifierType!: string; // 'EMAIL' | 'IP'
 
   @Property({ default: 0 })
-  attemptCount: number = 0;
+  attemptCount = 0;
 
   @Property()
   lastAttemptAt!: Date;

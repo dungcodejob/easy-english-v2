@@ -1,11 +1,40 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+
+# Build
+dist/
+build/
+*/dist/
+
+# Env
+.env
+.env.*
+client/.env
+server/.env
+
+# IDE
+.vscode/
+.idea/
+
+# Cache
+.cache/
+.next/
+.turbo/
+
+
+
 # Local
 .DS_Store
 *.local
 *.log*
 
-# Dist
-node_modules
-dist/
+# Superpowers
+.superpowers/
+.worktrees/
+
+
 
 # Profile
 .rspack-profile-*/
@@ -16,3 +45,6 @@ dist/
 .idea
 
 .env
+.gitnexus
+
+.mcp.json

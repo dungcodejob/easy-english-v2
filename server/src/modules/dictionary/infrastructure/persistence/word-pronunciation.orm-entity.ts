@@ -1,4 +1,5 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+
 import { WordOrmEntity } from './word.orm-entity';
 
 @Entity({ tableName: 'word_pronunciations' })

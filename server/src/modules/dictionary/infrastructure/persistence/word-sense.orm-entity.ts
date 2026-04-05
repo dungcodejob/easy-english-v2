@@ -6,6 +6,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
+
 import { WordExampleOrmEntity } from './word-example.orm-entity';
 import { WordOrmEntity } from './word.orm-entity';
 

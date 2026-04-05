@@ -4,17 +4,19 @@ import {
   Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
+
 import { firstValueFrom } from 'rxjs';
 import { type DictionaryConfig, InjectDictionaryConfig } from 'src/configs';
+
+import {
+  AzVocabDefinitionResponseDto,
+  AzVocabSearchResponseDto,
+} from './azvocab.types';
 import {
   InjectProviderCacheRepository,
   type IProviderCacheRepository,
 } from '../../../domain/repositories/provider-cache.repository.interface';
 import { ProviderResponseCacheOrmEntity } from '../../persistence/provider-response-cache.orm-entity';
-import {
-  AzVocabDefinitionResponseDto,
-  AzVocabSearchResponseDto,
-} from './azvocab.types';
 
 export enum AzVocabCacheProvider {
   Search = 'azvocab-search',
@@ -42,37 +44,6 @@ export class AzVocabHttpClient {
     this.timeout = this.configService.azVocab.timeoutMs;
   }
 
-  private buildHeaders(defId?: string): Record<string, string> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-      // Host: 'azvocab.ai',
-      Origin: 'https://azvocab.ai',
-      Pragma: 'no-cache',
-      Connection: 'keep-alive',
-      Referer: defId
-        ? `https://azvocab.ai/vi/definition/${encodeURIComponent(defId)}`
-        : 'https://azvocab.ai/dashboard',
-      'sec-ch-ua-platform': '"Windows"',
-      'Sec-Fetch-Dest': 'empty',
-      'Sec-Fetch-Mode': 'cors',
-      'Sec-Fetch-Site': 'same-origin',
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0',
-      purpose: 'prefetch',
-      'sec-ch-ua':
-        '"Microsoft Edge";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
-      'sec-ch-ua-mobile': '?0',
-    };
-
-    const cookie = this.cookie;
-    if (cookie) {
-      headers['Cookie'] = cookie;
-    }
-
-    return headers;
-  }
-
   async search(word: string): Promise<AzVocabSearchResponseDto[]> {
     if (!this.cookie) {
       this.logger.error('AzVocab Cookie not configured');
@@ -87,10 +58,12 @@ export class AzVocabHttpClient {
         normalizedWord,
         AzVocabCacheProvider.Search,
       );
+
       if (cached && cached.expiresAt > new Date()) {
         if (cached.httpStatus === 404) {
           return [];
         }
+
         return cached.rawResponse as unknown as AzVocabSearchResponseDto[];
       }
 
@@ -106,19 +79,20 @@ export class AzVocabHttpClient {
 
       // 3. Async save search cache
       const results = data || [];
+
       this.saveSearchToCache(normalizedWord, results);
 
       return results;
     } catch (error) {
       if (
         error &&
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         (error.code === 'ECONNABORTED' || error.name === 'TimeoutError')
       ) {
         this.logger.warn(`Timeout searching for word '${word}'`);
         throw new ServiceUnavailableException('Dictionary provider timeout');
       }
       this.handleError(error, `search word '${word}'`);
+
       return [];
     }
   }
@@ -130,6 +104,7 @@ export class AzVocabHttpClient {
       this.logger.warn(
         'AzVocab Cookie or BuildID not configured, skipping definition fetch',
       );
+
       return null;
     }
 
@@ -139,6 +114,7 @@ export class AzVocabHttpClient {
         defId,
         AzVocabCacheProvider.Definition,
       );
+
       if (cached && cached.expiresAt > new Date()) {
         return cached.rawResponse as unknown as AzVocabDefinitionResponseDto;
       }
@@ -165,6 +141,7 @@ export class AzVocabHttpClient {
       return data;
     } catch (error) {
       const err = error as { code?: string; name?: string; message?: string };
+
       if (
         err &&
         (err.code === 'ECONNABORTED' ||
@@ -172,20 +149,55 @@ export class AzVocabHttpClient {
           err.message === 'Dictionary provider timeout exceeded 5000ms')
       ) {
         this.logger.warn(`Timeout fetching definition for ${defId}`);
+
         return null;
       }
 
       // Log warning but don't throw for missing definitions - partial data is acceptable
       const status = (error as { response?: { status?: number } }).response
         ?.status;
+
       if (status === 404) {
         return null;
       }
       this.logger.warn(
         `Failed to fetch definition '${defId}': ${(error as Error).message}`,
       );
+
       return null;
     }
+  }
+
+  private buildHeaders(defId?: string): Record<string, string> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      Accept: '*/*',
+      // Host: 'azvocab.ai',
+      Origin: 'https://azvocab.ai',
+      Pragma: 'no-cache',
+      Connection: 'keep-alive',
+      Referer: defId
+        ? `https://azvocab.ai/vi/definition/${encodeURIComponent(defId)}`
+        : 'https://azvocab.ai/dashboard',
+      'sec-ch-ua-platform': '"Windows"',
+      'Sec-Fetch-Dest': 'empty',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Site': 'same-origin',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0',
+      purpose: 'prefetch',
+      'sec-ch-ua':
+        '"Microsoft Edge";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+      'sec-ch-ua-mobile': '?0',
+    };
+
+    const cookie = this.cookie;
+
+    if (cookie) {
+      headers.Cookie = cookie;
+    }
+
+    return headers;
   }
 
   private saveDefinitionToCache(
@@ -193,9 +205,11 @@ export class AzVocabHttpClient {
     data: AzVocabDefinitionResponseDto,
   ): void {
     const expiresAt = new Date();
+
     expiresAt.setDate(expiresAt.getDate() + 30); // 30 days TTL
 
     const entity = new ProviderResponseCacheOrmEntity();
+
     entity.normalizedWord = defId;
     entity.provider = AzVocabCacheProvider.Definition;
     entity.rawResponse = data as unknown as Record<string, unknown>;
@@ -215,6 +229,7 @@ export class AzVocabHttpClient {
     data: AzVocabSearchResponseDto[],
   ): void {
     const expiresAt = new Date();
+
     // Use 90 days for results, or 1 day for empty results (404 logic)
     if (data.length === 0) {
       expiresAt.setHours(expiresAt.getHours() + 24); // 24 hours for missing
@@ -223,6 +238,7 @@ export class AzVocabHttpClient {
     }
 
     const entity = new ProviderResponseCacheOrmEntity();
+
     entity.normalizedWord = word;
     entity.provider = AzVocabCacheProvider.Search;
     entity.rawResponse = data as unknown as Record<string, unknown>;
@@ -243,8 +259,10 @@ export class AzVocabHttpClient {
       code?: string;
       name?: string;
     };
-    if (err.response && err.response.status) {
+
+    if (err.response?.status) {
       const status = err.response.status;
+
       if (status === 404) {
         return; // Return empty/null upstream
       }

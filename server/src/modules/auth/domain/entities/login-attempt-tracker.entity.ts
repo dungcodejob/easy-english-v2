@@ -1,5 +1,6 @@
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
 
 export enum IdentifierType {
   EMAIL = 'EMAIL',
@@ -25,6 +26,7 @@ export class LoginAttemptTracker extends AggregateRoot {
 
   get isLocked(): boolean {
     if (!this.lockExpiresAt) return false;
+
     return new Date() < this.lockExpiresAt;
   }
 
@@ -46,6 +48,7 @@ export class LoginAttemptTracker extends AggregateRoot {
     props: Omit<LoginAttemptTrackerProps, 'attemptCount' | 'lastAttemptAt'>,
   ): LoginAttemptTracker {
     const id = v7();
+
     return new LoginAttemptTracker({
       id,
       ...props,
@@ -61,7 +64,7 @@ export class LoginAttemptTracker extends AggregateRoot {
   }
 
   public recordFailedAttempt(
-    maxAttempts: number = 5,
+    maxAttempts = 5,
     lockDurationMs: number = 15 * 60 * 1000,
   ): void {
     this.attemptCount++;
@@ -82,6 +85,7 @@ export class LoginAttemptTracker extends AggregateRoot {
   public getRemainingLockTime(): number {
     if (!this.lockExpiresAt) return 0;
     const remaining = this.lockExpiresAt.getTime() - Date.now();
+
     return remaining > 0 ? remaining : 0;
   }
 }

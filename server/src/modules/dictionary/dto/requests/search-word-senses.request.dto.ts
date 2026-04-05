@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { Transform, TransformFnParams } from 'class-transformer';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 

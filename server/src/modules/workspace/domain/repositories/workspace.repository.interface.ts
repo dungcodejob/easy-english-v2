@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { WorkspaceEntity } from '../entities/workspace.entity';
+
+import { type WorkspaceEntity } from '../entities/workspace.entity';
 
 export interface IWorkspaceRepository {
   persist(workspace: WorkspaceEntity): void;

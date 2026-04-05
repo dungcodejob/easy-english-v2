@@ -1,9 +1,10 @@
 import { v7 } from 'uuid';
 
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
+
 import { UserRegisteredEvent } from '../events';
-import { Email } from '../value-objects/email.vo';
-import { Username } from '../value-objects/username.vo';
+import { type Email } from '../value-objects/email.vo';
+import { type Username } from '../value-objects/username.vo';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -49,6 +50,7 @@ export class User extends AggregateRoot {
     };
 
     const user = new User(props);
+
     user.addEvent(
       new UserRegisteredEvent({
         aggregateId: user.id,
@@ -58,6 +60,7 @@ export class User extends AggregateRoot {
         name: user.name,
       }),
     );
+
     return user;
   }
 

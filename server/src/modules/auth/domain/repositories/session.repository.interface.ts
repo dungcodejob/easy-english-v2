@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Session } from '../entities/session.entity';
+
+import { type Session } from '../entities/session.entity';
 
 export interface ISessionRepository {
   persist(session: Session): void;

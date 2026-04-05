@@ -1,15 +1,14 @@
+import { type WordFamily } from '../../domain/entities/word-props.interface';
 import { WordSenseEntity } from '../../domain/entities/word-sense.entity';
-import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
-import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
-import { WordOrmEntity } from '../persistence/word.orm-entity';
-
-import { WordFamily } from '../../domain/entities/word-props.interface';
 import { Word } from '../../domain/entities/word.aggregate';
 import { CefrLevel } from '../../domain/value-objects/cefr-level.vo';
 import { DataSource } from '../../domain/value-objects/data-source.vo';
 import { Language } from '../../domain/value-objects/language.vo';
 import { PartOfSpeech } from '../../domain/value-objects/part-of-speech.vo';
+import { WordExampleVO } from '../../domain/value-objects/word-example.vo';
+import { WordPronunciationVO } from '../../domain/value-objects/word-pronunciation.vo';
 import { WordText } from '../../domain/value-objects/word-text.vo';
+import { type WordOrmEntity } from '../persistence/word.orm-entity';
 
 export class WordMapper {
   static toDomain(entity: WordOrmEntity): Word {

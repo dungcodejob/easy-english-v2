@@ -6,7 +6,8 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { EventBus, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import type { Cache } from 'cache-manager';
+
+import { LookupWordQuery } from './lookup-word.query';
 import { Word } from '../../domain/entities/word.aggregate';
 import { LookupMissedEvent } from '../../domain/events/lookup-missed.event';
 import { LookupSucceededEvent } from '../../domain/events/lookup-succeeded.event';
@@ -19,7 +20,8 @@ import {
   wordReadRepositoryToken,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
-import { LookupWordQuery } from './lookup-word.query';
+
+import type { Cache } from 'cache-manager';
 
 @QueryHandler(LookupWordQuery)
 export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
@@ -125,6 +127,7 @@ export class LookupWordHandler implements IQueryHandler<LookupWordQuery> {
       }
     } catch (error) {
       const err = error as { code?: string; name?: string; message?: string };
+
       if (
         err &&
         (err.code === 'ECONNABORTED' ||

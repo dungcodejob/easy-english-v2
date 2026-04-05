@@ -1,11 +1,3 @@
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
-import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
-import {
-  ApiPaginationParams,
-  PaginationParam,
-  type ParsedPaginationParams,
-} from '@core/api';
-import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import {
   Body,
   Controller,
@@ -23,10 +15,21 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { ApiResponse as ApiResponseBuilder } from '@core/api';
+import {
+  ApiPaginationParams,
+  PaginationParam,
+  type ParsedPaginationParams,
+} from '@core/api';
+
 import {
   createSwaggerPaginationResponseDto,
   CurrentUser,
 } from '@shared/decorators';
+
+import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
+
 import { AddTopicWordCommand } from '../application/commands/add-topic-word.command';
 import { CreateTopicCommand } from '../application/commands/create-topic.command';
 import { DeleteTopicCommand } from '../application/commands/delete-topic.command';
@@ -41,6 +44,8 @@ import {
   UpdateTopicRequestDto,
 } from '../dto/requests/topic-requests.dto';
 import { TopicDto, TopicWordDto } from '../dto/responses/topic.dto';
+
+import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
 @ApiTags('Topics')
 @Controller('topics')

@@ -1,11 +1,13 @@
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
+
 import {
-  Language,
-  LearningGoal,
-  LearningMode,
-  Level,
-  WorkspaceType,
+  type Language,
+  type LearningGoal,
+  type LearningMode,
+  type Level,
+  type WorkspaceType,
 } from '../enums/workspace-enums';
 import { WorkspaceCreatedEvent } from '../events';
 

@@ -1,8 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import type { ILearningReadRepository } from '../../domain/repositories/learning-read.repository.interface';
+
+import { GetLearningListQuery } from './get-learning-list.query';
 import { InjectLearningReadRepository } from '../../domain/repositories/learning-read.repository.interface';
 import { LearningListItemResponseDto } from '../../dto/responses/learning-list-item.response.dto';
-import { GetLearningListQuery } from './get-learning-list.query';
+
+import type { ILearningReadRepository } from '../../domain/repositories/learning-read.repository.interface';
 
 @QueryHandler(GetLearningListQuery)
 export class GetLearningListHandler implements IQueryHandler<GetLearningListQuery> {

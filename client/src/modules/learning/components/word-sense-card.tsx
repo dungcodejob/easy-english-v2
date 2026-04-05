@@ -1,4 +1,4 @@
-import { APP_ROUTES } from '@/shared/constants';
+import { DictionaryRoutes } from '@/shared/constants';
 import { Badge } from '@/shared/ui/shadcn/badge';
 import { Card } from '@/shared/ui/shadcn/card';
 import { Link } from '@tanstack/react-router';
@@ -11,8 +11,7 @@ interface WordSenseCardProps {
 export function WordSenseCard({ sense }: WordSenseCardProps) {
   return (
     <Link
-      to={APP_ROUTES.DICTIONARY.SENSE_DETAIL}
-      params={{ senseId: sense.senseId }}
+      to={DictionaryRoutes.senseDetail(sense.senseId)}
       className="outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl block"
     >
       <Card className="h-full hover:border-primary/50 hover:shadow-md transition-all cursor-pointer p-4 group">

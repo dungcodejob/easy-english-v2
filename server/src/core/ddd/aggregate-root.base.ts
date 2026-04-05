@@ -1,8 +1,9 @@
-import { Logger } from '@nestjs/common';
-import { EventBus } from '@nestjs/cqrs';
-import { RequestContextService } from '../context/request-context.service';
-import { DomainEvent } from './domain-event.base';
+import { type Logger } from '@nestjs/common';
+import { type EventBus } from '@nestjs/cqrs';
+
+import { type DomainEvent } from './domain-event.base';
 import { Entity } from './entity.base';
+import { RequestContextService } from '../context/request-context.service';
 
 export abstract class AggregateRoot extends Entity {
   private _domainEvents: DomainEvent[] = [];

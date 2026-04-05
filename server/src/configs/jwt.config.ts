@@ -1,7 +1,8 @@
-import { Inject } from '@nestjs/common';
-import { ConfigType, registerAs } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { Inject } from '@nestjs/common';
+import { type ConfigType, registerAs } from '@nestjs/config';
 
 export const jwtConfig = registerAs('jwt', () => {
   const privateKeyPath =

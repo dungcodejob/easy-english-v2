@@ -8,9 +8,11 @@ export class WordText extends ValueObject<{ value: string }> {
 
   static create(text: string): WordText {
     const trimmed = text?.trim();
+
     if (!trimmed) {
       throw new ArgumentNotProvidedException('Word text cannot be empty');
     }
+
     return new WordText({ value: trimmed });
   }
 

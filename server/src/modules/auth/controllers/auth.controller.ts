@@ -1,7 +1,8 @@
 import { Body, Controller, Ip, Post, Req, Res } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
+
 import { ApiPublic } from '@shared/decorators';
-import type { Request, Response } from 'express';
+
 import { LoginCommand } from '../application/commands/login.command';
 import { RefreshCommand } from '../application/commands/refresh.command';
 import { RegisterCommand } from '../application/commands/register.command';
@@ -12,6 +13,9 @@ import { RegisterRequestDto } from '../dto/requests/register.request.dto';
 import { LoginResponseDto } from '../dto/responses/login.response.dto';
 import { RegisterResponseDto } from '../dto/responses/register.response.dto';
 import { UserSessionCookie } from '../infrastructure/services/user-session-cookie';
+
+import type { Request, Response } from 'express';
+
 @Controller('auth')
 export class AuthController {
   constructor(

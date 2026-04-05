@@ -1,10 +1,12 @@
 import {
   applyDecorators,
   createParamDecorator,
-  ExecutionContext,
+  type ExecutionContext,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Request } from 'express';
+
+import { type Request } from 'express';
+
 import { parsePagination, QUERY_DEFAULTS } from './pagination.parser';
 
 /**
@@ -40,10 +42,10 @@ export const PaginationParam = createParamDecorator(
     const query = request.query;
 
     const input = {
-      top: query['$top'] ? parseInt(query['$top'] as string, 10) : undefined,
-      skip: query['$skip'] ? parseInt(query['$skip'] as string, 10) : undefined,
-      count: query['$count'] ? query['$count'] === 'true' : undefined,
-      skiptoken: query['$skiptoken'] as string | undefined,
+      top: query.$top ? parseInt(query.$top as string, 10) : undefined,
+      skip: query.$skip ? parseInt(query.$skip as string, 10) : undefined,
+      count: query.$count ? query.$count === 'true' : undefined,
+      skiptoken: query.$skiptoken as string | undefined,
     };
 
     const { top, skip, count } = parsePagination(input);

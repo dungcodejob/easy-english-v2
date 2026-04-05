@@ -1,8 +1,15 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+
 import cookieParser from 'cookie-parser';
+
 import { AppModule } from './app.module';
-import { appConfig, AppConfig, httpConfig, HttpConfig } from './configs';
+import {
+  appConfig,
+  type AppConfig,
+  httpConfig,
+  type HttpConfig,
+} from './configs';
 import { GlobalExceptionFilter, ResponseInterceptor } from './core/api';
 import { swagger } from './swagger';
 
@@ -18,6 +25,7 @@ async function bootstrap() {
   const isProduction = appConfigValues.isProduction;
 
   const globalPrefix = 'api';
+
   app.enableCors({
     origin: httpConfigValues.corsOrigins, // cho phép Angular gọi
     credentials: true, // nếu bạn gửi cookie/token
@@ -50,11 +58,15 @@ async function bootstrap() {
 
   await app.listen(port, isProduction ? '0.0.0.0' : '127.0.0.1');
 
+  // eslint-disable-next-line no-console
   console.log(`Server in ${process.env.NODE_ENV} mode`);
+  // eslint-disable-next-line no-console
   console.log(`Server is listening on :${port}/${globalPrefix}`);
+  // eslint-disable-next-line no-console
   console.log(`Swagger: ${domain}/${globalPrefix}/docs`);
 }
 bootstrap().catch((err) => {
+  // eslint-disable-next-line no-console
   console.error('Error during bootstrap:', err);
   process.exit(1);
 });

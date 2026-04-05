@@ -1,4 +1,5 @@
-import { Mapper } from '@core/ddd/mapper.interface';
+import { type Mapper } from '@core/ddd/mapper.base';
+
 import { WorkspaceEntity } from '../../domain/entities/workspace.entity';
 import { WorkspaceOrmEntity } from '../persistence/workspace.orm-entity';
 
@@ -27,6 +28,7 @@ export class WorkspaceMapper implements Mapper<
 
   toPersistence(domainEntity: WorkspaceEntity): WorkspaceOrmEntity {
     const ormEntity = new WorkspaceOrmEntity();
+
     ormEntity.id = domainEntity.id;
     ormEntity.tenantId = domainEntity.tenantId;
     ormEntity.userId = domainEntity.userId;
@@ -41,10 +43,11 @@ export class WorkspaceMapper implements Mapper<
     ormEntity.defaultLearningMode = domainEntity.defaultLearningMode;
     ormEntity.createdAt = domainEntity.createdAt;
     ormEntity.updatedAt = domainEntity.updatedAt;
+
     return ormEntity;
   }
 
-  toResponse(entity: WorkspaceEntity): any {
+  toResponse(entity: WorkspaceEntity): object {
     // Return a plain object or DTO
     return {
       id: entity.id,

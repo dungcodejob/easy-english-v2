@@ -1,6 +1,7 @@
+import { v7 } from 'uuid';
+
 import { ValueObject } from '@core/ddd';
 import { ArgumentNotProvidedException } from '@core/exceptions';
-import { v7 } from 'uuid';
 
 export class WordId extends ValueObject<{ value: string }> {
   get value(): string {
@@ -15,6 +16,7 @@ export class WordId extends ValueObject<{ value: string }> {
     if (!id || id.trim().length === 0) {
       throw new ArgumentNotProvidedException('WordId cannot be empty');
     }
+
     return new WordId({ value: id });
   }
 }

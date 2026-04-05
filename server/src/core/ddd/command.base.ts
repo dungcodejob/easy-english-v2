@@ -1,11 +1,13 @@
-import { isEmpty } from '@shared/utils';
 import { randomUUID } from 'crypto';
+
+import { isEmpty } from '@shared/utils';
+
 import { RequestContextService } from '../context/request-context.service';
 import { ArgumentNotProvidedException } from '../exceptions';
 
 export type CommandProps<T> = Omit<T, 'id' | 'metadata'> & Partial<Command>;
 
-type CommandMetadata = {
+interface CommandMetadata {
   /** ID for correlation purposes (for commands that
    *  arrive from other microservices,logs correlation, etc). */
   readonly correlationId: string;
@@ -25,7 +27,7 @@ type CommandMetadata = {
    * Time when the command occurred. Mostly for tracing purposes
    */
   readonly timestamp: number;
-};
+}
 
 export class Command {
   /**
@@ -43,6 +45,7 @@ export class Command {
       );
     }
     const ctx = RequestContextService.getContext();
+
     this.id = props.id || randomUUID();
     this.metadata = {
       correlationId: props?.metadata?.correlationId || ctx.requestId,

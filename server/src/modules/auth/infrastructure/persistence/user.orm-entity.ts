@@ -6,6 +6,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4 } from 'uuid';
+
 import { TenantOrmEntity } from './tenant.orm-entity';
 
 @Entity({ tableName: 'users' })
@@ -28,7 +29,7 @@ export class UserOrmEntity {
   username!: string;
 
   @Property({ default: 'MEMBER' })
-  role: string = 'MEMBER';
+  role = 'MEMBER';
 
   @Property({ onCreate: () => new Date() })
   createdAt: Date = new Date();

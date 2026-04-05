@@ -1,55 +1,84 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { TopicWordEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
+import {
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { AddTopicWordCommand } from './add-topic-word.command';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
+import { TopicWordDto } from '../../dto/responses/topic.dto';
+import { TopicWordOrmEntity } from '../../infrastructure/persistence/topic-word.orm-entity';
 
+/**
+ * Add Topic Word Command Handler
+ *
+ * Business logic layer - handles adding a word to a topic.
+ * Enforces the 200-word per topic limit and duplicate detection via domain logic.
+ */
 @CommandHandler(AddTopicWordCommand)
-export class AddTopicWordHandler implements ICommandHandler<AddTopicWordCommand> {
-  constructor(private readonly orm: MikroORM) {}
+export class AddTopicWordHandler implements ICommandHandler<
+  AddTopicWordCommand,
+  TopicWordDto
+> {
+  private readonly logger = new Logger(AddTopicWordHandler.name);
 
-  @CreateRequestContext()
-  async execute(command: AddTopicWordCommand): Promise<TopicWordEntity> {
-    const em = this.orm.em;
+  constructor(
+    private readonly em: EntityManager,
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly eventBus: EventBus,
+  ) {}
 
-    // 1. Verify topic exists and belongs to user
-    const topic = await em.findOne(TopicEntity, {
-      id: command.topicId,
-      tenantId: command.tenantId,
-      userId: command.userId,
-    });
+  async execute(command: AddTopicWordCommand): Promise<TopicWordDto> {
+    const topic = await this.repo.findById(
+      command.topicId,
+      command.tenantId,
+      command.userId,
+    );
 
     if (!topic) {
       throw new NotFoundException('Topic not found or access denied');
     }
 
-    // 2. Check limits (max 200 words per topic)
-    const wordCount = await em.count(TopicWordEntity, {
-      topic: topic.id,
+    const existingWordCount = await this.em.count(TopicWordOrmEntity, {
+      topic: { id: command.topicId },
     });
 
-    if (wordCount >= 200) {
-      throw new BadRequestException(
-        'Topic has reached the maximum limit of 200 words.',
-      );
+    const result = topic.addWord(command.wordSenseId, existingWordCount);
+
+    if (result.isErr()) {
+      if (result.error === 'duplicate') {
+        throw new ConflictException('Word is already in this topic');
+      }
+      if (result.error === 'limit_reached') {
+        throw new BadRequestException(
+          'Topic has reached the maximum limit of 200 words.',
+        );
+      }
+      throw new Error('Unexpected error adding word to topic');
     }
 
-    // 3. Check for duplicates
-    const existingWord = await em.findOne(TopicWordEntity, {
-      topic: topic.id,
-      wordSenseId: command.wordSenseId,
-    });
+    const topicWord = result.value.topicWord;
 
-    if (existingWord) {
-      throw new BadRequestException('Word is already in this topic');
-    }
+    this.repo.persist(topic);
+    await this.em.flush();
+    topic.publishEvents(this.logger, this.eventBus);
 
-    // 4. Create topic word
-    const topicWord = new TopicWordEntity(topic, command.wordSenseId);
-
-    await em.persistAndFlush(topicWord);
-
-    return topicWord;
+    return {
+      id: topicWord.id,
+      topicId: command.topicId,
+      wordSenseId: topicWord.wordSenseId,
+      // Status is derived from UserWordSenseProgress at read time.
+      // A freshly added word has no progress record yet — status is 'NEW'.
+      status: 'NEW' as const,
+      addedAt: topicWord.addedAt,
+    };
   }
 }

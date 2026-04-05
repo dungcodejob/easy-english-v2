@@ -1,9 +1,11 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
+
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
 import { dictionaryConfig } from '../../configs/dictionary.config';
 import { LookupMissedHandler } from './application/events/lookup-missed.handler';
 import { WordEnrichmentHandler } from './application/events/word-enrichment.handler';

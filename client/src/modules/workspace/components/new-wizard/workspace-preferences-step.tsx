@@ -1,20 +1,24 @@
+/**
+ * WorkspacePreferencesStep — wizard step component
+ *
+ * Migrated to Design System:
+ *  - WizardStepLayout  → WizardStepShell (DS pattern)
+ *  - shadcn Button    → DsButton (DS base)
+ *  - shadcn Input     → DsInput (DS base)
+ *  - shadcn Select    → DsSelect (DS base, new)
+ *  - shadcn Switch    → kept (complex controlled state)
+ */
+
+import { DsButton } from '@/shared/ui/base';
+import { DsInput } from '@/shared/ui/base';
+import { DsSelect, DsSelectItem } from '@/shared/ui/base';
+import { FieldLabel } from '@/shared/ui/shadcn/field';
+import { WizardStepShell } from '@/shared/ui/patterns';
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { Button } from '@/shared/ui/shadcn/button';
-import { Input } from '@/shared/ui/shadcn/input';
-import { Label } from '@/shared/ui/shadcn/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select';
 import { Switch } from '@/shared/ui/shadcn/switch';
 import { cn } from '@/shared/utils';
 import { Controller, useForm } from 'react-hook-form';
-
 import { WorkspaceLearningMode } from '../../types';
-import { WizardStepLayout } from '../wizard-step-layout';
 
 interface WorkspacePreferencesStepProps {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -48,16 +52,18 @@ export function WorkspacePreferencesStep({
   };
 
   return (
-    <WizardStepLayout
+    <WizardStepShell
       title="Preferences"
       description="Customize your learning habit. You can change these later."
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Daily Target */}
         <div className="space-y-3">
-          <Label htmlFor="dailyTarget">Daily Word Target</Label>
+          <FieldLabel htmlFor="dailyTarget" className="text-sm font-medium">
+            Daily Word Target
+          </FieldLabel>
           <div className="flex items-center gap-4">
-            <Input
+            <DsInput
               id="dailyTarget"
               type="number"
               min={1}
@@ -89,7 +95,7 @@ export function WorkspacePreferencesStep({
         {/* Study Reminder */}
         <div className="flex flex-row items-center justify-between rounded-lg border p-4">
           <div className="space-y-0.5">
-            <Label className="text-base">Study Reminders</Label>
+            <FieldLabel className="text-base font-medium">Study Reminders</FieldLabel>
             <div className="text-sm text-muted-foreground">
               Receive daily notifications to keep your streak.
             </div>
@@ -98,34 +104,40 @@ export function WorkspacePreferencesStep({
             control={control}
             name="studyReminder"
             render={({ field }) => (
-              <Switch checked={field.value} onCheckedChange={field.onChange} />
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
             )}
           />
         </div>
 
         {/* Learning Mode */}
         <div className="space-y-3">
-          <Label>Default Learning Mode</Label>
+          <FieldLabel className="text-sm font-medium">
+            Default Learning Mode
+          </FieldLabel>
           <Controller
             control={control}
             name="defaultLearningMode"
             render={({ field }) => (
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select mode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={WorkspaceLearningMode.Flashcard}>
-                    Flashcards (Visual)
-                  </SelectItem>
-                  <SelectItem value={WorkspaceLearningMode.Quiz}>
-                    Quiz (Multiple Choice)
-                  </SelectItem>
-                  <SelectItem value={WorkspaceLearningMode.SpacedRepetition}>
-                    Spaced Repetition (Smart)
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <DsSelect
+                value={field.value}
+                onValueChange={field.onChange}
+                placeholder="Select mode"
+              >
+                <DsSelectItem value={WorkspaceLearningMode.Flashcard}>
+                  Flashcards (Visual)
+                </DsSelectItem>
+                <DsSelectItem value={WorkspaceLearningMode.Quiz}>
+                  Quiz (Multiple Choice)
+                </DsSelectItem>
+                <DsSelectItem
+                  value={WorkspaceLearningMode.SpacedRepetition}
+                >
+                  Spaced Repetition (Smart)
+                </DsSelectItem>
+              </DsSelect>
             )}
           />
           <p className="text-xs text-muted-foreground">
@@ -134,17 +146,17 @@ export function WorkspacePreferencesStep({
         </div>
 
         <div className="flex justify-between pt-4">
-          <Button type="button" variant="ghost" onClick={onBack}>
+          <DsButton type="button" variant="ghost" onClick={onBack}>
             Back
-          </Button>
+          </DsButton>
           <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={onSkip}>
+            <DsButton type="button" variant="outline" onClick={onSkip}>
               Skip
-            </Button>
-            <Button type="submit">Review setup</Button>
+            </DsButton>
+            <DsButton type="submit">Review setup</DsButton>
           </div>
         </div>
       </form>
-    </WizardStepLayout>
+    </WizardStepShell>
   );
 }

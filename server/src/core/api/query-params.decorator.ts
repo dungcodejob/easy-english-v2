@@ -1,15 +1,17 @@
 import {
   applyDecorators,
   createParamDecorator,
-  ExecutionContext,
+  type ExecutionContext,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Request } from 'express';
+
+import { type Request } from 'express';
+
 import { QUERY_DEFAULTS } from './pagination/pagination.parser';
 import {
-  ParsedQueryParams,
+  type ParsedQueryParams,
   parseQueryParams,
-  QueryParamsInput,
+  type QueryParamsInput,
 } from './query-params';
 
 /**
@@ -39,12 +41,12 @@ export const QueryParams = createParamDecorator(
     const query = request.query;
 
     const input: QueryParamsInput = {
-      top: query['$top'] ? parseInt(query['$top'] as string, 10) : undefined,
-      skip: query['$skip'] ? parseInt(query['$skip'] as string, 10) : undefined,
-      count: query['$count'] ? query['$count'] === 'true' : undefined,
-      skiptoken: query['$skiptoken'] as string | undefined,
-      $filter: query['$filter'] as string | undefined,
-      $orderby: query['$orderby'] as string | undefined,
+      top: query.$top ? parseInt(query.$top as string, 10) : undefined,
+      skip: query.$skip ? parseInt(query.$skip as string, 10) : undefined,
+      count: query.$count ? query.$count === 'true' : undefined,
+      skiptoken: query.$skiptoken as string | undefined,
+      $filter: query.$filter as string | undefined,
+      $orderby: query.$orderby as string | undefined,
     };
 
     return parseQueryParams(input);

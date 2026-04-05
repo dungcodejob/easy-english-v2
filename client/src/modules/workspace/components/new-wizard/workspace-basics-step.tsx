@@ -1,14 +1,27 @@
+/**
+ * WorkspaceBasicsStep — wizard step component
+ *
+ * Migrated to Design System:
+ *  - WizardStepLayout  → WizardStepShell (DS pattern)
+ *  - shadcn Button     → DsButton (DS base)
+ *  - shadcn Input      → DsInput (DS base)
+ *  - shadcn Label      → FieldLabel (DS shadcn wrapper)
+ *
+ * UI: 100% DS components. Business logic: unchanged.
+ */
+
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { Button } from '@/shared/ui/shadcn/button';
-import { Input } from '@/shared/ui/shadcn/input';
+import { DsButton } from '@/shared/ui/base';
+import { DsInput } from '@/shared/ui/base';
+import { FieldLabel } from '@/shared/ui/shadcn/field';
 import { Label } from '@/shared/ui/shadcn/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/shadcn/radio-group';
 import { Textarea } from '@/shared/ui/shadcn/textarea';
+import { WizardStepShell } from '@/shared/ui/patterns';
 import { cn } from '@/shared/utils';
 import { Briefcase, GraduationCap, User } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceType } from '../../types';
-import { WizardStepLayout } from '../wizard-step-layout';
 
 interface WorkspaceBasicsStepProps {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -39,35 +52,36 @@ export function WorkspaceBasicsStep({
   };
 
   return (
-    <WizardStepLayout
+    <WizardStepShell
       title="Let's start with the basics"
       description="Give your workspace a name and choose how you'll use it."
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">
-              Workspace Name <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="name"
-              placeholder="e.g. My English Journey"
-              autoFocus
-              className={cn(
-                errors.name &&
-                  'border-destructive focus-visible:ring-destructive',
-              )}
-              {...register('name', { required: 'Workspace name is required' })}
-            />
-            {errors.name && (
-              <p className="text-sm text-destructive font-medium mt-1 animate-in slide-in-from-top-1 fade-in-0">
-                {errors.name.message}
-              </p>
+          <FieldLabel
+            htmlFor="name"
+            className="text-sm font-medium"
+          >
+            Workspace Name <span className="text-destructive">*</span>
+          </FieldLabel>
+          <DsInput
+            id="name"
+            placeholder="e.g. My English Journey"
+            autoFocus
+            className={cn(
+              errors.name &&
+                'border-destructive focus-visible:ring-destructive',
             )}
-          </div>
+            {...register('name', { required: 'Workspace name is required' })}
+          />
+          {errors.name && (
+            <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
+              {errors.name.message}
+            </p>
+          )}
 
           <div className="space-y-3">
-            <Label>Workspace Type</Label>
+            <Label className="text-sm font-medium">Workspace Type</Label>
             <Controller
               control={control}
               name="type"
@@ -77,67 +91,74 @@ export function WorkspaceBasicsStep({
                   defaultValue={field.value}
                   className="grid grid-cols-1 md:grid-cols-3 gap-4"
                 >
-                  <Label
-                    htmlFor="type-personal"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all"
-                  >
+                  <div>
                     <RadioGroupItem
                       value={WorkspaceType.Personal}
                       id="type-personal"
-                      className="sr-only"
+                      className="peer sr-only"
                     />
-                    <User className="mb-3 h-6 w-6 text-muted-foreground" />
-                    <div className="text-center">
-                      <div className="font-semibold mb-1">Personal</div>
-                      <div className="text-xs text-muted-foreground">
-                        For your own learning
+                    <Label
+                      htmlFor="type-personal"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                    >
+                      <User className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <div className="text-center">
+                        <div className="font-semibold mb-1">Personal</div>
+                        <div className="text-xs text-muted-foreground">
+                          For your own learning
+                        </div>
                       </div>
-                    </div>
-                  </Label>
+                    </Label>
+                  </div>
 
-                  <Label
-                    htmlFor="type-team"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all"
-                  >
+                  <div>
                     <RadioGroupItem
                       value={WorkspaceType.Team}
                       id="type-team"
-                      className="sr-only"
+                      className="peer sr-only"
                     />
-                    <Briefcase className="mb-3 h-6 w-6 text-muted-foreground" />
-
-                    <div className="text-center">
-                      <div className="font-semibold mb-1">Team</div>
-                      <div className="text-xs text-muted-foreground">
-                        Collaborate with peers
+                    <Label
+                      htmlFor="type-team"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                    >
+                      <Briefcase className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <div className="text-center">
+                        <div className="font-semibold mb-1">Team</div>
+                        <div className="text-xs text-muted-foreground">
+                          Collaborate with peers
+                        </div>
                       </div>
-                    </div>
-                  </Label>
+                    </Label>
+                  </div>
 
-                  <Label
-                    htmlFor="type-classroom"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all"
-                  >
+                  <div>
                     <RadioGroupItem
                       value={WorkspaceType.Classroom}
                       id="type-classroom"
-                      className="sr-only"
+                      className="peer sr-only"
                     />
-                    <GraduationCap className="mb-3 h-6 w-6 text-muted-foreground" />
-                    <div className="text-center">
-                      <div className="font-semibold mb-1">Classroom</div>
-                      <div className="text-xs text-muted-foreground">
-                        For teachers & students
+                    <Label
+                      htmlFor="type-classroom"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                    >
+                      <GraduationCap className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <div className="text-center">
+                        <div className="font-semibold mb-1">Classroom</div>
+                        <div className="text-xs text-muted-foreground">
+                          For teachers & students
+                        </div>
                       </div>
-                    </div>
-                  </Label>
+                    </Label>
+                  </div>
                 </RadioGroup>
               )}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (Optional)</Label>
+            <Label htmlFor="description" className="text-sm font-medium">
+              Description (Optional)
+            </Label>
             <Textarea
               id="description"
               placeholder="What is this workspace for?"
@@ -148,14 +169,18 @@ export function WorkspaceBasicsStep({
         </div>
 
         <div className="flex justify-between pt-4">
-          <Button type="button" variant="ghost" onClick={onBack}>
+          <DsButton
+            type="button"
+            variant="ghost"
+            onClick={onBack}
+          >
             Cancel
-          </Button>
-          <Button type="submit" size="lg">
+          </DsButton>
+          <DsButton type="submit">
             Next Step
-          </Button>
+          </DsButton>
         </div>
       </form>
-    </WizardStepLayout>
+    </WizardStepShell>
   );
 }

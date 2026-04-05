@@ -1,38 +1,69 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
-import { BadRequestException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
+import { Logger, BadRequestException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { CreateTopicCommand } from './create-topic.command';
+import { Topic } from '../../domain/entities/topic.aggregate';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
+import { TopicDto } from '../../dto/responses/topic.dto';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
+/**
+ * Create Topic Command Handler
+ *
+ * Business logic layer - handles the create topic use case.
+ * Enforces the 50-topic per user limit via domain logic.
+ */
 @CommandHandler(CreateTopicCommand)
-export class CreateTopicHandler implements ICommandHandler<CreateTopicCommand> {
-  constructor(private readonly orm: MikroORM) {}
+export class CreateTopicHandler implements ICommandHandler<
+  CreateTopicCommand,
+  TopicDto
+> {
+  private readonly logger = new Logger(CreateTopicHandler.name);
 
-  @CreateRequestContext()
-  async execute(command: CreateTopicCommand): Promise<TopicEntity> {
-    const em = this.orm.em;
+  constructor(
+    private readonly em: EntityManager,
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly mapper: TopicMapper,
+    private readonly eventBus: EventBus,
+  ) {}
 
-    // Check count limit (max 50)
-    const topicCount = await em.count(TopicEntity, {
-      tenantId: command.tenantId,
-      userId: command.userId,
-    });
+  async execute(command: CreateTopicCommand): Promise<TopicDto> {
+    // Check existing topic count to enforce the 50-topic limit
+    const { count } = await this.repo.findByUser(
+      command.tenantId,
+      command.userId,
+      1,
+      0,
+    );
 
-    if (topicCount >= 50) {
+    const result = Topic.create(
+      {
+        tenantId: command.tenantId,
+        userId: command.userId,
+        name: command.name,
+        description: command.description,
+      },
+      count,
+    );
+
+    if (result.isErr()) {
       throw new BadRequestException(
         'User has reached the maximum limit of 50 topics.',
       );
     }
 
-    const topic = new TopicEntity(
-      command.tenantId,
-      command.userId,
-      command.name,
-      command.description,
-    );
+    const topic = result.value;
 
-    await em.persistAndFlush(topic);
+    this.repo.persist(topic);
+    await this.em.flush();
+    topic.publishEvents(this.logger, this.eventBus);
 
-    return topic;
+    return this.mapper.toResponse(topic) as TopicDto;
   }
 }

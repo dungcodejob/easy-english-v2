@@ -1,5 +1,5 @@
-import { TokenResultDto } from '../auth-result.dto';
-import { UserResponseDto } from './user.response.dto';
+import { type TokenResultDto } from '../auth-result.dto';
+import { type UserResponseDto } from './user.response.dto';
 
 export class LoginResponseDto {
   readonly user: UserResponseDto;

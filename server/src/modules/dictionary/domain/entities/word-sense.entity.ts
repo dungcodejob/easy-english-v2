@@ -1,8 +1,10 @@
-import { Entity } from '@core/ddd';
 import { v7 } from 'uuid';
-import { CefrLevel } from '../value-objects/cefr-level.vo';
-import { PartOfSpeech } from '../value-objects/part-of-speech.vo';
-import { WordExampleVO } from '../value-objects/word-example.vo';
+
+import { Entity } from '@core/ddd';
+
+import { type CefrLevel } from '../value-objects/cefr-level.vo';
+import { type PartOfSpeech } from '../value-objects/part-of-speech.vo';
+import { type WordExampleVO } from '../value-objects/word-example.vo';
 
 export interface WordSenseProps {
   partOfSpeech: PartOfSpeech;

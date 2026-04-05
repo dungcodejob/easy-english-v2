@@ -1,5 +1,7 @@
-import { Mapper } from '@core/ddd';
 import { Injectable } from '@nestjs/common';
+
+import { Mapper } from '@core/ddd';
+
 import { Tenant, TenantPlan, TenantStatus } from '../../domain/entities';
 import { TenantOrmEntity } from '../persistence/tenant.orm-entity';
 
@@ -11,12 +13,14 @@ export class TenantMapper implements Mapper<
 > {
   toPersistence(entity: Tenant): TenantOrmEntity {
     const ormEntity = new TenantOrmEntity();
+
     ormEntity.id = entity.id;
     ormEntity.name = entity.name;
     ormEntity.status = entity.status as string;
     ormEntity.plan = entity.plan as string;
     ormEntity.createdAt = entity.createdAt;
     ormEntity.updatedAt = entity.updatedAt;
+
     return ormEntity;
   }
 

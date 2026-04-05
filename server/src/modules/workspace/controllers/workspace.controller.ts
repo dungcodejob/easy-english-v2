@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
 import { CurrentUser } from '@shared/decorators/current-user.decorator';
-import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
+
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
 import { CreateWorkspaceCommand } from '../application/commands/create-workspace.command';
 import { CheckHasWorkspaceQuery } from '../application/queries/check-has-workspace.query';
@@ -10,6 +11,8 @@ import { ListWorkspacesQuery } from '../application/queries/list-workspaces.quer
 import { CreateWorkspaceRequestDto } from '../dto/requests/create-workspace.request.dto';
 import { HasWorkspaceResponseDto } from '../dto/responses/has-workspace.response.dto';
 import { WorkspaceResponseDto } from '../dto/responses/workspace.response.dto';
+
+import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 
 @Controller('workspaces')
 @UseGuards(JwtAuthGuard)

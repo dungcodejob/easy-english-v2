@@ -1,6 +1,15 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+
+// Domain repositories (interfaces + DI tokens)
+
+// Infrastructure
+
+// Progress module ORM entities (needed for ListTopicWordsHandler progressMap query)
+
+// Application
 import { AddTopicWordHandler } from './application/commands/add-topic-word.handler';
 import { CreateTopicHandler } from './application/commands/create-topic.handler';
 import { DeleteTopicHandler } from './application/commands/delete-topic.handler';
@@ -10,16 +19,13 @@ import { GetTopicDetailHandler } from './application/queries/get-topic-detail.ha
 import { GetTopicsHandler } from './application/queries/get-topics.handler';
 import { ListTopicWordsHandler } from './application/queries/list-topic-words.handler';
 import { TopicController } from './controllers/topic.controller';
-import { TopicWordEntity } from './infrastructure/persistence/topic-word.orm-entity';
-import { TopicEntity } from './infrastructure/persistence/topic.orm-entity';
+import { provideTopicRepository } from './domain/repositories/topic.repository.interface';
+import { TopicMapper } from './infrastructure/mappers';
+import { TopicWordOrmEntity } from './infrastructure/persistence/topic-word.orm-entity';
+import { TopicOrmEntity } from './infrastructure/persistence/topic.orm-entity';
+import { TopicRepository } from './infrastructure/repositories/topic.repository';
 
-const queryHandlers = [
-  GetTopicsHandler,
-  GetTopicDetailHandler,
-  ListTopicWordsHandler,
-];
-
-const commandHandlers = [
+const CommandHandlers = [
   CreateTopicHandler,
   UpdateTopicHandler,
   DeleteTopicHandler,
@@ -27,13 +33,28 @@ const commandHandlers = [
   RemoveTopicWordHandler,
 ];
 
+const QueryHandlers = [
+  GetTopicsHandler,
+  GetTopicDetailHandler,
+  ListTopicWordsHandler,
+];
+
+const Repositories = [provideTopicRepository(TopicRepository)];
+
+const Mappers = [TopicMapper];
+
 @Module({
   imports: [
     CqrsModule,
-    MikroOrmModule.forFeature([TopicEntity, TopicWordEntity]),
+    MikroOrmModule.forFeature([TopicOrmEntity, TopicWordOrmEntity]),
   ],
   controllers: [TopicController],
-  providers: [...queryHandlers, ...commandHandlers],
-  exports: [MikroOrmModule],
+  providers: [
+    ...Repositories,
+    ...Mappers,
+    ...CommandHandlers,
+    ...QueryHandlers,
+  ],
+  exports: [...Repositories],
 })
 export class TopicModule {}

@@ -1,13 +1,14 @@
 import { ApplicationException } from '@core/exceptions';
+
 import { FilterParseException } from './filter/filter.exception';
 import { parseFilter } from './filter/filter.parser';
-import { FilterInput, FilterNode } from './filter/filter.types';
+import { type FilterInput, type FilterNode } from './filter/filter.types';
 import { PaginationParseException } from './pagination/pagination.exception';
 import { parsePagination } from './pagination/pagination.parser';
-import { PaginationInput } from './pagination/pagination.types';
+import { type PaginationInput } from './pagination/pagination.types';
 import { parseOrderBy } from './sort/sort-parser';
 import { SortParseException } from './sort/sort.exception';
-import { SortEntry, SortInput } from './sort/sort.types';
+import { type SortEntry, type SortInput } from './sort/sort.types';
 
 /**
  * Combined query parameters for list endpoints
@@ -56,6 +57,7 @@ export function parseQueryParams(input: QueryParamsInput): ParsedQueryParams {
     // Parse filter
     let filter: FilterNode | undefined;
     let filterRaw: string | undefined;
+
     if (input.$filter) {
       filter = parseFilter(input.$filter);
       filterRaw = input.$filter;
@@ -64,6 +66,7 @@ export function parseQueryParams(input: QueryParamsInput): ParsedQueryParams {
     // Parse sort
     let sort: SortEntry[] = [];
     let sortRaw: string | undefined;
+
     if (input.$orderby) {
       sort = parseOrderBy(input.$orderby);
       sortRaw = input.$orderby;

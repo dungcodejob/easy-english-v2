@@ -15,18 +15,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+
 import { Public } from '@shared/decorators';
+
 import {
   PaginationParam,
   type ParsedPaginationParams,
 } from '../../../core/api/pagination/pagination.decorator';
+import { ApiResponse as ApiResponseBuilder } from '../../../core/api/response.builder';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import {
   ApiAuth,
   ApiPublic,
 } from '../../../shared/decorators/http/http.decorator';
-import { ApiResponse as ApiResponseBuilder } from '../../../core/api/response.builder';
-import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
 import { GetWordSenseDetailQuery } from '../application/queries/get-word-sense-detail.query';
 import { LookupWordQuery } from '../application/queries/lookup-word.query';
@@ -36,6 +37,8 @@ import { SearchWordSensesRequestDto } from '../dto/requests/search-word-senses.r
 import { WordSenseDetailResponseDto } from '../dto/responses/word-sense-detail.response.dto';
 import { WordSenseSearchResultResponseDto } from '../dto/responses/word-sense-search-result.response.dto';
 import { WordResponseDto } from '../dto/responses/word.response.dto';
+
+import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
 
 @ApiTags('Dictionary')
 @Controller({ version: '1', path: 'dictionary' })

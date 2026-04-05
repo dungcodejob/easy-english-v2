@@ -1,9 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { ValidateSessionQuery } from './validate-session.query';
 import {
   type ISessionRepository,
   InjectSessionRepository,
 } from '../../domain/repositories/session.repository.interface';
-import { ValidateSessionQuery } from './validate-session.query';
 
 @QueryHandler(ValidateSessionQuery)
 export class ValidateSessionHandler implements IQueryHandler<ValidateSessionQuery> {

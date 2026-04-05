@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Word } from '../entities/word.aggregate';
+
+import { type Word } from '../entities/word.aggregate';
 
 export interface IWordWriteRepository {
   save(word: Word): Promise<void>;

@@ -1,5 +1,7 @@
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/postgresql';
+
 import { IProviderCacheRepository } from '../../domain/repositories/provider-cache.repository.interface';
 import { ProviderResponseCacheOrmEntity } from '../persistence/provider-response-cache.orm-entity';
 
@@ -26,6 +28,7 @@ export class ProviderCacheRepository implements IProviderCacheRepository {
     if (!normalizedWords.length) {
       return [];
     }
+
     return this.em.find(ProviderResponseCacheOrmEntity, {
       normalizedWord: { $in: normalizedWords },
       provider,
@@ -46,6 +49,7 @@ export class ProviderCacheRepository implements IProviderCacheRepository {
         );
       }
     })();
+
     return Promise.resolve();
   }
 }

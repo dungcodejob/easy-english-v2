@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { EventBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
+
 import { WordEnrichmentRequestedEvent } from '../../domain/events/word-enrichment-requested.event';
 import {
   lookupProviderToken,
@@ -42,6 +43,7 @@ export class WordEnrichmentHandler implements IEventHandler<WordEnrichmentReques
 
       if (!enrichedWords || enrichedWords.length === 0) {
         this.logger.warn(`No enriched words returned for '${normalizedWord}'`);
+
         return;
       }
 
@@ -52,6 +54,7 @@ export class WordEnrichmentHandler implements IEventHandler<WordEnrichmentReques
         this.logger.warn(
           `No existing words found in DB for '${normalizedWord}', skipping enrichment`,
         );
+
         return;
       }
 

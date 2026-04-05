@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+
+import { type StringValue } from 'ms';
+
 import { InjectJwtConfig, type JwtConfig } from '../../../../../configs';
 import { InvalidTokenPurposeException } from '../../../domain/exceptions/email-already-exists.exception';
 import {
@@ -25,13 +28,15 @@ export class RefreshTokenStrategy implements ITokenStrategy<ITokenPayload> {
       purpose: this.type,
     };
 
-    return this.jwtService.signAsync(payloadWithPurpose, {
+    const options: JwtSignOptions = {
       privateKey: this.jwtConfig.privateKey as string | Buffer,
-      expiresIn: this.jwtConfig.refreshTokenExpiration as string | number,
+      expiresIn: this.jwtConfig.refreshTokenExpiration as StringValue | number,
       issuer: this.jwtConfig.issuer,
       audience: this.jwtConfig.audience as string | string[],
       algorithm: this.jwtConfig.algorithm as 'RS256',
-    } as any);
+    };
+
+    return this.jwtService.signAsync(payloadWithPurpose, options);
   }
 
   async verify(token: string): Promise<ITokenPayload> {
@@ -51,6 +56,7 @@ export class RefreshTokenStrategy implements ITokenStrategy<ITokenPayload> {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { purpose, ...rest } = decoded;
+
     return rest;
   }
 

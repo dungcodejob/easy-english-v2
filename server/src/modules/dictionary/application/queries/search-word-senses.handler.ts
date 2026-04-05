@@ -1,10 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { SearchWordSensesQuery } from './search-word-senses.query';
 import {
   InjectWordReadRepository,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseSearchResultResponseDto } from '../../dto/responses/word-sense-search-result.response.dto';
-import { SearchWordSensesQuery } from './search-word-senses.query';
 
 @QueryHandler(SearchWordSensesQuery)
 export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQuery> {
@@ -25,8 +26,10 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
     // Sort: exact match first, then by text length
     const sorted = searchItems.sort((a, b) => {
       const queryLower = query.query.toLowerCase();
+
       if (a.normalizedText === queryLower) return -1;
       if (b.normalizedText === queryLower) return 1;
+
       return a.normalizedText.length - b.normalizedText.length;
     });
 

@@ -1,5 +1,6 @@
-import { Command, CommandProps } from '@core/ddd';
-import { CreateWorkspaceRequestDto } from '../../dto/requests/create-workspace.request.dto';
+import { Command, type CommandProps } from '@core/ddd';
+
+import { type CreateWorkspaceRequestDto } from '../../dto/requests/create-workspace.request.dto';
 
 export class CreateWorkspaceCommand extends Command {
   public readonly tenantId: string;

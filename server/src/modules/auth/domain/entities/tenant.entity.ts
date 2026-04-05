@@ -1,5 +1,7 @@
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
 import { v7 } from 'uuid';
+
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
+
 import { TenantCreatedEvent } from '../events';
 
 export enum TenantStatus {
@@ -56,6 +58,7 @@ export class Tenant extends AggregateRoot {
         status: tenant.status,
       }),
     );
+
     return tenant;
   }
 

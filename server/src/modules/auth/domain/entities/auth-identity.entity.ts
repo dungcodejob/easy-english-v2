@@ -1,9 +1,10 @@
 import { v7 } from 'uuid';
 
-import { AggregateRoot, CreateEntityProps } from '@core/ddd';
+import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
+
 import { AuthIdentityCreatedEvent } from '../events';
-import { IPasswordHasher } from '../ports/password-hasher.interface';
-import { Password } from '../value-objects/password.vo';
+import { type IPasswordHasher } from '../ports/password-hasher.interface';
+import { type Password } from '../value-objects/password.vo';
 
 export enum AuthProvider {
   LOCAL = 'LOCAL',
@@ -44,6 +45,7 @@ export class AuthIdentity extends AggregateRoot {
       ...create,
     };
     const authIdentity = new AuthIdentity(props);
+
     authIdentity.addEvent(
       new AuthIdentityCreatedEvent({
         aggregateId: authIdentity.id,
@@ -53,6 +55,7 @@ export class AuthIdentity extends AggregateRoot {
         providerUserId: authIdentity.providerUserId,
       }),
     );
+
     return authIdentity;
   }
 
@@ -67,6 +70,7 @@ export class AuthIdentity extends AggregateRoot {
     if (!this.password) {
       return false;
     }
+
     return hasher.compare(plainText, this.password.getHashedValue());
   }
 }

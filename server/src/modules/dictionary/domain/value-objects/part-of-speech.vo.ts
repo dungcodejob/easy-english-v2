@@ -12,6 +12,7 @@ export class PartOfSpeech extends ValueObject<{ value: string }> {
     }
 
     const cleanPos = pos.trim().toLowerCase();
+
     return new PartOfSpeech({ value: cleanPos });
   }
 }

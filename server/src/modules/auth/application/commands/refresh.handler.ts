@@ -1,6 +1,9 @@
-import { EntityManager } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
+import { EntityManager } from '@mikro-orm/core';
+
+import { RefreshCommand } from './refresh.command';
 import { InvalidRefreshTokenException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type ITokenPayload,
@@ -24,7 +27,6 @@ import {
 } from '../../domain/repositories/user.repository.interface';
 import { AuthResultDto } from '../../dto/auth-result.dto';
 import { UserResponseDto } from '../../dto/responses/user.response.dto';
-import { RefreshCommand } from './refresh.command';
 
 @CommandHandler(RefreshCommand)
 export class RefreshHandler implements ICommandHandler<
@@ -58,6 +60,7 @@ export class RefreshHandler implements ICommandHandler<
     }
 
     let payload: ITokenPayload;
+
     try {
       payload = await this.tokenService.verify(TokenType.REFRESH, refreshToken);
     } catch {
@@ -79,6 +82,7 @@ export class RefreshHandler implements ICommandHandler<
     }
 
     const user = await this.userRepo.findByEmail(payload.email);
+
     if (!user) {
       throw new InvalidRefreshTokenException();
     }

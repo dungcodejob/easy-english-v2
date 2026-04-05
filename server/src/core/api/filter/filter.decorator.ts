@@ -1,12 +1,14 @@
 import {
   applyDecorators,
   createParamDecorator,
-  ExecutionContext,
+  type ExecutionContext,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Request } from 'express';
+
+import { type Request } from 'express';
+
 import { parseFilter } from './filter.parser';
-import { FilterNode } from './filter.types';
+import { type FilterNode } from './filter.types';
 
 /**
  * Parsed filter result for use in controller methods
@@ -35,13 +37,14 @@ export interface FilterParams {
 export const FilterParam = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): FilterParams => {
     const request = ctx.switchToHttp().getRequest<Request>();
-    const filterStr = request.query['$filter'] as string | undefined;
+    const filterStr = request.query.$filter as string | undefined;
 
     if (!filterStr) {
       return {};
     }
 
     const filter = parseFilter(filterStr);
+
     return {
       filter,
       filterRaw: filterStr,

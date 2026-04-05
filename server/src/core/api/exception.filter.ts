@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import {
   ArgumentsHost,
   Catch,
@@ -6,8 +8,9 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+
 import { Request, Response } from 'express';
-import { randomUUID } from 'node:crypto';
+
 import { ApplicationException, DomainException } from '../exceptions';
 import { ApiResponse } from './response.builder';
 import { ErrorType } from './response.types';
@@ -50,7 +53,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
       if (typeof responseBody === 'object' && responseBody !== null) {
         const body = responseBody as Record<string, unknown>;
+
         message = (body.message as string) || exception.message;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         details = body.error ? { error: body.error } : undefined;
       } else {
         message = exception.message;

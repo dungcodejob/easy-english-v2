@@ -1,5 +1,6 @@
 import { createInjection } from '@shared/utils';
-import { Word } from '../entities/word.aggregate';
+
+import { type Word } from '../entities/word.aggregate';
 
 export interface WordSenseSearchReadModel {
   senseId: string;
@@ -26,7 +27,7 @@ export interface WordSenseDetailReadModel {
   antonyms: string[];
   idioms: string[];
   phrases: string[];
-  collocations: any | null;
+  collocations: unknown;
   pronunciations: { ipa: string; audioUrl: string | null; region: string }[];
 }
 

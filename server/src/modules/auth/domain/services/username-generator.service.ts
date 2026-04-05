@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import {
   GenerateUsernameProps,
   IUsernameGenerator,
@@ -24,6 +25,7 @@ export class UsernameGeneratorService implements IUsernameGenerator {
    */
   generate({ email }: GenerateUsernameProps): Username {
     const [localPart] = email.split('@');
+
     return Username.create(localPart);
   }
 }

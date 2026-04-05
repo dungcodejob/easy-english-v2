@@ -6,12 +6,12 @@ export class Password extends ValueObject<string> {
     this.validate({ value });
   }
 
-  public getHashedValue(): string {
-    return this.props.value;
-  }
-
   public static create(hashedValue: string): Password {
     return new Password(hashedValue);
+  }
+
+  public getHashedValue(): string {
+    return this.props.value;
   }
 
   protected validate({ value }: { value: string }): void {

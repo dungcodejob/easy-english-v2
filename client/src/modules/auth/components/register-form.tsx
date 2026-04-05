@@ -1,17 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
-import { Button } from '@/shared/ui/shadcn/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/shared/ui/shadcn/field';
-import { Input } from '@/shared/ui/shadcn/input';
+import { DsButton } from '@/shared/ui/base';
+import { DsInput } from '@/shared/ui/base';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/shared/ui/shadcn/field';
 import { useRegister } from '../hooks/use-register';
 import { PasswordInput } from './password-input';
 
@@ -82,7 +76,7 @@ export function RegisterForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
-                <Input
+                <DsInput
                   {...field}
                   id={field.name}
                   aria-invalid={fieldState.invalid}
@@ -105,7 +99,7 @@ export function RegisterForm() {
             render={({ field, fieldState }) => (
               <Field>
                 <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <Input
+                <DsInput
                   {...field}
                   id={field.name}
                   placeholder="name@example.com"
@@ -151,7 +145,7 @@ export function RegisterForm() {
                 <FieldLabel htmlFor={field.name}>
                   Workspace Name (Optional)
                 </FieldLabel>
-                <Input
+                <DsInput
                   {...field}
                   id={field.name}
                   placeholder="My Workspace"
@@ -166,10 +160,16 @@ export function RegisterForm() {
             )}
           />
 
-          <Button type="submit" disabled={isPending} className="w-full">
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <DsButton
+            type="submit"
+            variant="primary"
+            size="sm"
+            fullWidth
+            isLoading={isPending}
+            loadingLabel="Creating account..."
+          >
             Create Account
-          </Button>
+          </DsButton>
         </FieldGroup>
       </form>
     </div>

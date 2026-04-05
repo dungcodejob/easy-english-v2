@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+
 import {
   ApiErrorDto,
   ApiErrorResponseDto,
@@ -12,7 +13,7 @@ import { ErrorType } from '../../../core/api/response.types';
 export interface ErrorResponseConfig {
   status: number;
   description: string;
-  example?: any;
+  example?: unknown;
 }
 
 /**
@@ -199,7 +200,6 @@ export const ApiErrorResponses = (errorConfigs: ErrorResponseConfig[]) => {
           allOf: [
             { $ref: getSchemaPath(ApiErrorResponseDto) },
             {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               example: config.example,
             },
           ],

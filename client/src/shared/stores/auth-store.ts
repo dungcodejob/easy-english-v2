@@ -7,10 +7,9 @@ interface AuthState {
   accessToken: TokenResultDto | null;
   isAuthenticated: boolean;
   actions: {
-    login: (user: UserResponseDto, accessToken: TokenResultDto) => void;
-    logout: () => void;
+    setToken: (accessToken: TokenResultDto) => void;
+    clear: () => void;
     setUser: (user: UserResponseDto | null) => void;
-    updateAccessToken: (accessToken: TokenResultDto) => void;
   };
 }
 
@@ -21,17 +20,14 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       isAuthenticated: false,
       actions: {
-        login: (user: UserResponseDto, accessToken: TokenResultDto) => {
-          set({ user, accessToken: accessToken, isAuthenticated: true });
+        setToken: (accessToken: TokenResultDto) => {
+          set({ accessToken: accessToken, isAuthenticated: true });
         },
-        logout: () => {
+        clear: () => {
           set({ user: null, accessToken: null, isAuthenticated: false });
         },
         setUser: (user: UserResponseDto | null) => {
           set({ user, isAuthenticated: !!user });
-        },
-        updateAccessToken: (accessToken: TokenResultDto) => {
-          set({ accessToken });
         },
       },
     }),

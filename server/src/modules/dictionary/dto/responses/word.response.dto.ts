@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { Word } from '../../domain/entities/word.aggregate';
 
 export class PronunciationDto {

@@ -3,7 +3,7 @@
  * Based on Microsoft REST API Guidelines §9.7.1 (OData-style)
  */
 
-import { ObjectValues } from '@shared/utils';
+import { type ObjectValues } from '@shared/utils';
 
 export const COMPARISON_OPERATORS = {
   equals: 'eq',

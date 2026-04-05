@@ -1,4 +1,5 @@
 import { isEmpty } from '@shared/utils';
+
 import { ArgumentNotProvidedException } from '../exceptions';
 
 /**
@@ -31,6 +32,7 @@ export abstract class ValueObject<T> {
     if (vo === null || vo === undefined) {
       return false;
     }
+
     return JSON.stringify(this) === JSON.stringify(vo);
   }
 
@@ -49,6 +51,7 @@ export abstract class ValueObject<T> {
     if (Object.prototype.hasOwnProperty.call(obj, 'value')) {
       return true;
     }
+
     return false;
   }
 }

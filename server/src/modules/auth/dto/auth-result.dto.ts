@@ -1,4 +1,4 @@
-import { UserResponseDto } from './responses/user.response.dto';
+import { type UserResponseDto } from './responses/user.response.dto';
 
 export interface TokenResultDto {
   readonly token: string;

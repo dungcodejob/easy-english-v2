@@ -1,42 +1,48 @@
-import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { TopicDto } from '../../dto/responses/topic.dto';
-import { TopicEntity } from '../../infrastructure/persistence/topic.orm-entity';
+
 import { GetTopicsQuery } from './get-topics.query';
+import {
+  InjectTopicRepository,
+  type ITopicRepository,
+} from '../../domain/repositories/topic.repository.interface';
+import { TopicDto } from '../../dto/responses/topic.dto';
+import { TopicMapper } from '../../infrastructure/mappers/topic.mapper';
 
 export interface PaginatedTopicsResponse {
   data: TopicDto[];
   count: number;
 }
 
+/**
+ * Get Topics Query Handler
+ *
+ * Read layer - handles listing topics for a user with pagination.
+ * Uses repository interface for data access.
+ */
 @QueryHandler(GetTopicsQuery)
-export class GetTopicsHandler implements IQueryHandler<GetTopicsQuery> {
-  constructor(private readonly orm: MikroORM) {}
+export class GetTopicsHandler implements IQueryHandler<
+  GetTopicsQuery,
+  PaginatedTopicsResponse
+> {
+  constructor(
+    @InjectTopicRepository()
+    private readonly repo: ITopicRepository,
+    private readonly mapper: TopicMapper,
+  ) {}
 
-  @CreateRequestContext()
   async execute(query: GetTopicsQuery): Promise<PaginatedTopicsResponse> {
-    const em = this.orm.em;
     const { tenantId, userId, top, skip } = query;
 
-    const [topics, total] = await em.findAndCount(
-      TopicEntity,
-      { tenantId, userId },
-      {
-        limit: top,
-        offset: skip,
-        orderBy: { createdAt: 'DESC' },
-      },
+    const { data, count } = await this.repo.findByUser(
+      tenantId,
+      userId,
+      top,
+      skip,
     );
 
     return {
-      data: topics.map((topic) => ({
-        id: topic.id,
-        name: topic.name,
-        description: topic.description,
-        createdAt: topic.createdAt,
-        updatedAt: topic.updatedAt,
-      })),
-      count: total,
+      data: data.map((t) => this.mapper.toResponse(t) as TopicDto),
+      count,
     };
   }
 }

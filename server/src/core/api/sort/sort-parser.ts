@@ -2,7 +2,7 @@ import {
   SortInvalidDirectionException,
   SortSyntaxException,
 } from './sort.exception';
-import { SortDirection, SortEntry } from './sort.types';
+import { type SortDirection, type SortEntry } from './sort.types';
 
 /**
  * Parse $orderby string into SortEntry array
@@ -28,6 +28,7 @@ export function parseOrderBy(orderby: string): SortEntry[] {
     }
 
     let direction: SortDirection = 'asc'; // default
+
     if (directionToken) {
       if (directionToken !== 'asc' && directionToken !== 'desc') {
         throw new SortInvalidDirectionException(

@@ -13,8 +13,8 @@ export function IsMs(validationOptions?: ValidationOptions): PropertyDecorator {
         validate(value: string) {
           return (
             typeof value === 'string' &&
-            value.length != 0 &&
-            ms(value) !== undefined
+            value.length !== 0 &&
+            ms(value as Parameters<typeof ms>[0]) !== undefined
           );
         },
         defaultMessage() {

@@ -1,5 +1,7 @@
-import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+
+import { EntityManager } from '@mikro-orm/core';
+
 import { IUsernameAvailabilityService } from '../../domain/ports/username-availability.interface';
 import { Username } from '../../domain/value-objects/username.vo';
 import { UserOrmEntity } from '../persistence/user.orm-entity';
@@ -18,6 +20,7 @@ export class UsernameAvailabilityService implements IUsernameAvailabilityService
     const count = await this.em.count(UserOrmEntity, {
       username: username.value,
     });
+
     return count === 0;
   }
 

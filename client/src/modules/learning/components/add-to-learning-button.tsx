@@ -1,4 +1,4 @@
-import { APP_ROUTES } from '@/shared/constants';
+import { AuthRoutes, LearnRoutes, TopicRoutes } from '@/shared/constants';
 import { useAuthStore } from '@/shared/stores/auth-store';
 import { Button } from '@/shared/ui/shadcn/button';
 import {
@@ -20,9 +20,9 @@ import {
   Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAddWordToTopic } from '../../topic/hooks/use-topic-mutations';
+import { useTopics } from '../../topic/hooks/use-topics';
 import { useAddToLearning } from '../hooks/use-add-to-learning';
-import { useAddWordToTopic } from '../topic/hooks/use-topic-mutations';
-import { useTopics } from '../topic/hooks/use-topics';
 
 interface AddToLearningButtonProps {
   senseId: string;
@@ -47,14 +47,14 @@ export function AddToLearningButton({
     if (!isAuthenticated) {
       toast.error('You need to login to save words to your learning list');
       navigate({
-        to: APP_ROUTES.AUTH.LOGIN,
+        to: AuthRoutes.login(),
       });
       return;
     }
 
     if (isLearning) {
       // Navigate to learning list or just silently ignore
-      navigate({ to: APP_ROUTES.LEARN });
+      navigate({ to: LearnRoutes.base() });
       return;
     }
 
@@ -72,7 +72,7 @@ export function AddToLearningButton({
   const handleAddToTopic = (topicId: string, topicName: string) => {
     if (!isAuthenticated) {
       toast.error('You need to login to save words to topics');
-      navigate({ to: APP_ROUTES.AUTH.LOGIN });
+      navigate({ to: AuthRoutes.login() });
       return;
     }
 
@@ -160,7 +160,7 @@ export function AddToLearningButton({
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => navigate({ to: '/learning/topics' as any })}
+              onClick={() => navigate({ to: TopicRoutes.list() })}
             >
               <ArrowRight className="mr-2 h-4 w-4 text-muted-foreground" />
               Manage Topics

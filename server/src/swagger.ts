@@ -1,9 +1,12 @@
-import { INestApplication } from '@nestjs/common';
+import { type INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { SwaggerUiOptions } from '@nestjs/swagger/dist/interfaces/swagger-ui-options.interface';
+import { type SwaggerUiOptions } from '@nestjs/swagger/dist/interfaces/swagger-ui-options.interface';
+
+import { type NextFunction, type Request, type Response } from 'express';
+
 import { FEATURE_KEY, SWAGGER_SCHEME } from '@shared/constants';
-import { NextFunction, Request, Response } from 'express';
-import { AppConfig } from './configs/app.config';
+
+import { type AppConfig } from './configs/app.config';
 
 const apiDocumentationCredentials = {
   name: 'admin',
@@ -85,6 +88,7 @@ export function swagger(app: INestApplication, appConfig: AppConfig): void {
   };
 
   const httpAdapter = app.getHttpAdapter();
+
   httpAdapter.use(
     '/api/docs',
     (req: Request, res: Response, next: NextFunction) => {
@@ -194,6 +198,7 @@ function swaggerAuthMiddleware(
 
   if (isProduction) {
     const authHeader = req.headers.authorization;
+
     if (!authHeader) {
       return unauthorizedResponse();
     }

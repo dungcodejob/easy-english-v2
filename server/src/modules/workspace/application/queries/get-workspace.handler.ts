@@ -1,11 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { GetWorkspaceQuery } from './get-workspace.query';
 import {
   InjectWorkspaceRepository,
   type IWorkspaceRepository,
 } from '../../domain/repositories/workspace.repository.interface';
 import { WorkspaceResponseDto } from '../../dto/responses/workspace.response.dto';
-import { GetWorkspaceQuery } from './get-workspace.query';
 
 @QueryHandler(GetWorkspaceQuery)
 export class GetWorkspaceHandler implements IQueryHandler<
@@ -21,7 +22,7 @@ export class GetWorkspaceHandler implements IQueryHandler<
     const { id, userId } = query;
     const workspace = await this.workspaceRepo.findOneById(id);
 
-    if (!workspace || workspace.userId !== userId) {
+    if (workspace?.userId !== userId) {
       throw new NotFoundException('Workspace not found');
     }
 

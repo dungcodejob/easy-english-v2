@@ -1,5 +1,6 @@
 import { ApiRequestError, type ApiSuccessResponse } from '@/core/api';
-import { APP_ROUTES } from '@/shared/constants';
+
+import { AuthRoutes } from '@/shared/constants';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
@@ -15,7 +16,7 @@ export const useRegister = () => {
   >({
     mutationFn: authApi.register,
     onSuccess: () => {
-      navigate({ to: APP_ROUTES.AUTH.LOGIN });
+      navigate({ to: AuthRoutes.login() });
     },
   });
 

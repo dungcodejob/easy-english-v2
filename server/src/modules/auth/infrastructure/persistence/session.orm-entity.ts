@@ -6,6 +6,7 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { v4 } from 'uuid';
+
 import { AuthIdentityOrmEntity } from './auth-identity.orm-entity';
 import { TenantOrmEntity } from './tenant.orm-entity';
 import { UserOrmEntity } from './user.orm-entity';

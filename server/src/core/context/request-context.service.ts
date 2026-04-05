@@ -7,6 +7,7 @@ export class RequestContextService {
 
   static getContext(): { requestId: string } {
     const store = this.context.getStore();
+
     return store || { requestId: 'no-request-id' };
   }
 
