@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { RatingBreakdown, SessionMode, StudyCard } from '../types/study.types';
+import type { QuizAnswer, QuizCard, RatingBreakdown, SessionMode, StudyCard } from '../types/study.types';
 
 interface StudySessionStore {
   // Phase 1 fields
@@ -17,6 +17,11 @@ interface StudySessionStore {
   completed: boolean;
   ratingBreakdown: RatingBreakdown;
   reviewedCount: number;
+
+  // Phase 3 — Quiz Mode
+  quizAnswers: QuizAnswer[];
+  recordQuizAnswer: (answer: QuizAnswer) => void;
+  getQuizScore: () => { correct: number; total: number; accuracy: number };
 
   // Derived — not stored, computed from ratingBreakdown
   // correctLikeCount = ratingBreakdown.good + ratingBreakdown.easy
@@ -55,6 +60,9 @@ export const useStudySessionStore = create<StudySessionStore>((set, get) => ({
   ratingBreakdown: { again: 0, hard: 0, good: 0, easy: 0 },
   reviewedCount: 0,
 
+  // Phase 3 — Quiz Mode
+  quizAnswers: [],
+
   startSession: (cards, mode, sessionId, topicId) =>
     set({
       cards,
@@ -69,6 +77,7 @@ export const useStudySessionStore = create<StudySessionStore>((set, get) => ({
       startedAt: Date.now(),
       elapsedMs: 0,
       isSubmittingRating: false,
+      quizAnswers: [],
     }),
 
   setSessionCompleted: () =>
@@ -114,6 +123,20 @@ export const useStudySessionStore = create<StudySessionStore>((set, get) => ({
       isSubmittingRating: false,
     }),
 
+  // Phase 3 — Quiz Mode
+  recordQuizAnswer: (answer) =>
+    set((s) => ({ quizAnswers: [...s.quizAnswers, answer] })),
+
+  getQuizScore: () => {
+    const { quizAnswers } = get();
+    const correct = quizAnswers.filter((a) => a.correct).length;
+    return {
+      correct,
+      total: quizAnswers.length,
+      accuracy: quizAnswers.length > 0 ? correct / quizAnswers.length : 0,
+    };
+  },
+
   resetSession: () =>
     set({
       cards: [],
@@ -128,5 +151,6 @@ export const useStudySessionStore = create<StudySessionStore>((set, get) => ({
       startedAt: null,
       elapsedMs: 0,
       isSubmittingRating: false,
+      quizAnswers: [],
     }),
 }));

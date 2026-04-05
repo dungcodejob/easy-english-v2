@@ -1,4 +1,4 @@
-import { dictionaryKeys, learningKeys } from '@/shared/constants/key';
+import { dictionaryKeys, learningKeys } from '@/shared/constants/common-key';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LearningApi } from '../services/learning.api';
 

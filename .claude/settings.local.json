@@ -148,7 +148,12 @@
       "Bash(npx --yes gitnexus@1.4.9 impact --target \"StudyModule\" --direction upstream)",
       "Bash(npx --yes gitnexus@1.4.9 impact --target \"ReviewWordHandler\" --direction upstream)",
       "Bash(find server/src -name \"*.ts\" | xargs grep -l \"ApiResponseBuilder\" 2>/dev/null | head -5)",
-      "Bash(find server/src -name \"*.ts\" | xargs grep -l \"export.*ApiResponseBuilder\" 2>/dev/null | head -3; find server/src -name \"api*\" -type f 2>/dev/null)"
+      "Bash(find server/src -name \"*.ts\" | xargs grep -l \"export.*ApiResponseBuilder\" 2>/dev/null | head -3; find server/src -name \"api*\" -type f 2>/dev/null)",
+      "Bash(git check-ignore:*)",
+      "Bash(git worktree:*)",
+      "Bash(ls /e/Projects/multi-tenant/easy-english-v2/server/ 2>/dev/null || ls /mnt/e/Projects/multi-tenant/easy-english-v2/server/ 2>/dev/null || echo \"checking env\" && echo $PATH)",
+      "Bash(find \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\\\\src\" -name \"routeTree.gen.ts\" 2>/dev/null; find \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\\\\src\" -name \"*.route.ts\" 2>/dev/null | head -10)",
+      "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\" && npm install react-hotkeys-hook)"
     ]
   }
 }

@@ -8,10 +8,13 @@ import {
 
 import { EntityManager } from '@mikro-orm/postgresql';
 
+import { StartStudySessionCommand } from './start-study-session.command';
 import {
   StudySession,
   studySessionScope,
+  studySessionType,
 } from '../../domain/entities/study-session.entity';
+import { QuizCardDto } from '../../dto/responses/quiz-card.response.dto';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
@@ -19,15 +22,17 @@ import {
 } from '../../dto/responses/study-card.response.dto';
 import { StudySessionRepository } from '../../infrastructure/repositories/study-session.repository';
 import { GetDueCardsQuery } from '../queries/get-due-cards.query';
+import { GetQuizCardsQuery } from '../queries/get-quiz-cards.query';
 import { GetTopicCardsQuery } from '../queries/get-topic-cards.query';
-import { StartStudySessionCommand } from './start-study-session.command';
 
-export interface StartStudySessionResponse {
-  sessionId: string;
-  cards: StudyCardResponseDto[];
-  total: number;
-  capped: boolean;
-}
+export type StartStudySessionResponse =
+  | {
+      sessionId: string;
+      cards: StudyCardResponseDto[];
+      total: number;
+      capped: boolean;
+    }
+  | { sessionId: string; cards: QuizCardDto[]; total: number; capped: boolean };
 
 @CommandHandler(StartStudySessionCommand)
 export class StartStudySessionHandler implements ICommandHandler<
@@ -50,10 +55,12 @@ export class StartStudySessionHandler implements ICommandHandler<
       throw new BadRequestException('topicId is required for TOPIC scope');
     }
 
-    let cardsEnvelope: StudyCardsEnvelopeDto | TopicStudyCardsEnvelopeDto;
+    // Determine card type based on studyType
+    let cards: StudyCardResponseDto[] | QuizCardDto[];
+    let capped = false;
 
     if (command.scope === studySessionScope.Topic) {
-      cardsEnvelope = await this.queryBus.execute<
+      const cardsEnvelope = await this.queryBus.execute<
         GetTopicCardsQuery,
         TopicStudyCardsEnvelopeDto
       >(
@@ -63,11 +70,25 @@ export class StartStudySessionHandler implements ICommandHandler<
           command.topicId!,
         ),
       );
+
+      cards = cardsEnvelope.cards;
+      capped = cardsEnvelope.capped;
+    } else if (command.studyType === studySessionType.Quiz) {
+      const quizCards = await this.queryBus.execute<
+        GetQuizCardsQuery,
+        QuizCardDto[]
+      >(new GetQuizCardsQuery(command.userId, command.tenantId));
+
+      cards = quizCards;
+      capped = false; // GetQuizCardsHandler already caps at 20
     } else {
-      cardsEnvelope = await this.queryBus.execute<
+      const cardsEnvelope = await this.queryBus.execute<
         GetDueCardsQuery,
         StudyCardsEnvelopeDto
       >(new GetDueCardsQuery(command.userId, command.tenantId));
+
+      cards = cardsEnvelope.cards;
+      capped = cardsEnvelope.capped;
     }
 
     const session = StudySession.create({
@@ -77,18 +98,27 @@ export class StartStudySessionHandler implements ICommandHandler<
       studyType: command.studyType,
       topicId:
         command.scope === studySessionScope.Topic ? command.topicId! : null,
-      enrolledCardIds: cardsEnvelope.cards.map((card) => card.wordSenseId),
+      enrolledCardIds: cards.map((card) => card.wordSenseId) as string[],
     });
 
     await this.sessionRepository.saveSession(session);
     await this.em.flush();
     session.publishEvents(this.logger, this.eventBus);
 
-    return {
-      sessionId: session.id,
-      cards: cardsEnvelope.cards,
-      total: cardsEnvelope.total,
-      capped: cardsEnvelope.capped,
-    };
+    if (command.studyType === studySessionType.Quiz) {
+      return {
+        sessionId: session.id,
+        cards: cards as QuizCardDto[],
+        total: cards.length,
+        capped,
+      } as StartStudySessionResponse;
+    } else {
+      return {
+        sessionId: session.id,
+        cards: cards as StudyCardResponseDto[],
+        total: cards.length,
+        capped,
+      } as StartStudySessionResponse;
+    }
   }
 }

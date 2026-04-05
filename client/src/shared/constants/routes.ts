@@ -1,32 +1,65 @@
-export const APP_ROUTES = {
-  ROOT: '/',
-  AUTH: {
-    LOGIN: '/login',
-    REGISTER: '/register',
-  },
-  ONBOARDING: {
-    WORKSPACE: '/onboarding/workspace',
-  },
-  WORKSPACE: {
-    NEW: '/workspace/new',
-    LIST: '/workspace',
-  },
-  DASHBOARD: '/dashboard',
-  TOPIC: {
-    LIST: '/learning/topics',
-    DETAIL: '/learning/topics/$topicId',
-  },
-  DICTIONARY: {
-    SEARCH: '/dictionary',
-    SENSE_DETAIL: '/dictionary/senses/$senseId',
-  },
-  LEARN: '/learning',
-  LEARNING_STUDY: '/learning/study',
-  FLASHCARDS: '/flashcards',
-  STUDY: '/study',
-  FLASHCARD_STATS: '/flashcards/stats',
-  REVIEW: '/review',
-  PROGRESS: '/progress',
-  ACHIEVEMENTS: '/achievements',
-  SETTINGS: '/settings',
+export const RouteGroups = {
+  authenticated: '(authenticated)',
+  public: '(public)',
 } as const;
+
+export const AuthRoutes = {
+  login: () => '/login',
+  register: () => '/register',
+};
+
+export const WorkspaceRoutes = {
+  new: () => '/workspace/new',
+  list: () => '/workspace',
+};
+
+export const TopicRoutes = {
+  list: () => '/learning/topics',
+  detail: (topicId: string) => `/learning/topics/${topicId}`,
+};
+
+export const DictionaryRoutes = {
+  search: () => '/dictionary',
+  senseDetail: (senseId: string) => `/dictionary/senses/${senseId}`,
+};
+
+export const LearnRoutes = {
+  base: () => '/learning',
+  study: () => '/learning/study',
+};
+
+export const FlashcardsRoutes = {
+  list: () => '/flashcards',
+  study: () => '/study',
+  stats: () => '/flashcards/stats',
+};
+
+export const ReviewRoutes = {
+  list: () => '/review',
+};
+
+export const ProgressRoutes = {
+  list: () => '/progress',
+};
+
+export const AchievementsRoutes = {
+  list: () => '/achievements',
+};
+
+export const SettingsRoutes = {
+  list: () => '/settings',
+};
+
+export const AppRoutes = {
+  root: () => '/',
+  auth: AuthRoutes,
+  workspace: WorkspaceRoutes,
+  topic: TopicRoutes,
+  dictionary: DictionaryRoutes,
+  learn: LearnRoutes,
+  flashcards: FlashcardsRoutes,
+  review: ReviewRoutes,
+  progress: ProgressRoutes,
+  achievements: AchievementsRoutes,
+  settings: SettingsRoutes,
+};

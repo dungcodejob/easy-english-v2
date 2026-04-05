@@ -23,6 +23,10 @@ import { StartStudySessionCommand } from '../application/commands/start-study-se
 import { StartStudySessionResponse } from '../application/commands/start-study-session.handler';
 import { StudySessionReviewCommand } from '../application/commands/study-session-review.command';
 import { GetSessionSummaryQuery } from '../application/queries/get-session-summary.query';
+import {
+  studySessionScope,
+  studySessionType,
+} from '../domain/entities/study-session.entity';
 import { CompleteStudySessionRequestDto } from '../dto/requests/complete-study-session.request.dto';
 import { StartStudySessionRequestDto } from '../dto/requests/start-study-session.request.dto';
 import { StudySessionReviewRequestDto } from '../dto/requests/study-session-review.request.dto';
@@ -54,7 +58,10 @@ export class StudySessionController {
     const command = new StartStudySessionCommand(
       user.userId,
       user.tenantId,
-      dto.scope,
+      dto.studyType === 'QUIZ'
+        ? studySessionType.Quiz
+        : studySessionType.Flashcard,
+      dto.scope === 'TOPIC' ? studySessionScope.Topic : studySessionScope.Due,
       dto.topicId,
     );
 

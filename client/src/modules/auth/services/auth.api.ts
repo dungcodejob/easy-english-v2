@@ -68,7 +68,7 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     processQueue(error, null);
 
     // Always logout on failed refresh
-    useAuthStore.getState().actions.logout();
+    useAuthStore.getState().actions.clear();
 
     return null;
   } finally {

@@ -11,7 +11,6 @@
  * No inline Tailwind. No layout logic.
  */
 
-import { APP_ROUTES } from '@/shared/constants';
 import { DsButton, DsInput } from '@/shared/ui/base';
 import { Field, FieldError, FieldLabel } from '@/shared/ui/shadcn/field';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +20,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { AppRoutes } from '@/shared/constants';
 import { Input } from '@/shared/ui';
 import { useLogin } from '../hooks/use-login';
 
@@ -50,7 +50,7 @@ export const LoginForm = () => {
     setServerError(null);
     login(data, {
       onSuccess: () => {
-        router.navigate({ to: APP_ROUTES.ROOT });
+        router.navigate({ to: AppRoutes.root() });
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (err: any) => {

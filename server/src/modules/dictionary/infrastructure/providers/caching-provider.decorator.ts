@@ -128,7 +128,7 @@ export class CachingProviderDecorator implements ILookupProvider {
     entity.normalizedWord = normalizedWord;
     entity.provider = provider;
 
-    entity.rawResponse = result.raw || {};
+    entity.rawResponse = (result.raw ?? {}) as Record<string, unknown>;
     entity.httpStatus = result.status;
     entity.expiresAt = expiresAt;
 

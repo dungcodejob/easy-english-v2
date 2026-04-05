@@ -110,7 +110,7 @@ api.interceptors.response.use(
 
       // If we shouldn't retry or refresh failed, the token-refresh logic already logged out.
       // We can also just make sure:
-      useAuthStore.getState().actions.logout();
+      useAuthStore.getState().actions.clear();
     }
 
     return Promise.reject(error);

@@ -27,7 +27,7 @@ export class StudySessionRepository {
       userId: orm.userId,
       tenantId: orm.tenantId,
       scope: orm.scope,
-      studyType: orm.studyType as StudySessionType,
+      studyType: orm.studyType,
       topicId: orm.topicId,
       enrolledCardIds: orm.enrolledCardIds,
       reviewedCount: orm.reviewedCount,

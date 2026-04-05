@@ -16,6 +16,7 @@ export type StudySessionScope = ObjectValues<typeof studySessionScope>;
 
 export const studySessionType = {
   Flashcard: 'Flashcard',
+  Quiz: 'Quiz',
 } as const;
 
 export type StudySessionType = ObjectValues<typeof studySessionType>;

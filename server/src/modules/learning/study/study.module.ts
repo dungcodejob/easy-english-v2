@@ -9,6 +9,7 @@ import { CompleteStudySessionHandler } from './application/commands/complete-stu
 import { StartStudySessionHandler } from './application/commands/start-study-session.handler';
 import { StudySessionReviewHandler } from './application/commands/study-session-review.handler';
 import { GetDueCardsHandler } from './application/queries/get-due-cards.handler';
+import { GetQuizCardsHandler } from './application/queries/get-quiz-cards.handler';
 import { GetSessionSummaryHandler } from './application/queries/get-session-summary.handler';
 import { GetTopicCardsHandler } from './application/queries/get-topic-cards.handler';
 import { StudySessionController } from './controllers/study-session.controller';
@@ -25,6 +26,7 @@ import { TopicOrmEntity } from '../topic/infrastructure/persistence/topic.orm-en
 
 const queryHandlers = [
   GetDueCardsHandler,
+  GetQuizCardsHandler,
   GetTopicCardsHandler,
   GetSessionSummaryHandler,
 ];

@@ -1,37 +1,55 @@
-import { useEffect, useState } from 'react';
-import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
-import { AnimatePresence, motion } from 'motion/react';
-import { ChevronLeft, Clock } from 'lucide-react';
-import { APP_ROUTES } from '@/shared/constants';
+import { LearnRoutes } from '@/shared/constants';
+import { useFilters } from '@/shared/hooks/use-filters';
 import { DsButton } from '@/shared/ui';
-import { useStartSession } from '../hooks/use-start-session';
-import { useCompleteSession } from '../hooks/use-complete-session';
-import { useSessionSummary } from '../hooks/use-session-summary';
-import { useReviewCard } from '../hooks/use-review-card';
-import { useStudySessionStore } from '../stores/use-study-session-store';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { ChevronLeft, Clock } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlashcardView } from '../components/flashcard-view';
+import { QuizView } from '../components/quiz-view';
 import { RatingButtons } from '../components/rating-buttons';
-import { StudyProgress } from '../components/study-progress';
 import { SessionCompleteCard } from '../components/session-complete-card';
-import type { ReviewResult, StudyScope } from '../types/study.types';
+import { StudyProgress } from '../components/study-progress';
+import { useCompleteSession } from '../hooks/use-complete-session';
+import { useKeyboardShortcuts } from '../hooks/use-keyboard-shortcuts';
+import { useReviewCard } from '../hooks/use-review-card';
+import { useSessionSummary } from '../hooks/use-session-summary';
+import { useStartSession } from '../hooks/use-start-session';
+import { useStudySessionStore } from '../stores/use-study-session-store';
+import type { QuizCard, ReviewResult, StudyScope } from '../types/study.types';
 
 const FEEDBACK_DURATION_MS = 800;
 
+type StudySessionQueryParams = {
+  sessionId?: string;
+  completed?: string;
+  mode?: 'due' | 'topic' | 'quiz';
+  topicId?: string;
+  index?: number;
+  studyType?: 'FLASHCARD' | 'QUIZ';
+};
+
 export const Route = createFileRoute('/_(authenticated)/learning/study')({
   component: StudySessionPage,
+  validateSearch: () => ({}) as Partial<StudySessionQueryParams>,
 });
 
 type Rating = 1 | 2 | 3 | 4;
 
 function StudySessionPage() {
   const navigate = useNavigate();
-  const search = useSearch<typeof Route['useSearch']>();
 
+  const { filters, setSearch } = useFilters(Route.id);
+  const { showKeyboardHint, setShowKeyboardHint } = useKeyboardShortcuts({
+    onRate: handleRate,
+    onReset: handleReset,
+  });
   // URL search params
-  const sessionId = search.sessionId as string | undefined;
-  const completed = search.completed === 'true';
-  const mode = (search.mode as 'due' | 'topic') || 'due';
-  const topicId = search.topicId as string | undefined;
+  const sessionId = filters.sessionId;
+  const completed = filters.completed === 'true';
+  const mode = filters.mode || 'due';
+  const studyType = filters.studyType || 'FLASHCARD';
+  const topicId = filters.topicId;
 
   // Server session summary (for completed sessions)
   const { data: summaryData } = useSessionSummary(sessionId ?? '');
@@ -45,24 +63,38 @@ function StudySessionPage() {
 
   // Derived state
   const currentCard = store.cards[store.currentIndex];
-  const isSessionComplete = store.currentIndex >= store.cards.length && store.cards.length > 0;
+  const isSessionComplete =
+    store.currentIndex >= store.cards.length && store.cards.length > 0;
 
   // Show server summary if this is a completed navigation
   if (completed && sessionId) {
     const summary = summaryData?.data;
     if (summary) {
-      return (
-        <SessionCompleteCard
-          sessionSummary={summary}
-        />
-      );
+      return <SessionCompleteCard sessionSummary={summary} />;
     }
     // Summary still loading — show a spinner
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <svg className="size-8 animate-spin text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        <svg
+          className="size-8 animate-spin text-muted-foreground"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
         </svg>
       </div>
     );
@@ -72,6 +104,18 @@ function StudySessionPage() {
   // This handles page refresh mid-session (URL resumption)
   const [pendingAutoStart, setPendingAutoStart] = useState(false);
 
+  // Quiz mode — render QuizView
+  if (mode === 'quiz' && store.cards.length > 0) {
+    return (
+      <QuizView
+        cards={store.cards as QuizCard[]}
+        sessionId={sessionId!}
+        onComplete={handleQuizComplete}
+        onAnswer={handleQuizAnswer}
+      />
+    );
+  }
+
   useEffect(() => {
     if (!sessionId || store.sessionId === sessionId) return;
     if (store.cards.length > 0) return; // Already have cards
@@ -80,84 +124,78 @@ function StudySessionPage() {
     setPendingAutoStart(true);
     const scope: StudyScope = mode === 'topic' && topicId ? 'TOPIC' : 'DUE';
     startMutation.mutate(
-      { scope, topicId },
+      { scope, topicId, studyType: mode === 'quiz' ? 'QUIZ' : 'FLASHCARD' },
       {
         onSettled: () => setPendingAutoStart(false),
       },
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, mode, topicId]);
 
-  // Hide keyboard hint after first interaction
-  const [showKeyboardHint, setShowKeyboardHint] = useState(true);
-  useEffect(() => {
-    if (!showKeyboardHint) return;
-    const timer = setTimeout(() => setShowKeyboardHint(false), 5000);
-    return () => clearTimeout(timer);
-  }, [showKeyboardHint]);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-      if (e.key === ' ') {
-        e.preventDefault();
-        store.flipCard();
-        setShowKeyboardHint(false);
-      } else if (e.key === '1') { e.preventDefault(); handleRate(1); }
-      else if (e.key === '2') { e.preventDefault(); handleRate(2); }
-      else if (e.key === '3') { e.preventDefault(); handleRate(3); }
-      else if (e.key === '4') { e.preventDefault(); handleRate(4); }
-      else if (e.key === 'Escape') {
-        e.preventDefault();
-        store.resetSession();
-        navigate({ to: APP_ROUTES.LEARN });
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store.flipped, store.isSubmittingRating]);
-
-  const handleRate = async (rating: Rating) => {
-    if (store.isSubmittingRating || !store.flipped) return;
-    if (!currentCard) return;
-
+  const handleQuizAnswer = async (
+    wordSenseId: string,
+    rating: 1 | 2 | 3 | 4,
+  ) => {
     const startedAt = store.startedAt ?? Date.now();
     const reviewDurationMs = Date.now() - startedAt;
-
-    store.setSubmittingRating(true);
+    await reviewMutation.mutateAsync({ wordSenseId, rating, reviewDurationMs });
     store.recordRating(rating);
+  };
 
-    try {
-      const result = await reviewMutation.mutateAsync({
-        wordSenseId: currentCard.wordSenseId,
-        rating,
-        reviewDurationMs,
-      });
-      setFeedback(result);
-      setTimeout(() => {
-        setFeedback(null);
-        store.goNext();
-        store.setSubmittingRating(false);
-
-        if (store.currentIndex >= store.cards.length) {
-          // All cards reviewed — call complete and redirect to summary
-          if (store.sessionId) {
-            store.finishSession();
-            store.setSessionCompleted();
-            completeMutation.mutate(store.sessionId);
-          } else {
-            store.finishSession();
-          }
-        }
-      }, FEEDBACK_DURATION_MS);
-    } catch {
-      store.setSubmittingRating(false);
+  const handleQuizComplete = () => {
+    if (store.sessionId) {
+      store.finishSession();
+      store.setSessionCompleted();
+      completeMutation.mutate(store.sessionId);
     }
   };
+
+  const handleRate = useCallback(
+    async (rating: Rating) => {
+      if (store.isSubmittingRating || !store.flipped) return;
+      if (!currentCard) return;
+
+      const startedAt = store.startedAt ?? Date.now();
+      const reviewDurationMs = Date.now() - startedAt;
+
+      store.setSubmittingRating(true);
+      store.recordRating(rating);
+
+      try {
+        const result = await reviewMutation.mutateAsync({
+          wordSenseId: currentCard.wordSenseId,
+          rating,
+          reviewDurationMs,
+        });
+        setFeedback(result);
+        setTimeout(() => {
+          setFeedback(null);
+          store.goNext();
+          store.setSubmittingRating(false);
+
+          if (store.currentIndex >= store.cards.length) {
+            // All cards reviewed — call complete and redirect to summary
+            if (store.sessionId) {
+              store.finishSession();
+              store.setSessionCompleted();
+              completeMutation.mutate(store.sessionId);
+            } else {
+              store.finishSession();
+            }
+          }
+        }, FEEDBACK_DURATION_MS);
+      } catch {
+        store.setSubmittingRating(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentCard, store],
+  );
+
+  const handleReset = useCallback(() => {
+    store.resetSession();
+    navigate({ to: LearnRoutes.base() });
+  }, [store, navigate]);
 
   const [feedback, setFeedback] = useState<ReviewResult | null>(null);
 
@@ -165,9 +203,26 @@ function StudySessionPage() {
   if (startMutation.isPending || pendingAutoStart) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <svg className="size-8 animate-spin text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        <svg
+          className="size-8 animate-spin text-muted-foreground"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
         </svg>
       </div>
     );
@@ -185,7 +240,7 @@ function StudySessionPage() {
               : 'No cards are due for review right now.'}
           </p>
         </div>
-        <DsButton onClick={() => navigate({ to: APP_ROUTES.LEARN })}>
+        <DsButton onClick={() => navigate({ to: LearnRoutes.base() })}>
           Back to My Learning
         </DsButton>
       </div>
@@ -216,12 +271,15 @@ function StudySessionPage() {
           leftIcon={<ChevronLeft className="size-4" />}
           onClick={() => {
             store.resetSession();
-            navigate({ to: APP_ROUTES.LEARN });
+            navigate({ to: LearnRoutes.base() });
           }}
         >
           Exit
         </DsButton>
-        <StudyProgress current={store.currentIndex + 1} total={store.cards.length} />
+        <StudyProgress
+          current={store.currentIndex + 1}
+          total={store.cards.length}
+        />
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <Clock className="size-3" />
           <span>Space to flip</span>
@@ -256,7 +314,8 @@ function StudySessionPage() {
                       : 'Now'}
                   </p>
                   <p className="text-xs opacity-60 mt-1">
-                    {feedback.intervalDays} day{feedback.intervalDays !== 1 ? 's' : ''}
+                    {feedback.intervalDays} day
+                    {feedback.intervalDays !== 1 ? 's' : ''}
                   </p>
                 </div>
               </motion.div>

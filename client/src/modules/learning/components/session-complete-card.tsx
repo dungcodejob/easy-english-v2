@@ -1,6 +1,7 @@
-import { BookOpen, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { APP_ROUTES } from '@/shared/constants';
+import { BookOpen, CheckCircle2 } from 'lucide-react';
+
+import { LearnRoutes } from '@/shared/constants';
 import { DsButton } from '@/shared/ui';
 import type { SessionSummary } from '../types/study.types';
 
@@ -70,10 +71,26 @@ export function SessionCompleteCard({
           ratingBreakdown.easy > 0) && (
           <div className="flex w-full gap-3">
             {[
-              { label: 'Again', count: ratingBreakdown.again, color: 'text-red-500' },
-              { label: 'Hard', count: ratingBreakdown.hard, color: 'text-orange-500' },
-              { label: 'Good', count: ratingBreakdown.good, color: 'text-green-500' },
-              { label: 'Easy', count: ratingBreakdown.easy, color: 'text-blue-500' },
+              {
+                label: 'Again',
+                count: ratingBreakdown.again,
+                color: 'text-red-500',
+              },
+              {
+                label: 'Hard',
+                count: ratingBreakdown.hard,
+                color: 'text-orange-500',
+              },
+              {
+                label: 'Good',
+                count: ratingBreakdown.good,
+                color: 'text-green-500',
+              },
+              {
+                label: 'Easy',
+                count: ratingBreakdown.easy,
+                color: 'text-blue-500',
+              },
             ].map(({ label, count, color }) => (
               <div
                 key={label}
@@ -90,7 +107,7 @@ export function SessionCompleteCard({
 
         <DsButton
           leftIcon={<BookOpen className="size-4" />}
-          onClick={() => navigate({ to: APP_ROUTES.LEARN })}
+          onClick={() => navigate({ to: LearnRoutes.base() })}
           className="w-full"
         >
           Back to My Learning
@@ -105,8 +122,7 @@ export function SessionCompleteCard({
   const elapsed = elapsedMs ?? 0;
   const elapsedMin = Math.floor(elapsed / 60000);
   const elapsedSec = Math.floor((elapsed % 60000) / 1000);
-  const accuracy =
-    rCount > 0 ? Math.round((cCount / rCount) * 100) : 0;
+  const accuracy = rCount > 0 ? Math.round((cCount / rCount) * 100) : 0;
 
   return (
     <div className="flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-8 py-8 mx-auto">
@@ -146,7 +162,7 @@ export function SessionCompleteCard({
 
       <DsButton
         leftIcon={<BookOpen className="size-4" />}
-        onClick={() => navigate({ to: APP_ROUTES.LEARN })}
+        onClick={() => navigate({ to: LearnRoutes.base() })}
         className="w-full"
       >
         Back to My Learning

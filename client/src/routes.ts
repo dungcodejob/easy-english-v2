@@ -1,5 +1,11 @@
 import { index, layout, rootRoute, route } from '@tanstack/virtual-file-routes';
-import { APP_ROUTES } from './shared/constants';
+import {
+  AuthRoutes,
+  DictionaryRoutes,
+  FlashcardsRoutes,
+  TopicRoutes,
+  WorkspaceRoutes,
+} from './shared/constants';
 
 export const routes = rootRoute('root.tsx', [
   // Public index page
@@ -8,30 +14,37 @@ export const routes = rootRoute('root.tsx', [
     '(unauthenticated)',
     './modules/shell/pages/unauthenticated-layout.tsx',
     [
-      route(APP_ROUTES.AUTH.LOGIN, './modules/auth/pages/login-page.tsx'),
-      route(APP_ROUTES.AUTH.REGISTER, './modules/auth/pages/register.page.tsx'),
+      route(AuthRoutes.login(), './modules/auth/pages/login-page.tsx'),
+      route(AuthRoutes.register(), './modules/auth/pages/register.page.tsx'),
     ],
   ),
 
   layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
     route(APP_ROUTES.DASHBOARD, './modules/dashboard/pages/dashboard-page.tsx'),
     route(APP_ROUTES.LEARN, './modules/learning/pages/my-learning.page.tsx'),
-    route(APP_ROUTES.LEARNING_STUDY, './modules/learning/pages/study-session.page.tsx'),
-    route('/learning/topics', './modules/topic/pages/topics.page.tsx'),
     route(
-      '/learning/topics/$topicId',
+      APP_ROUTES.LEARNING_STUDY,
+      './modules/learning/pages/study-session.page.tsx',
+    ),
+    route(TopicRoutes.list(), './modules/topic/pages/topics.page.tsx'),
+    route(
+      TopicRoutes.detail('$topicId'),
       './modules/topic/pages/topic-detail.page.tsx',
     ),
-    route('/flashcards', './modules/flashcard/pages/flashcards.page.tsx'),
-    route('/study', './modules/flashcard/pages/study.page.tsx'),
-    route('/flashcards/stats', './modules/flashcard/pages/stats.page.tsx'),
     route(
-      APP_ROUTES.WORKSPACE.NEW,
+      FlashcardsRoutes.list(),
+      './modules/flashcard/pages/flashcards.page.tsx',
+    ),
+    route(FlashcardsRoutes.study(), './modules/flashcard/pages/study.page.tsx'),
+    route(FlashcardsRoutes.stats(), './modules/flashcard/pages/stats.page.tsx'),
+    route(
+      WorkspaceRoutes.new(),
       './modules/workspace/pages/new-workspace.page.tsx',
     ),
     // Dictionary Routes (Now Inside App Shell)
     route(
-      APP_ROUTES.DICTIONARY.SEARCH,
+      DictionaryRoutes.search(),
+
       './modules/learning/pages/dictionary-layout.tsx',
       [
         index('./modules/learning/pages/dictionary-search.page.tsx'),

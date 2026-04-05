@@ -7,7 +7,7 @@ import type { LoginResponseDto } from '../types';
 import type { LoginRequest } from '../types/auth.types';
 
 export const useLogin = () => {
-  const { login } = useAuthActions();
+  const { setToken, setUser } = useAuthActions();
 
   const mutation = useMutation<
     ApiSuccessResponse<LoginResponseDto>,
@@ -17,7 +17,8 @@ export const useLogin = () => {
     mutationFn: authApi.login,
     onSuccess: (response) => {
       if (response.data) {
-        login(response.data.user, response.data.accessToken);
+        setUser(response.data.user);
+        setToken(response.data.accessToken);
       }
     },
   });

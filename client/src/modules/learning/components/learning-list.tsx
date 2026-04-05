@@ -1,4 +1,4 @@
-import { APP_ROUTES } from '@/shared/constants';
+import { DictionaryRoutes } from '@/shared/constants';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -77,7 +77,7 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
           dictionary to add words!
         </p>
         <Button asChild>
-          <Link to={APP_ROUTES.DICTIONARY.SEARCH}>Explore Dictionary</Link>
+          <Link to={DictionaryRoutes.search()}>Explore Dictionary</Link>
         </Button>
       </div>
     );

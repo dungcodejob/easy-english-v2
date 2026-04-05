@@ -7,6 +7,7 @@ import type {
   StartSessionPayload,
   StartSessionResponse,
   StudyScope,
+  StudyType,
 } from '../types/study.types';
 
 export const useStartSession = () => {
@@ -31,6 +32,8 @@ export const useStartSession = () => {
       if (payload.scope === 'TOPIC' && payload.topicId) {
         search.mode = 'topic';
         search.topicId = payload.topicId;
+      } else if (payload.studyType === 'QUIZ') {
+        search.mode = 'quiz';
       } else {
         search.mode = 'due';
       }
