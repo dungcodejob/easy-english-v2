@@ -6,7 +6,7 @@ import type {
   UpdateFlashcardRequest,
 } from '../types';
 
-export const FLASHCAED_QUERY_KEY = {
+export const FLASHCARD_QUERY_KEY = {
   all: ['flashcards'] as const,
   stats: ['flashcards', 'stats'] as const,
   due: ['flashcards', 'due'] as const,
@@ -14,21 +14,21 @@ export const FLASHCAED_QUERY_KEY = {
 
 export function useFlashcards() {
   return useQuery({
-    queryKey: FLASHCAED_QUERY_KEY.all,
+    queryKey: FLASHCARD_QUERY_KEY.all,
     queryFn: () => FlashcardApi.getFlashcards(),
   });
 }
 
 export function useStudyStats() {
   return useQuery({
-    queryKey: FLASHCAED_QUERY_KEY.stats,
+    queryKey: FLASHCARD_QUERY_KEY.stats,
     queryFn: () => FlashcardApi.getStudyStats(),
   });
 }
 
 export function useDueCards(limit = 20) {
   return useQuery({
-    queryKey: [...FLASHCAED_QUERY_KEY.due, limit],
+    queryKey: [...FLASHCARD_QUERY_KEY.due, limit],
     queryFn: () => FlashcardApi.getDueCards(limit),
   });
 }
@@ -40,7 +40,7 @@ export function useCreateFlashcard() {
     mutationFn: (data: CreateFlashcardRequest) =>
       FlashcardApi.createFlashcard(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: FLASHCAED_QUERY_KEY.all });
+      queryClient.invalidateQueries({ queryKey: FLASHCARD_QUERY_KEY.all });
     },
   });
 }
@@ -52,7 +52,7 @@ export function useUpdateFlashcard() {
     mutationFn: ({ id, data }: { id: string; data: UpdateFlashcardRequest }) =>
       FlashcardApi.updateFlashcard(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: FLASHCAED_QUERY_KEY.all });
+      queryClient.invalidateQueries({ queryKey: FLASHCARD_QUERY_KEY.all });
     },
   });
 }
@@ -63,7 +63,7 @@ export function useDeleteFlashcard() {
   return useMutation({
     mutationFn: (id: string) => FlashcardApi.deleteFlashcard(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: FLASHCAED_QUERY_KEY.all });
+      queryClient.invalidateQueries({ queryKey: FLASHCARD_QUERY_KEY.all });
     },
   });
 }

@@ -1,6 +1,19 @@
 // Study session types for Phase 1 + Phase 2 (session tracking)
 
 // ---------------------------------------------------------------------------
+// Rating constants
+// ---------------------------------------------------------------------------
+
+export const Rating = {
+  Again: 1,
+  Hard: 2,
+  Good: 3,
+  Easy: 4,
+} as const;
+
+export type RatingValue = (typeof Rating)[keyof typeof Rating];
+
+// ---------------------------------------------------------------------------
 // Phase 1 — cards & review
 // ---------------------------------------------------------------------------
 
@@ -30,7 +43,7 @@ export interface TopicStudyCardsEnvelope extends StudyCardsEnvelope {
 
 export interface ReviewPayload {
   wordSenseId: string;
-  rating: 1 | 2 | 3 | 4;
+  rating: RatingValue;
   reviewDurationMs: number;
 }
 
@@ -68,7 +81,7 @@ export interface StartSessionResponse {
 export interface SessionReviewPayload {
   sessionId: string;
   wordSenseId: string;
-  rating: 1 | 2 | 3 | 4;
+  rating: RatingValue;
   reviewDurationMs: number;
 }
 
@@ -125,5 +138,5 @@ export interface QuizAnswer {
   wordSenseId: string;
   selectedLabel: 'A' | 'B' | 'C' | 'D';
   correct: boolean;
-  rating: 1 | 2 | 3 | 4; // 3 = correct, 1 = wrong
+  rating: RatingValue; // 3 = correct, 1 = wrong
 }

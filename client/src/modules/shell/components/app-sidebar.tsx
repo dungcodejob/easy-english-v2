@@ -1,5 +1,6 @@
 import { WorkspaceSwitcher } from '@/modules/workspace/components/workspace-switcher';
 import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
+import { useUser } from '@/shared/stores/auth-store';
 import {
   AchievementsRoutes,
   DictionaryRoutes,
@@ -34,11 +35,11 @@ import { NavUser } from '../ui/nav-user';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation();
   const { currentWorkspaceId } = useWorkspaceStore();
+  const authUser = useUser();
 
-  // Mock data for user - this should come from auth store
   const user = {
-    name: 'User',
-    email: 'user@example.com',
+    name: authUser?.email?.split('@')[0] ?? 'User',
+    email: authUser?.email ?? '',
     avatar: '',
   };
 

@@ -15,7 +15,12 @@ import { useReviewCard } from '../hooks/use-review-card';
 import { useSessionSummary } from '../hooks/use-session-summary';
 import { useStartSession } from '../hooks/use-start-session';
 import { useStudySessionStore } from '../stores/use-study-session-store';
-import type { QuizCard, ReviewResult, StudyScope } from '../types/study.types';
+import type {
+  QuizCard,
+  RatingValue,
+  ReviewResult,
+  StudyScope,
+} from '../types/study.types';
 
 const FEEDBACK_DURATION_MS = 800;
 
@@ -32,8 +37,6 @@ export const Route = createFileRoute('/_(authenticated)/learning/study')({
   component: StudySessionPage,
   validateSearch: () => ({}) as Partial<StudySessionQueryParams>,
 });
-
-type Rating = 1 | 2 | 3 | 4;
 
 function StudySessionPage() {
   const navigate = useNavigate();
@@ -147,7 +150,7 @@ function StudySessionPage() {
   };
 
   const handleRate = useCallback(
-    async (rating: Rating) => {
+    async (rating: RatingValue) => {
       if (store.isSubmittingRating || !store.flipped) return;
       if (!currentCard) return;
 
@@ -188,10 +191,18 @@ function StudySessionPage() {
     [currentCard, store],
   );
 
-  const handleReset = useCallback(() => {
+  const handleExit = useCallback(() => {
+    const hasActiveSession =
+      store.cards.length > 0 && !isSessionComplete && store.currentIndex > 0;
+    if (
+      hasActiveSession &&
+      !window.confirm('Exit session? Your progress so far will not be saved.')
+    ) {
+      return;
+    }
     store.resetSession();
     navigate({ to: LearnRoutes.base() });
-  }, [store, navigate]);
+  }, [store, navigate, isSessionComplete]);
 
   const [feedback, setFeedback] = useState<ReviewResult | null>(null);
 
@@ -265,10 +276,7 @@ function StudySessionPage() {
           variant="ghost"
           size="sm"
           leftIcon={<ChevronLeft className="size-4" />}
-          onClick={() => {
-            store.resetSession();
-            navigate({ to: LearnRoutes.base() });
-          }}
+          onClick={handleExit}
         >
           Exit
         </DsButton>

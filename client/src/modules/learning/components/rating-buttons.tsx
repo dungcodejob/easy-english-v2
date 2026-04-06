@@ -1,9 +1,8 @@
 import { DsButton } from '@/shared/ui';
-
-type Rating = 1 | 2 | 3 | 4;
+import type { RatingValue } from '../types/study.types';
 
 const RATING_CONFIG: Array<{
-  rating: Rating;
+  rating: RatingValue;
   label: string;
   shortcut: string;
   variant: 'destructive' | 'secondary' | 'default' | 'outline';
@@ -16,7 +15,7 @@ const RATING_CONFIG: Array<{
 
 interface RatingButtonsProps {
   disabled: boolean;
-  onRate: (rating: Rating) => void;
+  onRate: (rating: RatingValue) => void;
 }
 
 export function RatingButtons({ disabled, onRate }: RatingButtonsProps) {

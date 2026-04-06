@@ -17,7 +17,6 @@ export default function WordSenseDetailPage() {
 
   const { data: result, isLoading, error } = useWordSenseDetail(senseId);
 
-  console.log(result);
   return (
     <div className="container max-w-4xl mx-auto px-4 py-8 md:py-12">
       <div className="mb-8">
