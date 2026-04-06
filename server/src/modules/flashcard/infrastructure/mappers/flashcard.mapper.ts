@@ -1,9 +1,12 @@
+import { Injectable } from '@nestjs/common';
+
 import { type Mapper } from '@core/ddd';
 
 import { Flashcard } from '../../domain/entities/flashcard.aggregate';
 import { FlashcardSource } from '../../domain/value-objects/flashcard-source.vo';
 import { FlashcardOrmEntity } from '../persistence/flashcard.orm-entity';
 
+@Injectable()
 export class FlashcardMapper implements Mapper<
   Flashcard,
   FlashcardOrmEntity,

@@ -21,4 +21,4 @@ const { inject, provider, token } = createInjection<IFlashcardRepository>(
 
 export const InjectFlashcardRepository = inject;
 export const provideFlashcardRepository = provider;
-export const FlashcardRepositoryToken = token;
+export const flashcardRepositoryToken = token;

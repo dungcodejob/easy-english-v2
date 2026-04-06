@@ -3,7 +3,7 @@ import { EventBus, EventsHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
-import { WordReviewedEvent } from '../../../learning/progress/domain/events/word-reviewed.event';
+import { WordReviewedEvent } from '../../../progress/domain/events/word-reviewed.event';
 import {
   InjectStudyStatsRepository,
   type IStudyStatsRepository,

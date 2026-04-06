@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { EventsHandler } from '@nestjs/cqrs';
 
-import { WorkspaceCreatedEvent } from '../../../workspace/domain/events';
+import { WorkspaceCreatedEvent } from '../../../../workspace/domain/events';
 import { StudyStats } from '../../domain/entities/study-stats.aggregate';
 import {
   InjectStudyStatsRepository,

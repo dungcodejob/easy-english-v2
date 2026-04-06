@@ -44,17 +44,17 @@ import { LearningListItemResponseDto } from '../dto/responses/learning-list-item
 
 import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
-@ApiTags('Learning')
+@ApiTags('Learning Senses')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller({ version: '1', path: 'learning' })
-export class LearningController {
+@Controller({ version: '1', path: 'learning/senses' })
+export class SensesController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Post('senses')
+  @Post()
   @ApiOperation({ summary: 'Add a WordSense to the learning list' })
   @ApiResponse({
     status: 201,
@@ -80,7 +80,7 @@ export class LearningController {
     return ApiResponseBuilder.success(result);
   }
 
-  @Delete('senses/:senseId')
+  @Delete(':senseId')
   @ApiOperation({ summary: 'Remove a WordSense from the learning list' })
   @ApiParam({
     name: 'senseId',
@@ -106,7 +106,7 @@ export class LearningController {
     return ApiResponseBuilder.success(result);
   }
 
-  @Get('senses')
+  @Get()
   @ApiOperation({ summary: 'Get user learning list' })
   @ApiPaginationParams()
   @createSwaggerPaginationResponseDto(LearningListItemResponseDto)
@@ -133,7 +133,7 @@ export class LearningController {
     });
   }
 
-  @Get('senses/:senseId/state')
+  @Get(':senseId/state')
   @ApiOperation({ summary: 'Get learning state for a specific word sense' })
   @ApiParam({
     name: 'senseId',
@@ -158,7 +158,7 @@ export class LearningController {
     return ApiResponseBuilder.success(result);
   }
 
-  @Post('senses/:senseId/review')
+  @Post(':senseId/review')
   @ApiOperation({
     summary: 'Review a word in the learning list (dictionary mode)',
   })

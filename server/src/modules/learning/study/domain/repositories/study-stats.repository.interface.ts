@@ -14,9 +14,10 @@ export interface IStudyStatsRepository {
   delete(id: string): Promise<boolean>;
 }
 
-const { inject, provider } = createInjection<IStudyStatsRepository>(
+const { inject, provider, token } = createInjection<IStudyStatsRepository>(
   'IStudyStatsRepository',
 );
 
+export const studyStatsRepositoryToken = token;
 export const InjectStudyStatsRepository = inject;
 export const provideStudyStatsRepository = provider;

@@ -8,7 +8,7 @@ import { RemoveFromLearningHandler } from './application/commands/remove-from-le
 import { ReviewWordHandler } from './application/commands/review-word.handler';
 import { GetLearningListHandler } from './application/queries/get-learning-list.handler';
 import { GetLearningStateHandler } from './application/queries/get-learning-state.handler';
-import { LearningController } from './controllers/learning.controller';
+import { SensesController } from './controllers/senses.controller';
 import { provideLearningReadRepository } from './domain/repositories/learning-read.repository.interface';
 import { provideLearningWriteRepository } from './domain/repositories/learning-write.repository.interface';
 import { FsrsSchedulerService } from './domain/services/fsrs-scheduler.service';
@@ -27,7 +27,7 @@ const commandHandlers = [
   RemoveFromLearningHandler,
   ReviewWordHandler,
 ];
-const httpControllers = [LearningController];
+const httpControllers = [SensesController];
 const services = [FsrsSchedulerService];
 
 @Module({

@@ -2,7 +2,7 @@ import { v7 } from 'uuid';
 
 import { AggregateRoot } from '@core/ddd';
 
-import { type ReviewRating } from '../value-objects/review-rating.vo';
+import { type ReviewRating } from '../../../../flashcard/domain/value-objects/review-rating.vo';
 
 export interface StudyStatsProps {
   tenantId: string;

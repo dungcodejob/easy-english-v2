@@ -47,10 +47,10 @@ import { TopicDto, TopicWordDto } from '../dto/responses/topic.dto';
 
 import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
 
-@ApiTags('Topics')
-@Controller('topics')
-@UseGuards(JwtAuthGuard)
+@ApiTags('Learning Topics')
+@Controller({ version: '1', path: 'learning/topics' })
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class TopicController {
   constructor(
     private readonly commandBus: CommandBus,
