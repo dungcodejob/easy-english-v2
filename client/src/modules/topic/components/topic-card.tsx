@@ -6,7 +6,7 @@
  */
 
 import { TopicRoutes } from '@/shared/constants';
-import { DsBadge, DsButton, DsCard } from '@/shared/ui';
+import { DsButton, DsCard } from '@/shared/ui';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -121,12 +121,9 @@ export function TopicCard({ topic }: TopicCardProps) {
           )}
 
           {/* Footer */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Clock className="h-3.5 w-3.5" />
-              <span>{formatDate(topic.updatedAt)}</span>
-            </div>
-            <DsBadge variant="secondary">View topic</DsBadge>
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{formatDate(topic.updatedAt)}</span>
           </div>
         </div>
       </DsCard>

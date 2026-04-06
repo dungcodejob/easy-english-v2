@@ -54,10 +54,10 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     if (response.data && response.data.success && response.data.data) {
       const { accessToken, user } = response.data.data;
 
-      const { updateAccessToken, setUser } = useAuthStore.getState().actions;
+      const { setToken, setUser } = useAuthStore.getState().actions;
 
       setUser(user); // Important to ensure user is up to date (this handles updating state if changed)
-      updateAccessToken(accessToken);
+      setToken(accessToken);
 
       processQueue(null, accessToken.token);
       return accessToken.token;

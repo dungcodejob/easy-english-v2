@@ -26,6 +26,7 @@ import {
   DsInput,
   DsSelect,
   DsSelectItem,
+  DsSpinner,
   DsStatCard,
   DsTextarea,
 } from '@/shared/ui';
@@ -83,20 +84,21 @@ function FlashcardsPage() {
   return (
     <div className="flex w-full max-w-5xl flex-col gap-6 pb-10 mx-auto">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t('flashcards.title') || 'My Flashcards'}
-          </h1>
-          <p className="mt-1 text-muted-foreground">
-            {t('flashcards.subtitle') || `${flashcards.length} cards in your collection`}
-          </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20">
+            <Layers className="h-7 w-7" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+              {t('flashcards.title') || 'My Flashcards'}
+            </h1>
+            <p className="mt-1 text-muted-foreground">
+              {t('flashcards.subtitle') || `${flashcards.length} cards in your collection`}
+            </p>
+          </div>
         </div>
-
-        <DsButton
-          leftIcon={<Plus />}
-          onClick={() => setIsCreateOpen(true)}
-        >
+        <DsButton leftIcon={<Plus />} onClick={() => setIsCreateOpen(true)}>
           {t('flashcards.create') || 'Create Card'}
         </DsButton>
       </div>
@@ -144,16 +146,7 @@ function FlashcardsPage() {
       {/* Flashcard List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <svg
-            className="size-8 animate-spin text-muted-foreground"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
+          <DsSpinner size="lg" className="text-muted-foreground" />
         </div>
       ) : filteredCards.length === 0 ? (
         <DsEmptyState

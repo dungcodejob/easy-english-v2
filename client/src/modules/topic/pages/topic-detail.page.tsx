@@ -5,7 +5,18 @@
  */
 
 import { DictionaryRoutes, TopicRoutes } from '@/shared/constants';
-import { DsButton } from '@/shared/ui';
+import {
+  DsAlertDialog,
+  DsAlertDialogAction,
+  DsAlertDialogCancel,
+  DsAlertDialogContent,
+  DsAlertDialogDescription,
+  DsAlertDialogFooter,
+  DsAlertDialogHeader,
+  DsAlertDialogTitle,
+  DsAlertDialogTrigger,
+  DsButton,
+} from '@/shared/ui';
 import { Badge } from '@/shared/ui/shadcn/badge';
 import { Separator } from '@/shared/ui/shadcn/separator';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
@@ -62,9 +73,7 @@ export default function TopicDetailPage() {
 
   const handleDelete = () => {
     deleteTopic(topicId, {
-      onSuccess: () => {
-        void navigate({ to: TopicRoutes.list() });
-      },
+      onSuccess: () => void navigate({ to: TopicRoutes.list() }),
     });
   };
 
@@ -138,14 +147,34 @@ export default function TopicDetailPage() {
                       </DsButton>
                     }
                   />
-                  <DsButton
-                    variant="ghost"
-                    size="icon"
-                    className="h-9 w-9 text-muted-foreground hover:text-destructive"
-                    onClick={handleDelete}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </DsButton>
+                  <DsAlertDialog>
+                    <DsAlertDialogTrigger asChild>
+                      <DsButton
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </DsButton>
+                    </DsAlertDialogTrigger>
+                    <DsAlertDialogContent>
+                      <DsAlertDialogHeader>
+                        <DsAlertDialogTitle>Delete topic?</DsAlertDialogTitle>
+                        <DsAlertDialogDescription>
+                          This will permanently delete{' '}
+                          <strong className="text-foreground">{topic.name}</strong>{' '}
+                          and remove all its word associations. Words in your
+                          learning list will not be affected.
+                        </DsAlertDialogDescription>
+                      </DsAlertDialogHeader>
+                      <DsAlertDialogFooter>
+                        <DsAlertDialogCancel>Cancel</DsAlertDialogCancel>
+                        <DsAlertDialogAction onClick={handleDelete}>
+                          Delete topic
+                        </DsAlertDialogAction>
+                      </DsAlertDialogFooter>
+                    </DsAlertDialogContent>
+                  </DsAlertDialog>
                 </div>
               </div>
               {topic.description && (
