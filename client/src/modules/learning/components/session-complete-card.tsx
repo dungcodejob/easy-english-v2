@@ -54,7 +54,9 @@ export function SessionCompleteCard({
         <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Session complete!
         </h2>
-        <p className="text-muted-foreground text-lg">Great work — keep it up.</p>
+        <p className="text-muted-foreground text-lg">
+          Great work — keep it up.
+        </p>
       </div>
 
       {/* Stats */}

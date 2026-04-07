@@ -8,6 +8,7 @@ Reference-style documentation for each DDD module — entities, value objects, d
 |--------|---------------|-------------|
 | [auth](./auth/) | Authentication & Identity | Users, sessions, JWT tokens |
 | [workspace](./workspace/) | Multi-tenancy | Workspace management |
+| [dictionary](./dictionary/) | Vocabulary | Word lookup, search, CEFR levels, provider enrichment |
 | [flashcard](./flashcard/) | Learning | Card-level flashcard management |
 | [learning](./learning/) | Learning | Progress tracking, study sessions, topics |
 

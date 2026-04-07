@@ -181,12 +181,15 @@
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"implements.*Repository\" 2>/dev/null | grep -v node_modules)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*response.dto.ts\" -print 2>/dev/null | xargs grep -l \".\" 2>/dev/null)",
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"swagger\\\\|Swagger\\\\|@nestjs/swagger\" 2>/dev/null | grep -v node_modules | grep -v \".spec.ts\" | grep -v \".test.ts\")",
-      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server/src/core && mkdir -p infrastructure/persistence/interfaces && mkdir -p infrastructure/persistence/base && echo \"dirs created\")"
+      "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server/src/core && mkdir -p infrastructure/persistence/interfaces && mkdir -p infrastructure/persistence/base && echo \"dirs created\")",
+      "mcp__stitch__list_projects",
+      "mcp__stitch__list_screens"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "shadcn",
     "context7",
@@ -196,7 +199,8 @@
     "firecrawl",
     "exa",
     "sequential-thinking",
-    "token-optimizer"
+    "token-optimizer",
+    "stitch"
   ],
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true

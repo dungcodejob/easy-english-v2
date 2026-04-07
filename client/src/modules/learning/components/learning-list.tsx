@@ -94,37 +94,41 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
           ))}
         </div>
 
-        {pagination && pagination.count !== undefined && pagination.count > 20 && (
-          <div className="flex items-center justify-between rounded-lg border bg-muted/10 px-4 py-3 sm:px-6 mt-8">
-            <p className="text-sm text-muted-foreground">
-              Showing{' '}
-              <span className="font-medium">{(pagination.skip ?? 0) + 1}</span>{' '}
-              to{' '}
-              <span className="font-medium">
-                {Math.min((pagination.skip ?? 0) + 20, pagination.count)}
-              </span>{' '}
-              of <span className="font-medium">{pagination.count}</span> words
-            </p>
-            <div className="flex gap-2">
-              <DsButton
-                variant="outline"
-                size="sm"
-                onClick={() => onPageChange(page - 1)}
-                disabled={page === 1}
-              >
-                Previous
-              </DsButton>
-              <DsButton
-                variant="outline"
-                size="sm"
-                onClick={() => onPageChange(page + 1)}
-                disabled={!pagination.hasMore}
-              >
-                Next
-              </DsButton>
+        {pagination &&
+          pagination.count !== undefined &&
+          pagination.count > 20 && (
+            <div className="flex items-center justify-between rounded-lg border bg-muted/10 px-4 py-3 sm:px-6 mt-8">
+              <p className="text-sm text-muted-foreground">
+                Showing{' '}
+                <span className="font-medium">
+                  {(pagination.skip ?? 0) + 1}
+                </span>{' '}
+                to{' '}
+                <span className="font-medium">
+                  {Math.min((pagination.skip ?? 0) + 20, pagination.count)}
+                </span>{' '}
+                of <span className="font-medium">{pagination.count}</span> words
+              </p>
+              <div className="flex gap-2">
+                <DsButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onPageChange(page - 1)}
+                  disabled={page === 1}
+                >
+                  Previous
+                </DsButton>
+                <DsButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onPageChange(page + 1)}
+                  disabled={!pagination.hasMore}
+                >
+                  Next
+                </DsButton>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
 
       <WordSenseSheet
@@ -188,14 +192,16 @@ function WordCard({
                 <DsAlertDialogHeader>
                   <DsAlertDialogTitle>Remove from learning?</DsAlertDialogTitle>
                   <DsAlertDialogDescription>
-                    Are you sure you want to remove &quot;{item.wordText}&quot; from
-                    your learning list? Your progress will be hidden until you add it
-                    back.
+                    Are you sure you want to remove &quot;{item.wordText}&quot;
+                    from your learning list? Your progress will be hidden until
+                    you add it back.
                   </DsAlertDialogDescription>
                 </DsAlertDialogHeader>
                 <DsAlertDialogFooter>
                   <DsAlertDialogCancel>Cancel</DsAlertDialogCancel>
-                  <DsAlertDialogAction onClick={onRemove}>Remove</DsAlertDialogAction>
+                  <DsAlertDialogAction onClick={onRemove}>
+                    Remove
+                  </DsAlertDialogAction>
                 </DsAlertDialogFooter>
               </DsAlertDialogContent>
             </DsAlertDialog>

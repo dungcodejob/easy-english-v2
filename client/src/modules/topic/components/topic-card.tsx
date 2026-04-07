@@ -1,12 +1,5 @@
-/**
- * TopicCard — Topic module
- *
- * UI: DsBadge, DsButton, DsCard.
- * DropdownMenu kept raw (no DS abstraction needed).
- */
-
 import { TopicRoutes } from '@/shared/constants';
-import { DsButton, DsCard } from '@/shared/ui';
+import { DsButton } from '@/shared/ui';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,14 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { Link } from '@tanstack/react-router';
-import {
-  BookOpen,
-  ChevronRight,
-  Clock,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-} from 'lucide-react';
+import { ChevronRight, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
 import { UpdateTopicDialog } from './update-topic-dialog';
@@ -30,12 +16,17 @@ interface TopicCardProps {
   topic: Topic;
 }
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+function formatRelativeDate(dateStr: string) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 export function TopicCard({ topic }: TopicCardProps) {
@@ -48,85 +39,74 @@ export function TopicCard({ topic }: TopicCardProps) {
   };
 
   return (
-    <Link
-      to={TopicRoutes.detail(topic.id)}
-      className="group block focus:outline-none"
-    >
-      <DsCard className="relative h-full overflow-hidden border border-border/60 bg-card transition-all duration-200 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 cursor-pointer focus-within:ring-2 focus-within:ring-primary/40">
-        {/* Accent bar */}
-        <div className="absolute left-0 top-0 h-full w-1 bg-primary/20 transition-colors duration-200 group-hover:bg-primary/60" />
+    <div className="group relative flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/40">
+      {/* Main link covers the row */}
+      <Link
+        to={TopicRoutes.detail(topic.id)}
+        className="absolute inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+        aria-label={`Open topic: ${topic.name}`}
+      />
 
-        <div className="p-5 pl-6">
-          {/* Header */}
-          <div className="mb-3 flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary/20">
-                <BookOpen className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="truncate text-base font-bold text-foreground transition-colors duration-200 group-hover:text-primary">
-                  {topic.name}
-                </h3>
-              </div>
-            </div>
-            <div
-              className="flex items-center gap-1"
+      {/* Name + description */}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-foreground">
+          {topic.name}
+        </p>
+        {topic.description && (
+          <p className="mt-0.5 truncate text-xs text-muted-foreground">
+            {topic.description}
+          </p>
+        )}
+      </div>
+
+      {/* Updated date */}
+      <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+        {formatRelativeDate(topic.updatedAt)}
+      </span>
+
+      {/* Actions — visible on hover */}
+      <div
+        className="relative z-10 flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100"
+        onClick={(e) => e.preventDefault()}
+      >
+        <UpdateTopicDialog
+          topic={topic}
+          trigger={
+            <DsButton
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-foreground"
               onClick={(e) => e.preventDefault()}
             >
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <DsButton
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </DsButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-36">
-                  <DropdownMenuItem asChild>
-                    <UpdateTopicDialog
-                      topic={topic}
-                      trigger={
-                        <span className="flex w-full cursor-pointer items-center gap-2">
-                          <Pencil className="h-4 w-4" />
-                          Edit
-                        </span>
-                      }
-                    />
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleDelete}
-                    className="cursor-pointer text-destructive focus:text-destructive"
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
-            </div>
-          </div>
+              <Pencil className="h-3.5 w-3.5" />
+            </DsButton>
+          }
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <DsButton
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              onClick={(e) => e.preventDefault()}
+            >
+              <MoreHorizontal className="h-3.5 w-3.5" />
+            </DsButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem
+              onClick={handleDelete}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <Trash2 className="mr-2 h-3.5 w-3.5" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
-          {/* Description */}
-          {topic.description ? (
-            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-              {topic.description}
-            </p>
-          ) : (
-            <p className="mb-4 text-sm italic text-muted-foreground/50">
-              No description
-            </p>
-          )}
-
-          {/* Footer */}
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Clock className="h-3.5 w-3.5" />
-            <span>{formatDate(topic.updatedAt)}</span>
-          </div>
-        </div>
-      </DsCard>
-    </Link>
+      {/* Chevron */}
+      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40 transition-colors group-hover:text-muted-foreground" />
+    </div>
   );
 }
