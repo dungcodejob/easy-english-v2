@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resilience - Word Detail | Cognitive Editorial</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "outline": "#777587",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#351000",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "on-primary-fixed-variant": "#372abf",
+                        "secondary": "#515f74",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "inverse-surface": "#2d3133",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-low": "#f2f4f6",
+                        "primary": "#392cc1",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "primary-container": "#534ad9",
+                        "on-secondary-container": "#57657a",
+                        "surface-tint": "#5148d7",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#dbd7ff",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-surface": "#191c1e",
+                        "tertiary-fixed": "#ffdbcc",
+                        "primary-fixed": "#e3dfff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "tertiary": "#7e3000",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed": "#100069",
+                        "tertiary-container": "#a44100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold tracking-tighter text-indigo-700">Cognitive Editorial</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-500" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-500" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Side Navigation Shell -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-slate-50 flex flex-col p-4 space-y-6 pt-20 hidden md:flex">
+<div class="px-3 mb-4">
+<div class="text-xl font-black text-slate-900">The Lexicon</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Advanced English</div>
+</div>
+<div class="flex flex-col space-y-1">
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="bg-indigo-50 text-indigo-700 rounded-lg px-3 py-2 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-medium text-sm">Dictionary</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-medium text-sm">Lessons</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-medium text-sm">Progress</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</div>
+<div class="mt-auto space-y-1 border-t border-slate-100 pt-4">
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-medium text-sm">Help</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-medium text-sm">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 px-8 pb-16 min-h-screen bg-surface">
+<div class="max-w-5xl mx-auto">
+<!-- Breadcrumbs / Meta -->
+<div class="mb-8 flex items-center gap-2 text-on-surface-variant text-sm font-medium">
+<span>Dictionary</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-semibold">Resilience</span>
+</div>
+<!-- Hero Section: Word Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+<div class="space-y-4">
+<div class="flex items-center gap-6">
+<h1 class="text-6xl md:text-7xl font-bold tracking-tighter text-on-surface">Resilience</h1>
+<button class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</button>
+</div>
+<div class="flex items-center gap-4 text-xl text-on-surface-variant font-medium">
+<span class="font-body italic">noun</span>
+<span class="text-outline-variant">|</span>
+<span class="text-primary tracking-wide">/rɪˈzɪliəns/</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+                        Add to Learning List
+                    </button>
+<button class="px-6 py-3 border-2 border-outline-variant text-on-surface font-semibold rounded-lg hover:bg-surface-container-low transition-all">
+                        Add to Topic
+                    </button>
+</div>
+</div>
+<!-- Content Grid (Asymmetric) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Meanings & Examples -->
+<div class="lg:col-span-7 space-y-12">
+<!-- Section: Meanings -->
+<section>
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary mb-6">Definitions</h2>
+<div class="space-y-8">
+<div class="relative pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-full"></div>
+<span class="text-xs font-black text-outline uppercase block mb-1">Context: Psychology</span>
+<p class="text-2xl font-medium leading-relaxed text-on-surface">The capacity to recover quickly from difficulties; toughness.</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant rounded-full"></div>
+<span class="text-xs font-black text-outline uppercase block mb-1">Context: Physics / Materials</span>
+<p class="text-2xl font-medium leading-relaxed text-on-surface">The ability of a substance or object to spring back into shape.</p>
+</div>
+</div>
+</section>
+<!-- Section: Examples -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary mb-6">Usage Examples</h2>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="format_quote">format_quote</span>
+<p class="text-lg italic text-on-surface-variant">"She showed great <span class="text-primary font-bold not-italic">resilience</span> in the face of adversity."</p>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="format_quote">format_quote</span>
+<p class="text-lg italic text-on-surface-variant">"The <span class="text-primary font-bold not-italic">resilience</span> of the economy is being tested by global inflation."</p>
+</li>
+</ul>
+</section>
+</div>
+<!-- Right Column: Visual & Related -->
+<div class="lg:col-span-5 space-y-12">
+<!-- Feature Image / Visual Metaphor -->
+<div class="relative rounded-2xl overflow-hidden aspect-video bg-surface-container-highest shadow-xl group">
+<img alt="Single plant sprout growing through a crack in dry earth" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="a single resilient green sprout pushing through a cracked dry desert floor during golden hour with dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBppIwD0PSL_xMpQ0mrrSjsozWdT5Q-hB2Hzvii0N4hNQUuqTZn_CRV8FGSiWSfYHYFr-WKJa7BB0ekGXUp9vU2JtvmCQK3JNcdJHEfwQp-x-cxt1AKPTTbtVCLeC-Pq5La1-lSD3yCZoSzXUjdHyxPqfDHcgNnhMsKmXjI8f4Me7_Zxe-w3QpB5ZPotAfBaiD60lucuhXtM8Sma_IsO4t1XK9XhH29XDTCNEyFigTQU83JfGCpXHmTh0FYp-wcrisr_cMKwUdMb18V"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+<div class="absolute bottom-4 left-6 text-on-surface-variant text-xs font-semibold uppercase tracking-widest">Visual Metaphor: Enduring Strength</div>
+</div>
+<!-- Related Words Section -->
+<section>
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary mb-6">Related Concepts</h2>
+<div class="grid grid-cols-1 gap-4">
+<!-- Related Word Card -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 hover:bg-surface-bright hover:shadow-md transition-all cursor-pointer">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Fortitude</h3>
+<p class="text-sm text-on-surface-variant">Courage in pain or adversity.</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Related Word Card -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 hover:bg-surface-bright hover:shadow-md transition-all cursor-pointer">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Elasticity</h3>
+<p class="text-sm text-on-surface-variant">The quality of being able to stretch.</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Related Word Card -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 hover:bg-surface-bright hover:shadow-md transition-all cursor-pointer">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Durability</h3>
+<p class="text-sm text-on-surface-variant">The ability to withstand wear or pressure.</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Learning Statistics (Bento style) -->
+<div class="bg-primary-fixed p-6 rounded-xl space-y-4">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-bold text-sm uppercase tracking-tight">Active in Your Curriculum</span>
+</div>
+<p class="text-on-primary-fixed-variant text-sm font-medium">This word appears in <span class="font-bold">4 Lesson Modules</span> including "Leadership Under Pressure".</p>
+<div class="w-full bg-on-primary-fixed/10 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-primary uppercase">
+<span>Familiarity: Intermediate</span>
+<span>65%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Floating Action for Mobile -->
+<div class="fixed bottom-6 left-6 right-6 md:hidden">
+<button class="w-full h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center gap-3 font-bold">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    Quick Add to List
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-slate-50 flex items-center justify-around px-2 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-indigo-700">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-[10px] font-medium">Dictionary</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="text-[10px] font-medium">Lessons</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-medium">Progress</span>
+</button>
+</nav>
+</body></html>

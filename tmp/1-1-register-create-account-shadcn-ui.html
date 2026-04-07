@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register - Easy English</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(221.2 83.2% 53.3%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 84% 4.9%)",
+                        primary: {
+                            DEFAULT: "hsl(221.2 83.2% 53.3%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(222.2 47.4% 11.2%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(222.2 47.4% 11.2%)",
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        :root {
+            --radius: 0.5rem;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground min-h-screen flex flex-col">
+<!-- TopNavBar: Shadcn-inspired clean navigation -->
+<nav class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<div class="container flex h-16 items-center justify-between max-w-screen-2xl mx-auto px-6">
+<div class="flex items-center gap-8">
+<a class="flex items-center space-x-2" href="#">
+<span class="inline-block font-bold text-xl text-primary">Easy English</span>
+</a>
+<div class="hidden md:flex gap-6">
+<a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#">Dashboard</a>
+<a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#">Learning</a>
+<a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#">Study Hub</a>
+<a class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary" href="#">Create</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+Quick Start
+</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+<!-- Background Decorative Elements -->
+<div class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
+<div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[80px]"></div>
+</div>
+<div class="w-full max-w-md z-10 space-y-8">
+<!-- Brand Logo & Header -->
+<div class="flex flex-col space-y-2 text-center">
+<h1 class="text-3xl font-semibold tracking-tight text-foreground">Easy English</h1>
+<p class="text-sm text-muted-foreground">Join our digital sanctuary for focused learning.</p>
+</div>
+<!-- Registration Card: Shadcn-style Card -->
+<div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+<div class="p-8 space-y-6">
+<form class="space-y-4">
+<!-- Name Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name">Full Name</label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="name" name="name" placeholder="Alexander Hamilton" required="" type="text"/>
+</div>
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">Email Address</label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" name="email" placeholder="alexander@academy.edu" required="" type="email"/>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="password">Password</label>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+<!-- Workspace Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="workspace">Workspace Name</label>
+<span class="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Optional</span>
+</div>
+<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="workspace" name="workspace" placeholder="Oxford Global Hub" type="text"/>
+</div>
+<!-- Submit Button -->
+<div class="pt-2">
+<button class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-6 w-full text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring gap-2" type="submit">
+Create Account
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Divider -->
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<span class="w-full border-t"></span>
+</div>
+<div class="relative flex justify-center text-xs uppercase">
+<span class="bg-background px-2 text-muted-foreground">Already a member?</span>
+</div>
+</div>
+<!-- Login Link -->
+<div class="text-center">
+<a class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center gap-1" href="#">
+Login to Easy English
+<span class="material-symbols-outlined text-sm">login</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Trust Badges -->
+<div class="flex justify-center gap-6 items-center">
+<div class="flex items-center gap-1.5 text-muted-foreground">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+<span class="text-xs font-medium">Secure Enrollment</span>
+</div>
+<div class="flex items-center gap-1.5 text-muted-foreground">
+<span class="material-symbols-outlined text-lg">auto_stories</span>
+<span class="text-xs font-medium">Academic Standards</span>
+</div>
+</div>
+</div>
+<!-- Decorative Floating Elements: Modernized with shadcn aesthetics -->
+<div class="hidden lg:block absolute left-12 bottom-12 w-72 rounded-lg border bg-card p-4 shadow-lg -rotate-2">
+<div class="flex items-center gap-3 mb-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+<span class="material-symbols-outlined text-primary">school</span>
+</div>
+<div>
+<p class="text-xs font-bold">Oxford Study Method</p>
+<p class="text-[10px] text-muted-foreground leading-tight">Scientifically proven recall techniques for rapid fluency.</p>
+</div>
+</div>
+<img class="aspect-video w-full rounded-md object-cover grayscale-[0.2] hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVJ6Ptw1VoOF1-OqdqXsux9z088c-aG_0CHksSNxD3VaClRHr7xc6zvYpUcvYVdJwZuBZYmu3nk_va9dG7yztCXsDYzdXTQrkESzo9qZjWTKGOxRXf1G3zua5vDDQF4npLJrwSBTv--4tnsQXTYg7AINK-fe2D02u-4bQ4-RQueg5tG7wFXFY4o6GFNpLWFfW_kgUcL9egXN7aBUSwV4FxEIkf2U9KGSMif41-TnqQNG2vnlD1EsD5sYlj6Yu-yEM-DmTJDpt5r3pw"/>
+</div>
+<div class="hidden lg:block absolute right-16 top-24 w-56 rounded-lg border bg-background/50 backdrop-blur-md p-4 shadow-xl rotate-3">
+<div class="space-y-3">
+<div class="space-y-2">
+<div class="h-2 w-1/2 bg-muted rounded-full"></div>
+<div class="h-2 w-full bg-muted/60 rounded-full"></div>
+<div class="h-2 w-3/4 bg-muted/60 rounded-full"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3 overflow-hidden">
+<img class="inline-block h-8 w-8 rounded-full ring-2 ring-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd1DNuprW67He_Sz5oiG3gSTIBrLPN77spY3hUe8Tx8eWl_D764ZhW5fgvhwSx8d0hcvo1-BpDZO9Pd4eDrGxLqR5BqTmnWUVBx1jRoYvaNLOJGWEkPKycKU915OXXVa26dbLmbdeFQli2ByVS1DUt6Mj1IJN3-PKC43kytiJmi2Fjg_5c6oVALroqYOUjQaFxH2CdXB5sZ9Wr8-atKQZZrYVTut4pK845A9eI1E_BxadLPhE4tJr44a94OWm0jh7rvtmXR-jkQO8i"/>
+<img class="inline-block h-8 w-8 rounded-full ring-2 ring-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1zl38SdPPcdByKs309NwlRAOKcLKXd5HSGQxlGbKxBwEwfE1IZCraQgPWIQ6g70oE1gpJ-S8e2IiGYZZhPxu03pntcVxgPSR4H0fBniglhcnfgnJdOTfgsxNjxIMZiDnHs0tO0lS_RvHRNjSpY2Vv9WCDNTsv1JS2rBjYiP6dmSvyqPPUBpN_A_6r0u-kZ-cZsyiM4B6SXCA7p6BImZltdnNzzOnGIPJYtuJ-yYNunOahyvjOgcxBhCqwQtIZ4S4EQ51XClGitBLx"/>
+<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground ring-2 ring-background">+12k</div>
+</div>
+</div>
+<p class="text-[10px] font-semibold text-primary">Students active now</p>
+</div>
+</div>
+</main>
+<!-- Simple Transactional Footer -->
+<footer class="border-t py-6 md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row max-w-screen-2xl mx-auto px-12">
+<p class="text-center text-xs leading-loose text-muted-foreground md:text-left">
+© 2024 Easy English. All rights reserved.
+</p>
+<div class="flex items-center space-x-6 text-xs font-medium text-muted-foreground">
+<a class="underline-offset-4 hover:underline" href="#">Privacy Policy</a>
+<a class="underline-offset-4 hover:underline" href="#">Terms of Service</a>
+<a class="underline-offset-4 hover:underline" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+</body></html>

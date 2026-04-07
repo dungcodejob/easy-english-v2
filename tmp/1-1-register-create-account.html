@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register - Easy English</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#773200",
+                        "on-primary-fixed-variant": "#303c9a",
+                        "surface-tint": "#4955b3",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#4551af",
+                        "error": "#ba1a1a",
+                        "on-surface": "#191c1d",
+                        "on-primary-container": "#cbcfff",
+                        "surface": "#f8f9fa",
+                        "on-primary-fixed": "#000c62",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#ffc6a8",
+                        "primary-fixed-dim": "#bcc2ff",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbca",
+                        "secondary": "#1b6d24",
+                        "secondary-fixed-dim": "#88d982",
+                        "secondary-container": "#a0f399",
+                        "primary-fixed": "#dfe0ff",
+                        "tertiary-container": "#964100",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#bcc2ff",
+                        "tertiary": "#712f00",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-dim": "#d9dadb",
+                        "outline": "#757684",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb68f",
+                        "surface-container-high": "#e7e8e9",
+                        "on-tertiary-fixed": "#331200",
+                        "surface-bright": "#f8f9fa",
+                        "outline-variant": "#c5c5d4",
+                        "on-surface-variant": "#454652",
+                        "inverse-on-surface": "#f0f1f2",
+                        "background": "#f8f9fa",
+                        "on-secondary-container": "#217128",
+                        "on-secondary-fixed-variant": "#005312",
+                        "primary": "#2b3896",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#002204",
+                        "on-background": "#191c1d",
+                        "secondary-fixed": "#a3f69c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar: SUPPRESSED per "Destination Rule" for Transactional Screens (Registration) -->
+<!-- However, the prompt specifically requested to "Include the TopNavBar component". -->
+<!-- Balancing rules: The prompt's specific inclusion instruction overrides the general suppression rule for this instance. -->
+<nav class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md docked full-width top-0 sticky z-50 tonal separation via bg-surface-container-low">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black tracking-tight text-indigo-900 dark:text-indigo-100">Easy English</span>
+<div class="hidden md:flex gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 text-sm font-medium font-inter" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 text-sm font-medium font-inter" href="#">Learning</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 text-sm font-medium font-inter" href="#">Study Hub</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 text-sm font-medium font-inter" href="#">Create</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:bg-slate-100/50 p-2 rounded-full transition-colors" data-icon="notifications">notifications</button>
+<button class="bg-primary text-on-primary px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all active:scale-95 duration-150">Quick Start</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+<!-- Background Decorative Elements (Breathable Asymmetry) -->
+<div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary-container/10 rounded-full blur-3xl"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-secondary-container/20 rounded-full blur-3xl"></div>
+<div class="w-full max-w-md z-10">
+<!-- Brand Logo & Header -->
+<div class="text-center mb-10">
+<h1 class="text-4xl font-extrabold tracking-tight text-primary mb-3">Easy English</h1>
+<p class="text-on-surface-variant font-medium">Join our digital sanctuary for focused learning.</p>
+</div>
+<!-- Registration Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_12px_32px_rgba(25,28,29,0.04)] border border-outline-variant/15">
+<form class="space-y-6">
+<!-- Name Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface-variant ml-1" for="name">Full Name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="name" name="name" placeholder="Alexander Hamilton" required="" type="text"/>
+</div>
+</div>
+<!-- Email Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface-variant ml-1" for="email">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="email" name="email" placeholder="alexander@academy.edu" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-on-surface-variant ml-1" for="password">Password</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Workspace Field (Optional) -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="block text-sm font-medium text-on-surface-variant ml-1" for="workspace">Workspace Name</label>
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Optional</span>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="workspace" name="workspace" placeholder="Oxford Global Hub" type="text"/>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-2">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all flex justify-center items-center gap-2" type="submit">
+<span>Create Account</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase tracking-widest">
+<span class="bg-surface-container-lowest px-4 text-outline font-semibold">Already a member?</span>
+</div>
+</div>
+<!-- Login Link -->
+<div class="text-center">
+<a class="inline-flex items-center gap-1 text-primary font-bold hover:underline decoration-2 underline-offset-4" href="#">
+<span>Login to Easy English</span>
+<span class="material-symbols-outlined text-sm" data-icon="login">login</span>
+</a>
+</div>
+</div>
+<!-- Trust Badges / Footer Info -->
+<div class="mt-8 flex justify-center gap-8 items-center opacity-60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified_user">verified_user</span>
+<span class="text-xs font-medium text-on-surface-variant">Secure Enrollment</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="auto_stories">auto_stories</span>
+<span class="text-xs font-medium text-on-surface-variant">Academic Standards</span>
+</div>
+</div>
+</div>
+<!-- Decorative Floating Elements -->
+<div class="hidden lg:block absolute left-20 bottom-20 w-64 p-6 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/10 -rotate-3">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="school">school</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Oxford Study Method</p>
+<p class="text-[10px] text-on-surface-variant leading-tight">Scientifically proven recall techniques for rapid fluency.</p>
+</div>
+</div>
+<img class="w-full h-24 object-cover rounded-lg" data-alt="minimalist aesthetic study space with open notebook, fountain pen, and soft morning sunlight on a wooden desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVJ6Ptw1VoOF1-OqdqXsux9z088c-aG_0CHksSNxD3VaClRHr7xc6zvYpUcvYVdJwZuBZYmu3nk_va9dG7yztCXsDYzdXTQrkESzo9qZjWTKGOxRXf1G3zua5vDDQF4npLJrwSBTv--4tnsQXTYg7AINK-fe2D02u-4bQ4-RQueg5tG7wFXFY4o6GFNpLWFfW_kgUcL9egXN7aBUSwV4FxEIkf2U9KGSMif41-TnqQNG2vnlD1EsD5sYlj6Yu-yEM-DmTJDpt5r3pw"/>
+</div>
+<div class="hidden lg:block absolute right-24 top-32 w-48 p-4 bg-white/40 backdrop-blur-xl rounded-xl shadow-lg border border-white/20 rotate-6">
+<div class="flex flex-col gap-2">
+<div class="h-2 w-1/2 bg-primary/20 rounded-full"></div>
+<div class="h-2 w-full bg-primary/10 rounded-full"></div>
+<div class="h-2 w-3/4 bg-primary/10 rounded-full"></div>
+<div class="mt-2 flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="portrait of a young student smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd1DNuprW67He_Sz5oiG3gSTIBrLPN77spY3hUe8Tx8eWl_D764ZhW5fgvhwSx8d0hcvo1-BpDZO9Pd4eDrGxLqR5BqTmnWUVBx1jRoYvaNLOJGWEkPKycKU915OXXVa26dbLmbdeFQli2ByVS1DUt6Mj1IJN3-PKC43kytiJmi2Fjg_5c6oVALroqYOUjQaFxH2CdXB5sZ9Wr8-atKQZZrYVTut4pK845A9eI1E_BxadLPhE4tJr44a94OWm0jh7rvtmXR-jkQO8i"/>
+<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="portrait of an academic professor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1zl38SdPPcdByKs309NwlRAOKcLKXd5HSGQxlGbKxBwEwfE1IZCraQgPWIQ6g70oE1gpJ-S8e2IiGYZZhPxu03pntcVxgPSR4H0fBniglhcnfgnJdOTfgsxNjxIMZiDnHs0tO0lS_RvHRNjSpY2Vv9WCDNTsv1JS2rBjYiP6dmSvyqPPUBpN_A_6r0u-kZ-cZsyiM4B6SXCA7p6BImZltdnNzzOnGIPJYtuJ-yYNunOahyvjOgcxBhCqwQtIZ4S4EQ51XClGitBLx"/>
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[8px] text-white font-bold">+12k</div>
+</div>
+<p class="text-[10px] font-medium text-primary-container">Students active now</p>
+</div>
+</div>
+</main>
+<!-- Simple Transactional Footer -->
+<footer class="py-6 px-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-on-surface-variant">© 2024 Easy English. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a>
+</div>
+</footer>
+</body></html>

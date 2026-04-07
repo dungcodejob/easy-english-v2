@@ -183,7 +183,16 @@
       "Bash(cd \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\server\\\\src\" && find . -path ./node_modules -prune -o -name \"*.ts\" -print | xargs grep -n \"swagger\\\\|Swagger\\\\|@nestjs/swagger\" 2>/dev/null | grep -v node_modules | grep -v \".spec.ts\" | grep -v \".test.ts\")",
       "Bash(cd /e/Projects/multi-tenant/easy-english-v2/server/src/core && mkdir -p infrastructure/persistence/interfaces && mkdir -p infrastructure/persistence/base && echo \"dirs created\")",
       "mcp__stitch__list_projects",
-      "mcp__stitch__list_screens"
+      "mcp__stitch__list_screens",
+      "Bash(curl -L -o \"./tmp/7-2-dictionary-comprehensive-word-detail.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA2OGFlM2RlNDUzODQxYjY5NmUxYTkxMmE1Y2I2OTYzEgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"./tmp/1-1-register-create-account.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzNkYzljZTQ4MzIyNjQ1ODA4MmIxM2I0MjQyZGI5NTQ5EgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"./tmp/topics-create-new-topic-modal.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzJjNDQ4ODgwOGM3MjQ3MzU5Y2ExZmRkMzAxY2RhNGQ1EgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"./tmp/1-1-register-create-account-shadcn-ui.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2FkNzU3YzRhNjExNzQwZjU5MzJmOWRlYWJmNDYxZTZiEgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"./tmp/7-1-dictionary-search-quick-add.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2IxNDlhMjU1ZWU0NjRmNTM4NjBjZDllYWM3OWRlZGI4EgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(ls -lh ./tmp/*.html)",
+      "Bash(curl -L -o \"./tmp/topics-detail-view-business-english.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzkxYzdlM2VjYjE0NzQ5NDRhMjNiMTBmYTc4YmM1ZTgxEgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"./tmp/7-2-dictionary-word-detail-view.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzQ2ODdjNjQ1NjBhZTQ2Mzk4YzNhZDI5OWEwNjc2MDc4EgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
+      "Bash(sort -k2)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

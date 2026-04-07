@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Easy English - Topic List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3132",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-primary": "#bcc2ff",
+                        "secondary": "#1c6d24",
+                        "on-surface-variant": "#454652",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#9fa9ff",
+                        "on-tertiary-fixed-variant": "#773200",
+                        "surface-container": "#edeeef",
+                        "surface-dim": "#d9dadb",
+                        "surface-tint": "#4955b4",
+                        "on-tertiary-fixed": "#331200",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-fixed-variant": "#303c9a",
+                        "error": "#ba1a1a",
+                        "outline": "#767683",
+                        "on-primary-fixed": "#000c62",
+                        "tertiary-fixed-dim": "#ffb68f",
+                        "primary-container": "#2b3896",
+                        "secondary-fixed": "#a3f69c",
+                        "tertiary-container": "#712f00",
+                        "secondary-container": "#a0f399",
+                        "primary": "#0f1e80",
+                        "on-error": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-secondary-fixed-variant": "#005312",
+                        "primary-fixed": "#dfe0ff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#002203",
+                        "secondary-fixed-dim": "#88d982",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#bcc2ff",
+                        "surface": "#f8f9fa",
+                        "background": "#f8f9fa",
+                        "on-tertiary-container": "#ff9455",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-container": "#217128",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary": "#4e1e00",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c6c5d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col fixed left-0 top-0 h-full py-8 px-4 bg-slate-50 dark:bg-slate-900 h-screen w-64 border-r-0 z-50">
+<div class="mb-10 px-4">
+<span class="text-xl font-bold text-indigo-900 dark:text-indigo-300 tracking-wider">Easy English</span>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 font-manrope text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<!-- Dictionary (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 font-manrope text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                Dictionary
+            </a>
+<!-- Topics (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 text-indigo-900 dark:text-indigo-300 font-bold border-r-4 border-indigo-900 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 font-manrope text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+                Topics
+            </a>
+<!-- Progress (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 font-manrope text-sm font-medium tracking-tight" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+                Progress
+            </a>
+</nav>
+<div class="mt-auto px-4 py-6">
+<div class="flex items-center gap-3 mb-6">
+<img alt="User profile photo" class="w-10 h-10 rounded-full bg-surface-container" data-alt="close-up portrait of a professional academic wearing glasses in a soft-lit library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt3HHl5Ee5YecfN1pTSXYb0PFje3IEMl-VIgx1iwAp0ndtGOBGlhOI7MObIiyOfz_ZFY1_emcbVgRD5JWaiGVGmIXQcA27Tvg4NQOMIO4Z_hMMU1aIyEoW2-9n8wJVd3KcBULrEq9btjyLd0MCcQtq9TXH0EgVCYRZ5M6-3bIIOiAmKxn5Ip4EhW-yww8SG6K0pqY_gk_K5C0tsOEiAaJDkCrKNgwth0fK7xqNlCzI4LdmRoSVllEsxNSh1FYbEH0F3xPV5h1Hk3ZT"/>
+<div>
+<p class="font-bold text-sm text-indigo-900 dark:text-indigo-300">Focused Academic</p>
+<p class="text-xs text-slate-500">Premium Learning</p>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-indigo-900 text-white rounded-lg font-bold text-sm hover:bg-indigo-800 transition-all active:scale-95">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="ml-64 flex-1 min-h-screen">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center w-full px-8 py-4 sticky top-0 z-40 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md">
+<h1 class="font-manrope text-2xl font-extrabold text-indigo-900 dark:text-indigo-400 tracking-tight">Topics</h1>
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-primary to-primary-container text-white rounded-md font-semibold text-sm shadow-sm hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    Create New Topic
+                </button>
+<div class="flex items-center gap-4 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors" data-icon="settings">settings</span>
+<img alt="Academic profile" class="w-8 h-8 rounded-full border border-outline-variant/20" data-alt="clean minimalist logo icon of an open book with academic laurel leaves in deep indigo and gold" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1H-boiIXWZ-zmQdR3pqwW_zth1IDwHmPXNAU5a9xNKD1lKDsXLX8Ga7yawN9XxFXBfCIm3RaAfHK4qRRsenB_KY5PVH0nSW9srhbU_Hj-R_hQ0EEjZhX4OUyw2qOxdMWW-JpkqKGX9D8PCyeeE3_mqVkhGHwJCj3Ev2OdeV9TRgFtZ81T7sK8QpuEeGRPyHBLP-bUEKoGWMarDBVCKv9UuW19SuZrhsPaI6F_yCVZGuAc21FP-dFo8mcmaTkWIsOtuMCEFdy4ihnH"/>
+</div>
+</div>
+</header>
+<main class="p-8">
+<!-- Hero / Featured Section -->
+<section class="mb-12 relative overflow-hidden rounded-xl bg-primary-container p-10 text-white flex flex-col md:flex-row items-center gap-8">
+<div class="relative z-10 flex-1">
+<span class="inline-block px-3 py-1 rounded-full bg-secondary text-white text-xs font-bold mb-4">RECOMMENDED</span>
+<h2 class="text-4xl font-extrabold font-headline mb-4 tracking-tight leading-tight">Master Professional <br/>Business English</h2>
+<p class="text-on-primary-container text-lg max-w-md mb-6 font-body">Elevate your career with 250+ specialized terms for negotiations, presentations, and corporate strategy.</p>
+<button class="px-8 py-3 bg-secondary-fixed text-on-secondary-fixed font-bold rounded-lg hover:brightness-105 transition-all">Start Learning Now</button>
+</div>
+<div class="relative z-10 w-full md:w-1/3">
+<img alt="Business English Study" class="rounded-lg shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500" data-alt="minimalist 3d illustration of a sleek modern office desk with a laptop and a steaming cup of coffee in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsbHbmhVokrM7pi6W4rJJyNOdlDWrwwI7k14T54Pma4nCsy25j303iq-2iuybFdpcAwFjxGyMXQ2QM2J-fe1HcCPZU9VgO0LyTW8pUswwGo_ONoVVEjcArBIFqXBgg7XMAf19wzixSUZkawmug-8UeGICkkX0mpNBjVst6O8rUr6QSo_G8Ms7nPwTMf08SQUxzgOKkMI2Y-VTtjPhF5wBuXoyBFXYDXngA3oMW_yt93NkywxSt-5aw7Y-z85G5bMOydT5McGQeZMBe"/>
+</div>
+<!-- Abstract Background Detail -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full filter blur-3xl opacity-20 -mr-20 -mt-20"></div>
+</section>
+<!-- Grid Layout for Topic Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card: Business English -->
+<div class="bg-surface-container-lowest p-6 rounded-xl hover:shadow-[0px_12px_32px_rgba(25,28,29,0.04)] transition-all group flex flex-col h-full border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="business_center">business_center</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Mastery Level: 45%</span>
+</div>
+<h3 class="text-xl font-bold text-indigo-900 mb-2 font-headline">Business English</h3>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Terms for corporate communication, marketing strategy, and financial reporting.</p>
+<div class="space-y-4">
+<div class="flex justify-between items-end text-xs font-medium">
+<span class="text-on-surface-variant">120 words</span>
+<span class="text-secondary font-bold">45%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 45%"></div>
+</div>
+<div class="pt-4 border-t border-surface-container flex justify-between items-center text-[11px] text-on-surface-variant/70 italic">
+<span>Last studied: 2 hours ago</span>
+<button class="text-primary font-bold not-italic hover:underline">Continue</button>
+</div>
+</div>
+</div>
+<!-- Card: Travel & Tourism -->
+<div class="bg-surface-container-lowest p-6 rounded-xl hover:shadow-[0px_12px_32px_rgba(25,28,29,0.04)] transition-all group flex flex-col h-full border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed/30 flex items-center justify-center text-tertiary-container">
+<span class="material-symbols-outlined text-3xl" data-icon="flight_takeoff">flight_takeoff</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Mastery Level: 82%</span>
+</div>
+<h3 class="text-xl font-bold text-indigo-900 mb-2 font-headline">Travel &amp; Tourism</h3>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Essential phrases for airports, hotels, dining out, and navigating new cities.</p>
+<div class="space-y-4">
+<div class="flex justify-between items-end text-xs font-medium">
+<span class="text-on-surface-variant">85 words</span>
+<span class="text-secondary font-bold">82%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 82%"></div>
+</div>
+<div class="pt-4 border-t border-surface-container flex justify-between items-center text-[11px] text-on-surface-variant/70 italic">
+<span>Last studied: 3 days ago</span>
+<button class="text-primary font-bold not-italic hover:underline">Review</button>
+</div>
+</div>
+</div>
+<!-- Card: IELTS Preparation -->
+<div class="bg-surface-container-lowest p-6 rounded-xl hover:shadow-[0px_12px_32px_rgba(25,28,29,0.04)] transition-all group flex flex-col h-full border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="school">school</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Mastery Level: 12%</span>
+</div>
+<h3 class="text-xl font-bold text-indigo-900 mb-2 font-headline">IELTS Vocabulary</h3>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">High-level academic vocabulary to boost your score in Writing and Speaking modules.</p>
+<div class="space-y-4">
+<div class="flex justify-between items-end text-xs font-medium">
+<span class="text-on-surface-variant">450 words</span>
+<span class="text-secondary font-bold">12%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 12%"></div>
+</div>
+<div class="pt-4 border-t border-surface-container flex justify-between items-center text-[11px] text-on-surface-variant/70 italic">
+<span>Last studied: Yesterday</span>
+<button class="text-primary font-bold not-italic hover:underline">Continue</button>
+</div>
+</div>
+</div>
+<!-- Card: Medical Terminology -->
+<div class="bg-surface-container-lowest p-6 rounded-xl hover:shadow-[0px_12px_32px_rgba(25,28,29,0.04)] transition-all group flex flex-col h-full border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-3xl" data-icon="medical_services">medical_services</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Mastery Level: 0%</span>
+</div>
+<h3 class="text-xl font-bold text-indigo-900 mb-2 font-headline">Medical Terminology</h3>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Standardized English for healthcare professionals and medical students.</p>
+<div class="space-y-4">
+<div class="flex justify-between items-end text-xs font-medium">
+<span class="text-on-surface-variant">320 words</span>
+<span class="text-secondary font-bold">0%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 0%"></div>
+</div>
+<div class="pt-4 border-t border-surface-container flex justify-between items-center text-[11px] text-on-surface-variant/70 italic">
+<span>Not yet started</span>
+<button class="text-primary font-bold not-italic hover:underline">Start</button>
+</div>
+</div>
+</div>
+<!-- Glassmorphic Achievement Card -->
+<div class="relative bg-surface-container-lowest/40 backdrop-blur-xl p-8 rounded-xl border border-outline-variant/15 flex flex-col justify-center items-center text-center">
+<div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-50/50 to-white/10 -z-10"></div>
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-4xl text-on-secondary-container" data-icon="emoji_events">emoji_events</span>
+</div>
+<h3 class="text-lg font-bold text-indigo-900 mb-2">You're mastering this!</h3>
+<p class="text-sm text-on-surface-variant mb-6">You have completed 48 new words this week. Keep up the momentum!</p>
+<button class="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+                        View Weekly Stats
+                        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Bento-style Small Card: Next Scheduled Review -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<span class="text-[10px] font-bold text-primary tracking-widest mb-1 block uppercase">Next Review</span>
+<h4 class="text-lg font-bold text-indigo-900">Spaced Repetition</h4>
+</div>
+<div class="flex items-center gap-3 mt-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-container text-[10px] flex items-center justify-center text-white font-bold">BE</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-secondary-container text-[10px] flex items-center justify-center text-on-secondary-container font-bold">TR</div>
+</div>
+<span class="text-xs text-on-surface-variant font-medium">+12 Words Due</span>
+</div>
+<button class="mt-6 w-full py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-lg text-sm font-semibold hover:bg-white transition-colors">
+                        Review Now
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

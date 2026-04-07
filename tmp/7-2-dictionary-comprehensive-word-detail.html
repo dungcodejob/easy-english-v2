@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resilience - Word Detail | Cognitive Editorial</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "outline": "#777587",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#351000",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "on-primary-fixed-variant": "#372abf",
+                        "secondary": "#515f74",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "inverse-surface": "#2d3133",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-low": "#f2f4f6",
+                        "primary": "#392cc1",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "primary-container": "#534ad9",
+                        "on-secondary-container": "#57657a",
+                        "surface-tint": "#5148d7",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#dbd7ff",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-surface": "#191c1e",
+                        "tertiary-fixed": "#ffdbcc",
+                        "primary-fixed": "#e3dfff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "tertiary": "#7e3000",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed": "#100069",
+                        "tertiary-container": "#a44100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl border-b border-slate-200 flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold tracking-tighter text-indigo-700">Cognitive Editorial</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-500" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-200/50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-500" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Side Navigation Shell -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-slate-50 border-r border-slate-200 flex flex-col p-4 space-y-6 pt-20 hidden md:flex">
+<div class="px-3 mb-4">
+<div class="text-xl font-black text-slate-900">The Lexicon</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Advanced English</div>
+</div>
+<div class="flex flex-col space-y-1">
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="bg-indigo-50 text-indigo-700 rounded-lg px-3 py-2 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-medium text-sm">Dictionary</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-medium text-sm">Lessons</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-medium text-sm">Progress</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</div>
+<div class="mt-auto space-y-1 border-t border-slate-100 pt-4">
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-medium text-sm">Help</span>
+</a>
+<a class="text-slate-600 px-3 py-2 hover:bg-slate-100 transition-all flex items-center gap-3 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-medium text-sm">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 px-4 md:px-8 pb-16 min-h-screen bg-surface">
+<div class="max-w-6xl mx-auto">
+<!-- Breadcrumbs -->
+<div class="mb-6 flex items-center gap-2 text-on-surface-variant text-sm font-medium">
+<a class="hover:text-primary transition-colors" href="#">Dictionary</a>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-semibold">Resilience</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left & Center: Main Word Information -->
+<div class="lg:col-span-8 space-y-8">
+<!-- 1. Word Info Header -->
+<section class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/10 shadow-sm">
+<div class="flex flex-wrap items-start justify-between gap-6">
+<div class="space-y-4">
+<div class="flex items-center gap-5">
+<h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-on-surface">Resilience</h1>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary hover:scale-105 transition-transform" title="Listen US English">
+<span class="material-symbols-outlined text-xl" data-icon="volume_up">volume_up</span>
+<span class="absolute -top-6 text-[10px] font-bold text-primary">US</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:scale-105 transition-transform" title="Listen UK English">
+<span class="material-symbols-outlined text-xl" data-icon="volume_up">volume_up</span>
+<span class="absolute -top-6 text-[10px] font-bold text-on-surface-variant">UK</span>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-lg text-on-surface-variant font-medium">
+<span class="px-2.5 py-0.5 bg-surface-variant rounded text-sm font-bold uppercase tracking-wider">noun</span>
+<span class="text-outline-variant">|</span>
+<span class="text-primary tracking-wide font-mono">/rɪˈzɪliəns/</span>
+<span class="text-outline-variant">|</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span> US / UK</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+<button class="flex-1 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-container hover:shadow-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="school">school</span>
+                                Learn This Word
+                            </button>
+<button class="px-4 py-3 border-2 border-outline-variant text-on-surface font-semibold rounded-xl hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. Definitions & Translations -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Definitions &amp; Translations</h2>
+<div class="flex-1 h-px bg-outline-variant/30"></div>
+</div>
+<div class="grid gap-6">
+<!-- Sense 1 -->
+<div class="group bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+<div class="flex items-start gap-4">
+<span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold shrink-0">1</span>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<span class="text-xs font-black text-outline uppercase">Psychology</span>
+<span class="text-xs font-bold text-on-surface-variant italic">(noun)</span>
+</div>
+<p class="text-xl font-medium leading-relaxed text-on-surface">The capacity to recover quickly from difficulties; toughness.</p>
+<div class="pt-2 border-t border-outline-variant/10">
+<p class="text-lg font-semibold text-primary/80">Sự kiên cường, khả năng phục hồi nhanh chóng.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Sense 2 -->
+<div class="group bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+<div class="flex items-start gap-4">
+<span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center font-bold shrink-0">2</span>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<span class="text-xs font-black text-outline uppercase">Physics</span>
+<span class="text-xs font-bold text-on-surface-variant italic">(noun)</span>
+</div>
+<p class="text-xl font-medium leading-relaxed text-on-surface">The ability of a substance or object to spring back into shape; elasticity.</p>
+<div class="pt-2 border-t border-outline-variant/10">
+<p class="text-lg font-semibold text-primary/80">Tính đàn hồi, sức bật.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Contextual Examples -->
+<section class="bg-surface-container-low p-8 rounded-2xl">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Usage Examples</h2>
+<button class="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+                            See More <span class="material-symbols-outlined text-xs" data-icon="add">add</span>
+</button>
+</div>
+<ul class="space-y-6">
+<li class="flex gap-4 group">
+<span class="material-symbols-outlined text-primary mt-1 opacity-50 group-hover:opacity-100 transition-opacity" data-icon="format_quote">format_quote</span>
+<div>
+<p class="text-lg italic text-on-surface-variant leading-relaxed">"She showed great <span class="text-primary font-bold not-italic">resilience</span> in the face of adversity, refusing to give up on her dreams."</p>
+<p class="text-sm text-outline mt-1 font-medium">— Personal Memoir, 2023</p>
+</div>
+</li>
+<li class="flex gap-4 group">
+<span class="material-symbols-outlined text-primary mt-1 opacity-50 group-hover:opacity-100 transition-opacity" data-icon="format_quote">format_quote</span>
+<div>
+<p class="text-lg italic text-on-surface-variant leading-relaxed">"The <span class="text-primary font-bold not-italic">resilience</span> of the global economy is being tested by unprecedented inflation and supply chain issues."</p>
+<p class="text-sm text-outline mt-1 font-medium">— Financial Times</p>
+</div>
+</li>
+</ul>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- 6. Collocations -->
+<section class="space-y-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Common Collocations</h2>
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-5 space-y-3">
+<div class="flex items-center justify-between p-3 hover:bg-surface-bright rounded-lg transition-colors cursor-default">
+<span class="font-semibold text-on-surface">show/demonstrate resilience</span>
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="link">link</span>
+</div>
+<div class="flex items-center justify-between p-3 hover:bg-surface-bright rounded-lg transition-colors cursor-default border-t border-outline-variant/10">
+<span class="font-semibold text-on-surface">remarkable resilience</span>
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="link">link</span>
+</div>
+<div class="flex items-center justify-between p-3 hover:bg-surface-bright rounded-lg transition-colors cursor-default border-t border-outline-variant/10">
+<span class="font-semibold text-on-surface">build resilience</span>
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="link">link</span>
+</div>
+</div>
+</section>
+<!-- 7. Idioms -->
+<section class="space-y-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Related Idioms</h2>
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-5 space-y-4">
+<div>
+<h4 class="font-bold text-on-surface text-sm">Bounce back</h4>
+<p class="text-xs text-on-surface-variant">To recover quickly from a setback.</p>
+</div>
+<div class="pt-3 border-t border-outline-variant/10">
+<h4 class="font-bold text-on-surface text-sm">Weather the storm</h4>
+<p class="text-xs text-on-surface-variant">To survive a difficult period or situation.</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Right Sidebar: Progress & Metaphor -->
+<div class="lg:col-span-4 space-y-8">
+<!-- 2. Learning Progress Widget -->
+<section class="bg-indigo-600 text-white p-6 rounded-2xl shadow-xl shadow-indigo-100 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10 space-y-6">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="text-[10px] font-bold uppercase tracking-widest opacity-80">Mastery Level</span>
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black">Learning</span>
+<span class="material-symbols-outlined text-lg" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold">
+                                4 Reviews
+                            </div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold">
+<span>Progress</span>
+<span>65%</span>
+</div>
+<div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
+<div class="bg-white h-full w-[65%] rounded-full shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div class="bg-white/10 rounded-xl p-3">
+<div class="text-[10px] font-bold opacity-70 uppercase mb-1">Last Seen</div>
+<div class="text-sm font-bold">2 days ago</div>
+</div>
+<div class="bg-white/10 rounded-xl p-3">
+<div class="text-[10px] font-bold opacity-70 uppercase mb-1">Retained</div>
+<div class="text-sm font-bold">Solid</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Visual Metaphor -->
+<div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-surface-container-highest shadow-lg group">
+<img alt="Resilience metaphor" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBppIwD0PSL_xMpQ0mrrSjsozWdT5Q-hB2Hzvii0N4hNQUuqTZn_CRV8FGSiWSfYHYFr-WKJa7BB0ekGXUp9vU2JtvmCQK3JNcdJHEfwQp-x-cxt1AKPTTbtVCLeC-Pq5La1-lSD3yCZoSzXUjdHyxPqfDHcgNnhMsKmXjI8f4Me7_Zxe-w3QpB5ZPotAfBaiD60lucuhXtM8Sma_IsO4t1XK9XhH29XDTCNEyFigTQU83JfGCpXHmTh0FYp-wcrisr_cMKwUdMb18V"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="text-white text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Visual Metaphor</div>
+<div class="text-white font-medium text-sm">Growth through adversity</div>
+</div>
+</div>
+<!-- 5. Synonyms & Related Words -->
+<section class="space-y-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Synonyms &amp; Related</h2>
+<div class="flex flex-wrap gap-2">
+<a class="px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm" href="#">Fortitude</a>
+<a class="px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm" href="#">Elasticity</a>
+<a class="px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm" href="#">Durability</a>
+<a class="px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm" href="#">Grit</a>
+<a class="px-4 py-2 bg-surface-container-lowest border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm" href="#">Robustness</a>
+</div>
+</section>
+<!-- Curriculum Integration -->
+<div class="bg-surface-container-high p-6 rounded-2xl space-y-4">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-bold text-sm uppercase tracking-tight">Active Curriculum</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Included in <span class="font-bold text-on-surface">"Leadership Under Pressure"</span> &amp; 3 other modules.</p>
+<button class="w-full py-2.5 text-xs font-bold text-primary border border-primary/20 bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
+                        View Relevant Lessons
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-slate-50 border-t border-slate-200 flex items-center justify-around px-2 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-indigo-700 font-bold">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-[10px]">Dictionary</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="text-[10px] font-medium">Lessons</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-medium">Progress</span>
+</button>
+</nav>
+<!-- Floating Action for Mobile -->
+<div class="fixed bottom-20 right-4 md:hidden">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" data-icon="school">school</span>
+</button>
+</div>
+</body></html>
