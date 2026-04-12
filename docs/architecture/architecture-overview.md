@@ -85,7 +85,7 @@ Easy English V2 is a full-stack, multi-tenant SaaS application designed for voca
 | Language | TypeScript | 5.x | Type safety |
 | Routing | TanStack Router | 1.x | Type-safe routing |
 | Data Fetching | TanStack Query | 5.x | Server state |
-| State | Zustand | 4.x | Client state |
+| State | Zustand | 5.x | Client state |
 | Forms | React Hook Form + Zod | — | Form handling |
 | UI Primitives | Radix UI | — | Accessible components |
 | UI Components | Shadcn UI | — | Design system |

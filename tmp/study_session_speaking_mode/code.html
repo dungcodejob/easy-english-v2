@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Sanctuary - Speaking Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#dad9dd",
+                      "on-primary-fixed-variant": "#2e476f",
+                      "surface-variant": "#e3e2e6",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#465f88",
+                      "inverse-on-surface": "#f1f0f4",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb954",
+                      "tertiary-container": "#4d3000",
+                      "inverse-primary": "#aec7f7",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#d6e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#002046",
+                      "on-surface": "#1a1b1e",
+                      "secondary-fixed-dim": "#7ad7c6",
+                      "tertiary-fixed": "#ffddb4",
+                      "tertiary": "#311d00",
+                      "inverse-surface": "#2f3033",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "secondary-container": "#94f0df",
+                      "primary-fixed-dim": "#aec7f7",
+                      "on-tertiary-fixed": "#291800",
+                      "on-secondary-container": "#006f62",
+                      "on-primary-fixed": "#001b3d",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#1b365d",
+                      "on-background": "#1a1b1e",
+                      "background": "#faf9fd",
+                      "surface-container-low": "#f4f3f7",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#d4922a",
+                      "on-surface-variant": "#44474e",
+                      "secondary-fixed": "#97f3e2",
+                      "surface": "#faf9fd",
+                      "on-primary-container": "#87a0cd",
+                      "on-secondary-fixed-variant": "#005047",
+                      "outline": "#74777f",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#e9e7eb",
+                      "on-secondary-fixed": "#00201b",
+                      "error": "#ba1a1a",
+                      "surface-container-highest": "#e3e2e6",
+                      "secondary": "#006b5e",
+                      "surface-bright": "#faf9fd",
+                      "outline-variant": "#c4c6cf",
+                      "surface-container": "#efedf1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Lexend"],
+                      "body": ["Be Vietnam Pro"],
+                      "label": ["Be Vietnam Pro"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .ripple-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: #aec7f7;
+            opacity: 0.2;
+            width: 100%;
+            height: 100%;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #002046 0%, #1b365d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar - Suppressed Navigation, Task Focused Shell -->
+<header class="bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl text-blue-900 dark:text-blue-100 font-lexend tracking-tight flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<button class="hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors rounded-full p-2 scale-95 active:duration-150">
+<span class="material-symbols-outlined text-on-surface-variant">close</span>
+</button>
+<div class="h-2 w-32 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-2/3 bg-tertiary-fixed-dim rounded-full"></div>
+</div>
+</div>
+<div class="text-lg font-bold text-blue-950 dark:text-white">Scholarly Sanctuary</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-headline font-bold text-on-surface">1,240</span>
+</div>
+</header>
+<main class="min-h-[calc(100vh-72px)] flex flex-col items-center justify-between py-12 px-6 max-w-4xl mx-auto">
+<!-- Header Section -->
+<div class="text-center space-y-2">
+<span class="uppercase tracking-[0.2em] text-on-surface-variant font-headline text-xs font-semibold">Speaking Practice</span>
+<h2 class="text-on-surface-variant font-body text-sm">Pronounce the word clearly into your microphone</h2>
+</div>
+<!-- Main Word Display Section -->
+<div class="flex flex-col items-center justify-center space-y-8 w-full">
+<div class="text-center">
+<h1 class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter gradient-text">
+                    Ephemeral
+                </h1>
+<p class="mt-4 text-2xl font-body text-on-surface-variant/70 italic tracking-wide">
+                    /ɪˈfɛmərəl/
+                </p>
+</div>
+<!-- Interaction Area: Microphone & Ripples -->
+<div class="relative py-16 flex items-center justify-center w-full">
+<!-- Decorative Subtle Layers (The Tonal Layering) -->
+<div class="absolute w-64 h-64 bg-surface-container-low rounded-full scale-150 opacity-40 blur-3xl"></div>
+<div class="ripple-container">
+<!-- Stationary Ripple Frames representing "Listening" -->
+<div class="absolute w-32 h-32 border-2 border-primary-fixed-dim rounded-full opacity-20 scale-110"></div>
+<div class="absolute w-32 h-32 border-2 border-primary-fixed-dim rounded-full opacity-10 scale-150"></div>
+<!-- Main Action Button -->
+<button class="relative z-10 w-32 h-32 rounded-full bg-gradient-to-br from-primary to-primary-container shadow-2xl flex items-center justify-center group transform transition-all hover:scale-105 active:scale-95 duration-300">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<span class="text-secondary font-headline font-medium animate-pulse">Listening...</span>
+</div>
+</div>
+<!-- Feedback Section (Bento-style Minimalist Layout) -->
+<div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+<!-- Listen Button -->
+<button class="flex items-center gap-4 p-6 bg-surface-container-lowest rounded-xl hover:bg-surface-container-low transition-all group">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</div>
+<div class="text-left">
+<p class="font-headline font-bold text-on-surface">Listen to pronunciation</p>
+<p class="text-xs text-on-surface-variant font-medium">Standard British English</p>
+</div>
+</button>
+<!-- Hint Button -->
+<button class="flex items-center gap-4 p-6 bg-surface-container-lowest rounded-xl hover:bg-surface-container-low transition-all group">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div class="text-left">
+<p class="font-headline font-bold text-on-surface">Need a hint?</p>
+<p class="text-xs text-on-surface-variant font-medium">Definition &amp; Context</p>
+</div>
+</button>
+</div>
+</main>
+<!-- Suppressed BottomNavBar for Task-Focused Mode (Only Content Canvas) -->
+<!-- Secondary Task Actions (Floating Bottom Bar) -->
+<footer class="fixed bottom-0 left-0 w-full p-8 flex justify-center pointer-events-none">
+<div class="max-w-md w-full bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl p-2 rounded-full border border-white/20 shadow-xl flex items-center gap-2 pointer-events-auto">
+<div class="flex-1 px-6">
+<p class="text-xs font-headline font-bold uppercase tracking-widest text-on-surface-variant">Next Word</p>
+<p class="text-sm font-body font-semibold text-on-surface">Sustenance</p>
+</div>
+<button class="bg-primary text-on-primary h-12 px-8 rounded-full font-headline font-bold text-sm flex items-center gap-2 shadow-lg hover:shadow-primary/20 transition-all">
+                Skip
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Decorative Corner Visual -->
+<div class="fixed top-0 right-0 p-12 -z-10 opacity-20 pointer-events-none">
+<div class="w-96 h-96 bg-tertiary-fixed rounded-full blur-[100px] absolute -top-48 -right-48"></div>
+</div>
+<div class="fixed bottom-0 left-0 p-12 -z-10 opacity-20 pointer-events-none">
+<div class="w-96 h-96 bg-primary-fixed rounded-full blur-[100px] absolute -bottom-48 -left-48"></div>
+</div>
+</body></html>

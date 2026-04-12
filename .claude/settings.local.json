@@ -192,7 +192,19 @@
       "Bash(ls -lh ./tmp/*.html)",
       "Bash(curl -L -o \"./tmp/topics-detail-view-business-english.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzkxYzdlM2VjYjE0NzQ5NDRhMjNiMTBmYTc4YmM1ZTgxEgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
       "Bash(curl -L -o \"./tmp/7-2-dictionary-word-detail-view.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzQ2ODdjNjQ1NjBhZTQ2Mzk4YzNhZDI5OWEwNjc2MDc4EgsSBxDoxa7L1wUYAZIBJAoKcHJvamVjdF9pZBIWQhQxNzkyNTgxOTc4MTc1NTI2MjkxMQ&filename=&opi=89354086\")",
-      "Bash(sort -k2)"
+      "Bash(sort -k2)",
+      "Bash(grep -o 'color: #[0-9a-fA-F]\\\\{3,6\\\\}\\\\|background[^;]*#[0-9a-fA-F]\\\\{3,6\\\\}\\\\|background-color[^;]*#[0-9a-fA-F]\\\\{3,6\\\\}' E:/Projects/multi-tenant/easy-english-v2/tmp/dashboard/code.html)",
+      "Bash(grep -o '\"#[0-9a-fA-F]\\\\{3,6\\\\}\"' E:/Projects/multi-tenant/easy-english-v2/tmp/dashboard/code.html)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('deps:', len\\(d.get\\('dependencies',{}\\)\\)\\); print\\('devDeps:', len\\(d.get\\('devDependencies',{}\\)\\)\\); [print\\(f' {k}: {v}'\\) for k,v in d.get\\('dependencies',{}\\).items\\(\\)]\")",
+      "Bash(xargs -0 ls -la)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(xargs md5sum:*)",
+      "Bash(uniq -d -w32)",
+      "Bash(awk '{total += $5} END {printf \"%.2f MB\\\\n\", total/1024/1024}')",
+      "Bash(python3 -c ':*)",
+      "Bash(python3:*)",
+      "Bash(npx rsbuild:*)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

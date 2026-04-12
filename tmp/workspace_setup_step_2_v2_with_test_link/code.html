@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clarion Study - Workspace Setup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffddb4",
+                    "primary": "#002046",
+                    "outline": "#74777f",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "surface-container-low": "#f4f3f7",
+                    "secondary-fixed-dim": "#7ad7c6",
+                    "on-error": "#ffffff",
+                    "primary-container": "#1b365d",
+                    "primary-fixed": "#d6e3ff",
+                    "secondary-container": "#94f0df",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#291800",
+                    "tertiary": "#311d00",
+                    "primary-fixed-dim": "#aec7f7",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2f3033",
+                    "surface-container-highest": "#e3e2e6",
+                    "outline-variant": "#c4c6cf",
+                    "surface-tint": "#465f88",
+                    "surface-variant": "#e3e2e6",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#001b3d",
+                    "surface-dim": "#dad9dd",
+                    "on-secondary-container": "#006f62",
+                    "on-surface": "#1a1b1e",
+                    "surface": "#faf9fd",
+                    "tertiary-container": "#4d3000",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f0f4",
+                    "on-tertiary-container": "#d4922a",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006b5e",
+                    "inverse-primary": "#aec7f7",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e9e7eb",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "on-secondary-fixed": "#00201b",
+                    "surface-bright": "#faf9fd",
+                    "secondary-fixed": "#97f3e2",
+                    "on-surface-variant": "#44474e",
+                    "on-primary-container": "#87a0cd",
+                    "on-background": "#1a1b1e",
+                    "surface-container": "#efedf1",
+                    "on-secondary-fixed-variant": "#005047",
+                    "on-secondary": "#ffffff",
+                    "background": "#faf9fd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center justify-between px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="text-xl font-bold text-blue-950 dark:text-blue-50 font-lexend tracking-tight">Clarion Study</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors active:scale-95 duration-200" href="#">Dashboard</a>
+<a class="text-blue-900 dark:text-blue-200 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors active:scale-95 duration-200" href="#">Workspaces</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors active:scale-95 duration-200" href="#">Resources</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-xs font-bold">JD</div>
+</div>
+</div>
+<div class="bg-slate-100/50 dark:bg-slate-800/50 h-[1px]"></div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex flex-col py-8 px-4 h-screen w-64 border-r-0 bg-slate-50 dark:bg-slate-950 fixed">
+<div class="mb-10 px-4">
+<div class="text-lg font-bold text-blue-900 dark:text-blue-100 font-lexend">Setup Wizard</div>
+<div class="text-sm text-slate-500 dark:text-slate-400 font-lexend">Step 2 of 4</div>
+</div>
+<nav class="flex flex-col gap-6">
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-lexend">Workspace Details</span>
+</div>
+<div class="flex items-center gap-3 text-blue-900 dark:text-blue-200 font-bold border-l-4 border-amber-500 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined">translate</span>
+<span class="font-lexend">Language Focus</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined">speed</span>
+<span class="font-lexend">Learning Pace</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-lexend">Finalize</span>
+</div>
+</nav>
+<div class="mt-auto px-4 py-6">
+<div class="p-4 rounded-xl bg-surface-container-high/50 border border-outline-variant/15">
+<p class="text-xs text-on-surface-variant leading-relaxed">Your progress is automatically saved as you configure your scholarly sanctuary.</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-surface p-6 md:p-12 lg:p-20">
+<div class="max-w-4xl mx-auto">
+<!-- Hero Header -->
+<header class="mb-12">
+<span class="text-secondary font-medium tracking-widest text-xs uppercase mb-2 block">Step 02 — Contextualization</span>
+<h1 class="text-4xl md:text-5xl font-bold text-on-primary-fixed mb-4 leading-tight">Define Your Learning Context</h1>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Select the linguistic landscape and workspace environment that best supports your current academic goals.</p>
+</header>
+<!-- Section: Language Grid -->
+<section class="mb-16">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-semibold text-primary">Target Language</h2>
+<button class="text-on-primary-fixed-variant text-sm font-medium hover:underline">View all 48 languages</button>
+</div>
+<!-- Asymmetric Bento-style Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<!-- Language Card 1 (Large Active) -->
+<div class="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-white flex flex-col justify-between cursor-pointer transition-transform active:scale-95 duration-200">
+<div class="absolute top-0 right-0 p-6">
+<span class="material-symbols-outlined text-amber-500 scale-150" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<span class="text-4xl mb-4 block">🇫🇷</span>
+<h3 class="text-3xl font-bold mb-2">French</h3>
+<p class="text-primary-fixed/80 text-sm">Le Français — The language of diplomacy and philosophy.</p>
+</div>
+<div class="flex items-center gap-2 text-xs font-medium tracking-wide uppercase mt-8 bg-white/10 w-fit px-3 py-1 rounded-full backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+                                Currently Popular
+                            </div>
+</div>
+<!-- Language Card 2 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high p-6 rounded-xl transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="text-2xl mb-4 block">🇯🇵</span>
+<h3 class="text-lg font-bold text-primary mb-1">Japanese</h3>
+<p class="text-on-surface-variant text-xs">Modern commerce &amp; classic literature.</p>
+</div>
+<!-- Language Card 3 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high p-6 rounded-xl transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="text-2xl mb-4 block">🇩🇪</span>
+<h3 class="text-lg font-bold text-primary mb-1">German</h3>
+<p class="text-on-surface-variant text-xs">Technical precision and engineering.</p>
+</div>
+<!-- Language Card 4 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high p-6 rounded-xl transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="text-2xl mb-4 block">🇻🇳</span>
+<h3 class="text-lg font-bold text-primary mb-1">Vietnamese</h3>
+<p class="text-on-surface-variant text-xs">Rich tonal history and culture.</p>
+</div>
+<!-- Language Card 5 -->
+<div class="bg-surface-container-low hover:bg-surface-container-high p-6 rounded-xl transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="text-2xl mb-4 block">🇪🇸</span>
+<h3 class="text-lg font-bold text-primary mb-1">Spanish</h3>
+<p class="text-on-surface-variant text-xs">Vibrant global communication.</p>
+</div>
+</div>
+</section>
+<!-- Section: Workspace Type & Level -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+<!-- Workspace Focus -->
+<section>
+<h2 class="text-xl font-semibold text-primary mb-6">Workspace focus</h2>
+<div class="space-y-4">
+<label class="group block relative p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/15 hover:border-primary/30 transition-all cursor-pointer">
+<input checked="" class="hidden" name="workspace_type" type="radio"/>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-bold text-on-surface">Academic Researcher</span>
+<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Focus on peer-reviewed articles and formal syntax.</p>
+</div>
+</div>
+</label>
+<label class="group block relative p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/15 hover:border-primary/30 transition-all cursor-pointer">
+<input class="hidden" name="workspace_type" type="radio"/>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-lg bg-secondary/5 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">work</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-bold text-on-surface">Professional Business</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant"></div>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Networking, reporting, and executive communication.</p>
+</div>
+</div>
+</label>
+<label class="group block relative p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/15 hover:border-primary/30 transition-all cursor-pointer">
+<input class="hidden" name="workspace_type" type="radio"/>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed-dim/10 flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-bold text-on-surface">Creative Arts</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant"></div>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Exploration of literature, art history, and poetry.</p>
+</div>
+</div>
+</label>
+</div>
+</section>
+<!-- Proficiency Level -->
+<section class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<h2 class="text-xl font-semibold text-primary mb-2">Proficiency Level</h2>
+<p class="text-sm text-on-surface-variant mb-10">Choose your current comfort level with the target language.</p><div class="-mt-8 mb-6"><button class="text-xs font-medium text-on-primary-fixed-variant hover:text-primary transition-colors font-lexend flex items-center gap-1">Not sure of your level? <span class="underline">Take placement test</span></button></div>
+<!-- Segmented Control -->
+<div class="bg-surface-container-highest p-1 rounded-full flex items-center mb-8">
+<button class="flex-1 py-3 px-2 rounded-full text-xs font-bold bg-white shadow-sm text-primary transition-all">Beginner</button>
+<button class="flex-1 py-3 px-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all">Intermediate</button>
+<button class="flex-1 py-3 px-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all">Advanced</button>
+<button class="flex-1 py-3 px-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all">Expert</button>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Foundational Focus</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">We will start with high-frequency nouns and essential syntax structures used in academic papers.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative abstract shape for high-end feel -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+</section>
+</div>
+<!-- Footer Navigation -->
+<footer class="mt-20 pt-10 border-t border-outline-variant/10 flex flex-col md:flex-row items-center justify-between gap-6">
+<button class="flex items-center gap-2 text-on-primary-fixed-variant font-medium hover:text-primary transition-colors order-2 md:order-1">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Back to Details
+                    </button>
+<div class="flex items-center gap-4 w-full md:w-auto order-1 md:order-2">
+<button class="flex-1 md:flex-none px-8 py-4 rounded-full bg-gradient-to-br from-primary to-primary-container text-white font-semibold flex items-center justify-center gap-3 shadow-lg active:scale-95 duration-200">
+                            Continue to Step 3
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</footer>
+</div>
+</main>
+</div>
+<!-- Mobile Bottom Nav Suppression (Transactional Page Rule) -->
+<!-- Navigation hidden on purpose to focus on the workspace setup task -->
+</body></html>
