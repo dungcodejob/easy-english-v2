@@ -1,6 +1,6 @@
 import { Badge } from '@/shared/ui/shadcn/badge';
 import { cn } from '@/shared/utils';
-import { NavLink } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import type { ElementType } from 'react';
 
 export interface MenuItem {
@@ -19,6 +19,9 @@ export function NavGroup({
   title?: string;
   items: MenuItem[];
 }) {
+  const routerState = useRouterState();
+  const location = routerState.location;
+
   if (!items?.length) return null;
 
   return (
@@ -29,18 +32,17 @@ export function NavGroup({
         </div>
       )}
       {items.map((item) => {
+        const isActive = item.url ? location.pathname === item.url : false;
         return (
-          <NavLink
+          <Link
             key={item.id}
             to={item.url ?? '#'}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-                isActive
-                  ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg'
-                  : 'text-on-surface-variant hover:bg-surface-container-high',
-              )
-            }
+            className={cn(
+              'flex items-center gap-4 rounded-full mx-4 py-3 px-6 text-sm font-medium transition-all duration-200',
+              isActive
+                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg scale-105'
+                : 'text-on-surface-variant hover:bg-surface-container-high',
+            )}
           >
             {item.icon && <item.icon className="h-5 w-5 shrink-0" />}
             <span className="font-headline">{item.title}</span>
@@ -49,7 +51,7 @@ export function NavGroup({
                 {item.badge}
               </Badge>
             )}
-          </NavLink>
+          </Link>
         );
       })}
     </div>

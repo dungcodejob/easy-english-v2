@@ -16,7 +16,7 @@ export function AppHeader() {
       <div className="flex items-center gap-3">
         <SidebarTrigger className="-ml-2" />
         <span className="font-headline text-xl font-bold text-primary hidden sm:block">
-          Easy English
+          Scholarly Sanctuary
         </span>
       </div>
 
