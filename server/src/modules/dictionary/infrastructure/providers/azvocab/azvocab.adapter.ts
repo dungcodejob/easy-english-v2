@@ -2,12 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Word } from 'src/modules/dictionary/domain/entities/word.aggregate';
 
-import {
-  AzVocabDefinitionResponseDto,
-  AzVocabSearchResponseDto,
-  DefinitionDto,
-  VocabDto,
-} from './azvocab.types';
 import { WordSenseEntity } from '../../../domain/entities/word-sense.entity';
 import { CefrLevel } from '../../../domain/value-objects/cefr-level.vo';
 import { DataSource } from '../../../domain/value-objects/data-source.vo';
@@ -16,6 +10,12 @@ import { PartOfSpeech } from '../../../domain/value-objects/part-of-speech.vo';
 import { WordExampleVO } from '../../../domain/value-objects/word-example.vo';
 import { WordPronunciationVO } from '../../../domain/value-objects/word-pronunciation.vo';
 import { WordText } from '../../../domain/value-objects/word-text.vo';
+import {
+  AzVocabDefinitionResponseDto,
+  AzVocabSearchResponseDto,
+  DefinitionDto,
+  VocabDto,
+} from './azvocab.types';
 
 @Injectable()
 export class AzVocabAdapter {
@@ -102,8 +102,8 @@ export class AzVocabAdapter {
         if (!seenMap.has(key)) {
           prons.push(
             new WordPronunciationVO({
-              ipa: entry.pron_uk || '',
-              audioUrl: entry.uk || null,
+              ipa: entry.uk || '',
+              audioUrl: entry.pron_uk || null,
               region: 'UK',
             }),
           );
@@ -117,8 +117,8 @@ export class AzVocabAdapter {
         if (!seenMap.has(key)) {
           prons.push(
             new WordPronunciationVO({
-              ipa: entry.pron_us || '',
-              audioUrl: entry.us || null,
+              ipa: entry.us || '',
+              audioUrl: entry.pron_us || null,
               region: 'US',
             }),
           );

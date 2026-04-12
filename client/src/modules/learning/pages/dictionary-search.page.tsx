@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { BookmarkPlus, History, Sparkles } from 'lucide-react';
+import { History, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { SearchInput } from '../components/search-input';
 import { SearchResultsList } from '../components/search-results-list';
@@ -60,10 +60,10 @@ export default function DictionarySearchPage() {
       {/* ── Hero + Search ────────────────────────────────────────── */}
       <div className="mb-12">
         <div className="mb-8">
-          <h1 className="mb-4 font-headline text-4xl font-extrabold italic tracking-tight text-on-primary-fixed md:text-5xl">
+          <h1 className="text-4xl md:text-5xl font-headline font-extrabold text-on-primary-fixed mb-4 tracking-tight">
             Easy English Dictionary
           </h1>
-          <p className="max-w-xl text-lg leading-relaxed text-on-surface-variant">
+          <p className="text-on-surface-variant max-w-xl text-lg leading-relaxed">
             Expand your linguistic horizons in our quiet sanctuary of words.
             Search for any term to start your journey.
           </p>
@@ -143,6 +143,12 @@ export default function DictionarySearchPage() {
                 </button>
               </div>
             </div>
+
+            <img
+              className="w-full md:w-80 h-48 object-cover rounded-xl shadow-2xl relative z-10"
+              data-alt="Macro photography of an open dictionary with soft lighting highlighting the texture of paper and elegant typography"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuFgz3LX_ImXfovELyj-l811-FpuuG3gsOjlt1fiIGfeWtMpPJGxGbjz8HhYWJxFQGIT_1_gkLmHs_Jq1hupC9ByOhUlcDevlPegcjxWOPxRqubA_IplSufAtPVqBgVdTz9-flSYo1ls0DeytRmkvpjblnB2NpxEqBreP9KrFZNSePemTQi41NvRoQ6-jxLsQp-eCbnF8C8NSNNrn5wGghEjWAojwsqBPlb7YsyQ2rcxL5EVNk5fDRUhuVK_taji7QSOva41Yfb8M"
+            />
           </div>
         </div>
       )}

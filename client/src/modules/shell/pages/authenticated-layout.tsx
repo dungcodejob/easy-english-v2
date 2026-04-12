@@ -71,9 +71,9 @@ export default function AuthenticatedLayout() {
       {/* Fixed sidebar — matches mockup: w-64, rounded-r-[3rem], full height */}
       <AppSidebar />
       {/* Main content area — offset by sidebar width, below header */}
-      <div className="ml-64 pl-0">
+      <div className="ml-64 w-full pl-0">
         <AppHeader />
-        <main className="pt-20 p-12 max-w-[1400px] mx-auto">
+        <main className="">
           <Outlet />
         </main>
       </div>

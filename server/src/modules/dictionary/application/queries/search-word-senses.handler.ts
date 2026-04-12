@@ -1,11 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { SearchWordSensesQuery } from './search-word-senses.query';
 import {
   InjectWordReadRepository,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseSearchResultResponseDto } from '../../dto/responses/word-sense-search-result.response.dto';
+import { SearchWordSensesQuery } from './search-word-senses.query';
 
 @QueryHandler(SearchWordSensesQuery)
 export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQuery> {
@@ -43,6 +43,11 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
       definition: item.definition,
       definitionVi: item.definitionVi,
       cefrLevel: item.cefrLevel,
+      pronunciations: item.pronunciations.map((pronunciation) => ({
+        ipa: pronunciation.ipa,
+        audioUrl: pronunciation.audioUrl || '',
+        region: pronunciation.region,
+      })),
     }));
 
     return { data, count };

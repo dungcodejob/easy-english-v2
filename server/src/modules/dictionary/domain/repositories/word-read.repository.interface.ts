@@ -11,6 +11,7 @@ export interface WordSenseSearchReadModel {
   definitionVi: string | null;
   shortDefinition: string | null;
   cefrLevel: string | null;
+  pronunciations: { ipa: string; audioUrl: string | null; region: string }[];
 }
 
 export interface WordSenseDetailReadModel {

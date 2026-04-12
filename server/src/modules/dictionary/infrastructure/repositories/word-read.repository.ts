@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 
-import { WordMapper } from './word.mapper';
 import { Word } from '../../domain/entities/word.aggregate';
 import {
   IWordReadRepository,
@@ -12,6 +11,7 @@ import {
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseOrmEntity } from '../persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../persistence/word.orm-entity';
+import { WordMapper } from './word.mapper';
 
 @Injectable()
 export class WordReadRepository implements IWordReadRepository {
@@ -54,6 +54,7 @@ export class WordReadRepository implements IWordReadRepository {
     const qb = this.em
       .createQueryBuilder(WordSenseOrmEntity, 's')
       .leftJoinAndSelect('s.word', 'w')
+      .leftJoinAndSelect('w.pronunciations', 'p')
       .where({ 'w.normalizedText': { $ilike: `%${query}%` } })
       .limit(top)
       .offset(skip);
@@ -69,6 +70,11 @@ export class WordReadRepository implements IWordReadRepository {
       definition: s.definition,
       definitionVi: s.definitionVi,
       cefrLevel: s.cefrLevel || null,
+      pronunciations: s.word.pronunciations.getItems().map((p) => ({
+        ipa: p.ipa,
+        audioUrl: p.audioUrl,
+        region: p.region,
+      })),
     }));
 
     return { data, count };
