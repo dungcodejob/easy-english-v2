@@ -60,12 +60,14 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto pb-10">
+    <div className="space-y-8">
       {/* 1. Welcome Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-primary/10 via-primary/5 to-background border border-primary/20 p-8 sm:p-10 shadow-sm transition-all">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-primary/10 via-primary/5 to-background border border-primary/20 h-48 p-8 sm:p-10 shadow-sm transition-all">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent" />
         <div className="relative z-10 max-w-2xl space-y-4">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            {t('dashboard.welcome', { name: 'User' })}
+          <h1 className="font-headline text-5xl font-extrabold text-primary mb-4 tracking-tight">
+            {t('dashboard.welcome', { name: 'Scholar' })}
           </h1>
           <p className="text-muted-foreground text-lg pb-2">
             <Trans
@@ -79,7 +81,7 @@ export default function DashboardPage() {
           <div className="flex flex-wrap gap-3">
             <Button
               size="lg"
-              className="gap-2 shadow-md hover:shadow-lg transition-all"
+              className="bg-gradient-to-br from-primary to-primary-container text-white rounded-full px-10 py-5 font-headline font-bold shadow-lg flex items-center gap-3"
               asChild
             >
               {/* TODO: Update routing once /review is registered */}
@@ -102,11 +104,11 @@ export default function DashboardPage() {
       </div>
 
       {/* 2. Key Metrics Grid */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, i) => (
           <Card
             key={i}
-            className="hover:-translate-y-1 hover:shadow-md transition-all duration-200"
+            className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6 shadow-sm"
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -223,9 +225,9 @@ export default function DashboardPage() {
                     <span className="text-xs font-semibold">
                       {topic.progress}%
                     </span>
-                    <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div className="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-primary"
+                        className="h-full bg-tertiary-fixed-dim rounded-full shadow-[0_0_8px_rgba(255,185,84,0.4)]"
                         style={{ width: `${topic.progress}%` }}
                       />
                     </div>
