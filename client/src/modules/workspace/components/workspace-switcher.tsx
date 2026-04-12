@@ -1,27 +1,214 @@
+import { useState } from 'react';
 import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/shared/ui/shadcn/sidebar';
-import { Building } from 'lucide-react';
+  Building,
+  BookOpen,
+  BrainCircuit,
+  Flame,
+  ListChecks,
+} from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/shared/ui/shadcn/popover';
+import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
+import { cn } from '@/shared/utils/cn';
+
+/** Mock workspaces — replace with real API data when available */
+interface WorkspacePreview {
+  id: string;
+  name: string;
+  plan: string;
+  wordCount: number;
+  masteredCount: number;
+  reviewDueCount: number;
+  streak: number;
+  isActive: boolean;
+}
+
+const MOCK_WORKSPACES: WorkspacePreview[] = [
+  {
+    id: 'default-workspace',
+    name: 'Easy English',
+    plan: 'Free Plan',
+    wordCount: 120,
+    masteredCount: 45,
+    reviewDueCount: 12,
+    streak: 7,
+    isActive: true,
+  },
+  {
+    id: 'ws-spanish',
+    name: 'Spanish Basics',
+    plan: 'Pro Plan',
+    wordCount: 340,
+    masteredCount: 210,
+    reviewDueCount: 28,
+    streak: 21,
+    isActive: false,
+  },
+  {
+    id: 'ws-french',
+    name: 'French Journey',
+    plan: 'Free Plan',
+    wordCount: 60,
+    masteredCount: 8,
+    reviewDueCount: 5,
+    streak: 2,
+    isActive: false,
+  },
+];
+
+const PLAN_COLORS: Record<string, string> = {
+  'Free Plan': 'bg-surface-container text-on-surface-variant',
+  'Pro Plan': 'bg-secondary/10 text-secondary',
+};
 
 export function WorkspaceSwitcher() {
+  const { currentWorkspaceId, setCurrentWorkspaceId } = useWorkspaceStore();
+  const [open, setOpen] = useState(false);
+
+  const activeWorkspace =
+    MOCK_WORKSPACES.find((ws) => ws.id === currentWorkspaceId) ??
+    MOCK_WORKSPACES[0];
+
+  const totalWords = MOCK_WORKSPACES.reduce((sum, ws) => sum + ws.wordCount, 0);
+  const totalMastered = MOCK_WORKSPACES.reduce(
+    (sum, ws) => sum + ws.masteredCount,
+    0
+  );
+  const totalReviewDue = MOCK_WORKSPACES.reduce(
+    (sum, ws) => sum + ws.reviewDueCount, 0
+  );
+  const maxStreak = Math.max(...MOCK_WORKSPACES.map((ws) => ws.streak), 0);
+
+  const handleSwitch = (ws: WorkspacePreview) => {
+    setCurrentWorkspaceId(ws.id);
+    setOpen(false);
+  };
+
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-surface-container data-[state=open]:text-primary w-full rounded-2xl px-3 py-3"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="data-[state=open]:bg-surface-container data-[state=open]:text-primary flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-surface-container-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <div className="flex aspect-square size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+          <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
             <Building className="size-4" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-headline font-semibold text-on-surface">Easy English</span>
-            <span className="truncate text-xs text-on-surface-variant">Free Plan</span>
+            <span className="truncate font-headline font-semibold text-on-surface">
+              {activeWorkspace.name}
+            </span>
+            <span className="truncate text-xs text-on-surface-variant">
+              {activeWorkspace.plan}
+            </span>
           </div>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    </SidebarMenu>
+        </button>
+      </PopoverTrigger>
+
+      <PopoverContent
+        className="w-[480px] max-h-[600px] overflow-y-auto p-0"
+        align="start"
+        sideOffset={8}
+      >
+        <PopoverHeader className="sticky top-0 z-10 border-b border-outline-variant/20 bg-surface p-5">
+          <PopoverTitle className="font-headline text-xl font-bold text-on-surface">
+            Switch Workspace
+          </PopoverTitle>
+        </PopoverHeader>
+
+        <div className="p-5">
+          {/* Workspace cards grid */}
+          <div className="mb-6 grid grid-cols-1 gap-4">
+            {MOCK_WORKSPACES.map((ws) => {
+              const progress = ws.wordCount > 0
+                ? (ws.masteredCount / ws.wordCount) * 100
+                : 0;
+
+              return (
+                <button
+                  key={ws.id}
+                  type="button"
+                  onClick={() => handleSwitch(ws)}
+                  className={cn(
+                    'group relative flex flex-col gap-3 rounded-2xl border p-6 text-left transition-shadow',
+                    'hover:shadow-md hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                    ws.isActive
+                      ? 'border-primary/40 bg-primary/5'
+                      : 'border-outline-variant/20 bg-surface-container'
+                  )}
+                >
+                  {/* Header row */}
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-headline text-lg font-semibold text-on-surface leading-tight">
+                      {ws.name}
+                    </span>
+                    {ws.isActive && (
+                      <span className="shrink-0 px-2.5 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs font-medium">
+                        Active
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Stats row */}
+                  <span className="text-sm text-on-surface-variant">
+                    {ws.wordCount} words · {ws.masteredCount} mastered
+                  </span>
+
+                  {/* Progress bar */}
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-high">
+                    <div
+                      className="h-full rounded-full bg-secondary transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Stats summary grid */}
+          <div className="rounded-2xl bg-surface-container p-4">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+              Your Stats
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+                <ListChecks className="size-4 text-on-surface-variant" />
+                <span className="font-headline text-2xl font-bold text-primary">
+                  {totalWords}
+                </span>
+                <span className="text-xs text-on-surface-variant">Words</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+                <BookOpen className="size-4 text-on-surface-variant" />
+                <span className="font-headline text-2xl font-bold text-primary">
+                  {totalMastered}
+                </span>
+                <span className="text-xs text-on-surface-variant">Mastered</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+                <BrainCircuit className="size-4 text-on-surface-variant" />
+                <span className="font-headline text-2xl font-bold text-primary">
+                  {totalReviewDue}
+                </span>
+                <span className="text-xs text-on-surface-variant">Review</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+                <Flame className="size-4 text-secondary" />
+                <span className="font-headline text-2xl font-bold text-primary">
+                  {maxStreak}
+                </span>
+                <span className="text-xs text-on-surface-variant">Day Streak</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
