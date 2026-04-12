@@ -287,7 +287,7 @@ function StudySessionPage() {
                 >
                   <div className="text-center">
                     <p className="text-sm font-medium text-on-surface-variant opacity-80">Next review</p>
-                    <p className="text-xl font-extrabold font-headline text-primary tabular-nums">
+                    <p className="text-xl font-bold font-headline text-primary tabular-nums">
                       {feedback.nextDueDate
                         ? new Date(feedback.nextDueDate).toLocaleDateString()
                         : 'Now'}
