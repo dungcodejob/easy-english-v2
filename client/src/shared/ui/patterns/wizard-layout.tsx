@@ -62,7 +62,7 @@ function WizardStepper({
                 idx === currentStep &&
                   'bg-primary text-primary-foreground ring-4 ring-primary/20',
                 idx > currentStep &&
-                  'bg-surface-container-highest text-on-surface-variant',
+                  'bg-surface-container text-on-surface-variant',
               )}
             >
               {idx < currentStep ? (

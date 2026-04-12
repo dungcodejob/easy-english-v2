@@ -1,11 +1,4 @@
-import { useState } from 'react';
-import {
-  Building,
-  BookOpen,
-  BrainCircuit,
-  Flame,
-  ListChecks,
-} from 'lucide-react';
+import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
 import {
   Popover,
   PopoverContent,
@@ -13,8 +6,15 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from '@/shared/ui/shadcn/popover';
-import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
-import { cn } from '@/shared/utils/cn';
+import { cn } from '@/shared/utils';
+import {
+  BookOpen,
+  BrainCircuit,
+  Building,
+  Flame,
+  ListChecks,
+} from 'lucide-react';
+import { useState } from 'react';
 
 /** Mock workspaces — replace with real API data when available */
 interface WorkspacePreview {
@@ -77,10 +77,11 @@ export function WorkspaceSwitcher() {
   const totalWords = MOCK_WORKSPACES.reduce((sum, ws) => sum + ws.wordCount, 0);
   const totalMastered = MOCK_WORKSPACES.reduce(
     (sum, ws) => sum + ws.masteredCount,
-    0
+    0,
   );
   const totalReviewDue = MOCK_WORKSPACES.reduce(
-    (sum, ws) => sum + ws.reviewDueCount, 0
+    (sum, ws) => sum + ws.reviewDueCount,
+    0,
   );
   const maxStreak = Math.max(...MOCK_WORKSPACES.map((ws) => ws.streak), 0);
 
@@ -94,7 +95,7 @@ export function WorkspaceSwitcher() {
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="data-[state=open]:bg-surface-container data-[state=open]:text-primary flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-surface-container-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="data-[state=open]:bg-surface-container-high data-[state=open]:text-primary flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
             <Building className="size-4" />
@@ -125,9 +126,8 @@ export function WorkspaceSwitcher() {
           {/* Workspace cards grid */}
           <div className="mb-6 grid grid-cols-1 gap-4">
             {MOCK_WORKSPACES.map((ws) => {
-              const progress = ws.wordCount > 0
-                ? (ws.masteredCount / ws.wordCount) * 100
-                : 0;
+              const progress =
+                ws.wordCount > 0 ? (ws.masteredCount / ws.wordCount) * 100 : 0;
 
               return (
                 <button
@@ -139,7 +139,7 @@ export function WorkspaceSwitcher() {
                     'hover:shadow-md hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     ws.isActive
                       ? 'border-primary/40 bg-primary/5'
-                      : 'border-outline-variant/20 bg-surface-container'
+                      : 'border-outline-variant/20 bg-surface-container',
                   )}
                 >
                   {/* Header row */}
@@ -176,34 +176,38 @@ export function WorkspaceSwitcher() {
             <p className="mb-3 text-xs font-medium uppercase tracking-wider text-on-surface-variant">
               Your Stats
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex flex-col items-center gap-1 rounded-2xl bg-surface-container p-5 text-center">
                 <ListChecks className="size-4 text-on-surface-variant" />
                 <span className="font-headline text-2xl font-bold text-primary">
                   {totalWords}
                 </span>
                 <span className="text-xs text-on-surface-variant">Words</span>
               </div>
-              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+              <div className="flex flex-col items-center gap-1 rounded-2xl bg-surface-container p-5 text-center">
                 <BookOpen className="size-4 text-on-surface-variant" />
                 <span className="font-headline text-2xl font-bold text-primary">
                   {totalMastered}
                 </span>
-                <span className="text-xs text-on-surface-variant">Mastered</span>
+                <span className="text-xs text-on-surface-variant">
+                  Mastered
+                </span>
               </div>
-              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+              <div className="flex flex-col items-center gap-1 rounded-2xl bg-surface-container p-5 text-center">
                 <BrainCircuit className="size-4 text-on-surface-variant" />
                 <span className="font-headline text-2xl font-bold text-primary">
                   {totalReviewDue}
                 </span>
                 <span className="text-xs text-on-surface-variant">Review</span>
               </div>
-              <div className="flex flex-col items-center gap-1 rounded-xl bg-surface p-4 text-center">
+              <div className="flex flex-col items-center gap-1 rounded-2xl bg-surface-container p-5 text-center">
                 <Flame className="size-4 text-secondary" />
                 <span className="font-headline text-2xl font-bold text-primary">
                   {maxStreak}
                 </span>
-                <span className="text-xs text-on-surface-variant">Day Streak</span>
+                <span className="text-xs text-on-surface-variant">
+                  Day Streak
+                </span>
               </div>
             </div>
           </div>
