@@ -1,10 +1,3 @@
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText,
-} from '@/shared/ui/shadcn/input-group';
 import { Search, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchStore } from '../stores/use-search-store';
@@ -31,57 +24,33 @@ export function SearchInput() {
   }, [localValue, setQuery, setDebouncedQuery]);
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <InputGroup className="h-14 rounded-full bg-surface-container shadow-sm hover:shadow-md transition-shadow">
-        <InputGroupAddon align="inline-start" className="pl-5">
-          <InputGroupText>
-            <Search className="h-5 w-5 text-on-surface-variant" />
-          </InputGroupText>
-        </InputGroupAddon>
-        <InputGroupInput
-          placeholder="Search words, idioms, or phrases..."
-          value={localValue}
-          onChange={(e) => setLocalValue(e.target.value)}
-          className="text-base h-14 focus:ring-2 focus:ring-primary/30"
-          autoFocus
-        />
-        <InputGroupAddon align="inline-end" className="pr-2">
-          {localValue && (
-            <InputGroupButton
-              onClick={() => setLocalValue('')}
-              size="icon-sm"
-              variant="ghost"
-              className="rounded-full text-on-surface-variant hover:text-on-surface"
-              aria-label="Clear search"
-            >
-              <X className="h-4 w-4" />
-            </InputGroupButton>
-          )}
-        </InputGroupAddon>
-      </InputGroup>
-      <p className="text-center text-xs text-on-surface-variant mt-3">
-        Try searching for{' '}
-        <span
-          className="font-medium text-primary cursor-pointer hover:underline"
-          onClick={() => setLocalValue('phenomenon')}
-        >
-          phenomenon
-        </span>
-        ,{' '}
-        <span
-          className="font-medium text-primary cursor-pointer hover:underline"
-          onClick={() => setLocalValue('look forward to')}
-        >
-          look forward to
-        </span>
-        , or{' '}
-        <span
-          className="font-medium text-primary cursor-pointer hover:underline"
-          onClick={() => setLocalValue('out of the blue')}
-        >
-          out of the blue
-        </span>
-      </p>
+    <div className="relative group">
+      <div className="pointer-events-none absolute inset-y-0 left-6 flex items-center">
+        <Search className="h-7 w-7 text-outline" />
+      </div>
+      <input
+        type="text"
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        placeholder="Search for a word..."
+        autoFocus
+        className="w-full rounded-xl border-none bg-surface-container-lowest py-7 pl-18 pr-16 font-headline text-2xl font-light shadow-xl transition-all placeholder:text-outline-variant focus:ring-2 focus:ring-primary/10 focus:outline-none"
+      />
+      <div className="absolute right-6 top-1/2 flex -translate-y-1/2 items-center gap-2">
+        {localValue ? (
+          <button
+            onClick={() => setLocalValue('')}
+            className="rounded-full p-1.5 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+            aria-label="Clear search"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        ) : (
+          <kbd className="hidden items-center rounded-lg border border-outline-variant bg-surface-container-low px-3 py-1 text-xs font-semibold text-on-surface-variant sm:inline-flex">
+            Ctrl K
+          </kbd>
+        )}
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Badge } from '@/shared/ui/shadcn/badge';
 import { cn } from '@/shared/utils';
 import { Link, useRouterState } from '@tanstack/react-router';
 import type { ElementType } from 'react';
+import { motion } from 'motion/react';
 
 export interface MenuItem {
   id: string;
@@ -38,9 +39,9 @@ export function NavGroup({
             key={item.id}
             to={item.url ?? '#'}
             className={cn(
-              'flex items-center gap-4 rounded-full mx-4 py-3 px-6 text-sm font-medium transition-all duration-200',
+              'relative flex items-center gap-4 rounded-full mx-4 py-3 px-6 text-sm font-medium transition-all duration-300',
               isActive
-                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg scale-105'
+                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg shadow-primary/10 scale-105'
                 : 'text-on-surface-variant hover:bg-surface-container-high',
             )}
           >

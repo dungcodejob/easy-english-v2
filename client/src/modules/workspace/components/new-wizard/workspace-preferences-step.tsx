@@ -80,7 +80,9 @@ export function WorkspacePreferencesStep({
                 max: { value: 100, message: 'Maximum 100 words' },
               })}
             />
-            <span className="text-sm text-on-surface-variant">words per day</span>
+            <span className="text-sm text-on-surface-variant">
+              words per day
+            </span>
           </div>
           {errors.dailyTarget && (
             <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
@@ -95,7 +97,9 @@ export function WorkspacePreferencesStep({
         {/* Study Reminder */}
         <div className="flex flex-row items-center justify-between rounded-2xl border border-outline-variant/30 bg-surface-container p-5">
           <div className="space-y-0.5">
-            <FieldLabel className="text-base font-medium font-headline">Study Reminders</FieldLabel>
+            <FieldLabel className="text-base font-medium font-headline">
+              Study Reminders
+            </FieldLabel>
             <div className="text-sm text-on-surface-variant">
               Receive daily notifications to keep your streak.
             </div>
@@ -104,10 +108,7 @@ export function WorkspacePreferencesStep({
             control={control}
             name="studyReminder"
             render={({ field }) => (
-              <Switch
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
+              <Switch checked={field.value} onCheckedChange={field.onChange} />
             )}
           />
         </div>
@@ -132,9 +133,7 @@ export function WorkspacePreferencesStep({
                 <DsSelectItem value={WorkspaceLearningMode.Quiz}>
                   Quiz (Multiple Choice)
                 </DsSelectItem>
-                <DsSelectItem
-                  value={WorkspaceLearningMode.SpacedRepetition}
-                >
+                <DsSelectItem value={WorkspaceLearningMode.SpacedRepetition}>
                   Spaced Repetition (Smart)
                 </DsSelectItem>
               </DsSelect>

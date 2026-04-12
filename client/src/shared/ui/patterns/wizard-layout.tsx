@@ -57,8 +57,7 @@ function WizardStepper({
             <div
               className={cn(
                 'absolute left-0 top-3 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200',
-                idx < currentStep &&
-                  'bg-primary text-primary-foreground',
+                idx < currentStep && 'bg-primary text-primary-foreground',
                 idx === currentStep &&
                   'bg-primary text-primary-foreground ring-4 ring-primary/20',
                 idx > currentStep &&
@@ -193,7 +192,9 @@ export function WizardLayout({
               <div className="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
-                  style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                  style={{
+                    width: `${((currentStep + 1) / steps.length) * 100}%`,
+                  }}
                 />
               </div>
               <span className="text-xs font-medium text-on-surface-variant whitespace-nowrap font-headline">

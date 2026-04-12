@@ -206,7 +206,17 @@
       "Bash(python3:*)",
       "Bash(npx rsbuild:*)",
       "Bash(bash:*)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4200)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4200)",
+      "Bash(npx tailwindcss:*)",
+      "mcp__filesystem__search_files",
+      "mcp__filesystem__list_directory",
+      "Bash(git -C \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\" add client/src/styles/globals.css client/src/shared/ui/design-tokens/ client/src/modules/shell/ client/src/modules/learning/components/study-session-header.tsx)",
+      "Bash(git -C \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\" commit -m \"feat\\(ui\\): apply MD3 scholarly design tokens and restyle layout shell — navy primary, teal secondary, amber tertiary, Lexend headlines, Be Vietnam Pro body, pill-shaped sidebar nav, glass header, StudySessionHeader\")",
+      "Bash(git:*)",
+      "Bash(dir /s /b \"E:\\\\Projects\\\\multi-tenant\\\\easy-english-v2\\\\client\\\\src\\\\modules\\\\dashboard\\\\components\\\\*.tsx\")",
+      "Bash(dir:*)",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); const keys = Object.keys\\(l\\); const matches = keys.filter\\(k => k.toLowerCase\\(\\).includes\\('light'\\) || k.toLowerCase\\(\\).includes\\('lightning'\\) || k.toLowerCase\\(\\).includes\\('zap'\\)\\); console.log\\(matches.join\\('\\\\n'\\)\\);\")",
+      "mcp__filesystem__edit_file"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

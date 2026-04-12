@@ -13,7 +13,7 @@
 export const typography = {
   /** Font family stack — match whatever your fonts.css loads */
   fontFamily: {
-    sans: 'var(--font-sans)',      // Be Vietnam Pro
+    sans: 'var(--font-sans)', // Be Vietnam Pro
     mono: 'var(--font-mono)',
     display: 'var(--font-headline)', // Lexend
     headline: 'var(--font-headline)', // Lexend — alias for .font-headline

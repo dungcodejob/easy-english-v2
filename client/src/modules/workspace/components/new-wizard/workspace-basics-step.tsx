@@ -58,10 +58,7 @@ export function WorkspaceBasicsStep({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <FieldLabel
-            htmlFor="name"
-            className="text-sm font-medium"
-          >
+          <FieldLabel htmlFor="name" className="text-sm font-medium">
             Workspace Name <span className="text-destructive">*</span>
           </FieldLabel>
           <DsInput
@@ -103,7 +100,9 @@ export function WorkspaceBasicsStep({
                     >
                       <User className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">Personal</div>
+                        <div className="font-headline font-semibold mb-1">
+                          Personal
+                        </div>
                         <div className="text-xs text-on-surface-variant">
                           For your own learning
                         </div>
@@ -123,7 +122,9 @@ export function WorkspaceBasicsStep({
                     >
                       <Briefcase className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">Team</div>
+                        <div className="font-headline font-semibold mb-1">
+                          Team
+                        </div>
                         <div className="text-xs text-on-surface-variant">
                           Collaborate with peers
                         </div>
@@ -143,7 +144,9 @@ export function WorkspaceBasicsStep({
                     >
                       <GraduationCap className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">Classroom</div>
+                        <div className="font-headline font-semibold mb-1">
+                          Classroom
+                        </div>
                         <div className="text-xs text-on-surface-variant">
                           For teachers & students
                         </div>

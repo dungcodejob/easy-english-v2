@@ -13,11 +13,18 @@ interface QuizViewProps {
 
 type QuizState = 'selecting' | 'answered';
 
-export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }: QuizViewProps) {
+export function QuizView({
+  cards,
+  sessionId: _sessionId,
+  onComplete,
+  onAnswer,
+}: QuizViewProps) {
   // sessionId kept for future session-aware features
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizState, setQuizState] = useState<QuizState>('selecting');
-  const [selectedLabel, setSelectedLabel] = useState<'A' | 'B' | 'C' | 'D' | null>(null);
+  const [selectedLabel, setSelectedLabel] = useState<
+    'A' | 'B' | 'C' | 'D' | null
+  >(null);
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Use refs for stable function references to avoid exhaustive-deps warnings
@@ -79,7 +86,10 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
     const handleKeyDown = (e: KeyboardEvent) => {
       if (quizState !== 'selecting') return;
       const keyMap: Record<string, 'A' | 'B' | 'C' | 'D'> = {
-        '1': 'A', '2': 'B', '3': 'C', '4': 'D',
+        '1': 'A',
+        '2': 'B',
+        '3': 'C',
+        '4': 'D',
       };
       const label = keyMap[e.key];
       if (label) handleSelectOption(label);
@@ -130,8 +140,10 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
           const isSelected = option.label === selectedLabel;
           const isCorrectOption = option.label === currentCard.correctAnswer;
           const showAsCorrect = quizState === 'answered' && isCorrectOption;
-          const showAsWrong = quizState === 'answered' && isSelected && !isCorrectOption;
-          const dimmed = quizState === 'answered' && !isSelected && !isCorrectOption;
+          const showAsWrong =
+            quizState === 'answered' && isSelected && !isCorrectOption;
+          const dimmed =
+            quizState === 'answered' && !isSelected && !isCorrectOption;
 
           let optionClass =
             'rounded-2xl border-2 p-4 text-left transition-all bg-surface-container hover:bg-surface-container-high flex items-start gap-3 cursor-pointer';
@@ -143,7 +155,8 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
           } else if (dimmed) {
             optionClass += ' border-outline text-on-surface-variant opacity-50';
           } else if (quizState === 'selecting') {
-            optionClass += ' border-outline-variant hover:border-primary cursor-pointer';
+            optionClass +=
+              ' border-outline-variant hover:border-primary cursor-pointer';
           } else {
             optionClass += ' border-outline bg-surface-container';
           }
@@ -158,28 +171,38 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
               whileTap={quizState === 'selecting' ? { scale: 0.98 } : undefined}
             >
               {/* Label badge */}
-              <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
-                showAsCorrect
-                  ? 'bg-green-500 text-white'
-                  : showAsWrong
-                  ? 'bg-red-500 text-white'
-                  : 'bg-surface-container-high text-on-surface-variant'
-              }`}>
+              <span
+                className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
+                  showAsCorrect
+                    ? 'bg-green-500 text-white'
+                    : showAsWrong
+                      ? 'bg-red-500 text-white'
+                      : 'bg-surface-container-high text-on-surface-variant'
+                }`}
+              >
                 {option.label}
               </span>
 
               {/* Option text */}
-              <span className={`flex-1 text-sm leading-relaxed ${
-                showAsCorrect ? 'text-green-700 dark:text-green-400' :
-                showAsWrong ? 'text-red-700 dark:text-red-400' :
-                'text-on-surface'
-              }`}>
+              <span
+                className={`flex-1 text-sm leading-relaxed ${
+                  showAsCorrect
+                    ? 'text-green-700 dark:text-green-400'
+                    : showAsWrong
+                      ? 'text-red-700 dark:text-red-400'
+                      : 'text-on-surface'
+                }`}
+              >
                 {option.text}
               </span>
 
               {/* Icon */}
-              {showAsCorrect && <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500" />}
-              {showAsWrong && <XCircle className="h-5 w-5 shrink-0 text-red-500" />}
+              {showAsCorrect && (
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500" />
+              )}
+              {showAsWrong && (
+                <XCircle className="h-5 w-5 shrink-0 text-red-500" />
+              )}
             </motion.button>
           );
         })}
@@ -217,7 +240,12 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
                   Incorrect
                 </p>
                 <p className="mt-1 text-sm text-red-600 dark:text-red-500">
-                  Correct: {currentCard.correctAnswer} — {currentCard.options.find(o => o.label === currentCard.correctAnswer)?.text.split(' — ')[0]}
+                  Correct: {currentCard.correctAnswer} —{' '}
+                  {
+                    currentCard.options
+                      .find((o) => o.label === currentCard.correctAnswer)
+                      ?.text.split(' — ')[0]
+                  }
                 </p>
               </div>
             )}

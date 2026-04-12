@@ -21,7 +21,7 @@ export const color = {
   primary: {
     default: 'var(--primary)',
     foreground: 'var(--primary-foreground)',
-    hover: 'var(--primary) / 90%',   // oklch supports opacity via /
+    hover: 'var(--primary) / 90%', // oklch supports opacity via /
     muted: 'var(--primary) / 10%',
     subtle: 'var(--primary) / 5%',
   },

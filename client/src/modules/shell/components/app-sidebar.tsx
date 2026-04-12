@@ -1,6 +1,4 @@
-import { WorkspaceSwitcher } from '@/modules/workspace/components/workspace-switcher';
 import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
-import { useUser } from '@/shared/stores/auth-store';
 import {
   AchievementsRoutes,
   DictionaryRoutes,
@@ -9,8 +7,10 @@ import {
   SettingsRoutes,
   TopicRoutes,
 } from '@/shared/constants';
+import { useUser } from '@/shared/stores/auth-store';
 import { Separator } from '@shared/ui/shadcn/separator';
 import {
+  BookMarked,
   BookOpen,
   Flame,
   Layers,
@@ -63,6 +63,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<'aside'>) {
     },
     {
       id: useId(),
+      title: t('sidebar.flashcards') ?? 'Flashcards',
+      url: '',
+      icon: BookMarked,
+    },
+    {
+      id: useId(),
       title: t('sidebar.progress') ?? 'Progress',
       url: ProgressRoutes.list(),
       icon: TrendingUp,
@@ -109,16 +115,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<'aside'>) {
         </div>
       </div>
 
-      <nav aria-label="Main navigation" className="flex flex-1 flex-col gap-1 px-3">
+      {/* Navigation */}
+      <nav aria-label="Main navigation" className="flex-1 space-y-1">
         <NavGroup items={navItems} />
-        <div className="mt-auto">
-          <NavGroup items={navSystem} />
-        </div>
       </nav>
 
-      <Separator className="border-t border-outline-variant/20" />
+      <Separator className="mx-4 border-t border-outline-variant/10" />
 
-      <div className="mt-auto px-4 pb-2">
+      {/* System Navigation */}
+      <div className="mt-auto pt-2 space-y-1">
+        <NavGroup items={navSystem} />
+      </div>
+
+      <div className="px-4 pb-2">
         <NavUser user={user} />
       </div>
     </aside>

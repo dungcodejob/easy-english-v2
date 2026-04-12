@@ -59,7 +59,10 @@ export function TopicCard({ topic }: TopicCardProps) {
           Active
         </span>
 
-        <div className="flex items-center gap-0.5" onClick={(e) => e.preventDefault()}>
+        <div
+          className="flex items-center gap-0.5"
+          onClick={(e) => e.preventDefault()}
+        >
           <UpdateTopicDialog
             topic={topic}
             trigger={
@@ -98,11 +101,15 @@ export function TopicCard({ topic }: TopicCardProps) {
       </div>
 
       {/* Topic name */}
-      <h3 className="mb-2 font-headline text-lg font-semibold text-on-surface">{topic.name}</h3>
+      <h3 className="mb-2 font-headline text-lg font-semibold text-on-surface">
+        {topic.name}
+      </h3>
 
       {/* Description */}
       {topic.description && (
-        <p className="mb-4 text-sm text-on-surface-variant">{topic.description}</p>
+        <p className="mb-4 text-sm text-on-surface-variant">
+          {topic.description}
+        </p>
       )}
 
       {/* Progress bar */}

@@ -3,14 +3,15 @@ import { LanguageSwitcher } from './language-switcher';
 import { ModeSwitcher } from './mode-switcher';
 import { SearchMenu } from './search-menu';
 import { cn } from '@/shared/utils/tailwind';
+import { UserMenu } from './user-menu';
 
 export function AppHeader() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 flex items-center justify-between gap-6 border-b px-6 py-3',
+        'sticky top-0 z-50 flex items-center justify-between gap-4 border-b px-8 py-4',
         'bg-surface/80 backdrop-blur-xl',
-        'shadow-[0_12px_32px_rgba(26,27,30,0.06)]'
+        'shadow-[0_12px_32px_rgba(26,27,30,0.06)]',
       )}
     >
       <div className="flex items-center gap-3">
@@ -24,6 +25,7 @@ export function AppHeader() {
         <SearchMenu />
         <ModeSwitcher />
         <LanguageSwitcher />
+        <UserMenu />
       </div>
     </header>
   );

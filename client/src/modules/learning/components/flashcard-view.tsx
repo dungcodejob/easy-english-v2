@@ -20,7 +20,9 @@ export function FlashcardView({ card, flipped, onFlip }: FlashcardViewProps) {
       }}
       tabIndex={0}
       role="button"
-      aria-label={flipped ? 'Card back — click to flip' : 'Card front — click to flip'}
+      aria-label={
+        flipped ? 'Card back — click to flip' : 'Card front — click to flip'
+      }
     >
       <AnimatePresence mode="wait">
         {!flipped ? (

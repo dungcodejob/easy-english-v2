@@ -153,7 +153,9 @@ export function WorkspaceLearningStep({
                     htmlFor="level-beginner"
                     className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-headline font-semibold">Beginner</span>
+                    <span className="font-headline font-semibold">
+                      Beginner
+                    </span>
                     <span className="text-xs text-on-surface-variant mt-1">
                       A1 - A2
                     </span>
@@ -170,7 +172,9 @@ export function WorkspaceLearningStep({
                     htmlFor="level-intermediate"
                     className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-headline font-semibold">Intermediate</span>
+                    <span className="font-headline font-semibold">
+                      Intermediate
+                    </span>
                     <span className="text-xs text-on-surface-variant mt-1">
                       B1 - B2
                     </span>
@@ -187,7 +191,9 @@ export function WorkspaceLearningStep({
                     htmlFor="level-advanced"
                     className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-headline font-semibold">Advanced</span>
+                    <span className="font-headline font-semibold">
+                      Advanced
+                    </span>
                     <span className="text-xs text-on-surface-variant mt-1">
                       C1 - C2
                     </span>

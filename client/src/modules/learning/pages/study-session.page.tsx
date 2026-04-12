@@ -130,7 +130,11 @@ function StudySessionPage() {
         sessionType="Quiz"
         current={store.currentIndex + 1}
         total={store.cards.length}
-        progressPercent={store.cards.length > 0 ? ((store.currentIndex + 1) / store.cards.length) * 100 : 0}
+        progressPercent={
+          store.cards.length > 0
+            ? ((store.currentIndex + 1) / store.cards.length) * 100
+            : 0
+        }
         onExit={handleExit}
       >
         <QuizView
@@ -217,7 +221,9 @@ function StudySessionPage() {
   // No cards (empty due/topic set)
   if (store.cards.length === 0 && !sessionId) {
     return (
-      <StudySessionLayout sessionType={mode === 'topic' ? 'Topic Study' : 'Daily Review'}>
+      <StudySessionLayout
+        sessionType={mode === 'topic' ? 'Topic Study' : 'Daily Review'}
+      >
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
           <div className="space-y-2 text-center">
             <h2 className="text-2xl font-bold">All caught up!</h2>
@@ -258,10 +264,20 @@ function StudySessionPage() {
 
   return (
     <StudySessionLayout
-      sessionType={mode === 'topic' ? 'Topic Study' : mode === 'quiz' ? 'Quiz' : 'Daily Review'}
+      sessionType={
+        mode === 'topic'
+          ? 'Topic Study'
+          : mode === 'quiz'
+            ? 'Quiz'
+            : 'Daily Review'
+      }
       current={store.currentIndex + 1}
       total={store.cards.length}
-      progressPercent={store.cards.length > 0 ? ((store.currentIndex + 1) / store.cards.length) * 100 : 0}
+      progressPercent={
+        store.cards.length > 0
+          ? ((store.currentIndex + 1) / store.cards.length) * 100
+          : 0
+      }
       onExit={handleExit}
     >
       <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center gap-8">
@@ -286,7 +302,9 @@ function StudySessionPage() {
                   className="absolute inset-0 flex items-center justify-center rounded-2xl bg-surface/80 backdrop-blur-sm"
                 >
                   <div className="text-center">
-                    <p className="text-sm font-medium text-on-surface-variant opacity-80">Next review</p>
+                    <p className="text-sm font-medium text-on-surface-variant opacity-80">
+                      Next review
+                    </p>
                     <p className="text-xl font-bold font-headline text-primary tabular-nums">
                       {feedback.nextDueDate
                         ? new Date(feedback.nextDueDate).toLocaleDateString()

@@ -119,7 +119,9 @@ function RatingRow({ breakdown }: { breakdown: RatingBreakdown }) {
           key={key}
           className="flex flex-1 flex-col items-center rounded-2xl border border-outline-variant/30 bg-surface-container px-2 py-2"
         >
-          <span className={`font-headline text-lg font-bold tabular-nums ${color}`}>
+          <span
+            className={`font-headline text-lg font-bold tabular-nums ${color}`}
+          >
             {breakdown[key]}
           </span>
           <span className="text-xs text-on-surface-variant">{label}</span>

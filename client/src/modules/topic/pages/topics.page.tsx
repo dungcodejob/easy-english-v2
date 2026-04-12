@@ -14,7 +14,14 @@ export const Route = createFileRoute('/_(authenticated)/learning/topics')({
 const PAGE_LIMIT = 20;
 
 // Demo categories — replace with real data from API when available
-const CATEGORIES = ['All', 'Vocabulary', 'Grammar', 'Idioms', 'Business', 'Travel'];
+const CATEGORIES = [
+  'All',
+  'Vocabulary',
+  'Grammar',
+  'Idioms',
+  'Business',
+  'Travel',
+];
 
 export default function TopicsPage() {
   const [page, setPage] = useState(1);
@@ -28,7 +35,6 @@ export default function TopicsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <h1 className="mb-8 font-headline text-4xl font-bold italic text-primary">
         Explore Your Linguistic Realms
@@ -77,7 +83,10 @@ export default function TopicsPage() {
       {isLoading && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6">
+            <div
+              key={i}
+              className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6"
+            >
               <Skeleton className="mb-3 h-4 w-24 rounded-full" />
               <Skeleton className="mb-2 h-5 w-3/4 rounded" />
               <Skeleton className="mb-4 h-4 w-full rounded" />
@@ -90,7 +99,9 @@ export default function TopicsPage() {
       {/* ── Error ─────────────────────────────────────────────────── */}
       {isError && !isLoading && (
         <div className="rounded-2xl border border-error/30 bg-error-container/30 p-8 text-center">
-          <p className="text-sm font-medium text-error">Failed to load topics</p>
+          <p className="text-sm font-medium text-error">
+            Failed to load topics
+          </p>
           <p className="mt-1 text-xs text-on-surface-variant">
             Check your connection and refresh the page.
           </p>
@@ -107,7 +118,8 @@ export default function TopicsPage() {
             No topics yet
           </h2>
           <p className="mb-6 max-w-xs text-sm text-on-surface-variant">
-            Create a topic to organise your vocabulary into focused study collections.
+            Create a topic to organise your vocabulary into focused study
+            collections.
           </p>
           <CreateTopicDialog
             trigger={
