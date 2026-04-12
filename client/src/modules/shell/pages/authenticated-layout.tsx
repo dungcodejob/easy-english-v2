@@ -76,9 +76,9 @@ export default function AuthenticatedLayout() {
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <div className="flex flex-1 flex-col h-full">
+        <div className="flex flex-1 flex-col h-full bg-surface">
           <div className="flex-1">
-            <div className="relative z-50 mx-auto flex w-full max-w-[1360px] flex-1 flex-col self-stretch p-4 md:p-6">
+            <div className="ml-64 pt-20 p-12 max-w-[1400px] mx-auto flex flex-1 flex-col self-stretch">
               <Outlet />
             </div>
           </div>

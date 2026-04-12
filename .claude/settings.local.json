@@ -204,7 +204,9 @@
       "Bash(awk '{total += $5} END {printf \"%.2f MB\\\\n\", total/1024/1024}')",
       "Bash(python3 -c ':*)",
       "Bash(python3:*)",
-      "Bash(npx rsbuild:*)"
+      "Bash(npx rsbuild:*)",
+      "Bash(bash:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4200)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

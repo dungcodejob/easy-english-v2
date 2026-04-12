@@ -79,6 +79,49 @@ export const color = {
     default: 'var(--input)',
     muted: 'var(--input) / 30%',
   },
+  /** Tertiary / Amber — progress, streaks, highlights */
+  tertiary: {
+    default: 'var(--tertiary)',
+    foreground: 'var(--tertiary-foreground)',
+    container: 'var(--tertiary-container)',
+    fixed: 'var(--tertiary-fixed)',
+    'fixed-dim': 'var(--tertiary-fixed-dim)',
+    muted: 'var(--tertiary) / 10%',
+  },
+  /** Surface hierarchy (MD3) */
+  surface: {
+    default: 'var(--surface)',
+    bright: 'var(--surface-bright)',
+    dim: 'var(--surface-dim)',
+    'container-lowest': 'var(--surface-container-lowest)',
+    'container-low': 'var(--surface-container-low)',
+    container: 'var(--surface-container)',
+    'container-high': 'var(--surface-container-high)',
+    'container-highest': 'var(--surface-container-highest)',
+  },
+  /** On-surface text variants */
+  onSurface: {
+    default: 'var(--on-surface)',
+    variant: 'var(--on-surface-variant)',
+  },
+  /** Border / outline */
+  outline: {
+    default: 'var(--outline)',
+    variant: 'var(--outline-variant)',
+  },
+  /** Inverse colors (for dark-on-light) */
+  inverse: {
+    surface: 'var(--inverse-surface)',
+    'on-surface': 'var(--inverse-on-surface)',
+    primary: 'var(--inverse-primary)',
+  },
+  /** Error */
+  error: {
+    default: 'var(--error)',
+    container: 'var(--error-container)',
+    foreground: 'var(--on-error)',
+    'on-container': 'var(--on-error-container)',
+  },
 } as const;
 
 /**

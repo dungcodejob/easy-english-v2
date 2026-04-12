@@ -114,22 +114,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" className="rounded-r-3xl shadow-xl" {...props}>
       <SidebarHeader>
         <WorkspaceSwitcher />
       </SidebarHeader>
-      <Separator orientation="horizontal" />
       <SidebarContent>
-        <div className="bg-primary/5 rounded-lg mx-2 mt-2 pb-2">
-          <NavGroup title={t('sidebar.priority')} items={navPriority} />
-        </div>
-        <NavGroup title={t('sidebar.learning')} items={navLearning} />
-        <NavGroup title={t('sidebar.progress')} items={navProgress} />
-        <div className="mt-auto">
-          <NavGroup title={t('sidebar.system')} items={navSystem} />
-        </div>
+        <nav aria-label="Main navigation" className="flex flex-col gap-1 px-3 pt-2">
+          <NavGroup items={navPriority} />
+          <NavGroup items={navLearning} />
+          <NavGroup items={navProgress} />
+          <div className="mt-auto">
+            <NavGroup items={navSystem} />
+          </div>
+        </nav>
       </SidebarContent>
-      <Separator orientation="horizontal" />
+      <Separator className="border-t border-outline-variant/20" />
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>
