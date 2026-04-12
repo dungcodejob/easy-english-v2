@@ -45,16 +45,16 @@ export function SessionCompleteCard({
   return (
     <div className="flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-8 py-8 mx-auto">
       {/* Icon */}
-      <div className="flex size-20 items-center justify-center rounded-full bg-green-500/10 ring-1 ring-green-500/20">
-        <CheckCircle2 className="size-10 text-green-500" />
+      <div className="flex size-20 items-center justify-center rounded-full bg-tertiary/10 ring-1 ring-tertiary/20">
+        <CheckCircle2 className="size-10 text-tertiary" />
       </div>
 
       {/* Heading */}
       <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
+        <h2 className="font-headline text-3xl font-bold text-primary">
           Session complete!
         </h2>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-on-surface-variant text-lg">
           Great work — keep it up.
         </p>
       </div>
@@ -76,7 +76,7 @@ export function SessionCompleteCard({
       <DsButton
         leftIcon={<BookOpen className="size-4" />}
         onClick={() => navigate({ to: LearnRoutes.base() })}
-        className="w-full"
+        className="w-full bg-gradient-to-br from-primary to-primary-container text-white shadow-md hover:shadow-lg"
       >
         Back to My Learning
       </DsButton>
@@ -88,11 +88,11 @@ export function SessionCompleteCard({
 
 function StatCell({ value, label }: { value: string | number; label: string }) {
   return (
-    <div className="flex flex-col items-center rounded-xl border border-border bg-card px-4 py-3">
-      <span className="text-2xl font-extrabold text-foreground tabular-nums">
+    <div className="flex flex-col items-center rounded-2xl border border-outline-variant/30 bg-surface-container px-4 py-3">
+      <span className="font-headline text-2xl font-bold text-primary tabular-nums">
         {value}
       </span>
-      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-on-surface-variant">{label}</span>
     </div>
   );
 }
@@ -117,12 +117,12 @@ function RatingRow({ breakdown }: { breakdown: RatingBreakdown }) {
       {RATING_LABELS.map(({ key, label, color }) => (
         <div
           key={key}
-          className="flex flex-1 flex-col items-center rounded-xl border border-border bg-card px-2 py-2"
+          className="flex flex-1 flex-col items-center rounded-2xl border border-outline-variant/30 bg-surface-container px-2 py-2"
         >
-          <span className={`text-lg font-bold tabular-nums ${color}`}>
+          <span className={`font-headline text-lg font-bold tabular-nums ${color}`}>
             {breakdown[key]}
           </span>
-          <span className="text-xs text-muted-foreground">{label}</span>
+          <span className="text-xs text-on-surface-variant">{label}</span>
         </div>
       ))}
     </div>

@@ -30,12 +30,12 @@ export function FlashcardView({ card, flipped, onFlip }: FlashcardViewProps) {
             animate={{ rotateY: 0, opacity: 1 }}
             exit={{ rotateY: -180, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="flex min-h-[260px] w-full flex-col items-center justify-center rounded-2xl border border-border bg-card p-8 shadow-sm ring-1 ring-border/50"
+            className="flex min-h-[260px] w-full flex-col items-center justify-center rounded-2xl border border-outline-variant/20 bg-surface-container p-8 shadow-sm"
           >
-            <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-3">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-on-surface-variant mb-3">
               {card.hint}
             </span>
-            <span className="text-center text-4xl font-extrabold tracking-tight text-foreground">
+            <span className="font-headline text-4xl font-bold text-primary text-center">
               {card.front}
             </span>
           </motion.div>
@@ -46,13 +46,13 @@ export function FlashcardView({ card, flipped, onFlip }: FlashcardViewProps) {
             animate={{ rotateY: 0, opacity: 1 }}
             exit={{ rotateY: 180, opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="flex min-h-[260px] w-full flex-col items-center justify-center rounded-2xl border border-border bg-card p-8 shadow-sm ring-1 ring-border/50 gap-4"
+            className="flex min-h-[260px] w-full flex-col items-center justify-center rounded-2xl border border-outline-variant/20 bg-surface-container p-8 shadow-sm gap-4"
           >
-            <span className="text-center text-2xl font-bold text-foreground">
+            <span className="font-headline text-2xl font-bold text-on-surface text-center">
               {card.back.definition}
             </span>
             {card.back.example && (
-              <span className="text-center text-base italic text-muted-foreground">
+              <span className="text-base italic text-on-surface-variant text-center">
                 {card.back.example}
               </span>
             )}

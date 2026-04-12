@@ -2,14 +2,13 @@ import { LearnRoutes } from '@/shared/constants';
 import { useFilters } from '@/shared/hooks/use-filters';
 import { DsButton, DsSpinner } from '@/shared/ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { ChevronLeft, Clock } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { FlashcardView } from '../components/flashcard-view';
 import { QuizView } from '../components/quiz-view';
 import { RatingButtons } from '../components/rating-buttons';
 import { SessionCompleteCard } from '../components/session-complete-card';
-import { StudyProgress } from '../components/study-progress';
+import { StudySessionLayout } from '../components/study-session-layout';
 import { useCompleteSession } from '../hooks/use-complete-session';
 import { useReviewCard } from '../hooks/use-review-card';
 import { useSessionSummary } from '../hooks/use-session-summary';
@@ -41,13 +40,12 @@ export const Route = createFileRoute('/_(authenticated)/learning/study')({
 function StudySessionPage() {
   const navigate = useNavigate();
 
-  const { filters, setSearch } = useFilters(Route.id);
+  const { filters } = useFilters(Route.id);
 
   // URL search params
   const sessionId = filters.sessionId;
   const completed = filters.completed === 'true';
   const mode = filters.mode || 'due';
-  const studyType = filters.studyType || 'FLASHCARD';
   const topicId = filters.topicId;
 
   // Server session summary (for completed sessions)
@@ -69,13 +67,24 @@ function StudySessionPage() {
   if (completed && sessionId) {
     const summary = summaryData?.data;
     if (summary) {
-      return <SessionCompleteCard sessionSummary={summary} />;
+      return (
+        <StudySessionLayout
+          sessionType="Session Complete"
+          current={store.reviewedCount}
+          total={store.cards.length}
+          progressPercent={100}
+        >
+          <SessionCompleteCard sessionSummary={summary} />
+        </StudySessionLayout>
+      );
     }
     // Summary still loading — show a spinner
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <DsSpinner size="lg" className="text-muted-foreground" />
-      </div>
+      <StudySessionLayout sessionType="Session Complete">
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <DsSpinner size="lg" className="text-muted-foreground" />
+        </div>
+      </StudySessionLayout>
     );
   }
 
@@ -83,33 +92,18 @@ function StudySessionPage() {
   // This handles page refresh mid-session (URL resumption)
   const [pendingAutoStart, setPendingAutoStart] = useState(false);
 
-  // Quiz mode — render QuizView
-  if (mode === 'quiz' && store.cards.length > 0) {
-    return (
-      <QuizView
-        cards={store.cards as QuizCard[]}
-        sessionId={sessionId!}
-        onComplete={handleQuizComplete}
-        onAnswer={handleQuizAnswer}
-      />
-    );
-  }
-
-  useEffect(() => {
-    if (!sessionId || store.sessionId === sessionId) return;
-    if (store.cards.length > 0) return; // Already have cards
-
-    // Trigger start — server will return the enrolled card set
-    setPendingAutoStart(true);
-    const scope: StudyScope = mode === 'topic' && topicId ? 'TOPIC' : 'DUE';
-    startMutation.mutate(
-      { scope, topicId, studyType: mode === 'quiz' ? 'QUIZ' : 'FLASHCARD' },
-      {
-        onSettled: () => setPendingAutoStart(false),
-      },
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, mode, topicId]);
+  const handleExit = useCallback(() => {
+    const hasActiveSession =
+      store.cards.length > 0 && !isSessionComplete && store.currentIndex > 0;
+    if (
+      hasActiveSession &&
+      !window.confirm('Exit session? Your progress so far will not be saved.')
+    ) {
+      return;
+    }
+    store.resetSession();
+    navigate({ to: LearnRoutes.base() });
+  }, [store, navigate, isSessionComplete]);
 
   const handleQuizAnswer = async (
     wordSenseId: string,
@@ -128,6 +122,42 @@ function StudySessionPage() {
       completeMutation.mutate(store.sessionId);
     }
   };
+
+  // Quiz mode — render QuizView
+  if (mode === 'quiz' && store.cards.length > 0) {
+    return (
+      <StudySessionLayout
+        sessionType="Quiz"
+        current={store.currentIndex + 1}
+        total={store.cards.length}
+        progressPercent={store.cards.length > 0 ? ((store.currentIndex + 1) / store.cards.length) * 100 : 0}
+        onExit={handleExit}
+      >
+        <QuizView
+          cards={store.cards as QuizCard[]}
+          sessionId={sessionId!}
+          onComplete={handleQuizComplete}
+          onAnswer={handleQuizAnswer}
+        />
+      </StudySessionLayout>
+    );
+  }
+
+  useEffect(() => {
+    if (!sessionId || store.sessionId === sessionId) return;
+    if (store.cards.length > 0) return; // Already have cards
+
+    // Trigger start — server will return the enrolled card set
+    setPendingAutoStart(true);
+    const scope: StudyScope = mode === 'topic' && topicId ? 'TOPIC' : 'DUE';
+    startMutation.mutate(
+      { scope, topicId, studyType: mode === 'quiz' ? 'QUIZ' : 'FLASHCARD' },
+      {
+        onSettled: () => setPendingAutoStart(false),
+      },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId, mode, topicId]);
 
   const handleRate = useCallback(
     async (rating: RatingValue) => {
@@ -171,138 +201,124 @@ function StudySessionPage() {
     [currentCard, store],
   );
 
-  const handleExit = useCallback(() => {
-    const hasActiveSession =
-      store.cards.length > 0 && !isSessionComplete && store.currentIndex > 0;
-    if (
-      hasActiveSession &&
-      !window.confirm('Exit session? Your progress so far will not be saved.')
-    ) {
-      return;
-    }
-    store.resetSession();
-    navigate({ to: LearnRoutes.base() });
-  }, [store, navigate, isSessionComplete]);
-
   const [feedback, setFeedback] = useState<ReviewResult | null>(null);
 
   // Loading states
   if (startMutation.isPending || pendingAutoStart) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <DsSpinner size="lg" className="text-muted-foreground" />
-      </div>
+      <StudySessionLayout sessionType="Loading...">
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <DsSpinner size="lg" className="text-muted-foreground" />
+        </div>
+      </StudySessionLayout>
     );
   }
 
   // No cards (empty due/topic set)
   if (store.cards.length === 0 && !sessionId) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
-        <div className="space-y-2 text-center">
-          <h2 className="text-2xl font-bold">All caught up!</h2>
-          <p className="text-muted-foreground">
-            {mode === 'topic'
-              ? 'No cards to study in this topic yet.'
-              : 'No cards are due for review right now.'}
-          </p>
+      <StudySessionLayout sessionType={mode === 'topic' ? 'Topic Study' : 'Daily Review'}>
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6">
+          <div className="space-y-2 text-center">
+            <h2 className="text-2xl font-bold">All caught up!</h2>
+            <p className="text-muted-foreground">
+              {mode === 'topic'
+                ? 'No cards to study in this topic yet.'
+                : 'No cards are due for review right now.'}
+            </p>
+          </div>
+          <DsButton onClick={() => navigate({ to: LearnRoutes.base() })}>
+            Back to My Learning
+          </DsButton>
         </div>
-        <DsButton onClick={() => navigate({ to: LearnRoutes.base() })}>
-          Back to My Learning
-        </DsButton>
-      </div>
+      </StudySessionLayout>
     );
   }
 
   // Session complete (non-redirect path — e.g. completed session still in store)
   if (isSessionComplete && !completed) {
     return (
-      <SessionCompleteCard
-        sessionSummary={undefined}
-        reviewedCount={store.reviewedCount}
-        correctLikeCount={
-          store.ratingBreakdown.good + store.ratingBreakdown.easy
-        }
-        elapsedMs={store.elapsedMs}
-      />
+      <StudySessionLayout
+        sessionType="Session Complete"
+        current={store.reviewedCount}
+        total={store.cards.length}
+        progressPercent={100}
+      >
+        <SessionCompleteCard
+          sessionSummary={undefined}
+          reviewedCount={store.reviewedCount}
+          correctLikeCount={
+            store.ratingBreakdown.good + store.ratingBreakdown.easy
+          }
+          elapsedMs={store.elapsedMs}
+        />
+      </StudySessionLayout>
     );
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-180px)] w-full max-w-3xl flex-col items-center justify-center gap-8 py-8 mx-auto px-4">
-      {/* Header */}
-      <div className="flex w-full items-center justify-between">
-        <DsButton
-          variant="ghost"
-          size="sm"
-          leftIcon={<ChevronLeft className="size-4" />}
-          onClick={handleExit}
-        >
-          Exit
-        </DsButton>
-        <StudyProgress
-          current={store.currentIndex + 1}
-          total={store.cards.length}
-        />
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Clock className="size-3" />
-          <span>Space to flip</span>
-        </div>
-      </div>
+    <StudySessionLayout
+      sessionType={mode === 'topic' ? 'Topic Study' : mode === 'quiz' ? 'Quiz' : 'Daily Review'}
+      current={store.currentIndex + 1}
+      total={store.cards.length}
+      progressPercent={store.cards.length > 0 ? ((store.currentIndex + 1) / store.cards.length) * 100 : 0}
+      onExit={handleExit}
+    >
+      <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center gap-8">
+        {/* Card */}
+        {currentCard && (
+          <div className="relative w-full">
+            <FlashcardView
+              card={currentCard}
+              flipped={store.flipped}
+              onFlip={store.flipCard}
+            />
 
-      {/* Card */}
-      {currentCard && (
-        <div className="relative w-full">
-          <FlashcardView
-            card={currentCard}
-            flipped={store.flipped}
-            onFlip={store.flipCard}
+            {/* Feedback overlay */}
+            <AnimatePresence>
+              {feedback && (
+                <motion.div
+                  key="feedback"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute inset-0 flex items-center justify-center rounded-2xl bg-surface/80 backdrop-blur-sm"
+                >
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-on-surface-variant opacity-80">Next review</p>
+                    <p className="text-xl font-extrabold font-headline text-primary tabular-nums">
+                      {feedback.nextDueDate
+                        ? new Date(feedback.nextDueDate).toLocaleDateString()
+                        : 'Now'}
+                    </p>
+                    <p className="text-xs text-on-surface-variant opacity-60 mt-1">
+                      {feedback.intervalDays} day
+                      {feedback.intervalDays !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
+        {/* Flip / Rating */}
+        {!store.flipped ? (
+          <button
+            type="button"
+            onClick={store.flipCard}
+            className="bg-gradient-to-br from-primary to-primary-container text-white rounded-full px-8 py-3 font-headline font-bold shadow-lg w-full max-w-sm"
+          >
+            Show Answer
+          </button>
+        ) : (
+          <RatingButtons
+            disabled={store.isSubmittingRating}
+            onRate={handleRate}
           />
-
-          {/* Feedback overlay */}
-          <AnimatePresence>
-            {feedback && (
-              <motion.div
-                key="feedback"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2 }}
-                className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/60 backdrop-blur-sm"
-              >
-                <div className="text-center text-white">
-                  <p className="text-sm font-medium opacity-80">Next review</p>
-                  <p className="text-xl font-extrabold tabular-nums">
-                    {feedback.nextDueDate
-                      ? new Date(feedback.nextDueDate).toLocaleDateString()
-                      : 'Now'}
-                  </p>
-                  <p className="text-xs opacity-60 mt-1">
-                    {feedback.intervalDays} day
-                    {feedback.intervalDays !== 1 ? 's' : ''}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
-
-      {/* Flip / Rating */}
-      {!store.flipped ? (
-        <DsButton
-          variant="outline"
-          className="w-full max-w-xs"
-          onClick={store.flipCard}
-        >
-          Show Answer
-        </DsButton>
-      ) : (
-        <RatingButtons
-          disabled={store.isSubmittingRating}
-          onRate={handleRate}
-        />
-      )}
-    </div>
+        )}
+      </div>
+    </StudySessionLayout>
   );
 }

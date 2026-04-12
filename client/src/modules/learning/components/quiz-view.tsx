@@ -104,10 +104,10 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-180px)] w-full max-w-3xl flex-col items-center justify-center gap-8 py-8 mx-auto px-4">
+    <div className="flex min-h-[calc(100vh-180px)] w-full flex-col items-center justify-center gap-8 py-8 px-4">
       {/* Header with progress */}
       <div className="flex w-full items-center justify-between">
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-on-surface-variant font-medium uppercase tracking-widest">
           Quiz Mode
         </div>
         <StudyProgress current={currentIndex + 1} total={cards.length} />
@@ -116,16 +116,16 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
 
       {/* Question */}
       <div className="text-center">
-        <h2 className="text-4xl font-extrabold tracking-tight text-foreground">
+        <h2 className="font-headline text-4xl font-bold text-primary text-center mb-4">
           {currentCard.question}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-lg text-on-surface-variant text-center mb-8 italic">
           {currentCard.partOfSpeech}
         </p>
       </div>
 
       {/* Options */}
-      <div className="flex w-full flex-col gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl">
         {currentCard.options.map((option) => {
           const isSelected = option.label === selectedLabel;
           const isCorrectOption = option.label === currentCard.correctAnswer;
@@ -134,18 +134,18 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
           const dimmed = quizState === 'answered' && !isSelected && !isCorrectOption;
 
           let optionClass =
-            'w-full rounded-xl border-2 p-4 text-left transition-all flex items-start gap-3 cursor-pointer';
+            'rounded-2xl border-2 p-4 text-left transition-all bg-surface-container hover:bg-surface-container-high flex items-start gap-3 cursor-pointer';
 
           if (showAsCorrect) {
             optionClass += ' border-green-500 bg-green-50 dark:bg-green-950/30';
           } else if (showAsWrong) {
             optionClass += ' border-red-500 bg-red-50 dark:bg-red-950/30';
           } else if (dimmed) {
-            optionClass += ' border-border bg-muted/30 opacity-50';
+            optionClass += ' border-outline text-on-surface-variant opacity-50';
           } else if (quizState === 'selecting') {
-            optionClass += ' border-border bg-card hover:border-primary/50 hover:bg-muted/50 cursor-pointer';
+            optionClass += ' border-outline-variant hover:border-primary cursor-pointer';
           } else {
-            optionClass += ' border-border bg-card';
+            optionClass += ' border-outline bg-surface-container';
           }
 
           return (
@@ -163,7 +163,7 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
                   ? 'bg-green-500 text-white'
                   : showAsWrong
                   ? 'bg-red-500 text-white'
-                  : 'bg-muted text-muted-foreground'
+                  : 'bg-surface-container-high text-on-surface-variant'
               }`}>
                 {option.label}
               </span>
@@ -172,7 +172,7 @@ export function QuizView({ cards, sessionId: _sessionId, onComplete, onAnswer }:
               <span className={`flex-1 text-sm leading-relaxed ${
                 showAsCorrect ? 'text-green-700 dark:text-green-400' :
                 showAsWrong ? 'text-red-700 dark:text-red-400' :
-                'text-foreground'
+                'text-on-surface'
               }`}>
                 {option.text}
               </span>
