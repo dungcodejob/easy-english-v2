@@ -38,75 +38,93 @@ export function TopicCard({ topic }: TopicCardProps) {
     deleteTopic(topic.id);
   };
 
+  // Static progress for visual restyling — no real data in API yet
+  const progressPercent = 0;
+
   return (
-    <div className="group relative flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/40">
-      {/* Main link covers the row */}
+    <div className="group relative rounded-2xl border border-outline-variant/20 bg-surface-container p-6 transition-shadow hover:shadow-md">
+      {/* Main link — covers the whole card */}
       <Link
         to={TopicRoutes.detail(topic.id)}
-        className="absolute inset-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+        className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
         aria-label={`Open topic: ${topic.name}`}
       />
 
-      {/* Name + description */}
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-foreground">
-          {topic.name}
-        </p>
-        {topic.description && (
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">
-            {topic.description}
-          </p>
-        )}
-      </div>
-
-      {/* Updated date */}
-      <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-        {formatRelativeDate(topic.updatedAt)}
-      </span>
-
-      {/* Actions — visible on hover */}
+      {/* Actions — top-right, visible on hover, above the card link */}
       <div
-        className="relative z-10 flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100"
+        className="relative z-10 mb-3 flex items-center justify-between"
         onClick={(e) => e.preventDefault()}
       >
-        <UpdateTopicDialog
-          topic={topic}
-          trigger={
-            <DsButton
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Pencil className="h-3.5 w-3.5" />
-            </DsButton>
-          }
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <DsButton
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
-              onClick={(e) => e.preventDefault()}
-            >
-              <MoreHorizontal className="h-3.5 w-3.5" />
-            </DsButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem
-              onClick={handleDelete}
-              className="cursor-pointer text-destructive focus:text-destructive"
-            >
-              <Trash2 className="mr-2 h-3.5 w-3.5" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <span className="inline-block rounded-full bg-secondary/10 px-3 py-0.5 text-xs font-medium uppercase text-secondary">
+          Active
+        </span>
+
+        <div className="flex items-center gap-0.5" onClick={(e) => e.preventDefault()}>
+          <UpdateTopicDialog
+            topic={topic}
+            trigger={
+              <DsButton
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-on-surface-variant hover:text-on-surface"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </DsButton>
+            }
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <DsButton
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-on-surface-variant hover:text-on-surface"
+                onClick={(e) => e.preventDefault()}
+              >
+                <MoreHorizontal className="h-3.5 w-3.5" />
+              </DsButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuItem
+                onClick={handleDelete}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
-      {/* Chevron */}
-      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40 transition-colors group-hover:text-muted-foreground" />
+      {/* Topic name */}
+      <h3 className="mb-2 font-headline text-lg font-semibold text-on-surface">{topic.name}</h3>
+
+      {/* Description */}
+      {topic.description && (
+        <p className="mb-4 text-sm text-on-surface-variant">{topic.description}</p>
+      )}
+
+      {/* Progress bar */}
+      <div className="mb-3 flex items-center gap-3">
+        <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-container-high">
+          <div
+            className="h-full rounded-full bg-tertiary-fixed-dim"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        <span className="whitespace-nowrap text-xs font-medium text-on-surface-variant">
+          {progressPercent}%
+        </span>
+      </div>
+
+      {/* Meta row */}
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-on-surface-variant">
+          {formatRelativeDate(topic.updatedAt)}
+        </span>
+        <ChevronRight className="h-3.5 w-3.5 text-on-surface-variant/50 transition-colors group-hover:text-on-surface-variant" />
+      </div>
     </div>
   );
 }
