@@ -36,21 +36,21 @@ export function WorkspaceReviewStep({
       description="Everything look good? Ready to start your learning journey."
     >
       <div className="space-y-6">
-        <Card className="bg-muted/50 border-dashed">
+        <Card className="bg-surface-container border border-outline-variant/30 rounded-2xl">
           <CardContent className="pt-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Workspace
                 </div>
                 <div className="text-lg font-semibold">{data.name}</div>
-                <div className="text-sm text-muted-foreground capitalize">
+                <div className="text-sm text-on-surface-variant capitalize">
                   {data.type} Workspace
                 </div>
               </div>
               {data.description && (
                 <div className="space-y-1">
-                  <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                  <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                     Description
                   </div>
                   <div className="text-sm">{data.description}</div>
@@ -62,16 +62,16 @@ export function WorkspaceReviewStep({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Learning
                 </div>
                 <div className="font-semibold uppercase">{data.language}</div>
-                <div className="text-sm text-muted-foreground capitalize">
+                <div className="text-sm text-on-surface-variant capitalize">
                   {data.level} Level
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Goal
                 </div>
                 <div className="capitalize">
@@ -84,42 +84,42 @@ export function WorkspaceReviewStep({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Daily Target
                 </div>
                 <div>
                   {data.dailyTarget} words{' '}
                   {data.dailyTarget ===
                     defaultWizardPreferences.dailyTarget && (
-                    <span className="text-xs text-muted-foreground ml-1">
+                    <span className="text-xs text-on-surface-variant ml-1">
                       (Default)
                     </span>
                   )}
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Reminders
                 </div>
                 <div>
                   {data.studyReminder ? 'Enabled' : 'Disabled'}{' '}
                   {data.studyReminder ===
                     defaultWizardPreferences.studyReminder && (
-                    <span className="text-xs text-muted-foreground ml-1">
+                    <span className="text-xs text-on-surface-variant ml-1">
                       (Default)
                     </span>
                   )}
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider text-[10px]">
+                <div className="text-sm font-medium text-on-surface-variant uppercase tracking-wider text-[10px]">
                   Mode
                 </div>
                 <div className="capitalize">
                   {data.defaultLearningMode?.replace('_', ' ')}{' '}
                   {data.defaultLearningMode ===
                     defaultWizardPreferences.defaultLearningMode && (
-                    <span className="text-xs text-muted-foreground ml-1">
+                    <span className="text-xs text-on-surface-variant ml-1">
                       (Default)
                     </span>
                   )}
@@ -129,12 +129,13 @@ export function WorkspaceReviewStep({
           </CardContent>
         </Card>
 
-        <div className="flex justify-between pt-4">
+        <div className="flex justify-between pt-6 border-t border-outline-variant/20 mt-8">
           <DsButton
             type="button"
             variant="ghost"
             onClick={onBack}
             disabled={isSubmitting}
+            className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
           >
             Back
           </DsButton>
@@ -144,7 +145,7 @@ export function WorkspaceReviewStep({
             isLoading={isSubmitting}
             loadingLabel="Creating workspace..."
             leftIcon={!isSubmitting ? <CheckCircle2 /> : undefined}
-            className="w-full md:w-auto min-w-[150px]"
+            className="bg-gradient-to-br from-primary to-primary-container text-primary-foreground rounded-full px-8 py-4 font-headline font-bold shadow-lg text-lg"
           >
             {isError ? 'Retry Create Workspace' : 'Create Workspace'}
           </DsButton>

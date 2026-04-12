@@ -23,6 +23,7 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 import type { ReactNode } from 'react';
+import { cn } from '@/shared/utils';
 
 interface WizardLayoutProps {
   children: ReactNode;
@@ -35,75 +36,8 @@ interface WizardLayoutProps {
   className?: string;
 }
 
-/** Single step dot in the progress indicator */
-function StepDot({
-  label,
-  index,
-  isActive,
-  isCompleted,
-}: {
-  label: string;
-  index: number;
-  isActive: boolean;
-  isCompleted: boolean;
-}) {
-  return (
-    <div className="flex flex-1 flex-col items-center gap-1.5">
-      {/* Connector line (not on first item) */}
-      {index > 0 && (
-        <div
-          className={`h-0.5 w-full transition-colors duration-300 ${
-            isCompleted ? 'bg-primary' : 'bg-border'
-          }`}
-        />
-      )}
-      {/* Step indicator circle */}
-      <div className="flex flex-col items-center gap-1">
-        <div
-          className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition-all duration-200 ${
-            isActive
-              ? 'bg-primary text-primary-foreground ring-4 ring-primary/20'
-              : isCompleted
-                ? 'bg-primary/20 text-primary'
-                : 'bg-muted text-muted-foreground'
-          }`}
-        >
-          {isCompleted ? (
-            // Checkmark SVG for completed steps
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              className="size-3.5"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="2,8 6,12 14,4" />
-            </svg>
-          ) : (
-            index + 1
-          )}
-        </div>
-        {/* Step label */}
-        <span
-          className={`text-center text-xs font-medium leading-tight transition-colors ${
-            isActive
-              ? 'text-foreground'
-              : isCompleted
-                ? 'text-primary'
-                : 'text-muted-foreground'
-          }`}
-        >
-          {label}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-/** Progress bar — horizontal connector with dots */
-function WizardProgressBar({
+/** Vertical stepper — left column */
+function WizardStepper({
   steps,
   currentStep,
 }: {
@@ -111,16 +45,56 @@ function WizardProgressBar({
   currentStep: number;
 }) {
   return (
-    <div className="flex w-full items-center px-2">
-      {steps.map((label, index) => (
-        <StepDot
-          key={label}
-          label={label}
-          index={index}
-          isActive={index === currentStep}
-          isCompleted={index < currentStep}
-        />
-      ))}
+    <div className="w-48 shrink-0">
+      <div className="space-y-0">
+        {steps.map((label, idx) => (
+          <div key={label} className="relative pl-6 py-3">
+            {/* Active indicator bar */}
+            {idx < currentStep && (
+              <div className="absolute left-2.5 top-0 bottom-0 w-0.5 bg-primary rounded-full" />
+            )}
+            {/* Step number circle */}
+            <div
+              className={cn(
+                'absolute left-0 top-3 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200',
+                idx < currentStep &&
+                  'bg-primary text-primary-foreground',
+                idx === currentStep &&
+                  'bg-primary text-primary-foreground ring-4 ring-primary/20',
+                idx > currentStep &&
+                  'bg-surface-container-highest text-on-surface-variant',
+              )}
+            >
+              {idx < currentStep ? (
+                // Checkmark SVG for completed steps
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="size-3.5"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="2,8 6,12 14,4" />
+                </svg>
+              ) : (
+                idx + 1
+              )}
+            </div>
+            <div
+              className={cn(
+                'text-sm font-medium transition-colors',
+                idx === currentStep
+                  ? 'text-primary font-semibold'
+                  : 'text-on-surface-variant',
+              )}
+            >
+              {label}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -166,13 +140,13 @@ export function WizardStepShell({
   className?: string;
 }) {
   return (
-    <div className={`space-y-6 ${className ?? ''}`}>
+    <div className={cn('space-y-6', className ?? '')}>
       <div className="space-y-1 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+        <h2 className="font-headline text-2xl font-bold tracking-tight text-primary">
           {title}
         </h2>
         {description && (
-          <p className="text-muted-foreground text-sm">{description}</p>
+          <p className="text-on-surface-variant text-sm">{description}</p>
         )}
       </div>
       <div className="mx-auto max-w-md">{children}</div>
@@ -188,30 +162,48 @@ export function WizardLayout({
   className = '',
 }: WizardLayoutProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-surface p-4">
       <div
-        className={`w-full max-w-2xl rounded-2xl border border-border/50 bg-card shadow-sm ${className}`}
-      >
-        {/* Cancel button — top right */}
-        {onCancel && (
-          <div className="flex justify-end p-4">
-            <button
-              onClick={onCancel}
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
+        className={cn(
+          'w-full max-w-5xl rounded-3xl border border-outline-variant/30 bg-surface-container-lowest shadow-xl',
+          className,
         )}
+      >
+        {/* Two-column layout: stepper + content */}
+        <div className="flex gap-12 p-8">
+          {/* Left: vertical stepper */}
+          <WizardStepper steps={steps} currentStep={currentStep} />
 
-        {/* Step progress */}
-        <div className="px-6 pb-4">
-          <WizardProgressBar steps={steps} currentStep={currentStep} />
-        </div>
+          {/* Right: step content */}
+          <div className="flex-1">
+            {/* Cancel button — top right */}
+            {onCancel && (
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={onCancel}
+                  className="text-on-surface-variant hover:text-primary text-sm transition-colors rounded-full px-4 py-1.5 hover:bg-surface-container"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
 
-        {/* Animated content area */}
-        <div className="border-t border-border/50 p-6">
-          <AnimatePresence mode="wait">{children}</AnimatePresence>
+            {/* Progress bar */}
+            <div className="flex items-center gap-3 mb-8">
+              <div className="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
+                  style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                />
+              </div>
+              <span className="text-xs font-medium text-on-surface-variant whitespace-nowrap font-headline">
+                STEP {currentStep + 1} OF {steps.length}
+              </span>
+            </div>
+
+            {/* Animated content area */}
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

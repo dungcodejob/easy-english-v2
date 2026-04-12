@@ -80,23 +80,23 @@ export function WorkspacePreferencesStep({
                 max: { value: 100, message: 'Maximum 100 words' },
               })}
             />
-            <span className="text-sm text-muted-foreground">words per day</span>
+            <span className="text-sm text-on-surface-variant">words per day</span>
           </div>
           {errors.dailyTarget && (
             <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
               {errors.dailyTarget.message}
             </p>
           )}
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-on-surface-variant">
             Recommended: 10-20 words for steady progress.
           </p>
         </div>
 
         {/* Study Reminder */}
-        <div className="flex flex-row items-center justify-between rounded-lg border p-4">
+        <div className="flex flex-row items-center justify-between rounded-2xl border border-outline-variant/30 bg-surface-container p-5">
           <div className="space-y-0.5">
-            <FieldLabel className="text-base font-medium">Study Reminders</FieldLabel>
-            <div className="text-sm text-muted-foreground">
+            <FieldLabel className="text-base font-medium font-headline">Study Reminders</FieldLabel>
+            <div className="text-sm text-on-surface-variant">
               Receive daily notifications to keep your streak.
             </div>
           </div>
@@ -140,20 +140,35 @@ export function WorkspacePreferencesStep({
               </DsSelect>
             )}
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-on-surface-variant">
             This will be the default view when you start a review session.
           </p>
         </div>
 
-        <div className="flex justify-between pt-4">
-          <DsButton type="button" variant="ghost" onClick={onBack}>
+        <div className="flex justify-between pt-6 border-t border-outline-variant/20 mt-8">
+          <DsButton
+            type="button"
+            variant="ghost"
+            onClick={onBack}
+            className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
+          >
             Back
           </DsButton>
           <div className="flex gap-2">
-            <DsButton type="button" variant="outline" onClick={onSkip}>
+            <DsButton
+              type="button"
+              variant="outline"
+              onClick={onSkip}
+              className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
+            >
               Skip
             </DsButton>
-            <DsButton type="submit">Review setup</DsButton>
+            <DsButton
+              type="submit"
+              className="bg-gradient-to-br from-primary to-primary-container text-primary-foreground rounded-full px-8 py-3 font-headline font-bold shadow-lg"
+            >
+              Review setup
+            </DsButton>
           </div>
         </div>
       </form>

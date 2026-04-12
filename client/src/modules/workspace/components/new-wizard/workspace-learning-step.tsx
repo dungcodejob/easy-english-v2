@@ -95,7 +95,7 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="goal-vocab"
-                    className="font-normal cursor-pointer"
+                    className="font-normal cursor-pointer text-on-surface-variant"
                   >
                     Build Vocabulary
                   </Label>
@@ -107,7 +107,7 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="goal-exam"
-                    className="font-normal cursor-pointer"
+                    className="font-normal cursor-pointer text-on-surface-variant"
                   >
                     Exam Preparation (IELTS, TOEIC, etc.)
                   </Label>
@@ -119,7 +119,7 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="goal-daily"
-                    className="font-normal cursor-pointer"
+                    className="font-normal cursor-pointer text-on-surface-variant"
                   >
                     Daily Practice & Habit Building
                   </Label>
@@ -151,10 +151,10 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="level-beginner"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all text-center h-full"
+                    className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-semibold">Beginner</span>
-                    <span className="text-xs text-muted-foreground mt-1">
+                    <span className="font-headline font-semibold">Beginner</span>
+                    <span className="text-xs text-on-surface-variant mt-1">
                       A1 - A2
                     </span>
                   </Label>
@@ -168,10 +168,10 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="level-intermediate"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all text-center h-full"
+                    className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-semibold">Intermediate</span>
-                    <span className="text-xs text-muted-foreground mt-1">
+                    <span className="font-headline font-semibold">Intermediate</span>
+                    <span className="text-xs text-on-surface-variant mt-1">
                       B1 - B2
                     </span>
                   </Label>
@@ -185,10 +185,10 @@ export function WorkspaceLearningStep({
                   />
                   <Label
                     htmlFor="level-advanced"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all text-center h-full"
+                    className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all text-center h-full"
                   >
-                    <span className="font-semibold">Advanced</span>
-                    <span className="text-xs text-muted-foreground mt-1">
+                    <span className="font-headline font-semibold">Advanced</span>
+                    <span className="text-xs text-on-surface-variant mt-1">
                       C1 - C2
                     </span>
                   </Label>
@@ -198,11 +198,21 @@ export function WorkspaceLearningStep({
           />
         </div>
 
-        <div className="flex justify-between pt-4">
-          <DsButton type="button" variant="outline" onClick={onBack}>
+        <div className="flex justify-between pt-6 border-t border-outline-variant/20 mt-8">
+          <DsButton
+            type="button"
+            variant="outline"
+            onClick={onBack}
+            className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
+          >
             Back
           </DsButton>
-          <DsButton type="submit">Next Step</DsButton>
+          <DsButton
+            type="submit"
+            className="bg-gradient-to-br from-primary to-primary-container text-primary-foreground rounded-full px-8 py-3 font-headline font-bold shadow-lg"
+          >
+            Next Step
+          </DsButton>
         </div>
       </form>
     </WizardStepShell>

@@ -99,12 +99,12 @@ export function WorkspaceBasicsStep({
                     />
                     <Label
                       htmlFor="type-personal"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
                     >
-                      <User className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <User className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-semibold mb-1">Personal</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-headline font-semibold mb-1">Personal</div>
+                        <div className="text-xs text-on-surface-variant">
                           For your own learning
                         </div>
                       </div>
@@ -119,12 +119,12 @@ export function WorkspaceBasicsStep({
                     />
                     <Label
                       htmlFor="type-team"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
                     >
-                      <Briefcase className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <Briefcase className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-semibold mb-1">Team</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-headline font-semibold mb-1">Team</div>
+                        <div className="text-xs text-on-surface-variant">
                           Collaborate with peers
                         </div>
                       </div>
@@ -139,12 +139,12 @@ export function WorkspaceBasicsStep({
                     />
                     <Label
                       htmlFor="type-classroom"
-                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary cursor-pointer transition-all text-center h-full"
+                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
                     >
-                      <GraduationCap className="mb-3 h-6 w-6 text-muted-foreground" />
+                      <GraduationCap className="mb-3 h-6 w-6 text-secondary" />
                       <div className="text-center">
-                        <div className="font-semibold mb-1">Classroom</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-headline font-semibold mb-1">Classroom</div>
+                        <div className="text-xs text-on-surface-variant">
                           For teachers & students
                         </div>
                       </div>
@@ -162,21 +162,25 @@ export function WorkspaceBasicsStep({
             <Textarea
               id="description"
               placeholder="What is this workspace for?"
-              className="resize-none min-h-[80px]"
+              className="resize-none min-h-[80px] bg-surface-container border-outline-variant/30 focus:border-primary"
               {...register('description')}
             />
           </div>
         </div>
 
-        <div className="flex justify-between pt-4">
+        <div className="flex justify-between pt-6 border-t border-outline-variant/20 mt-8">
           <DsButton
             type="button"
             variant="ghost"
             onClick={onBack}
+            className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
           >
             Cancel
           </DsButton>
-          <DsButton type="submit">
+          <DsButton
+            type="submit"
+            className="bg-gradient-to-br from-primary to-primary-container text-primary-foreground rounded-full px-8 py-3 font-headline font-bold shadow-lg"
+          >
             Next Step
           </DsButton>
         </div>
