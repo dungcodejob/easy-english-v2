@@ -32,17 +32,17 @@ export function SearchInput() {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <InputGroup className="h-12 rounded-full shadow-sm hover:shadow-md transition-shadow bg-background/50 backdrop-blur-sm border-primary/20">
-        <InputGroupAddon align="inline-start" className="pl-4">
+      <InputGroup className="h-14 rounded-full bg-surface-container shadow-sm hover:shadow-md transition-shadow">
+        <InputGroupAddon align="inline-start" className="pl-5">
           <InputGroupText>
-            <Search className="h-5 w-5 text-muted-foreground" />
+            <Search className="h-5 w-5 text-on-surface-variant" />
           </InputGroupText>
         </InputGroupAddon>
         <InputGroupInput
           placeholder="Search words, idioms, or phrases..."
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
-          className="text-base h-12"
+          className="text-base h-14 focus:ring-2 focus:ring-primary/30"
           autoFocus
         />
         <InputGroupAddon align="inline-end" className="pr-2">
@@ -51,7 +51,7 @@ export function SearchInput() {
               onClick={() => setLocalValue('')}
               size="icon-sm"
               variant="ghost"
-              className="rounded-full text-muted-foreground hover:text-foreground"
+              className="rounded-full text-on-surface-variant hover:text-on-surface"
               aria-label="Clear search"
             >
               <X className="h-4 w-4" />
@@ -59,7 +59,7 @@ export function SearchInput() {
           )}
         </InputGroupAddon>
       </InputGroup>
-      <p className="text-center text-xs text-muted-foreground mt-3">
+      <p className="text-center text-xs text-on-surface-variant mt-3">
         Try searching for{' '}
         <span
           className="font-medium text-primary cursor-pointer hover:underline"

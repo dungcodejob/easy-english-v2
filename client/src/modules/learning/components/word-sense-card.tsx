@@ -1,7 +1,6 @@
 import { DictionaryRoutes } from '@/shared/constants';
-import { Badge } from '@/shared/ui/shadcn/badge';
-import { Card } from '@/shared/ui/shadcn/card';
 import { Link } from '@tanstack/react-router';
+import { cn } from '@/shared/utils';
 import type { WordSenseSearchResult } from '../types/learning.types';
 
 interface WordSenseCardProps {
@@ -12,34 +11,39 @@ export function WordSenseCard({ sense }: WordSenseCardProps) {
   return (
     <Link
       to={DictionaryRoutes.senseDetail(sense.senseId)}
-      className="outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl block"
+      className="outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl block"
     >
-      <Card className="h-full hover:border-primary/50 hover:shadow-md transition-all cursor-pointer p-4 group">
+      <div className="rounded-2xl border border-outline-variant/20 bg-surface-container p-5 shadow-sm hover:shadow-md transition-all cursor-pointer group">
         <div className="flex flex-col gap-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-lg font-bold text-primary group-hover:underline">
+              <span className="text-lg font-bold text-primary group-hover:underline font-headline">
                 {sense.wordText}
               </span>
-              <Badge
-                variant="secondary"
-                className="font-mono text-[10px] lowercase"
+              <span
+                className={cn(
+                  'inline-block px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide',
+                  sense.partOfSpeech === 'adjective' && 'bg-secondary/10 text-secondary',
+                  sense.partOfSpeech === 'noun' && 'bg-primary/10 text-primary',
+                  sense.partOfSpeech === 'verb' && 'bg-tertiary-fixed/20 text-[var(--on-tertiary-fixed-variant)]',
+                  (!sense.partOfSpeech || (sense.partOfSpeech !== 'adjective' && sense.partOfSpeech !== 'noun' && sense.partOfSpeech !== 'verb')) && 'bg-surface-container-high text-on-surface-variant',
+                )}
               >
                 {sense.partOfSpeech}
-              </Badge>
+              </span>
             </div>
             {sense.cefrLevel && (
-              <Badge variant="outline" className="text-[10px] shrink-0">
+              <span className="px-2 py-0.5 rounded-full border border-outline text-[10px] text-on-surface-variant shrink-0">
                 {sense.cefrLevel}
-              </Badge>
+              </span>
             )}
           </div>
 
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-sm text-on-surface line-clamp-2 leading-relaxed">
             {sense.shortDefinition || 'No short definition available.'}
           </p>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }

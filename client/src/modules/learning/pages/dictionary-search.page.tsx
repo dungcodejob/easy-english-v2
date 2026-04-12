@@ -48,12 +48,11 @@ export default function DictionarySearchPage() {
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8 md:py-16">
       <div className="flex flex-col items-center mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4">
-          Dictionary
+        <h1 className="font-headline text-4xl font-bold text-primary mb-2">
+          Easy English Dictionary
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl text-balance">
-          Search our comprehensive database of English vocabulary, including
-          definitions, examples, idioms, and translations.
+        <p className="text-on-surface-variant text-lg max-w-2xl text-balance mb-8">
+          Search thousands of words with definitions, examples, and pronunciations.
         </p>
       </div>
 
