@@ -1,6 +1,5 @@
-import { Separator } from '@/shared/ui/shadcn/separator';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
-import { BookOpen, Quote, TrendingUp, Volume2 } from 'lucide-react';
+import { CheckCircle, GraduationCap, Volume2 } from 'lucide-react';
 import { useRef } from 'react';
 import { useLearningState } from '../hooks/use-learning-state';
 import type { WordSenseDetail as WordSenseDetailType } from '../services/dictionary.api';
@@ -18,7 +17,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
   );
   const learningState = stateResponse?.data;
 
-  // Play audio function
   const playAudio = (url: string) => {
     if (!audioRef.current) {
       audioRef.current = new Audio(url);
@@ -30,244 +28,287 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
       .catch((e) => console.error('Audio playback failed', e));
   };
 
-  // Find priority pronunciation (US first, else whatever)
   const defaultPronunciation =
     detail.pronunciations.find((p) => p.region === 'US') ||
     detail.pronunciations[0];
 
+  const masteryPercent = learningState
+    ? Math.round((learningState.masteryLevel / 5) * 100)
+    : 0;
+
   return (
-    <div className="space-y-12 animate-in fade-in duration-700 pb-12">
-      {/* Header section */}
-      <div className="relative">
-        <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
-
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-4">
-          <div className="space-y-4">
-            {/* POS badge + CEF level */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium uppercase">
-                {detail.partOfSpeech}
-              </span>
-              {detail.cefrLevel && (
-                <span className="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-medium">
-                  {detail.cefrLevel}
-                </span>
-              )}
+    <div className="space-y-12 pb-12">
+      {/* ── Hero Section ─────────────────────────────────────────── */}
+      <section className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-4">
+          {/* CEFR badge */}
+          {detail.cefrLevel && (
+            <div className="inline-flex items-center rounded-full bg-secondary-container px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-on-secondary-container">
+              Level: {detail.cefrLevel}
             </div>
+          )}
 
-            {/* Word — huge headline */}
-            <h1 className="font-headline text-6xl font-black text-primary mb-1">
+          {/* Word + audio */}
+          <div className="flex items-center gap-6">
+            <h1 className="font-headline text-6xl font-extrabold tracking-tighter text-primary md:text-8xl capitalize">
               {detail.wordText}
             </h1>
+            {defaultPronunciation?.audioUrl && (
+              <button
+                onClick={() => playAudio(defaultPronunciation.audioUrl!)}
+                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-primary shadow-md transition-all hover:bg-primary-fixed-dim active:scale-90"
+                aria-label="Play pronunciation"
+              >
+                <Volume2 className="h-7 w-7" />
+              </button>
+            )}
+          </div>
 
-            {/* Pronunciation */}
-            {defaultPronunciation && (
-              <div className="flex items-center gap-4">
-                <span className="text-2xl text-on-surface-variant italic font-headline">
-                  /{defaultPronunciation.ipa}/
-                </span>
-                {defaultPronunciation.audioUrl && (
-                  <button
-                    onClick={() => playAudio(defaultPronunciation.audioUrl!)}
-                    className="flex items-center justify-center h-10 w-10 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors"
-                    aria-label="Play pronunciation"
-                  >
-                    <Volume2 className="h-5 w-5" />
-                  </button>
-                )}
+          {/* Pronunciation + POS */}
+          {defaultPronunciation?.ipa && (
+            <p className="text-xl text-on-surface-variant font-medium">
+              /{defaultPronunciation.ipa}/ &bull;{' '}
+              <span className="italic">{detail.partOfSpeech}</span>
+            </p>
+          )}
+          {!defaultPronunciation?.ipa && detail.partOfSpeech && (
+            <p className="text-xl text-on-surface-variant font-medium">
+              {detail.partOfSpeech}
+            </p>
+          )}
+        </div>
+
+        {/* Mastery Indicator Card */}
+        {!isLoadingState && learningState && (
+          <div className="flex min-w-[280px] flex-col gap-4 rounded-xl bg-surface-container-lowest p-6 shadow-[0_12px_32px_rgba(26,27,30,0.06)]">
+            <div className="flex items-center justify-between">
+              <span className="font-headline font-semibold text-primary">
+                Mastery Level
+              </span>
+              <span className="font-bold text-secondary">
+                {masteryPercent}%
+              </span>
+            </div>
+            <div className="h-3 w-full overflow-hidden rounded-full bg-surface-container">
+              <div
+                className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
+                style={{ width: `${masteryPercent}%` }}
+              />
+            </div>
+            <p className="text-xs text-on-surface-variant">
+              Reviewed {learningState.reviewCount}
+              {learningState.reviewCount === 1 ? ' time' : ' times'}.{' '}
+              {masteryPercent >= 80
+                ? "You're doing great!"
+                : 'Keep practicing!'}
+            </p>
+          </div>
+        )}
+        {isLoadingState && <Skeleton className="h-32 w-72 rounded-xl" />}
+      </section>
+
+      {/* ── Bento Grid ───────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        {/* Definition + Examples (8 cols) */}
+        <div className="space-y-6 rounded-xl bg-surface-container-low p-8 md:col-span-8">
+          {/* Definition */}
+          <div>
+            <h3 className="mb-4 font-headline text-2xl font-bold text-primary">
+              Definition
+            </h3>
+            <p className="text-lg leading-relaxed text-on-surface">
+              {detail.definition}
+            </p>
+            {detail.definitionVi && (
+              <div className="mt-4 flex items-start gap-3 border-t border-outline-variant/30 pt-4">
+                <div className="mt-1 shrink-0 rounded bg-surface-container-high px-2 py-1 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                  VI
+                </div>
+                <p className="text-base text-on-surface-variant">
+                  {detail.definitionVi}
+                </p>
               </div>
             )}
           </div>
 
-          <div className="lg:mt-4 shrink-0">
+          {/* Examples */}
+          {detail.examples.length > 0 && (
+            <div>
+              <h3 className="mb-4 font-headline text-xl font-semibold text-primary">
+                Examples
+              </h3>
+              <ul className="space-y-4">
+                {detail.examples.map((example) => (
+                  <li key={example.order} className="flex gap-4">
+                    <CheckCircle
+                      className="mt-0.5 h-5 w-5 shrink-0 text-secondary"
+                      fill="currentColor"
+                      stroke="var(--surface-container-low)"
+                      strokeWidth={1.5}
+                    />
+                    <div>
+                      <span className="italic leading-relaxed text-on-surface-variant">
+                        "{example.text}"
+                      </span>
+                      {example.translationVi && (
+                        <p className="mt-1 text-sm text-on-surface-variant/70">
+                          {example.translationVi}
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Action Sidebar (4 cols) */}
+        <div className="space-y-6 md:col-span-4">
+          {/* CTA Card */}
+          <div className="flex flex-col items-center gap-6 rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-center text-white shadow-xl">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-md">
+              <GraduationCap className="h-10 w-10 text-tertiary-fixed-dim" />
+            </div>
+            <div>
+              <h4 className="font-headline text-2xl font-bold">
+                Ready to Learn?
+              </h4>
+              <p className="mt-2 text-sm text-on-primary-container">
+                Add this word to your personalized study hub and master it with
+                AI-powered drills.
+              </p>
+            </div>
             <AddToLearningButton
               senseId={detail.senseId}
               isLearning={!!learningState?.isLearning}
+              className="w-full flex-col gap-2"
             />
           </div>
-        </div>
-      </div>
 
-      {/* Learning State Card */}
-      {!isLoadingState && learningState && (
-        <div className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-secondary/10 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-secondary" />
-              </div>
-              <div>
-                <h3 className="font-headline font-bold text-on-surface">
-                  Learning Progress
+          {/* Etymology / Origins card (static placeholder — extend with real data when available) */}
+          <div className="rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 shadow-sm">
+            <h4 className="mb-2 font-headline font-bold text-primary">
+              Origins
+            </h4>
+            <p className="text-sm leading-relaxed text-on-surface-variant">
+              Explore the etymology and historical usage of{' '}
+              <span className="font-semibold text-primary">
+                {detail.wordText}
+              </span>{' '}
+              in the full study session.
+            </p>
+          </div>
+        </div>
+
+        {/* Synonyms & Antonyms (6 cols) */}
+        {(detail.synonyms.length > 0 || detail.antonyms.length > 0) && (
+          <div className="rounded-xl border border-outline-variant/5 bg-surface-container-lowest p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] md:col-span-6">
+            {detail.synonyms.length > 0 && (
+              <>
+                <h3 className="mb-6 font-headline text-2xl font-bold text-primary">
+                  Synonyms
                 </h3>
-                <p className="text-sm text-on-surface-variant">
-                  Reviewed {learningState.reviewCount}
-                  {learningState.reviewCount === 1 ? ' time' : ' times'}
-                </p>
+                <div className="flex flex-wrap gap-3">
+                  {detail.synonyms.map((syn) => (
+                    <span
+                      key={syn}
+                      className="cursor-pointer rounded-full bg-surface-container px-5 py-2.5 font-medium text-on-surface transition-all hover:bg-secondary-container hover:text-on-secondary-container"
+                    >
+                      {syn}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+            {detail.antonyms.length > 0 && (
+              <>
+                <h3 className="mb-6 mt-10 font-headline text-2xl font-bold text-primary">
+                  Antonyms
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {detail.antonyms.map((ant) => (
+                    <span
+                      key={ant}
+                      className="cursor-pointer rounded-full border border-error-container bg-error-container/30 px-5 py-2.5 font-medium text-on-error-container transition-all hover:bg-error-container"
+                    >
+                      {ant}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Phrases & Idioms (6 cols) */}
+        {((detail.phrases && detail.phrases.length > 0) ||
+          (detail.idioms && detail.idioms.length > 0)) && (
+          <div className="relative overflow-hidden rounded-xl bg-surface-container-low p-8 md:col-span-6">
+            <div className="relative z-10">
+              <h3 className="mb-6 font-headline text-2xl font-bold text-primary">
+                Phrases &amp; Idioms
+              </h3>
+              <div className="space-y-6">
+                {detail.phrases?.map((phrase) => (
+                  <div
+                    key={phrase}
+                    className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm"
+                  >
+                    <h5 className="mb-1 font-bold text-primary">{phrase}</h5>
+                  </div>
+                ))}
+                {detail.idioms?.map((idiom) => (
+                  <div
+                    key={idiom}
+                    className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm"
+                  >
+                    <h5 className="mb-1 font-bold text-primary">{idiom}</h5>
+                  </div>
+                ))}
               </div>
             </div>
-            <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium">
-              Level {learningState.masteryLevel}
-            </span>
+            {/* Abstract decorative blur */}
+            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-tertiary-fixed-dim opacity-20 blur-3xl transition-transform duration-700 group-hover:scale-150" />
           </div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs font-medium text-on-surface-variant">
-              <span>Beginner</span>
-              <span>Mastered</span>
-            </div>
-            <div className="h-2 bg-surface-container-high rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-secondary"
-                style={{ width: `${(learningState.masteryLevel / 5) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+        )}
 
-      {isLoadingState && (
-        <Skeleton className="h-32 w-full rounded-2xl opacity-50" />
-      )}
-
-      <Separator className="opacity-50" />
-
-      {/* Definition section */}
-      <section className="space-y-5">
-        <div className="flex items-center gap-2 text-on-surface-variant">
-          <BookOpen className="h-5 w-5 text-secondary" />
-          <h2 className="font-headline text-lg font-semibold">Definition</h2>
-        </div>
-        <div className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6 md:p-8 space-y-4">
-          <p className="text-xl md:text-2xl leading-relaxed text-on-surface font-medium">
-            {detail.definition}
-          </p>
-          {detail.definitionVi && (
-            <div className="flex items-start gap-3 mt-4 pt-4 border-t border-outline-variant/30">
-              <div className="px-2 py-1 bg-surface-container-high rounded text-xs font-bold text-on-surface-variant uppercase tracking-wider shrink-0 mt-1">
-                VI
-              </div>
-              <p className="text-lg text-on-surface-variant">
-                {detail.definitionVi}
+        <section className="col-span-12 mt-16">
+          <h3 className="lexend text-2xl font-bold text-primary mb-8 text-center">
+            Expand Your Vocabulary
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
+              <p className="lexend font-bold text-lg text-primary">Ephemeral</p>
+              <p className="text-xs text-on-surface-variant mt-1 italic">
+                adj. short-lived
               </p>
             </div>
-          )}
-        </div>
-      </section>
-
-      {/* Examples section */}
-      {detail.examples.length > 0 && (
-        <section className="space-y-5">
-          <div className="flex items-center gap-2 text-on-surface-variant">
-            <Quote className="h-5 w-5 text-secondary" />
-            <h2 className="font-headline text-lg font-semibold">Examples</h2>
-          </div>
-          <div className="space-y-3">
-            {detail.examples.map((example) => (
-              <div
-                key={example.order}
-                className="rounded-2xl border border-outline-variant/20 bg-surface-container p-5 shadow-sm"
-              >
-                <div className="flex gap-3">
-                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim shrink-0" />
-                  <p className="text-on-surface italic text-base leading-relaxed">
-                    "{example.text}"
-                  </p>
-                </div>
-                {example.translationVi && (
-                  <p className="text-sm text-on-surface-variant pl-6 mt-1">
-                    {example.translationVi}
-                  </p>
-                )}
-              </div>
-            ))}
+            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
+              <p className="lexend font-bold text-lg text-primary">
+                Melancholy
+              </p>
+              <p className="text-xs text-on-surface-variant mt-1 italic">
+                n. pensive sadness
+              </p>
+            </div>
+            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
+              <p className="lexend font-bold text-lg text-primary">
+                Resilience
+              </p>
+              <p className="text-xs text-on-surface-variant mt-1 italic">
+                n. capacity to recover
+              </p>
+            </div>
+            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
+              <p className="lexend font-bold text-lg text-primary">Ethereal</p>
+              <p className="text-xs text-on-surface-variant mt-1 italic">
+                adj. extremely delicate
+              </p>
+            </div>
           </div>
         </section>
-      )}
-
-      {/* Synonyms and Antonyms */}
-      {(detail.synonyms.length > 0 || detail.antonyms.length > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {detail.synonyms.length > 0 && (
-            <section className="space-y-4">
-              <h3 className="font-headline text-lg font-semibold text-on-surface">
-                Synonyms
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {detail.synonyms.map((syn) => (
-                  <span
-                    key={syn}
-                    className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm"
-                  >
-                    {syn}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {detail.antonyms.length > 0 && (
-            <section className="space-y-4">
-              <h3 className="font-headline text-lg font-semibold text-on-surface">
-                Antonyms
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {detail.antonyms.map((ant) => (
-                  <span
-                    key={ant}
-                    className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm"
-                  >
-                    {ant}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      )}
-
-      {/* Phrases & Idioms */}
-      {((detail.phrases && detail.phrases.length > 0) ||
-        (detail.idioms && detail.idioms.length > 0)) && (
-        <>
-          <Separator className="opacity-50" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-            {detail.phrases && detail.phrases.length > 0 && (
-              <section className="space-y-4">
-                <h3 className="font-headline text-lg font-semibold text-on-surface">
-                  Common Phrases
-                </h3>
-                <ul className="space-y-2">
-                  {detail.phrases.map((phrase) => (
-                    <li key={phrase} className="flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim shrink-0" />
-                      <span className="text-on-surface leading-relaxed">
-                        {phrase}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-            {detail.idioms && detail.idioms.length > 0 && (
-              <section className="space-y-4">
-                <h3 className="font-headline text-lg font-semibold text-on-surface">
-                  Idioms
-                </h3>
-                <ul className="space-y-2">
-                  {detail.idioms.map((idiom) => (
-                    <li key={idiom} className="flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim shrink-0" />
-                      <span className="text-on-surface leading-relaxed">
-                        {idiom}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </div>
-        </>
-      )}
+      </div>
     </div>
   );
 }

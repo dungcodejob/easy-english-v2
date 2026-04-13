@@ -13,6 +13,10 @@
   --primary-foreground: #ffffff;
   --primary-container: #1b365d;
   --on-primary-container: #87a0cd;
+  --primary-fixed: #d6e3ff;
+  --primary-fixed-dim: #aec7f7;
+  --on-primary-fixed: #001b3d;
+  --on-primary-fixed-variant: #2e476f;
 
   /* Secondary / Teal (Learning/Success) */
   --secondary: #006b5e;
@@ -112,6 +116,10 @@
   --primary-foreground: #001b3d;
   --primary-container: #1b365d;
   --on-primary-container: #d6e3ff;
+  --primary-fixed: #d6e3ff;
+  --primary-fixed-dim: #aec7f7;
+  --on-primary-fixed: #001b3d;
+  --on-primary-fixed-variant: #2e476f;
 
   --secondary: #4fdfc7;
   --secondary-foreground: #00201b;
@@ -199,6 +207,10 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-container: var(--primary-container);
   --color-on-primary-container: var(--on-primary-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-container: var(--secondary-container);

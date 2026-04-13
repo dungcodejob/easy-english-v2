@@ -1,6 +1,5 @@
 import { AuthRoutes, LearnRoutes, TopicRoutes } from '@/shared/constants';
 import { useAuthStore } from '@/shared/stores/auth-store';
-import { Button } from '@/shared/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +10,7 @@ import {
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { cn } from '@/shared/utils';
 import { useNavigate } from '@tanstack/react-router';
-import {
-  ArrowRight,
-  Bookmark,
-  BookmarkCheck,
-  ChevronDown,
-  FolderPlus,
-  Loader2,
-} from 'lucide-react';
+import { ArrowRight, BookmarkCheck, FolderPlus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddWordToTopic } from '../../topic/hooks/use-topic-mutations';
 import { useTopics } from '../../topic/hooks/use-topics';
@@ -43,17 +35,14 @@ export function AddToLearningButton({
   const { mutate: addWordToTopic } = useAddWordToTopic();
   const topics = topicsData?.data ?? [];
 
-  const handleAddToLearning = () => {
+  const handleStudyNow = () => {
     if (!isAuthenticated) {
       toast.error('You need to login to save words to your learning list');
-      navigate({
-        to: AuthRoutes.login(),
-      });
+      navigate({ to: AuthRoutes.login() });
       return;
     }
 
     if (isLearning) {
-      // Navigate to learning list or just silently ignore
       navigate({ to: LearnRoutes.base() });
       return;
     }
@@ -89,58 +78,46 @@ export function AddToLearningButton({
   };
 
   return (
-    <div className={cn('flex items-center gap-1', className)}>
-      <Button
-        onClick={handleAddToLearning}
+    <div className={cn('flex flex-col gap-2', className)}>
+      {/* Study Now button */}
+      <button
+        onClick={handleStudyNow}
         disabled={isPending || (isLearning && !isAuthenticated)}
-        variant={isLearning ? 'secondary' : 'default'}
         className={cn(
-          'transition-all duration-300 min-w-36',
+          'w-full rounded-full py-4 font-bold shadow-lg transition-transform active:scale-95 disabled:opacity-50',
           isLearning
-            ? 'bg-primary/10 text-primary border-transparent opacity-100 font-medium hover:bg-primary/20'
-            : 'shadow-md hover:shadow-lg',
+            ? 'bg-secondary text-white'
+            : 'bg-tertiary-fixed-dim text-primary hover:bg-tertiary-fixed',
         )}
       >
         {isPending ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <span className="inline-flex items-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
             Adding...
-          </>
+          </span>
         ) : isLearning ? (
-          <>
-            <BookmarkCheck className="mr-2 h-4 w-4 text-primary" />
+          <span className="inline-flex items-center gap-2">
+            <BookmarkCheck className="h-4 w-4" />
             Already Learning
-          </>
+          </span>
         ) : (
-          <>
-            <Bookmark className="mr-2 h-4 w-4" />
-            Learn This Word
-          </>
+          'Study Now'
         )}
-      </Button>
+      </button>
 
-      {isAuthenticated && (
+      {/* Add to List button */}
+      {isAuthenticated ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant={isLearning ? 'secondary' : 'default'}
-              size="icon"
-              className={cn(
-                'transition-all duration-300 w-10 shrink-0',
-                isLearning
-                  ? 'bg-primary/10 text-primary border-transparent opacity-100 hover:bg-primary/20'
-                  : 'shadow-md hover:shadow-lg',
-              )}
-            >
-              <ChevronDown className="h-4 w-4" />
-              <span className="sr-only">Add to Topic</span>
-            </Button>
+            <button className="w-full rounded-full border border-white/30 bg-transparent py-4 font-medium text-white transition-colors hover:bg-white/10">
+              Add to List
+            </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="center" className="w-56">
             <DropdownMenuLabel>Add to Topic</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {isLoadingTopics ? (
-              <div className="p-2 text-sm text-muted-foreground text-center">
+              <div className="p-2 text-center text-sm text-muted-foreground">
                 Loading topics...
               </div>
             ) : topics.length > 0 ? (
@@ -154,7 +131,7 @@ export function AddToLearningButton({
                 </DropdownMenuItem>
               ))
             ) : (
-              <div className="p-2 text-sm text-muted-foreground text-center">
+              <div className="p-2 text-center text-sm text-muted-foreground">
                 No topics found
               </div>
             )}
@@ -167,6 +144,13 @@ export function AddToLearningButton({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      ) : (
+        <button
+          onClick={() => navigate({ to: AuthRoutes.login() })}
+          className="w-full rounded-full border border-white/30 bg-transparent py-4 font-medium text-white transition-colors hover:bg-white/10"
+        >
+          Add to List
+        </button>
       )}
     </div>
   );
