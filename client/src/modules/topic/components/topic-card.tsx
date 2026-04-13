@@ -79,7 +79,7 @@ export function TopicCard({ topic }: TopicCardProps) {
                 <DsButton
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 text-on-surface-variant hover:text-on-surface"
+                  className="h-7 w-7  hover:text-on-surface"
                   onClick={(e) => e.preventDefault()}
                 >
                   <MoreHorizontal className="h-3.5 w-3.5" />

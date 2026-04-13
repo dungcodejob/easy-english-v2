@@ -22,12 +22,15 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { SurfaceInput } from '@/shared/ui/base/surface-input';
+import { SurfaceLabel } from '@/shared/ui/base/surface-label';
+import { SurfaceTextarea } from '@/shared/ui/base/surface-textarea';
+import { Button } from '@/shared/ui/shadcn/button';
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from '@/shared/ui/shadcn/dialog';
-import { Button } from '@/shared/ui/shadcn/button';
 import { useCreateTopic } from '../hooks/use-topic-mutations';
 
 // ── [API TODO] Icon picker options ──────────────────────────────────────────
@@ -159,30 +162,21 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
         <form onSubmit={handleSubmit} className="space-y-8 px-10 pb-10">
           {/* Topic Name — underline style */}
           <div className="space-y-2">
-            <label
-              htmlFor="create-topic-name"
-              className="block px-1 text-sm font-semibold tracking-wide text-[var(--on-primary-fixed-variant)]"
-            >
-              Topic Name
-            </label>
-            <input
+            <SurfaceLabel htmlFor="create-topic-name">Topic Name</SurfaceLabel>
+            <SurfaceInput
               id="create-topic-name"
-              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Business Vocabulary"
               maxLength={100}
               autoFocus
               required
-              className="w-full border-0 border-b-2 border-outline-variant/30 bg-transparent py-3 font-headline text-lg text-on-surface transition-colors placeholder:text-on-surface-variant/40 focus:border-secondary focus:ring-0"
             />
           </div>
 
           {/* [API TODO] Icon Picker — UI ready, backend does not support `icon` field */}
           <div className="space-y-3">
-            <label className="block px-1 text-sm font-semibold tracking-wide text-[var(--on-primary-fixed-variant)]">
-              Choose Icon
-            </label>
+            <SurfaceLabel>Choose Icon</SurfaceLabel>
             <div className="grid grid-cols-5 gap-3 rounded-xl bg-surface-container-low p-4 sm:grid-cols-7">
               {ICON_OPTIONS.map(({ id, icon: Icon, label }) => (
                 <button
@@ -204,9 +198,7 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
 
           {/* [API TODO] Theme Color Picker — UI ready, backend does not support `themeColor` field */}
           <div className="space-y-3">
-            <label className="block px-1 text-sm font-semibold tracking-wide text-[var(--on-primary-fixed-variant)]">
-              Choose Theme Color
-            </label>
+            <SurfaceLabel>Choose Theme Color</SurfaceLabel>
             <div className="flex flex-wrap gap-4 rounded-xl bg-surface-container-low p-4">
               {COLOR_OPTIONS.map(({ id, hex, label }) => (
                 <button
@@ -227,12 +219,9 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
 
           {/* [API TODO] Category Dropdown — UI ready, backend does not support `category` field */}
           <div className="space-y-2">
-            <label
-              htmlFor="create-topic-category"
-              className="block px-1 text-sm font-semibold tracking-wide text-[var(--on-primary-fixed-variant)]"
-            >
+            <SurfaceLabel htmlFor="create-topic-category">
               Category
-            </label>
+            </SurfaceLabel>
             <div className="relative">
               <select
                 id="create-topic-category"
@@ -267,20 +256,16 @@ export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
 
           {/* Description */}
           <div className="space-y-2">
-            <label
-              htmlFor="create-topic-desc"
-              className="block px-1 text-sm font-semibold tracking-wide text-[var(--on-primary-fixed-variant)]"
-            >
+            <SurfaceLabel htmlFor="create-topic-desc">
               Brief Description
-            </label>
-            <textarea
+            </SurfaceLabel>
+            <SurfaceTextarea
               id="create-topic-desc"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe the focus of this topic..."
               maxLength={500}
               rows={3}
-              className="w-full resize-none rounded-xl border-none bg-surface-container-low px-5 py-4 text-on-surface transition-all placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary-container"
             />
           </div>
 
