@@ -1,20 +1,25 @@
-import { Button } from '@/shared/ui/shadcn/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/shared/ui/shadcn/card';
+/**
+ * DashboardPage — Scholarly Sanctuary dashboard
+ *
+ * Layout matches the "Scholarly Sanctuary" HTML mockup:
+ * Hero greeting + Quick Start CTA, 3-col stat bento (Study Streak,
+ * Words Due, Daily Goal), Learning Progress bar chart (8-col) +
+ * Recent Topics sidebar (4-col), full-width promotional banner.
+ *
+ * [MOCK] All data is hardcoded — replace with real API hooks when available.
+ * [MOCK] Bar chart is pure CSS — replace with a charting library if needed.
+ */
+
+import { DictionaryRoutes, TopicRoutes } from '@/shared/constants';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import {
-  ArrowRight,
-  BookOpen,
-  Clock,
+  ChevronRight,
   Flame,
-  PlayCircle,
-  Star,
-  Target,
-  TrendingUp,
+  FlaskConical,
+  Gavel,
+  Landmark,
+  Play,
+  Zap,
 } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -22,222 +27,271 @@ export const Route = createFileRoute('/_(authenticated)/dashboard')({
   component: DashboardPage,
 });
 
+// [MOCK] Weekly chart data — backend does not support this yet
+const WEEKLY_DATA = [
+  { day: 'MON', learned: 40, mastered: 25 },
+  { day: 'TUE', learned: 60, mastered: 45 },
+  { day: 'WED', learned: 85, mastered: 55 },
+  { day: 'THU', learned: 50, mastered: 30 },
+  { day: 'FRI', learned: 75, mastered: 65 },
+  { day: 'SAT', learned: 30, mastered: 20 },
+  { day: 'SUN', learned: 45, mastered: 35 },
+];
+
+// [MOCK] Recent topics — backend does not support this yet
+const RECENT_TOPICS = [
+  {
+    title: 'Modern Architecture',
+    mastery: 85,
+    icon: Landmark,
+    bgColor: 'bg-primary-fixed',
+    textColor: 'text-primary',
+  },
+  {
+    title: 'Molecular Biology',
+    mastery: 32,
+    icon: FlaskConical,
+    bgColor: 'bg-secondary-fixed',
+    textColor: 'text-on-secondary-fixed-variant',
+  },
+  {
+    title: 'International Law',
+    mastery: 12,
+    icon: Gavel,
+    bgColor: 'bg-tertiary-fixed',
+    textColor: 'text-on-tertiary-fixed-variant',
+  },
+];
+
 export default function DashboardPage() {
   const { t } = useTranslation();
 
-  // Temporary mock data
-  const stats = [
-    {
-      title: t('dashboard.stats.streak'),
-      value: '12 Days',
-      icon: Flame,
-      trend: t('dashboard.stats.streak_trend', { count: 2 }),
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
-    },
-    {
-      title: t('dashboard.stats.words_learned'),
-      value: '348',
-      icon: BookOpen,
-      trend: t('dashboard.stats.words_trend', { count: 24 }),
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
-    },
-    {
-      title: t('dashboard.stats.accuracy'),
-      value: '92%',
-      icon: Target,
-      trend: t('dashboard.stats.accuracy_trend', { count: 1.2 }),
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
-    },
-  ];
-
-  const recentTopics = [
-    { title: 'Business Negotiations', progress: 80, time: '2h ago' },
-    { title: 'Travel & Airport', progress: 100, time: 'Yesterday' },
-    { title: 'Daily Conversations', progress: 45, time: '2 days ago' },
-  ];
-
   return (
-    <div className="space-y-8">
-      {/* 1. Welcome Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-primary/10 via-primary/5 to-background border border-primary/20 h-48 p-8 sm:p-10 shadow-sm transition-all">
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent" />
-        <div className="relative z-10 max-w-2xl space-y-4">
-          <h1 className="font-headline text-5xl font-extrabold text-primary mb-4 tracking-tight">
+    <div className="mx-auto max-w-[1400px] space-y-8 px-6 pb-12 pt-6 md:px-8">
+      {/* ── Hero Greeting ─────────────────────────────────────────── */}
+      <section className="relative mb-4 flex items-center justify-between">
+        <div className="max-w-2xl">
+          <h2 className="mb-4 font-headline text-5xl font-extrabold tracking-tight text-on-primary-fixed">
             {t('dashboard.welcome', { name: 'Scholar' })}
-          </h1>
-          <p className="text-muted-foreground text-lg pb-2">
+          </h2>
+          <p className="text-lg leading-relaxed text-on-surface-variant">
             <Trans
               i18nKey="dashboard.review_status"
-              values={{ count: 15 }}
-              components={[
-                <strong key="0" className="text-primary font-semibold" />,
-              ]}
+              values={{ count: 42 }}
+              components={[<span key="0" className="font-bold text-primary" />]}
             />
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              className="bg-gradient-to-br from-primary to-primary-container text-white rounded-full px-10 py-5 font-headline font-bold shadow-lg flex items-center gap-3"
-              asChild
-            >
-              {/* TODO: Update routing once /review is registered */}
-              <Link to="/">
-                <PlayCircle className="size-5" />
-                {t('dashboard.start_review')}
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" asChild>
-              <Link to="/learning">
-                <BookOpen className="size-5" />
-                {t('dashboard.explore_topic')}
-              </Link>
-            </Button>
+        </div>
+        <button className="flex items-center gap-3 rounded-full bg-gradient-to-br from-primary to-primary-container px-10 py-5 font-headline text-lg font-bold text-white shadow-lg transition-all hover:shadow-primary-container/20 active:scale-95">
+          <Play className="h-5 w-5" fill="currentColor" />
+          {t('dashboard.start_review')}
+        </button>
+      </section>
+
+      {/* ── Stats Bento Grid (3-col) ──────────────────────────────── */}
+      <div className="grid grid-cols-12 gap-8">
+        {/* Study Streak */}
+        <div className="group relative col-span-12 overflow-hidden rounded-xl bg-surface-container-lowest p-8 shadow-sm transition-all hover:shadow-md md:col-span-4">
+          {/* Watermark icon */}
+          <div className="absolute right-0 top-0 p-8 opacity-10 transition-opacity group-hover:opacity-20">
+            <Flame className="h-[120px] w-[120px]" fill="currentColor" />
+          </div>
+          <div>
+            <p className="mb-1 text-sm font-medium uppercase tracking-widest text-on-surface-variant">
+              Study Streak
+            </p>
+            <h3 className="font-headline text-6xl font-black text-on-primary-fixed">
+              07{' '}
+              <span className="text-xl font-medium text-on-surface-variant">
+                Days
+              </span>
+            </h3>
+          </div>
+          <div className="mt-8">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container">
+              <div className="h-full w-[70%] rounded-full bg-tertiary-fixed-dim" />
+            </div>
+          </div>
+          <p className="mt-4 text-xs font-medium italic text-on-surface-variant">
+            Keep going! You're in the top 5% this week.
+          </p>
+        </div>
+
+        {/* Words Due */}
+        <div className="col-span-12 rounded-xl border-l-8 border-secondary bg-surface-container-lowest p-8 shadow-sm transition-all hover:shadow-md md:col-span-4">
+          <p className="mb-1 text-sm font-medium uppercase tracking-widest text-on-surface-variant">
+            Words Due
+          </p>
+          <h3 className="font-headline text-6xl font-black text-secondary">
+            42
+          </h3>
+          <p className="mt-4 text-sm leading-relaxed text-on-surface-variant">
+            Most are from{' '}
+            <span className="font-bold text-on-surface">"Academic Verbs"</span>{' '}
+            topic. Review now to ensure long-term retention.
+          </p>
+          <div className="mt-6 flex -space-x-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-primary-fixed text-[10px] font-bold">
+              A
+            </div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-secondary-fixed text-[10px] font-bold">
+              B
+            </div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-tertiary-fixed text-[10px] font-bold">
+              C
+            </div>
           </div>
         </div>
-        {/* Decorative background element */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 sm:w-80 sm:h-80 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-32 sm:w-64 sm:h-64 bg-accent/20 rounded-full blur-3xl" />
-      </div>
 
-      {/* 2. Key Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {stats.map((stat, i) => (
-          <Card
-            key={i}
-            className="rounded-2xl border border-outline-variant/20 bg-surface-container p-6 shadow-sm"
-          >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-              <div className={`p-2 rounded-full ${stat.bgColor}`}>
-                <stat.icon className={`size-4 ${stat.color}`} />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                <TrendingUp className="size-3" />
-                {stat.trend}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* 3. Daily Goal Progress */}
-        <Card className="col-span-1 lg:col-span-1 border-border/50 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <Target className="size-5 text-primary" />{' '}
+        {/* Daily Goal — dark primary card */}
+        <div className="group relative col-span-12 overflow-hidden rounded-xl bg-primary p-8 text-white shadow-lg md:col-span-4">
+          <div className="relative z-10">
+            <p className="mb-1 text-sm font-medium uppercase tracking-widest text-on-primary-container">
               {t('dashboard.daily_goal')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col items-center justify-center p-6 bg-muted/30 rounded-xl">
-              <div className="relative size-32">
-                <svg
-                  className="size-full -rotate-90"
-                  viewBox="0 0 36 36"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="18"
-                    cy="18"
-                    r="16"
-                    fill="none"
-                    className="stroke-current text-muted stroke-2"
-                  />
-                  <circle
-                    cx="18"
-                    cy="18"
-                    r="16"
-                    fill="none"
-                    className="stroke-current text-primary stroke-2"
-                    strokeDasharray="100"
-                    strokeDashoffset="40"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-2xl font-bold">60%</span>
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-widest">
-                    {t('dashboard.completed')}
-                  </span>
-                </div>
+            </p>
+            <h3 className="mb-6 font-headline text-3xl font-bold">
+              85% {t('dashboard.completed')}
+            </h3>
+            <div className="space-y-4">
+              <div className="flex justify-between text-sm">
+                <span>Words Learned</span>
+                <span>12/15</span>
               </div>
-              <p className="mt-4 text-sm text-center text-muted-foreground">
-                <Trans
-                  i18nKey="dashboard.goal_progress"
-                  values={{ count: 12, total: 20 }}
-                  components={[<strong key="0" className="text-foreground" />]}
-                />
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                <div className="h-full w-[80%] rounded-full bg-white" />
+              </div>
+            </div>
+          </div>
+          {/* Decorative corner circle */}
+          <div className="absolute -mb-8 -mr-8 bottom-0 right-0 h-32 w-32 rounded-tl-full bg-white/5" />
+        </div>
+
+        {/* ── Learning Progress Chart (8-col) ─────────────────────── */}
+        <div className="col-span-12 rounded-xl bg-surface-container-low p-10 md:col-span-8">
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <h4 className="font-headline text-2xl font-bold text-on-primary-fixed">
+                Learning Progress
+              </h4>
+              <p className="text-sm text-on-surface-variant">
+                Comparison of words discovered vs. mastery levels reached.
               </p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex gap-6 text-xs font-bold uppercase tracking-widest">
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-primary" />
+                <span>Learned</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-tertiary-fixed-dim" />
+                <span>Mastered</span>
+              </div>
+            </div>
+          </div>
 
-        {/* 4. Recent Topics */}
-        <Card className="col-span-1 lg:col-span-2 border-border/50 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <Star className="size-5 text-yellow-500 fill-yellow-500/20" />{' '}
-              {t('dashboard.recent_topics')}
-            </CardTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-1 h-8 text-muted-foreground"
-              asChild
-            >
-              {/* TODO: Update routing once /topic is registered */}
-              <Link to="/learning">
-                {t('dashboard.view_all')} <ArrowRight className="size-3" />
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 mt-2">
-              {recentTopics.map((topic, i) => (
+          {/* [MOCK] Pure CSS bar chart */}
+          <div className="flex h-64 items-end gap-6 px-4">
+            {WEEKLY_DATA.map(({ day, learned, mastered }) => {
+              // Today (WED in mock) gets solid bars, others get translucent + hover
+              const isToday = day === 'WED';
+              return (
                 <div
-                  key={i}
-                  className="flex items-center justify-between group p-2 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                  key={day}
+                  className="group flex flex-1 flex-col items-center gap-2"
+                >
+                  <div className="flex h-full w-full items-end gap-1">
+                    <div
+                      className={`flex-1 rounded-t-lg transition-all ${
+                        isToday
+                          ? 'bg-primary'
+                          : 'bg-primary/20 group-hover:bg-primary/40'
+                      }`}
+                      style={{ height: `${learned}%` }}
+                    />
+                    <div
+                      className={`flex-1 rounded-t-lg transition-all ${
+                        isToday
+                          ? 'bg-tertiary-fixed-dim'
+                          : 'bg-tertiary-fixed-dim/20 group-hover:bg-tertiary-fixed-dim/40'
+                      }`}
+                      style={{ height: `${mastered}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-bold text-on-surface-variant">
+                    {day}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Recent Topics Sidebar (4-col) ───────────────────────── */}
+        <div className="col-span-12 flex flex-col gap-8 md:col-span-4">
+          <div className="flex-1 rounded-xl bg-surface-container-highest p-8">
+            <h4 className="mb-6 font-headline text-xl font-bold text-on-primary-fixed">
+              {t('dashboard.recent_topics')}
+            </h4>
+            <div className="space-y-4">
+              {RECENT_TOPICS.map((topic) => (
+                <Link
+                  key={topic.title}
+                  to={TopicRoutes.list()}
+                  className="group flex cursor-pointer items-center justify-between rounded-xl border border-transparent bg-surface-container-lowest p-4 transition-colors hover:border-outline-variant/30 hover:bg-white"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <BookOpen className="size-5" />
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${topic.bgColor} ${topic.textColor}`}
+                    >
+                      <topic.icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-sm group-hover:text-primary transition-colors">
-                        {topic.title}
-                      </h4>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                        <Clock className="size-3" /> {topic.time}
+                      <p className="text-sm font-bold">{topic.title}</p>
+                      <p className="text-[10px] uppercase tracking-wider text-on-surface-variant">
+                        {topic.mastery}% Mastered
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-semibold">
-                      {topic.progress}%
-                    </span>
-                    <div className="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-tertiary-fixed-dim rounded-full shadow-[0_0_8px_rgba(255,185,84,0.4)]"
-                        style={{ width: `${topic.progress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
+                  <ChevronRight className="h-5 w-5 text-on-surface-variant transition-transform group-hover:translate-x-1" />
+                </Link>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+
+        {/* ── Full-width Promotional Banner ───────────────────────── */}
+        <div className="col-span-12">
+          <div className="group relative h-64 overflow-hidden rounded-xl">
+            {/* Gradient background simulating the library image */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-fixed/60 via-surface-container to-secondary-fixed/40" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-primary/30 via-transparent to-transparent" />
+
+            {/* Overlay with CTA */}
+            <div className="absolute inset-0 flex items-center bg-gradient-to-r from-primary/90 to-transparent p-12">
+              <div className="max-w-md">
+                <h4 className="mb-2 font-headline text-3xl font-bold text-white">
+                  Philosophy Weekend
+                </h4>
+                <p className="mb-6 text-primary-fixed">
+                  Join our live deep-dive into the terminology of Existentialism
+                  this Saturday.
+                </p>
+                <Link
+                  to={DictionaryRoutes.search()}
+                  className="rounded-full bg-white px-8 py-3 text-sm font-bold text-primary transition-colors hover:bg-primary-fixed"
+                >
+                  Register Free
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* ── FAB: Quick Practice ───────────────────────────────────── */}
+      <button className="fixed bottom-8 right-8 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed shadow-2xl transition-all hover:scale-110 active:scale-95">
+        <Zap className="h-7 w-7" fill="currentColor" />
+      </button>
     </div>
   );
 }
