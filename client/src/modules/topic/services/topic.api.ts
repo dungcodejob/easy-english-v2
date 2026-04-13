@@ -57,7 +57,7 @@ export const TopicApi = {
   /** Update an existing topic. */
   updateTopic: (id: string, name: string, description?: string) =>
     apiCall(() =>
-      api.put<unknown, ApiSuccessResponse<Topic>>(`/topics/${id}`, {
+      api.put<unknown, ApiSuccessResponse<Topic>>(`/learning/topics/${id}`, {
         name,
         description,
       }),
@@ -66,14 +66,14 @@ export const TopicApi = {
   /** Delete a topic. */
   deleteTopic: (id: string) =>
     apiCall(() =>
-      api.delete<unknown, ApiSuccessResponse<null>>(`/topics/${id}`),
+      api.delete<unknown, ApiSuccessResponse<null>>(`/learning/topics/${id}`),
     ),
 
   /** Paginated list of words inside a topic. */
   getTopicWords: (topicId: string, top = 20, skip = 0) =>
     apiCall(() =>
       api.get<unknown, ApiSuccessResponse<PaginatedResponse<TopicWord>>>(
-        `/topics/${topicId}/words`,
+        `/learning/topics/${topicId}/words`,
         { params: { $top: top, $skip: skip } },
       ),
     ),
@@ -82,7 +82,7 @@ export const TopicApi = {
   addWord: (topicId: string, wordSenseId: string) =>
     apiCall(() =>
       api.post<unknown, ApiSuccessResponse<TopicWord>>(
-        `/topics/${topicId}/words`,
+        `/learning/topics/${topicId}/words`,
         { wordSenseId },
       ),
     ),
@@ -91,7 +91,7 @@ export const TopicApi = {
   removeWord: (topicId: string, wordId: string) =>
     apiCall(() =>
       api.delete<unknown, ApiSuccessResponse<null>>(
-        `/topics/${topicId}/words/${wordId}`,
+        `/learning/topics/${topicId}/words/${wordId}`,
       ),
     ),
 };

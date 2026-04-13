@@ -1,7 +1,12 @@
 /**
  * TopicWordCard — Topic module
  *
- * UI: DsAlertDialog, DsBadge, DsButton, DsCard.
+ * Bento vocabulary card matching the "Clarion Study" mockup.
+ * Shows word title, pronunciation, definition, mastery progress bar,
+ * and a remove action on hover.
+ *
+ * [MOCK] mastery percentage — backend does not support per-word mastery yet.
+ *        Uses a deterministic hash of word.id to generate a stable fake %.
  */
 
 import {
@@ -14,11 +19,11 @@ import {
   DsAlertDialogHeader,
   DsAlertDialogTitle,
   DsAlertDialogTrigger,
-  DsBadge,
-  DsButton,
-  DsCard,
 } from '@/shared/ui';
-import { BookOpen, Trash2 } from 'lucide-react';
+import { DictionaryRoutes } from '@/shared/constants';
+import { Link } from '@tanstack/react-router';
+import { Trash2, Volume2 } from 'lucide-react';
+import { useMemo } from 'react';
 import { useRemoveTopicWord } from '../hooks/use-topic-mutations';
 import type { TopicWord } from '../services/topic.api';
 
@@ -27,63 +32,78 @@ interface TopicWordCardProps {
   topicId: string;
 }
 
-const POS_COLORS: Record<string, string> = {
-  noun: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-  verb: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-  adjective:
-    'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-  adverb:
-    'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-};
+// [MOCK] Deterministic pseudo-random mastery % from word id
+function mockMastery(id: string): number {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % 101;
+}
+
+function getMasteryColor(pct: number): string {
+  if (pct >= 70) return 'bg-secondary';
+  if (pct >= 40) return 'bg-tertiary-fixed-dim';
+  return 'bg-error/60';
+}
 
 export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
   const { mutate: removeWord, isPending } = useRemoveTopicWord(topicId);
-  const posKey = (word.partOfSpeech ?? '').toLowerCase();
-  const posClass =
-    POS_COLORS[posKey] ??
-    'bg-secondary/40 text-secondary-foreground border-secondary/40';
+
+  // [MOCK] mastery — replace with real data when backend supports it
+  const mastery = useMemo(() => mockMastery(word.id), [word.id]);
 
   return (
-    <DsCard className="group flex items-start justify-between gap-4 border border-border/60 bg-card p-4 transition-all duration-200 hover:border-border hover:shadow-sm">
-      {/* Word info */}
-      <div className="flex min-w-0 items-start gap-3">
-        <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
-          <BookOpen className="h-4 w-4" />
-        </div>
-        <div className="min-w-0 space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-base font-bold lowercase text-foreground">
-              {word.wordText ?? '—'}
-            </span>
-            {word.partOfSpeech && (
-              <DsBadge
-                variant="outline"
-                className={`rounded-full px-2 py-0.5 text-xs font-semibold ${posClass}`}
-              >
-                {word.partOfSpeech}
-              </DsBadge>
-            )}
-          </div>
-          {word.definition && (
-            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-              {word.definition}
-            </p>
+    <article className="group relative cursor-pointer rounded-xl border-b-4 border-transparent bg-surface-container-lowest p-8 transition-all duration-300 hover:border-secondary hover:shadow-2xl hover:shadow-black/[0.04]">
+      {/* Header: word + audio */}
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+          <Link
+            to={DictionaryRoutes.senseDetail(word.wordSenseId)}
+            className="font-headline text-2xl font-bold text-on-primary-fixed transition-colors group-hover:text-secondary"
+          >
+            {word.wordText ?? '—'}
+          </Link>
+          {word.partOfSpeech && (
+            <p className="text-sm italic text-outline">{word.partOfSpeech}</p>
           )}
+        </div>
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container text-outline transition-colors group-hover:bg-primary-fixed group-hover:text-primary">
+          <Volume2 className="h-5 w-5" />
         </div>
       </div>
 
-      {/* Remove action */}
+      {/* Definition */}
+      {word.definition && (
+        <p className="mb-6 line-clamp-2 leading-relaxed text-on-surface-variant">
+          {word.definition}
+        </p>
+      )}
+
+      {/* [MOCK] Mastery progress bar */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-outline">
+          <span>Mastery</span>
+          <span>{mastery}%</span>
+        </div>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-high">
+          <div
+            className={`h-full rounded-full ${getMasteryColor(mastery)}`}
+            style={{ width: `${mastery}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Remove button — appears on hover */}
       <DsAlertDialog>
         <DsAlertDialogTrigger asChild>
-          <DsButton
-            variant="ghost"
-            size="icon"
-            className="group-hover:opacity-100 cursor-pointer opacity-0 shrink-0 rounded-lg text-muted-foreground transition-opacity duration-150 hover:bg-destructive/10 hover:text-destructive focus:opacity-100 disabled:pointer-events-none disabled:opacity-50"
+          <button
+            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-outline opacity-0 transition-all hover:bg-error-container/30 hover:text-error group-hover:opacity-100"
             aria-label="Remove word from topic"
             disabled={isPending}
           >
-            <Trash2 className="h-4 w-4" />
-          </DsButton>
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
         </DsAlertDialogTrigger>
         <DsAlertDialogContent>
           <DsAlertDialogHeader>
@@ -108,6 +128,6 @@ export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
           </DsAlertDialogFooter>
         </DsAlertDialogContent>
       </DsAlertDialog>
-    </DsCard>
+    </article>
   );
 }
