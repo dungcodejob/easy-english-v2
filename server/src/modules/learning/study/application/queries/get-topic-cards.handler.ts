@@ -10,11 +10,11 @@ import {
 import { TopicOrmEntity } from 'src/modules/learning/topic/infrastructure/persistence/topic.orm-entity';
 import { validate as isUuid } from 'uuid';
 
-import { GetTopicCardsQuery } from './get-topic-cards.query';
 import {
   StudyCardResponseDto,
   TopicStudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
+import { GetTopicCardsQuery } from './get-topic-cards.query';
 
 const PHASE1_CARD_CAP = 100;
 
@@ -36,11 +36,17 @@ export class GetTopicCardsHandler implements IQueryHandler<
       throw new BadRequestException('Invalid topicId format');
     }
 
-    const topic = await this.em.findOne(TopicOrmEntity, {
-      id: query.topicId,
-      tenantId: query.tenantId,
-      userId: query.userId,
-    });
+    const topic = await this.em.findOne(
+      TopicOrmEntity,
+      {
+        id: query.topicId,
+        tenantId: query.tenantId,
+        userId: query.userId,
+      },
+      {
+        populate: ['words'],
+      },
+    );
 
     if (!topic) {
       throw new NotFoundException('Topic not found');

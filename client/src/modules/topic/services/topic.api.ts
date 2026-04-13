@@ -20,8 +20,7 @@ export interface TopicWord {
   partOfSpeech?: string;
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
+export interface PaginatedResponse<T> extends ApiSuccessResponse<T[]> {
   pagination: {
     top: number;
     skip: number;
@@ -35,20 +34,21 @@ export const TopicApi = {
   /** Paginated list of topics owned by the current user. */
   getTopics: (top = 20, skip = 0) =>
     apiCall(() =>
-      api.get<unknown, ApiSuccessResponse<PaginatedResponse<Topic>>>(
-        '/topics',
-        { params: { $top: top, $skip: skip } },
-      ),
+      api.get<unknown, PaginatedResponse<Topic>>('/learning/topics', {
+        params: { $top: top, $skip: skip },
+      }),
     ),
 
   /** Get single topic details. */
   getTopicDetail: (id: string) =>
-    apiCall(() => api.get<unknown, ApiSuccessResponse<Topic>>(`/topics/${id}`)),
+    apiCall(() =>
+      api.get<unknown, ApiSuccessResponse<Topic>>(`/learning/topics/${id}`),
+    ),
 
   /** Create a new topic. */
   createTopic: (name: string, description?: string) =>
     apiCall(() =>
-      api.post<unknown, ApiSuccessResponse<Topic>>('/topics', {
+      api.post<unknown, ApiSuccessResponse<Topic>>('/learning/topics', {
         name,
         description,
       }),

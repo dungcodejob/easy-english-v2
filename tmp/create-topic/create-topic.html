@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#d6e3ff",
+                    "surface-variant": "#e3e2e6",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#87a0cd",
+                    "secondary-fixed": "#97f3e2",
+                    "surface-dim": "#dad9dd",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1b1e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#00201b",
+                    "outline-variant": "#c4c6cf",
+                    "inverse-primary": "#aec7f7",
+                    "surface": "#faf9fd",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#465f88",
+                    "primary": "#002046",
+                    "secondary-fixed-dim": "#7ad7c6",
+                    "background": "#faf9fd",
+                    "inverse-on-surface": "#f1f0f4",
+                    "surface-container": "#efedf1",
+                    "tertiary": "#311d00",
+                    "primary-fixed-dim": "#aec7f7",
+                    "on-tertiary-container": "#d4922a",
+                    "on-surface-variant": "#44474e",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "surface-container-high": "#e9e7eb",
+                    "on-tertiary-fixed": "#291800",
+                    "tertiary-container": "#4d3000",
+                    "secondary": "#006b5e",
+                    "on-secondary-container": "#006f62",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e3e2e6",
+                    "primary-container": "#1b365d",
+                    "secondary-container": "#94f0df",
+                    "on-primary-fixed": "#001b3d",
+                    "on-secondary-fixed-variant": "#005047",
+                    "tertiary-fixed": "#ffddb4",
+                    "inverse-surface": "#2f3033",
+                    "outline": "#74777f",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "surface-container-low": "#f4f3f7",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "on-error": "#ffffff",
+                    "on-background": "#1a1b1e",
+                    "surface-bright": "#faf9fd",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-overlay {
+            backdrop-filter: blur(12px);
+            background-color: rgba(26, 27, 30, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- Top Navigation Anchor (Shared Component) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm">
+<div class="text-2xl font-bold text-blue-900 dark:text-blue-50 font-lexend tracking-tight">Scholarly Sanctuary</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors" href="#">Curriculum</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors" href="#">Library</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors" href="#">Progress</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-sm focus:ring-2 focus:ring-primary-container w-64" placeholder="Search knowledge..." type="text"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">settings</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="professional headshot of a scholar in a library setting with soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1D2aVDKd8TaXTZ-QScBcb1h6GP5umva4-SSble9At4-iuZxv7WYKRY-dhCHrNjYvnDCV2J6vS4KrjSUr5QEbEX8u8-2bttHuBTeSj7v_d0_Z_6Wg0QUg348iQLAO-BE0PzmladQU8zRIM5nIR9HIoaObzukzdPsd-QGF8MHJ_8PLzXGsMpsIiZAAA3ztM-QWkWnduJKAuFTpTLW27Pm5muvx4t6LWjWqFzcocAElqXXf-02NkoPkIZm0SH9yF54u-kbxkxqS1Rlw"/>
+</div>
+</header>
+<div class="flex h-screen pt-16">
+<!-- Side Navigation Anchor (Shared Component) -->
+<aside class="hidden lg:flex flex-col h-full py-6 bg-slate-50 dark:bg-slate-950 h-screen w-64 border-r-0 font-lexend antialiased">
+<div class="px-6 mb-8">
+<div class="text-xl font-black text-blue-900 dark:text-blue-50">The Sanctuary</div>
+<div class="text-xs text-slate-500 uppercase tracking-widest">Advanced Learning</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 bg-blue-100/50 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 rounded-full px-4 py-3 mx-2" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span>Topics</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">category</span>
+<span>Categories</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span>Resources</span>
+</a>
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 mx-2 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="px-2 mt-auto">
+<a class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Help Center</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-8 bg-surface">
+<div class="max-w-6xl mx-auto">
+<header class="flex justify-between items-end mb-12">
+<div>
+<h1 class="text-4xl font-headline font-bold text-on-primary-fixed tracking-tight mb-2">Knowledge Topics</h1>
+<p class="text-on-surface-variant max-w-lg">Manage and explore your academic curriculum. Organize your thoughts into focused areas of study.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-3 rounded-full font-headline font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                        Add Topic
+                    </button>
+</header>
+<!-- Background Content: Topics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Sample Topic Cards (Visual Context) -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Linguistics</span>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+<h3 class="text-xl font-headline font-semibold mb-3">Syntax &amp; Structure</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Exploring the deep patterns of human language generation and rule sets.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="close up of a person smiling subtly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD49AnvTjG_5WY1OdTfUeIhc9D0ei8ORA-hi1jSnEVQ0__-gn3u_nzZ7tHF9R1HiT1BF6O3WxvJFIYdJ328PnJ-JWXPW30HV1bgHpRCFZ0MZqUIhBKsPl3nL1JQWkGjY4aB6zhY4H075odJlgFmanR6eP2pl0FXO2uG4S2UgBfAbT_XrkWsZFqcwJtUGsqErV2ig5iHH9tA1NvA0QDKqC7UvZ2k3BxpDJzMr-OrmYicaMFduknjxGjgEFfnvCzRYF0Lh6_3DuXUEz8"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="portrait of a focused student in a dark room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuasuSrvEI934631OfyCPdJE7uvGDvTY0n6QcoEG3MhjZr57w9-dVdYSfpy3tU3cY-pS4DSK7ol1dX7rUVLszBSBDRqh4pSZSzuAb3ssm0CfL_tli1QLo1YPidAS2HcXFIZIDHqIxkQOROlKp_pHA_Q1CEP-W3zEUEXo-P0Rs65skP70jXUqdIbATz0FUk4BtjLVDnsThBnMXn67npFQ3VvhXt6_biNuF97gpmkCx4_KWDN51I9tmM0eOGi3nchqtRXSCk67-5IaM"/>
+</div>
+<span class="text-xs text-on-surface-variant font-medium">12 Resources</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">History</span>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+<h3 class="text-xl font-headline font-semibold mb-3">Ancient Civilizations</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Tracing the origins of societal architecture in Mesopotamia and the Nile Valley.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-white border-2 border-surface">+4</div>
+</div>
+<span class="text-xs text-on-surface-variant font-medium">28 Resources</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ADD TOPIC MODAL OVERLAY -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 glass-overlay">
+<div class="bg-surface-container-lowest w-full max-w-lg rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.12)] overflow-hidden">
+<!-- Modal Header -->
+<div class="px-10 pt-10 pb-6">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<h2 class="text-2xl font-headline font-bold text-on-primary-fixed tracking-tight">Create New Topic</h2>
+<p class="text-on-surface-variant text-sm">Define a new area of study for your sanctuary.</p>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Modal Form -->
+<form class="px-10 pb-10 space-y-8">
+<!-- Topic Name Input -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-primary-fixed-variant tracking-wide px-1" for="topic-name">Topic Name</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-outline-variant/30 focus:border-secondary focus:ring-0 text-lg font-headline placeholder:text-on-surface-variant/40 py-3 transition-colors" id="topic-name" name="topic-name" placeholder="e.g. Quantum Philology" type="text"/>
+</div><div class="space-y-3">
+<label class="block text-sm font-semibold text-on-primary-fixed-variant tracking-wide px-1">Choose Icon</label>
+<div class="grid grid-cols-7 gap-3 bg-surface-container-low p-4 rounded-xl">
+<div class="flex items-center justify-center p-2 rounded-lg bg-primary text-white cursor-pointer shadow-sm">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">auto_stories</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">translate</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">science</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">biotech</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">calculate</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">work</span>
+</div>
+<div class="flex items-center justify-center p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">travel_explore</span>
+</div>
+</div>
+</div>
+<!-- Category Dropdown -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-primary-fixed-variant tracking-wide px-1" for="category">Category</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface appearance-none focus:ring-2 focus:ring-primary-container transition-all" id="category" name="category">
+<option disabled="" selected="" value="">Select a curriculum category</option>
+<option value="linguistics">Linguistics &amp; Semantics</option>
+<option value="history">Historical Analysis</option>
+<option value="philosophy">Classical Philosophy</option>
+<option value="science">Natural Sciences</option>
+<option value="arts">Fine Arts &amp; Aesthetics</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Brief Description -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-on-primary-fixed-variant tracking-wide px-1" for="description">Brief Description</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary-container resize-none transition-all" id="description" name="description" placeholder="Describe the focus of this academic pursuit..." rows="3"></textarea>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center justify-end gap-6 pt-4">
+<button class="text-on-primary-fixed-variant font-headline font-semibold text-sm hover:text-primary transition-colors" type="button">
+                        Cancel
+                    </button>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-10 py-4 rounded-full font-headline font-bold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all" type="submit">
+                        Create Topic
+                    </button>
+</div>
+</form>
+<!-- Subtle Decorative Bottom Element -->
+<div class="h-1.5 w-full bg-gradient-to-r from-primary via-secondary to-tertiary-fixed-dim opacity-50"></div>
+</div>
+</div>
+</body></html>
