@@ -1,11 +1,11 @@
 /**
- * UpdateTopicDialog — Topic module
+ * CreateTopicDialog — Topic module
  *
  * Styled to match the "Scholarly Sanctuary" modal mockup.
  * Uses the shared TopicForm (React Hook Form + Zod) for validation.
  */
 
-import { Pencil } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { Button } from '@/shared/ui/shadcn/button';
@@ -14,23 +14,20 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/shared/ui/shadcn/dialog';
-import { useUpdateTopic } from '../hooks/use-topic-mutations';
-import type { Topic } from '../services/topic.api';
-import { TopicForm, type TopicFormValues } from './topic.form';
+import { TopicForm, type TopicFormValues } from '../topic.form';
+import { useCreateTopic } from './use-create-topic';
 
-interface UpdateTopicDialogProps {
-  topic: Topic;
+interface CreateTopicDialogProps {
   trigger?: React.ReactNode;
 }
 
-export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
+export function CreateTopicDialog({ trigger }: CreateTopicDialogProps) {
   const [open, setOpen] = useState(false);
-  const { mutate: updateTopic, isPending } = useUpdateTopic();
+  const { mutate: createTopic, isPending } = useCreateTopic();
 
-  const onSubmit = (data: TopicFormValues) => {
-    updateTopic(
+  const handleSubmit = (data: TopicFormValues) => {
+    createTopic(
       {
-        id: topic.id,
         name: data.name,
         description: data.description || undefined,
         // [API TODO] Include these when backend supports them:
@@ -50,9 +47,9 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button variant="ghost" size="sm" className="gap-2">
-            <Pencil className="h-4 w-4" />
-            Edit
+          <Button className="gap-2 rounded-xl font-semibold">
+            <Plus className="h-4 w-4" />
+            New Topic
           </Button>
         )}
       </DialogTrigger>
@@ -63,10 +60,10 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <h2 className="font-headline text-2xl font-bold tracking-tight text-on-primary-fixed">
-                Edit Topic
+                Create New Topic
               </h2>
               <p className="text-sm text-on-surface-variant">
-                Update your topic details and preferences.
+                Define a new area of study for your learning journey.
               </p>
             </div>
             <button
@@ -90,18 +87,14 @@ export function UpdateTopicDialog({ topic, trigger }: UpdateTopicDialogProps) {
           </div>
         </div>
 
-        {/* Form — pre-filled with existing topic data */}
+        {/* Form */}
         <TopicForm
-          defaultValues={{
-            name: topic.name,
-            description: topic.description ?? '',
-          }}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           onCancel={() => setOpen(false)}
           isPending={isPending}
-          submitLabel="Save Changes"
-          pendingLabel="Saving…"
-          idPrefix="update-topic"
+          submitLabel="Create Topic"
+          pendingLabel="Creating…"
+          idPrefix="create-topic"
         />
 
         {/* Decorative gradient strip */}

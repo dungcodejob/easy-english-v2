@@ -3,9 +3,9 @@ import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { createFileRoute } from '@tanstack/react-router';
 import { FolderOpen, PlusCircle, Sparkles } from 'lucide-react';
 import { useState } from 'react';
-import { CreateTopicDialog } from '../components/create-topic-dialog';
-import { TopicCard } from '../components/topic-card';
-import { useTopics } from '../hooks/use-topics';
+import { CreateTopicDialog } from '../../components/create-topic/create-topic-dialog';
+import { TopicCard } from '../../components/topic-card';
+import { useTopics } from '../../hooks/use-topics';
 
 export const Route = createFileRoute('/_(authenticated)/learning/topics')({
   component: TopicsPage,

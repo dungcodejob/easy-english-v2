@@ -78,6 +78,10 @@ export type {
   DsAlertDialogTriggerProps,
 } from './base/ds-alert-dialog';
 
+/* ─── Common Components ─────────────────────────── */
+export { FormField } from './common/form-field';
+export type { FormFieldProps, FormFieldRenderArgs } from './common/form-field';
+
 /* ─── Pattern Components ────────────────────────── */
 export { FormWrapper } from './patterns/form-wrapper';
 export { ModalWrapper } from './patterns/modal-wrapper';

@@ -31,7 +31,10 @@ export const routes = rootRoute('root.tsx', [
       LearnRoutes.study(),
       './modules/learning/pages/study-session.page.tsx',
     ),
-    route(TopicRoutes.list(), './modules/topic/pages/topics.page.tsx'),
+    route(
+      TopicRoutes.list(),
+      './modules/topic/screens/topics/topics.screen.tsx',
+    ),
     route(
       TopicRoutes.detail('$topicId'),
       './modules/topic/pages/topic-detail.page.tsx',

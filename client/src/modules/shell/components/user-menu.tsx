@@ -9,12 +9,7 @@ import {
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/shared/ui/shadcn/avatar';
 import { Button } from '@/shared/ui/shadcn/button';
-import {
-  Settings,
-  User,
-  LogOut,
-  HelpCircle,
-} from 'lucide-react';
+import { Settings, User, LogOut, HelpCircle } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import { SettingsRoutes } from '@/shared/constants';
 import { LearnRoutes } from '@/shared/constants';

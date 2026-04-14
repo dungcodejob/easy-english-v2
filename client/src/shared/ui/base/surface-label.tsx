@@ -16,7 +16,7 @@ function SurfaceLabel({ className, ...props }: React.ComponentProps<'label'>) {
     <label
       data-slot="surface-label"
       className={cn(
-        'block px-1 text-sm font-semibold tracking-wide text-on-primary-fixed-variant',
+        'block text-sm font-semibold tracking-wide text-on-primary-fixed-variant',
         className,
       )}
       {...props}
