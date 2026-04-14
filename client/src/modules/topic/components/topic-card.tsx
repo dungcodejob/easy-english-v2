@@ -8,23 +8,15 @@ import {
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { Link } from '@tanstack/react-router';
 import { BookOpen, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
-import { TopicDialog } from './topic-dialog';
 
 interface TopicCardProps {
   topic: Topic;
+  onEdit?: (topic: Topic) => void;
+  onDelete?: (topic: Topic) => void;
 }
 
-export function TopicCard({ topic }: TopicCardProps) {
-  const { mutate: deleteTopic } = useDeleteTopic();
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    deleteTopic(topic.id);
-  };
-
+export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-xl bg-surface-container-lowest p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
       {/* Decorative corner blob */}
@@ -44,45 +36,52 @@ export function TopicCard({ topic }: TopicCardProps) {
             <BookOpen className="h-7 w-7 text-primary" />
           </div>
 
-          <div
-            className="flex items-center gap-0.5"
-            onClick={(e) => e.preventDefault()}
-          >
-            <TopicDialog
-              topic={topic}
-              trigger={
+          {(onEdit || onDelete) && (
+            <div
+              className="flex items-center gap-0.5"
+              onClick={(e) => e.preventDefault()}
+            >
+              {onEdit && (
                 <DsButton
                   variant="ghost"
                   size="icon"
                   className="h-7 w-7 text-on-surface-variant hover:text-on-surface"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onEdit(topic);
+                  }}
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </DsButton>
-              }
-            />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <DsButton
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7  hover:text-on-surface"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <MoreHorizontal className="h-3.5 w-3.5" />
-                </DsButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32">
-                <DropdownMenuItem
-                  onClick={handleDelete}
-                  className="cursor-pointer text-destructive focus:text-destructive"
-                >
-                  <Trash2 className="mr-2 h-3.5 w-3.5" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+              )}
+              {onDelete && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <DsButton
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 hover:text-on-surface"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <MoreHorizontal className="h-3.5 w-3.5" />
+                    </DsButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-32">
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onDelete(topic);
+                      }}
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                    >
+                      <Trash2 className="mr-2 h-3.5 w-3.5" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Title */}

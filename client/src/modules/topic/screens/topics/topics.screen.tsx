@@ -8,11 +8,16 @@ import {
   PlusCircle,
   Sparkles,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-import { TopicDialog } from '../../components/topic-dialog';
+import {
+  TopicDialog,
+  type TopicDialogHandle,
+} from '../../components/create-or-update-topic/topic-dialog';
 import { TopicCard } from '../../components/topic-card';
+import { useDeleteTopic } from '../../hooks/use-topic-mutations';
 import { useTopics } from '../../hooks/use-topics';
+import type { Topic } from '../../services/topic.api';
 
 export const Route = createFileRoute('/_(authenticated)/learning/topics')({
   component: TopicsPage,
@@ -22,12 +27,17 @@ const PAGE_LIMIT = 20;
 
 export default function TopicsPage() {
   const [page, setPage] = useState(1);
+  const dialogRef = useRef<TopicDialogHandle>(null);
   const { data, isLoading, isError } = useTopics(page, PAGE_LIMIT);
+  const { mutate: deleteTopic } = useDeleteTopic();
 
   const topics = data?.data ?? [];
   const totalCount = data?.pagination?.count ?? 0;
   const pagination = data?.pagination;
   const totalPages = pagination ? Math.ceil(totalCount / PAGE_LIMIT) : 1;
+
+  const handleEdit = (topic: Topic) => dialogRef.current?.open(topic);
+  const handleDelete = (topic: Topic) => deleteTopic(topic.id);
 
   return (
     <div className="px-6 pb-12 md:px-12">
@@ -139,7 +149,12 @@ export default function TopicsPage() {
         <>
           <div className="mb-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
             {topics.map((topic) => (
-              <TopicCard key={topic.id} topic={topic} />
+              <TopicCard
+                key={topic.id}
+                topic={topic}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
 
@@ -186,6 +201,9 @@ export default function TopicsPage() {
           )}
         </>
       )}
+
+      {/* ── Imperative edit dialog (opened via ref) ──────────────── */}
+      <TopicDialog ref={dialogRef} />
     </div>
   );
 }

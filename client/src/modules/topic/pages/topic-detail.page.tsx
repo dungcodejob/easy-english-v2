@@ -41,9 +41,12 @@ import {
   Trash2,
   Zap,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import {
+  TopicDialog,
+  type TopicDialogHandle,
+} from '../components/create-or-update-topic/topic-dialog';
 import { TopicWordCard } from '../components/topic-word-card';
-import { TopicDialog } from '../components/topic-dialog';
 import { useTopicDetail } from '../hooks/use-topic-detail';
 import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import { useTopicWords } from '../hooks/use-topic-words';
@@ -63,6 +66,7 @@ export default function TopicDetailPage() {
   const { topicId } = useParams({
     from: '/_(authenticated)/learning/topics/$topicId',
   });
+  const dialogRef = useRef<TopicDialogHandle>(null);
   const [page, setPage] = useState(1);
   // [MOCK] active filter — UI only, no filtering logic
   const [activeFilter, setActiveFilter] = useState('All');
@@ -187,15 +191,13 @@ export default function TopicDetailPage() {
               <button className="rounded-full bg-gradient-to-br from-primary to-primary-container px-8 py-4 font-headline text-lg font-bold text-white shadow-xl shadow-primary/10 transition-all hover:shadow-primary/20 active:scale-95">
                 Start Topic Review
               </button>
-              <TopicDialog
-                topic={topic}
-                trigger={
-                  <button className="flex items-center gap-2 rounded-full bg-surface-container px-5 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high">
-                    <Pencil className="h-3.5 w-3.5" />
-                    Edit
-                  </button>
-                }
-              />
+              <button
+                onClick={() => dialogRef.current?.open(topic)}
+                className="flex items-center gap-2 rounded-full bg-surface-container px-5 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                Edit
+              </button>
               <DsAlertDialog>
                 <DsAlertDialogTrigger asChild>
                   <button className="flex items-center gap-2 rounded-full bg-error-container/30 px-5 py-2.5 text-sm font-medium text-on-error-container transition-colors hover:bg-error-container">
@@ -408,6 +410,9 @@ export default function TopicDetailPage() {
       <button className="fixed bottom-8 right-8 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed shadow-2xl transition-all hover:scale-110 active:scale-95">
         <Zap className="h-7 w-7" fill="currentColor" />
       </button>
+
+      {/* ── Imperative edit dialog ───────────────────────────────── */}
+      <TopicDialog ref={dialogRef} />
     </div>
   );
 }

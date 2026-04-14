@@ -27,8 +27,8 @@ import { FormField } from '@/shared/ui/common/form-field';
 import {
   topicFormSchema,
   type TopicFormValues,
-} from '../models/topic-form.schema';
-export type { TopicFormValues } from '../models/topic-form.schema';
+} from '../../models/topic-form.schema';
+export type { TopicFormValues } from '../../models/topic-form.schema';
 
 // ── Constants ───────────────────────────────────────────────────────────────
 const ICON_OPTIONS = [
@@ -151,9 +151,7 @@ export function TopicForm({
                 onClick={() => field.onChange(id)}
                 title={label}
                 className={`h-8 w-8 rounded-full transition-transform hover:scale-110 ${
-                  field.value === id
-                    ? 'ring-2 ring-primary ring-offset-2'
-                    : ''
+                  field.value === id ? 'ring-2 ring-primary ring-offset-2' : ''
                 }`}
                 style={{ backgroundColor: hex }}
               />
