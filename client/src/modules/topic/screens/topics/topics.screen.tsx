@@ -1,13 +1,7 @@
-import { DsButton } from '@/shared/ui';
+import { DsButton, DsPagination } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  ChevronLeft,
-  ChevronRight,
-  FolderOpen,
-  PlusCircle,
-  Sparkles,
-} from 'lucide-react';
+import { FolderOpen, PlusCircle, Sparkles } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 import {
@@ -159,46 +153,12 @@ export default function TopicsPage() {
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
-              <div className="flex items-center gap-4 rounded-full bg-surface-container-low px-8 py-3 shadow-sm">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page <= 1}
-                  className="p-2 text-on-surface-variant transition-colors hover:text-primary disabled:opacity-30"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <div className="flex gap-2">
-                  {Array.from({ length: Math.min(totalPages, 5) }).map(
-                    (_, i) => {
-                      const pageNum = i + 1;
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setPage(pageNum)}
-                          className={
-                            page === pageNum
-                              ? 'flex h-8 w-8 items-center justify-center rounded-full bg-primary font-headline text-sm text-white'
-                              : 'flex h-8 w-8 cursor-pointer items-center justify-center rounded-full font-headline text-sm text-on-surface-variant hover:bg-surface-container-high'
-                          }
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    },
-                  )}
-                </div>
-                <button
-                  onClick={() => setPage((p) => p + 1)}
-                  disabled={!pagination?.hasMore}
-                  className="p-2 text-on-surface-variant transition-colors hover:text-primary disabled:opacity-30"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          )}
+          <DsPagination
+            page={10}
+            totalPages={20}
+            onPageChange={setPage}
+            className="mt-20"
+          />
         </>
       )}
 

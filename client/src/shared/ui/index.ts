@@ -45,6 +45,8 @@ export { DsStatCard } from './base/ds-stat-card';
 
 export { DsEmptyState } from './base/ds-empty-state';
 
+export { DsPagination } from './base/ds-pagination';
+
 export { DsProgress } from './base/ds-progress';
 export type { DsProgressProps } from './base/ds-progress';
 

@@ -21,6 +21,7 @@ import {
   DsAlertDialogHeader,
   DsAlertDialogTitle,
   DsAlertDialogTrigger,
+  DsPagination,
 } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import {
@@ -32,8 +33,6 @@ import {
 import {
   ArrowLeft,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
   Inbox,
   Pencil,
   Plus,
@@ -47,9 +46,14 @@ import {
   type TopicDialogHandle,
 } from '../components/create-or-update-topic/topic-dialog';
 import { TopicWordCard } from '../components/topic-word-card';
+import { useConfirm } from '@/shared/ui/common/confirm-dialog/use-confirm-dialog';
 import { useTopicDetail } from '../hooks/use-topic-detail';
-import { useDeleteTopic } from '../hooks/use-topic-mutations';
+import {
+  useDeleteTopic,
+  useRemoveTopicWord,
+} from '../hooks/use-topic-mutations';
 import { useTopicWords } from '../hooks/use-topic-words';
+import type { TopicWord } from '../services/topic.api';
 
 export const Route = createFileRoute(
   '/_(authenticated)/learning/topics/$topicId',
@@ -85,7 +89,27 @@ export default function TopicDetailPage() {
   } = useTopicWords(topicId, page, WORD_LIMIT);
 
   const { mutate: deleteTopic } = useDeleteTopic();
+  const { mutate: removeWord } = useRemoveTopicWord(topicId);
+  const { confirm } = useConfirm();
   const navigate = useNavigate();
+
+  const handleRemoveWord = async (word: TopicWord) => {
+    const ok = await confirm({
+      title: 'Remove word?',
+      description: (
+        <>
+          This will remove{' '}
+          <strong className="text-foreground">
+            {word.wordText ?? 'this word'}
+          </strong>{' '}
+          from the topic. The word will still be in your learning list.
+        </>
+      ),
+      confirmText: 'Remove',
+      destructive: true,
+    });
+    if (ok) removeWord(word.id);
+  };
 
   const handleDelete = () => {
     deleteTopic(topicId, {
@@ -334,7 +358,11 @@ export default function TopicDetailPage() {
         <>
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {words.map((word) => (
-              <TopicWordCard key={word.id} word={word} topicId={topicId} />
+              <TopicWordCard
+                key={word.id}
+                word={word}
+                onRemove={handleRemoveWord}
+              />
             ))}
 
             {/* Add New Word slot — matches mockup's dashed card */}
@@ -352,57 +380,13 @@ export default function TopicDetailPage() {
           </section>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-16 flex justify-center pb-12">
-              <nav className="flex items-center gap-2">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page <= 1}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-outline transition-colors hover:bg-surface-container-low disabled:opacity-30"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
-                  const pageNum = i + 1;
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setPage(pageNum)}
-                      className={
-                        page === pageNum
-                          ? 'flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white'
-                          : 'flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low'
-                      }
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-                {totalPages > 5 && (
-                  <>
-                    <span className="px-2 text-outline">...</span>
-                    <button
-                      onClick={() => setPage(totalPages)}
-                      className={
-                        page === totalPages
-                          ? 'flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white'
-                          : 'flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low'
-                      }
-                    >
-                      {totalPages}
-                    </button>
-                  </>
-                )}
-                <button
-                  onClick={() => setPage((p) => p + 1)}
-                  disabled={!wordPagination?.hasMore}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-outline transition-colors hover:bg-surface-container-low disabled:opacity-30"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </nav>
-            </div>
-          )}
+          <DsPagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            variant="minimal"
+            className="mt-16 pb-12"
+          />
         </>
       )}
 

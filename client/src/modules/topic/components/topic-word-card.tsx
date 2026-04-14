@@ -1,35 +1,25 @@
 /**
- * TopicWordCard — Topic module
+ * TopicWordCard — Topic module (presentational)
  *
  * Bento vocabulary card matching the "Clarion Study" mockup.
  * Shows word title, pronunciation, definition, mastery progress bar,
- * and a remove action on hover.
+ * and a remove button on hover.
+ *
+ * Pure presentational — emits `onRemove` callback, parent handles mutation.
  *
  * [MOCK] mastery percentage — backend does not support per-word mastery yet.
  *        Uses a deterministic hash of word.id to generate a stable fake %.
  */
 
-import {
-  DsAlertDialog,
-  DsAlertDialogAction,
-  DsAlertDialogCancel,
-  DsAlertDialogContent,
-  DsAlertDialogDescription,
-  DsAlertDialogFooter,
-  DsAlertDialogHeader,
-  DsAlertDialogTitle,
-  DsAlertDialogTrigger,
-} from '@/shared/ui';
 import { DictionaryRoutes } from '@/shared/constants';
 import { Link } from '@tanstack/react-router';
 import { Trash2, Volume2 } from 'lucide-react';
 import { useMemo } from 'react';
-import { useRemoveTopicWord } from '../hooks/use-topic-mutations';
 import type { TopicWord } from '../services/topic.api';
 
 interface TopicWordCardProps {
   word: TopicWord;
-  topicId: string;
+  onRemove?: (word: TopicWord) => void;
 }
 
 // [MOCK] Deterministic pseudo-random mastery % from word id
@@ -47,9 +37,7 @@ function getMasteryColor(pct: number): string {
   return 'bg-error/60';
 }
 
-export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
-  const { mutate: removeWord, isPending } = useRemoveTopicWord(topicId);
-
+export function TopicWordCard({ word, onRemove }: TopicWordCardProps) {
   // [MOCK] mastery — replace with real data when backend supports it
   const mastery = useMemo(() => mockMastery(word.id), [word.id]);
 
@@ -95,39 +83,15 @@ export function TopicWordCard({ word, topicId }: TopicWordCardProps) {
       </div>
 
       {/* Remove button — appears on hover */}
-      <DsAlertDialog>
-        <DsAlertDialogTrigger asChild>
-          <button
-            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-outline opacity-0 transition-all hover:bg-error-container/30 hover:text-error group-hover:opacity-100"
-            aria-label="Remove word from topic"
-            disabled={isPending}
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        </DsAlertDialogTrigger>
-        <DsAlertDialogContent>
-          <DsAlertDialogHeader>
-            <DsAlertDialogTitle>Remove word?</DsAlertDialogTitle>
-            <DsAlertDialogDescription>
-              This will remove{' '}
-              <strong className="text-foreground">
-                {word.wordText ?? 'this word'}
-              </strong>{' '}
-              from the topic. The word will still be in your learning list.
-            </DsAlertDialogDescription>
-          </DsAlertDialogHeader>
-          <DsAlertDialogFooter>
-            <DsAlertDialogCancel>Cancel</DsAlertDialogCancel>
-            <DsAlertDialogAction
-              isLoading={isPending}
-              loadingLabel="Removing…"
-              onClick={() => removeWord(word.id)}
-            >
-              Remove
-            </DsAlertDialogAction>
-          </DsAlertDialogFooter>
-        </DsAlertDialogContent>
-      </DsAlertDialog>
+      {onRemove && (
+        <button
+          onClick={() => onRemove(word)}
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-outline opacity-0 transition-all hover:bg-error-container/30 hover:text-error group-hover:opacity-100"
+          aria-label="Remove word from topic"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      )}
     </article>
   );
 }
