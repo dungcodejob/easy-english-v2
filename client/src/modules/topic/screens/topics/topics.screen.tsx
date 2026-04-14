@@ -1,9 +1,16 @@
 import { DsButton } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { createFileRoute } from '@tanstack/react-router';
-import { FolderOpen, PlusCircle, Sparkles } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  FolderOpen,
+  PlusCircle,
+  Sparkles,
+} from 'lucide-react';
 import { useState } from 'react';
-import { CreateTopicDialog } from '../../components/create-topic/create-topic-dialog';
+
+import { TopicDialog } from '../../components/topic-dialog';
 import { TopicCard } from '../../components/topic-card';
 import { useTopics } from '../../hooks/use-topics';
 
@@ -13,11 +20,8 @@ export const Route = createFileRoute('/_(authenticated)/learning/topics')({
 
 const PAGE_LIMIT = 20;
 
-const CATEGORIES = ['All Topics', 'Professional', 'Leisure', 'Foundation'];
-
 export default function TopicsPage() {
   const [page, setPage] = useState(1);
-  const [activeCategory, setActiveCategory] = useState('All Topics');
   const { data, isLoading, isError } = useTopics(page, PAGE_LIMIT);
 
   const topics = data?.data ?? [];
@@ -66,25 +70,9 @@ export default function TopicsPage() {
         </div>
       </div>
 
-      {/* ── Filter & Action Row ──────────────────────────────────── */}
-      <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-        <div className="flex w-full items-center gap-4 overflow-x-auto pb-2 md:w-auto">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={
-                activeCategory === cat
-                  ? 'whitespace-nowrap rounded-full bg-primary px-6 py-2 font-headline text-sm text-white'
-                  : 'whitespace-nowrap rounded-full bg-surface-container-low px-6 py-2 font-headline text-sm text-on-surface-variant transition-colors hover:bg-surface-container-high'
-              }
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        <CreateTopicDialog
+      {/* ── Action Row ─────────────────────────────────────────── */}
+      <div className="mb-12 flex items-center justify-end">
+        <TopicDialog
           trigger={
             <button className="flex items-center gap-3 whitespace-nowrap rounded-full bg-gradient-to-r from-secondary to-[#00897b] px-8 py-4 font-headline font-bold text-white shadow-xl transition-transform hover:scale-[1.02] active:scale-95">
               <PlusCircle className="h-5 w-5" />
@@ -136,7 +124,7 @@ export default function TopicsPage() {
             Create a topic to organise your vocabulary into focused study
             collections.
           </p>
-          <CreateTopicDialog
+          <TopicDialog
             trigger={
               <DsButton leftIcon={<PlusCircle className="h-4 w-4" />}>
                 Create your first topic
@@ -164,19 +152,7 @@ export default function TopicsPage() {
                   disabled={page <= 1}
                   className="p-2 text-on-surface-variant transition-colors hover:text-primary disabled:opacity-30"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
+                  <ChevronLeft className="h-5 w-5" />
                 </button>
                 <div className="flex gap-2">
                   {Array.from({ length: Math.min(totalPages, 5) }).map(
@@ -203,19 +179,7 @@ export default function TopicsPage() {
                   disabled={!pagination?.hasMore}
                   className="p-2 text-on-surface-variant transition-colors hover:text-primary disabled:opacity-30"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-5 w-5" />
                 </button>
               </div>
             </div>

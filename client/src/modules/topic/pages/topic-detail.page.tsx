@@ -43,7 +43,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { TopicWordCard } from '../components/topic-word-card';
-import { UpdateTopicDialog } from '../components/update-topic-dialog';
+import { TopicDialog } from '../components/topic-dialog';
 import { useTopicDetail } from '../hooks/use-topic-detail';
 import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import { useTopicWords } from '../hooks/use-topic-words';
@@ -187,7 +187,7 @@ export default function TopicDetailPage() {
               <button className="rounded-full bg-gradient-to-br from-primary to-primary-container px-8 py-4 font-headline text-lg font-bold text-white shadow-xl shadow-primary/10 transition-all hover:shadow-primary/20 active:scale-95">
                 Start Topic Review
               </button>
-              <UpdateTopicDialog
+              <TopicDialog
                 topic={topic}
                 trigger={
                   <button className="flex items-center gap-2 rounded-full bg-surface-container px-5 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high">

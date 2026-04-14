@@ -10,23 +10,10 @@ import { Link } from '@tanstack/react-router';
 import { BookOpen, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useDeleteTopic } from '../hooks/use-topic-mutations';
 import type { Topic } from '../services/topic.api';
-import { UpdateTopicDialog } from './update-topic-dialog';
+import { TopicDialog } from './topic-dialog';
 
 interface TopicCardProps {
   topic: Topic;
-}
-
-function formatRelativeDate(dateStr: string) {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 export function TopicCard({ topic }: TopicCardProps) {
@@ -61,7 +48,7 @@ export function TopicCard({ topic }: TopicCardProps) {
             className="flex items-center gap-0.5"
             onClick={(e) => e.preventDefault()}
           >
-            <UpdateTopicDialog
+            <TopicDialog
               topic={topic}
               trigger={
                 <DsButton
@@ -108,23 +95,16 @@ export function TopicCard({ topic }: TopicCardProps) {
           {topic.description || 'No description yet.'}
         </p>
 
-        {/* Progress footer — pushed to bottom */}
-
-        <div className="mt-auto">
-          <div className="flex justify-between items-end mb-3">
-            <span className="text-xs font-bold text-primary tracking-wider uppercase">
-              2,100 Words
-            </span>
-            <span className="text-lg font-headline font-bold text-primary">
-              41%
-            </span>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container">
-            <div
-              className="h-full rounded-full bg-secondary transition-colors group-hover:bg-primary"
-              style={{ width: '0%' }}
-            />
-          </div>
+        {/* Date footer — pushed to bottom */}
+        <div className="mt-auto pt-4 border-t border-outline-variant/10">
+          <span className="text-xs text-on-surface-variant">
+            Created{' '}
+            {new Date(topic.createdAt).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </span>
         </div>
       </div>
     </div>

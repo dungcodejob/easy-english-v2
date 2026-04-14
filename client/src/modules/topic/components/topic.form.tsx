@@ -76,8 +76,6 @@ export interface TopicFormProps {
   submitLabel?: string;
   /** Label shown while the mutation is in-flight. */
   pendingLabel?: string;
-  /** HTML id prefix to avoid duplicate IDs when multiple forms exist. */
-  idPrefix?: string;
 }
 
 const topicFormDefaultValues: TopicFormValues = {
