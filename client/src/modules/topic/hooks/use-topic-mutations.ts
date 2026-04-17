@@ -1,64 +1,7 @@
-import { topicKeys, wordKeys } from '@/shared/constants';
+import { wordKeys } from '@/shared/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { TopicApi } from '../services/topic.api';
-
-export function useCreateTopic() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      name,
-      description,
-    }: {
-      name: string;
-      description?: string;
-    }) => TopicApi.createTopic(name, description),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: topicKeys.lists() });
-      toast.success('Topic created successfully!');
-    },
-    onError: () => {
-      toast.error('Failed to create topic. Please try again.');
-    },
-  });
-}
-
-export function useUpdateTopic() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      id,
-      name,
-      description,
-    }: {
-      id: string;
-      name: string;
-      description?: string;
-    }) => TopicApi.updateTopic(id, name, description),
-    onSuccess: (_, { id }) => {
-      void queryClient.invalidateQueries({ queryKey: topicKeys.lists() });
-      void queryClient.invalidateQueries({ queryKey: topicKeys.detail(id) });
-      toast.success('Topic updated successfully!');
-    },
-    onError: () => {
-      toast.error('Failed to update topic. Please try again.');
-    },
-  });
-}
-
-export function useDeleteTopic() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => TopicApi.deleteTopic(id),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: topicKeys.lists() });
-      toast.success('Topic deleted successfully!');
-    },
-    onError: () => {
-      toast.error('Failed to delete topic. Please try again.');
-    },
-  });
-}
 
 /** Add a word sense to a topic. topicId is passed alongside wordSenseId at mutation call time. */
 export function useAddTopicWord(topicId: string) {

@@ -37,7 +37,7 @@ export const routes = rootRoute('root.tsx', [
     ),
     route(
       TopicRoutes.detail('$topicId'),
-      './modules/topic/pages/topic-detail.page.tsx',
+      './modules/topic/screens/topic-detail/topic-detail.screen.tsx',
     ),
     route(
       FlashcardsRoutes.list(),

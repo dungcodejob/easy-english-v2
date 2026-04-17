@@ -8,8 +8,8 @@ import {
   TopicDialog,
   type TopicDialogHandle,
 } from '../../components/create-or-update-topic/topic-dialog';
+import { useDeleteTopic } from '../../components/delete-topic/use-delete-topic';
 import { TopicCard } from '../../components/topic-card';
-import { useDeleteTopic } from '../../hooks/use-topic-mutations';
 import { useTopics } from '../../hooks/use-topics';
 import type { Topic } from '../../services/topic.api';
 
@@ -23,15 +23,15 @@ export default function TopicsPage() {
   const [page, setPage] = useState(1);
   const dialogRef = useRef<TopicDialogHandle>(null);
   const { data, isLoading, isError } = useTopics(page, PAGE_LIMIT);
-  const { mutate: deleteTopic } = useDeleteTopic();
+  const { deleteTopic } = useDeleteTopic();
 
   const topics = data?.data ?? [];
   const totalCount = data?.pagination?.count ?? 0;
   const pagination = data?.pagination;
   const totalPages = pagination ? Math.ceil(totalCount / PAGE_LIMIT) : 1;
 
-  const handleEdit = (topic: Topic) => dialogRef.current?.open(topic);
-  const handleDelete = (topic: Topic) => deleteTopic(topic.id);
+  const onHandleEdit = (topic: Topic) => dialogRef.current?.open(topic);
+  const onHandleDelete = (topic: Topic) => deleteTopic(topic);
 
   return (
     <div className="px-6 pb-12 md:px-12">
@@ -146,16 +146,16 @@ export default function TopicsPage() {
               <TopicCard
                 key={topic.id}
                 topic={topic}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
+                onEdit={onHandleEdit}
+                onDelete={onHandleDelete}
               />
             ))}
           </div>
 
           {/* Pagination */}
           <DsPagination
-            page={10}
-            totalPages={20}
+            page={page}
+            totalPages={totalPages}
             onPageChange={setPage}
             className="mt-20"
           />

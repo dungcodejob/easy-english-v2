@@ -11,18 +11,8 @@
  */
 
 import { DictionaryRoutes, TopicRoutes } from '@/shared/constants';
-import {
-  DsAlertDialog,
-  DsAlertDialogAction,
-  DsAlertDialogCancel,
-  DsAlertDialogContent,
-  DsAlertDialogDescription,
-  DsAlertDialogFooter,
-  DsAlertDialogHeader,
-  DsAlertDialogTitle,
-  DsAlertDialogTrigger,
-  DsPagination,
-} from '@/shared/ui';
+import { DsPagination } from '@/shared/ui';
+import { useConfirm } from '@/shared/ui/common/confirm-dialog/use-confirm-dialog';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import {
   createFileRoute,
@@ -37,23 +27,19 @@ import {
   Pencil,
   Plus,
   Search,
-  Trash2,
   Zap,
 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import {
   TopicDialog,
   type TopicDialogHandle,
-} from '../components/create-or-update-topic/topic-dialog';
-import { TopicWordCard } from '../components/topic-word-card';
-import { useConfirm } from '@/shared/ui/common/confirm-dialog/use-confirm-dialog';
-import { useTopicDetail } from '../hooks/use-topic-detail';
-import {
-  useDeleteTopic,
-  useRemoveTopicWord,
-} from '../hooks/use-topic-mutations';
-import { useTopicWords } from '../hooks/use-topic-words';
-import type { TopicWord } from '../services/topic.api';
+} from '../../components/create-or-update-topic/topic-dialog';
+import { DeleteTopicButton } from '../../components/delete-topic/delete-topic-button';
+import { TopicWordCard } from '../../components/topic-word-card';
+import { useTopicDetail } from '../../hooks/use-topic-detail';
+import { useRemoveTopicWord } from '../../hooks/use-topic-mutations';
+import { useTopicWords } from '../../hooks/use-topic-words';
+import type { TopicWord } from '../../services/topic.api';
 
 export const Route = createFileRoute(
   '/_(authenticated)/learning/topics/$topicId',
@@ -88,7 +74,6 @@ export default function TopicDetailPage() {
     isError: isWordsError,
   } = useTopicWords(topicId, page, WORD_LIMIT);
 
-  const { mutate: deleteTopic } = useDeleteTopic();
   const { mutate: removeWord } = useRemoveTopicWord(topicId);
   const { confirm } = useConfirm();
   const navigate = useNavigate();
@@ -111,10 +96,8 @@ export default function TopicDetailPage() {
     if (ok) removeWord(word.id);
   };
 
-  const handleDelete = () => {
-    deleteTopic(topicId, {
-      onSuccess: () => void navigate({ to: TopicRoutes.list() }),
-    });
+  const onDeleted = () => {
+    navigate({ to: TopicRoutes.list() });
   };
 
   const topic = topicResponse?.data;
@@ -222,31 +205,7 @@ export default function TopicDetailPage() {
                 <Pencil className="h-3.5 w-3.5" />
                 Edit
               </button>
-              <DsAlertDialog>
-                <DsAlertDialogTrigger asChild>
-                  <button className="flex items-center gap-2 rounded-full bg-error-container/30 px-5 py-2.5 text-sm font-medium text-on-error-container transition-colors hover:bg-error-container">
-                    <Trash2 className="h-3.5 w-3.5" />
-                    Delete
-                  </button>
-                </DsAlertDialogTrigger>
-                <DsAlertDialogContent>
-                  <DsAlertDialogHeader>
-                    <DsAlertDialogTitle>Delete topic?</DsAlertDialogTitle>
-                    <DsAlertDialogDescription>
-                      This will permanently delete{' '}
-                      <strong className="text-foreground">{topic.name}</strong>{' '}
-                      and remove all its word associations. Words in your
-                      learning list will not be affected.
-                    </DsAlertDialogDescription>
-                  </DsAlertDialogHeader>
-                  <DsAlertDialogFooter>
-                    <DsAlertDialogCancel>Cancel</DsAlertDialogCancel>
-                    <DsAlertDialogAction onClick={handleDelete}>
-                      Delete topic
-                    </DsAlertDialogAction>
-                  </DsAlertDialogFooter>
-                </DsAlertDialogContent>
-              </DsAlertDialog>
+              <DeleteTopicButton topic={topic} onDeleted={onDeleted} />
             </div>
           </div>
 

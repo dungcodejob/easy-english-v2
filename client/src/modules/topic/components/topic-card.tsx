@@ -54,7 +54,7 @@ export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
                   <Pencil className="h-3.5 w-3.5" />
                 </DsButton>
               )}
-              {onDelete && (
+              {(onDelete || onEdit) && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <DsButton
@@ -67,16 +67,31 @@ export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
                     </DsButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onDelete(topic);
-                      }}
-                      className="cursor-pointer text-destructive focus:text-destructive"
-                    >
-                      <Trash2 className="mr-2 h-3.5 w-3.5" />
-                      Delete
-                    </DropdownMenuItem>
+                    {onEdit && (
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onEdit(topic);
+                        }}
+                        className="cursor-pointer text-destructive focus:text-destructive"
+                      >
+                        <Pencil className="mr-2 h-3.5 w-3.5" />
+                        Edit
+                      </DropdownMenuItem>
+                    )}
+
+                    {onDelete && (
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onDelete(topic);
+                        }}
+                        className="cursor-pointer text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-3.5 w-3.5" />
+                        Delete
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}

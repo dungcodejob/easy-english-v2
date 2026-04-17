@@ -39,15 +39,15 @@ import { toast } from 'sonner';
 
 // ── Types ────────────────────────────────────────────────────────────
 
-export interface ToastMessages<TError = Error> {
-  loading: string;
-  success: string;
+export interface ToastMessages<TError = Error, TVariables = void> {
+  loading: string | ((vars: TVariables) => string);
+  success: string | ((vars: TVariables) => string);
   error: string | ((err: TError) => string);
 }
 
 export type Input<TData, TError, TVariables, TContext> = {
   options: UseMutationOptions<TData, TError, TVariables, TContext>;
-  toast?: ToastMessages<TError>;
+  toast?: ToastMessages<TError, TVariables>;
 };
 
 // ── Hook ─────────────────────────────────────────────────────────────
@@ -66,12 +66,22 @@ export function useToastMutation<
 
   // Override mutateAsync with toast.promise if messages are provided
   const mutateAsyncWithToast = messages
-    ? (variables: TVariables) =>
-        toast.promise(mutation.mutateAsync(variables), {
-          loading: messages.loading,
-          success: messages.success,
-          error: messages.error as string | ((err: unknown) => string),
-        })
+    ? (variables: TVariables) => {
+        const loadingMessage =
+          typeof messages.loading === 'function'
+            ? messages.loading(variables)
+            : messages.loading;
+        const successMessage =
+          typeof messages.success === 'function'
+            ? messages.success(variables)
+            : messages.success;
+
+        return toast.promise(mutation.mutateAsync(variables), {
+          loading: loadingMessage,
+          success: successMessage,
+          error: messages.error,
+        });
+      }
     : mutation.mutateAsync;
 
   return {

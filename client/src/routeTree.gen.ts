@@ -8,181 +8,181 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './root'
-import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
-import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
-import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
-import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
-import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
-import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
-import { Route as DotModulesFlashcardPagesFlashcardsDotpageRouteImport } from './modules/flashcard/pages/flashcards.page'
-import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
-import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
-import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
-import { Route as DotModulesTopicScreensTopicsTopicsDotscreenRouteImport } from './modules/topic/screens/topics/topics.screen'
-import { Route as DotModulesLearningPagesStudySessionDotpageRouteImport } from './modules/learning/pages/study-session.page'
-import { Route as DotModulesFlashcardPagesStudyDotpageRouteImport } from './modules/flashcard/pages/study.page'
-import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page'
-import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page'
-import { Route as DotModulesTopicPagesTopicDetailDotpageRouteImport } from './modules/topic/pages/topic-detail.page'
-import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page'
+import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page';
+import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page';
+import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page';
+import { Route as DotModulesFlashcardPagesFlashcardsDotpageRouteImport } from './modules/flashcard/pages/flashcards.page';
+import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page';
+import { Route as DotModulesFlashcardPagesStudyDotpageRouteImport } from './modules/flashcard/pages/study.page';
+import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout';
+import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page';
+import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page';
+import { Route as DotModulesLearningPagesStudySessionDotpageRouteImport } from './modules/learning/pages/study-session.page';
+import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page';
+import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout';
+import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page';
+import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout';
+import { Route as DotModulesTopicPagesTopicDetailDotpageRouteImport } from './modules/topic/screens/topic-detail/topic-detail.screen';
+import { Route as DotModulesTopicScreensTopicsTopicsDotscreenRouteImport } from './modules/topic/screens/topics/topics.screen';
+import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page';
+import { Route as rootRouteImport } from './root';
 
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
   DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
     id: '/_(unauthenticated)',
     getParentRoute: () => rootRouteImport,
-  } as any)
+  } as any);
 const DotModulesShellPagesAuthenticatedLayoutRoute =
   DotModulesShellPagesAuthenticatedLayoutRouteImport.update({
     id: '/_(authenticated)',
     getParentRoute: () => rootRouteImport,
-  } as any)
+  } as any);
 const modulesShellPagesLandingPageRoute =
   modulesShellPagesLandingPageRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => rootRouteImport,
-  } as any)
+  } as any);
 const DotModulesAuthPagesRegisterDotpageRoute =
   DotModulesAuthPagesRegisterDotpageRouteImport.update({
     id: '/register',
     path: '/register',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesAuthPagesLoginPageRoute =
   DotModulesAuthPagesLoginPageRouteImport.update({
     id: '/login',
     path: '/login',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesLearningPagesMyLearningDotpageRoute =
   DotModulesLearningPagesMyLearningDotpageRouteImport.update({
     id: '/learning',
     path: '/learning',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesFlashcardPagesFlashcardsDotpageRoute =
   DotModulesFlashcardPagesFlashcardsDotpageRouteImport.update({
     id: '/flashcards',
     path: '/flashcards',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesLearningPagesDictionaryLayoutRoute =
   DotModulesLearningPagesDictionaryLayoutRouteImport.update({
     id: '/dictionary',
     path: '/dictionary',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesDashboardPagesDashboardPageRoute =
   DotModulesDashboardPagesDashboardPageRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
   DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport.update({
     id: '/workspace/new',
     path: '/workspace/new',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesTopicScreensTopicsTopicsDotscreenRoute =
   DotModulesTopicScreensTopicsTopicsDotscreenRouteImport.update({
     id: '/learning/topics',
     path: '/learning/topics',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesLearningPagesStudySessionDotpageRoute =
   DotModulesLearningPagesStudySessionDotpageRouteImport.update({
     id: '/learning/study',
     path: '/learning/study',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesFlashcardPagesStudyDotpageRoute =
   DotModulesFlashcardPagesStudyDotpageRouteImport.update({
     id: '/flashcards/study',
     path: '/flashcards/study',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesFlashcardPagesStatsDotpageRoute =
   DotModulesFlashcardPagesStatsDotpageRouteImport.update({
     id: '/flashcards/stats',
     path: '/flashcards/stats',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesLearningPagesDictionarySearchDotpageRoute =
   DotModulesLearningPagesDictionarySearchDotpageRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesTopicPagesTopicDetailDotpageRoute =
   DotModulesTopicPagesTopicDetailDotpageRouteImport.update({
     id: '/learning/topics/$topicId',
     path: '/learning/topics/$topicId',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
-  } as any)
+  } as any);
 const DotModulesLearningPagesWordSenseDetailDotpageRoute =
   DotModulesLearningPagesWordSenseDetailDotpageRouteImport.update({
     id: '/senses/$senseId',
     path: '/senses/$senseId',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
-  } as any)
+  } as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof modulesShellPagesLandingPageRoute
-  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
-  '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
-  '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
-  '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
+  '/': typeof modulesShellPagesLandingPageRoute;
+  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute;
+  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren;
+  '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute;
+  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute;
+  '/login': typeof DotModulesAuthPagesLoginPageRoute;
+  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute;
+  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute;
+  '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute;
+  '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute;
+  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute;
+  '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute;
+  '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute;
+  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute;
+  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof modulesShellPagesLandingPageRoute
-  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
-  '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
-  '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
-  '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
+  '/': typeof modulesShellPagesLandingPageRoute;
+  '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute;
+  '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute;
+  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute;
+  '/login': typeof DotModulesAuthPagesLoginPageRoute;
+  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute;
+  '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute;
+  '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute;
+  '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute;
+  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute;
+  '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute;
+  '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute;
+  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute;
+  '/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof modulesShellPagesLandingPageRoute
-  '/_(authenticated)': typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
-  '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
-  '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
-  '/_(authenticated)/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
-  '/_(authenticated)/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
-  '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
-  '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
-  '/_(authenticated)/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
-  '/_(authenticated)/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute
+  __root__: typeof rootRouteImport;
+  '/': typeof modulesShellPagesLandingPageRoute;
+  '/_(authenticated)': typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren;
+  '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren;
+  '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute;
+  '/_(authenticated)/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren;
+  '/_(authenticated)/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute;
+  '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute;
+  '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute;
+  '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute;
+  '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute;
+  '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute;
+  '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute;
+  '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute;
+  '/_(authenticated)/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute;
+  '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute;
+  '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute;
+  '/_(authenticated)/learning/topics/$topicId': typeof DotModulesTopicPagesTopicDetailDotpageRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
     | '/dashboard'
@@ -198,8 +198,8 @@ export interface FileRouteTypes {
     | '/learning/topics'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
-    | '/learning/topics/$topicId'
-  fileRoutesByTo: FileRoutesByTo
+    | '/learning/topics/$topicId';
+  fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
     | '/dashboard'
@@ -214,7 +214,7 @@ export interface FileRouteTypes {
     | '/learning/topics'
     | '/workspace/new'
     | '/dictionary/senses/$senseId'
-    | '/learning/topics/$topicId'
+    | '/learning/topics/$topicId';
   id:
     | '__root__'
     | '/'
@@ -233,142 +233,142 @@ export interface FileRouteTypes {
     | '/_(authenticated)/learning/topics'
     | '/_(authenticated)/workspace/new'
     | '/_(authenticated)/dictionary/senses/$senseId'
-    | '/_(authenticated)/learning/topics/$topicId'
-  fileRoutesById: FileRoutesById
+    | '/_(authenticated)/learning/topics/$topicId';
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  modulesShellPagesLandingPageRoute: typeof modulesShellPagesLandingPageRoute
-  DotModulesShellPagesAuthenticatedLayoutRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
-  DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
+  modulesShellPagesLandingPageRoute: typeof modulesShellPagesLandingPageRoute;
+  DotModulesShellPagesAuthenticatedLayoutRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren;
+  DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/_(unauthenticated)': {
-      id: '/_(unauthenticated)'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/_(unauthenticated)';
+      path: '';
+      fullPath: '/';
+      preLoaderRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/_(authenticated)': {
-      id: '/_(authenticated)'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/_(authenticated)';
+      path: '';
+      fullPath: '/';
+      preLoaderRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof modulesShellPagesLandingPageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof modulesShellPagesLandingPageRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/_(unauthenticated)/register': {
-      id: '/_(unauthenticated)/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
-    }
+      id: '/_(unauthenticated)/register';
+      path: '/register';
+      fullPath: '/register';
+      preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute;
+    };
     '/_(unauthenticated)/login': {
-      id: '/_(unauthenticated)/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport
-      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
-    }
+      id: '/_(unauthenticated)/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport;
+      parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute;
+    };
     '/_(authenticated)/learning': {
-      id: '/_(authenticated)/learning'
-      path: '/learning'
-      fullPath: '/learning'
-      preLoaderRoute: typeof DotModulesLearningPagesMyLearningDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/learning';
+      path: '/learning';
+      fullPath: '/learning';
+      preLoaderRoute: typeof DotModulesLearningPagesMyLearningDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/flashcards': {
-      id: '/_(authenticated)/flashcards'
-      path: '/flashcards'
-      fullPath: '/flashcards'
-      preLoaderRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/flashcards';
+      path: '/flashcards';
+      fullPath: '/flashcards';
+      preLoaderRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/dictionary': {
-      id: '/_(authenticated)/dictionary'
-      path: '/dictionary'
-      fullPath: '/dictionary'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/dictionary';
+      path: '/dictionary';
+      fullPath: '/dictionary';
+      preLoaderRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/dashboard': {
-      id: '/_(authenticated)/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/dashboard';
+      path: '/dashboard';
+      fullPath: '/dashboard';
+      preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/workspace/new': {
-      id: '/_(authenticated)/workspace/new'
-      path: '/workspace/new'
-      fullPath: '/workspace/new'
-      preLoaderRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/workspace/new';
+      path: '/workspace/new';
+      fullPath: '/workspace/new';
+      preLoaderRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/learning/topics': {
-      id: '/_(authenticated)/learning/topics'
-      path: '/learning/topics'
-      fullPath: '/learning/topics'
-      preLoaderRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/learning/topics';
+      path: '/learning/topics';
+      fullPath: '/learning/topics';
+      preLoaderRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/learning/study': {
-      id: '/_(authenticated)/learning/study'
-      path: '/learning/study'
-      fullPath: '/learning/study'
-      preLoaderRoute: typeof DotModulesLearningPagesStudySessionDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/learning/study';
+      path: '/learning/study';
+      fullPath: '/learning/study';
+      preLoaderRoute: typeof DotModulesLearningPagesStudySessionDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/flashcards/study': {
-      id: '/_(authenticated)/flashcards/study'
-      path: '/flashcards/study'
-      fullPath: '/flashcards/study'
-      preLoaderRoute: typeof DotModulesFlashcardPagesStudyDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/flashcards/study';
+      path: '/flashcards/study';
+      fullPath: '/flashcards/study';
+      preLoaderRoute: typeof DotModulesFlashcardPagesStudyDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/flashcards/stats': {
-      id: '/_(authenticated)/flashcards/stats'
-      path: '/flashcards/stats'
-      fullPath: '/flashcards/stats'
-      preLoaderRoute: typeof DotModulesFlashcardPagesStatsDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/flashcards/stats';
+      path: '/flashcards/stats';
+      fullPath: '/flashcards/stats';
+      preLoaderRoute: typeof DotModulesFlashcardPagesStatsDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/dictionary/': {
-      id: '/_(authenticated)/dictionary/'
-      path: '/'
-      fullPath: '/dictionary/'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
-    }
+      id: '/_(authenticated)/dictionary/';
+      path: '/';
+      fullPath: '/dictionary/';
+      preLoaderRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRouteImport;
+      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute;
+    };
     '/_(authenticated)/learning/topics/$topicId': {
-      id: '/_(authenticated)/learning/topics/$topicId'
-      path: '/learning/topics/$topicId'
-      fullPath: '/learning/topics/$topicId'
-      preLoaderRoute: typeof DotModulesTopicPagesTopicDetailDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
-    }
+      id: '/_(authenticated)/learning/topics/$topicId';
+      path: '/learning/topics/$topicId';
+      fullPath: '/learning/topics/$topicId';
+      preLoaderRoute: typeof DotModulesTopicPagesTopicDetailDotpageRouteImport;
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute;
+    };
     '/_(authenticated)/dictionary/senses/$senseId': {
-      id: '/_(authenticated)/dictionary/senses/$senseId'
-      path: '/senses/$senseId'
-      fullPath: '/dictionary/senses/$senseId'
-      preLoaderRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
-    }
+      id: '/_(authenticated)/dictionary/senses/$senseId';
+      path: '/senses/$senseId';
+      fullPath: '/dictionary/senses/$senseId';
+      preLoaderRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRouteImport;
+      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute;
+    };
   }
 }
 
 interface DotModulesLearningPagesDictionaryLayoutRouteChildren {
-  DotModulesLearningPagesDictionarySearchDotpageRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  DotModulesLearningPagesWordSenseDetailDotpageRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  DotModulesLearningPagesDictionarySearchDotpageRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRoute;
+  DotModulesLearningPagesWordSenseDetailDotpageRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRoute;
 }
 
 const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPagesDictionaryLayoutRouteChildren =
@@ -377,24 +377,24 @@ const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPa
       DotModulesLearningPagesDictionarySearchDotpageRoute,
     DotModulesLearningPagesWordSenseDetailDotpageRoute:
       DotModulesLearningPagesWordSenseDetailDotpageRoute,
-  }
+  };
 
 const DotModulesLearningPagesDictionaryLayoutRouteWithChildren =
   DotModulesLearningPagesDictionaryLayoutRoute._addFileChildren(
     DotModulesLearningPagesDictionaryLayoutRouteChildren,
-  )
+  );
 
 interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
-  DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
-  DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
-  DotModulesFlashcardPagesFlashcardsDotpageRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
-  DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute
-  DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute
-  DotModulesLearningPagesStudySessionDotpageRoute: typeof DotModulesLearningPagesStudySessionDotpageRoute
-  DotModulesTopicScreensTopicsTopicsDotscreenRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  DotModulesTopicPagesTopicDetailDotpageRoute: typeof DotModulesTopicPagesTopicDetailDotpageRoute
+  DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute;
+  DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren;
+  DotModulesFlashcardPagesFlashcardsDotpageRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRoute;
+  DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute;
+  DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute;
+  DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute;
+  DotModulesLearningPagesStudySessionDotpageRoute: typeof DotModulesLearningPagesStudySessionDotpageRoute;
+  DotModulesTopicScreensTopicsTopicsDotscreenRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute;
+  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute;
+  DotModulesTopicPagesTopicDetailDotpageRoute: typeof DotModulesTopicPagesTopicDetailDotpageRoute;
 }
 
 const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPagesAuthenticatedLayoutRouteChildren =
@@ -419,16 +419,16 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
     DotModulesTopicPagesTopicDetailDotpageRoute:
       DotModulesTopicPagesTopicDetailDotpageRoute,
-  }
+  };
 
 const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
   DotModulesShellPagesAuthenticatedLayoutRoute._addFileChildren(
     DotModulesShellPagesAuthenticatedLayoutRouteChildren,
-  )
+  );
 
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
-  DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute
-  DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
+  DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute;
+  DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute;
 }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
@@ -436,12 +436,12 @@ const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPag
     DotModulesAuthPagesLoginPageRoute: DotModulesAuthPagesLoginPageRoute,
     DotModulesAuthPagesRegisterDotpageRoute:
       DotModulesAuthPagesRegisterDotpageRoute,
-  }
+  };
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =
   DotModulesShellPagesUnauthenticatedLayoutRoute._addFileChildren(
     DotModulesShellPagesUnauthenticatedLayoutRouteChildren,
-  )
+  );
 
 const rootRouteChildren: RootRouteChildren = {
   modulesShellPagesLandingPageRoute: modulesShellPagesLandingPageRoute,
@@ -449,7 +449,7 @@ const rootRouteChildren: RootRouteChildren = {
     DotModulesShellPagesAuthenticatedLayoutRouteWithChildren,
   DotModulesShellPagesUnauthenticatedLayoutRoute:
     DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
