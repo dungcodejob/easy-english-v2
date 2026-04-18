@@ -7,11 +7,14 @@
 
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
 import { Language } from '@/modules/workspace/types/workspace.types';
-import { ClarionButton } from '@/shared/ui/base';
 import { WizardStepShell } from '@/shared/ui/patterns';
+import {
+  BackButton,
+  CTAButton,
+  SegmentedControlItem,
+} from '@/shared/ui/semantic';
 import { cn } from '@/shared/utils';
 import {
-  ArrowLeft,
   ArrowRight,
   BookOpen,
   CheckCircle2,
@@ -308,24 +311,15 @@ export function WorkspaceLearningStep({
                 render={({ field }) => (
                   <>
                     <div className="bg-surface-container-highest p-1 rounded-full flex items-center mb-8">
-                      {LEVELS.map(({ value, label }) => {
-                        const active = field.value === value;
-                        return (
-                          <button
-                            type="button"
-                            key={value}
-                            onClick={() => field.onChange(value)}
-                            className={cn(
-                              'flex-1 py-3 px-2 rounded-full text-xs font-bold transition-all font-headline',
-                              active
-                                ? 'bg-surface-container-lowest shadow-sm text-primary'
-                                : 'text-on-surface-variant hover:text-primary',
-                            )}
-                          >
-                            {label}
-                          </button>
-                        );
-                      })}
+                      {LEVELS.map(({ value, label }) => (
+                        <SegmentedControlItem
+                          key={value}
+                          isActive={field.value === value}
+                          onClick={() => field.onChange(value)}
+                        >
+                          {label}
+                        </SegmentedControlItem>
+                      ))}
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed shrink-0">
@@ -350,20 +344,10 @@ export function WorkspaceLearningStep({
 
         {/* Footer */}
         <footer className="pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <ClarionButton
-            variant="ghost-back"
-            onClick={onBack}
-            leftIcon={<ArrowLeft />}
-          >
-            Back to Details
-          </ClarionButton>
-          <ClarionButton
-            type="submit"
-            variant="primary"
-            rightIcon={<ArrowRight />}
-          >
+          <BackButton onClick={onBack}>Back to Details</BackButton>
+          <CTAButton type="submit" endIcon={<ArrowRight />}>
             Continue to Step 3
-          </ClarionButton>
+          </CTAButton>
         </footer>
       </form>
     </WizardStepShell>

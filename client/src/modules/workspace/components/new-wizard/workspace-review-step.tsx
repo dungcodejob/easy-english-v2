@@ -7,13 +7,11 @@
 
 import { defaultWizardPreferences } from '@/modules/workspace/stores/use-wizard-store';
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { ClarionButton } from '@/shared/ui/base';
 import { WizardStepShell } from '@/shared/ui/patterns';
+import { BackButton, CTAButton, InlineEditButton } from '@/shared/ui/semantic';
 import { cn } from '@/shared/utils';
 import {
-  ArrowLeft,
   BellRing,
-  CheckCircle2,
   FileEdit,
   Gauge,
   Languages,
@@ -83,7 +81,7 @@ export function WorkspaceReviewStep({
         <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
           <div className="mb-4 flex items-center justify-between">
             <FileEdit className="size-5 text-secondary" />
-            <ClarionButton variant="edit">EDIT</ClarionButton>
+            <InlineEditButton>Edit</InlineEditButton>
           </div>
           <h4 className="text-on-surface-variant text-[11px] font-bold uppercase tracking-widest mb-1">
             Identity
@@ -106,7 +104,7 @@ export function WorkspaceReviewStep({
                 Focus Language
               </span>
             </div>
-            <ClarionButton variant="edit">EDIT</ClarionButton>
+            <InlineEditButton>Edit</InlineEditButton>
           </div>
           <div className="flex items-end justify-between gap-4">
             <div>
@@ -137,7 +135,7 @@ export function WorkspaceReviewStep({
                 Pace & Intensity
               </span>
             </div>
-            <ClarionButton variant="edit">EDIT</ClarionButton>
+            <InlineEditButton>Edit</InlineEditButton>
           </div>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -215,24 +213,16 @@ export function WorkspaceReviewStep({
               </div>
             </div>
             <div className="flex items-center gap-3 w-full md:w-auto">
-              <ClarionButton
-                variant="ghost-back"
-                onClick={onBack}
-                disabled={isSubmitting}
-                leftIcon={<ArrowLeft />}
-              >
+              <BackButton onClick={onBack} disabled={isSubmitting}>
                 Back
-              </ClarionButton>
-              <ClarionButton
-                variant="primary"
+              </BackButton>
+              <CTAButton
                 onClick={onSubmit}
                 disabled={isSubmitting}
                 isLoading={isSubmitting}
-                loadingLabel="Finalizing..."
-                leftIcon={!isSubmitting ? <CheckCircle2 /> : undefined}
               >
                 {isError ? 'Retry Finalize' : 'Finalize Workspace'}
-              </ClarionButton>
+              </CTAButton>
             </div>
           </div>
         </div>

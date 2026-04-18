@@ -3,22 +3,11 @@
  */
 
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import {
-  ClarionButton,
-  ClarionInput,
-  ClarionLabel,
-  ClarionTextarea,
-} from '@/shared/ui/base';
+import { ClarionInput, ClarionLabel, ClarionTextarea } from '@/shared/ui/base';
+import { BackButton, CTAButton } from '@/shared/ui/semantic';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import { cn } from '@/shared/utils';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Briefcase,
-  GraduationCap,
-  Info,
-  User,
-} from 'lucide-react';
+import { ArrowRight, Briefcase, GraduationCap, Info, User } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceType } from '../../types';
 
@@ -187,20 +176,10 @@ export function WorkspaceBasicsStep({
 
         {/* Action footer */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-4">
-          <ClarionButton
-            variant="ghost-back"
-            onClick={onBack}
-            leftIcon={<ArrowLeft />}
-          >
-            Return to Selection
-          </ClarionButton>
-          <ClarionButton
-            type="submit"
-            variant="primary"
-            rightIcon={<ArrowRight />}
-          >
+          <BackButton onClick={onBack}>Return to Selection</BackButton>
+          <CTAButton type="submit" endIcon={<ArrowRight />}>
             Continue to Language Focus
-          </ClarionButton>
+          </CTAButton>
         </div>
       </form>
     </WizardStepShell>

@@ -63,9 +63,6 @@ export type {
   DsAlertDialogTriggerProps,
 } from './ds-alert-dialog';
 
-export { ClarionButton } from './clarion-button';
-export type { ClarionButtonProps } from './clarion-button';
-
 export { ClarionInput } from './clarion-input';
 export { ClarionLabel } from './clarion-label';
 export { ClarionTextarea } from './clarion-textarea';

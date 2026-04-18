@@ -53,9 +53,6 @@ export type { ClarionProgressProps } from './base/clarion-progress';
 export { DsSpinner } from './base/ds-spinner';
 export type { DsSpinnerProps } from './base/ds-spinner';
 
-export { ClarionButton } from './base/clarion-button';
-export type { ClarionButtonProps } from './base/clarion-button';
-
 export { ClarionInput } from './base/clarion-input';
 export { ClarionLabel } from './base/clarion-label';
 export { ClarionTextarea } from './base/clarion-textarea';
@@ -86,6 +83,12 @@ export type {
 /* ─── Common Components ─────────────────────────── */
 export { FormField } from './common/form-field';
 export type { FormFieldProps, FormFieldRenderArgs } from './common/form-field';
+
+/* ─── Semantic Buttons (role-named) ─────────────── */
+export { CTAButton } from './semantic/cta-button';
+export { BackButton } from './semantic/back-button';
+export { InlineEditButton } from './semantic/inline-edit-button';
+export { SegmentedControlItem } from './semantic/segmented-control-item';
 
 /* ─── Pattern Components ────────────────────────── */
 export { FormWrapper } from './patterns/form-wrapper';

@@ -6,11 +6,10 @@
  */
 
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { ClarionButton } from '@/shared/ui/base';
 import { WizardStepShell } from '@/shared/ui/patterns';
+import { BackButton, CTAButton } from '@/shared/ui/semantic';
 import { cn } from '@/shared/utils';
 import {
-  ArrowLeft,
   ArrowRight,
   BellRing,
   CheckCircle2,
@@ -246,28 +245,12 @@ export function WorkspacePreferencesStep({
 
         {/* Footer */}
         <footer className="pt-8 border-t border-outline-variant/10 flex items-center justify-between gap-4 flex-wrap">
-          <ClarionButton
-            variant="ghost-back"
-            onClick={onBack}
-            leftIcon={<ArrowLeft />}
-          >
-            Back to Focus
-          </ClarionButton>
+          <BackButton onClick={onBack}>Back to Focus</BackButton>
           <div className="flex items-center gap-3">
-            <ClarionButton
-              variant="ghost-back"
-              onClick={onSkip}
-              className="text-on-surface-variant hover:text-primary"
-            >
-              Skip for now
-            </ClarionButton>
-            <ClarionButton
-              type="submit"
-              variant="primary"
-              rightIcon={<ArrowRight />}
-            >
+            <BackButton onClick={onSkip}>Skip for now</BackButton>
+            <CTAButton type="submit" endIcon={<ArrowRight />}>
               Continue to Final Step
-            </ClarionButton>
+            </CTAButton>
           </div>
         </footer>
       </form>
