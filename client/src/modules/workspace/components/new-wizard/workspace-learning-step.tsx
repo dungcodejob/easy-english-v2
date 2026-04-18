@@ -22,6 +22,7 @@ import {
   School,
   Star,
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceLearningGoal, WorkspaceLearningLevel } from '../../types';
 
@@ -31,20 +32,20 @@ interface Props {
   onBack: () => void;
 }
 
-const LANGUAGES: Array<{
+interface LangOption {
   value: Language;
   flag: string;
   label: string;
   blurb: string;
-  featured?: boolean;
   tagline?: string;
-}> = [
+}
+
+const LANGUAGES: LangOption[] = [
   {
     value: Language.FR,
     flag: '🇫🇷',
     label: 'French',
     blurb: 'Le Français — The language of diplomacy and philosophy.',
-    featured: true,
     tagline: 'Currently Popular',
   },
   {
@@ -72,6 +73,113 @@ const LANGUAGES: Array<{
     blurb: 'Vibrant global communication.',
   },
 ];
+
+const DEFAULT_FEATURED_LANGUAGE = Language.FR;
+
+interface LanguageCardProps {
+  lang: LangOption;
+  isFeatured: boolean;
+  onSelect: () => void;
+}
+
+function LanguageCard({ lang, isFeatured, onSelect }: LanguageCardProps) {
+  return (
+    <motion.button
+      type="button"
+      layout
+      onClick={onSelect}
+      whileTap={{ scale: isFeatured ? 0.97 : 0.95 }}
+      transition={{
+        layout: { type: 'spring', stiffness: 260, damping: 28 },
+        default: { duration: 0.35 },
+      }}
+      className={cn(
+        'group relative overflow-hidden rounded-xl text-left cursor-pointer',
+        isFeatured
+          ? 'md:col-span-2 md:row-span-2 bg-gradient-to-br from-primary to-primary-container p-6 md:p-8 flex flex-col justify-between shadow-xl'
+          : 'bg-surface-container-low hover:bg-surface-container-high p-6',
+      )}
+    >
+      <AnimatePresence>
+        {isFeatured && (
+          <motion.span
+            key="check-lg"
+            initial={{ scale: 0, rotate: -90, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 18 }}
+            className="absolute top-5 right-5"
+          >
+            <CheckCircle2
+              className="size-7 text-tertiary-fixed-dim drop-shadow-lg"
+              strokeWidth={2}
+            />
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      <motion.div layout="position">
+        <motion.span
+          layout
+          className={cn(
+            'block mb-4 ',
+            isFeatured ? 'text-white text-4xl' : 'text-2xl',
+          )}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, isFeatured ? -6 : 6, 0] }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          key={`flag-${isFeatured}`}
+        >
+          {lang.flag}
+        </motion.span>
+
+        <motion.h3
+          layout="position"
+          className={cn(
+            'font-headline font-bold mb-2',
+            isFeatured ? 'text-3xl text-white' : 'text-lg text-primary',
+          )}
+        >
+          {lang.label}
+        </motion.h3>
+        <motion.p
+          layout="position"
+          className={cn(
+            'leading-relaxed',
+            isFeatured
+              ? 'text-white/80 text-sm max-w-xs'
+              : 'text-on-surface-variant text-xs',
+          )}
+        >
+          {lang.blurb}
+        </motion.p>
+      </motion.div>
+
+      <AnimatePresence>
+        {isFeatured && lang.tagline && (
+          <motion.div
+            key="tagline"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ delay: 0.15, duration: 0.3 }}
+            className="flex items-center gap-2 text-[11px] font-medium tracking-widest uppercase mt-8 bg-white/10 w-fit px-3 py-1 rounded-full backdrop-blur-md text-white"
+          >
+            <motion.span
+              className="w-2 h-2 rounded-full bg-tertiary-fixed-dim"
+              animate={{ scale: [1, 1.4, 1] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            {lang.tagline}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+}
 
 const GOALS = [
   {
@@ -117,7 +225,7 @@ export function WorkspaceLearningStep({
     formState: { errors },
   } = useForm<Partial<CreateWorkspaceWizardData>>({
     defaultValues: {
-      language: defaultValues.language || undefined,
+      language: defaultValues.language || DEFAULT_FEATURED_LANGUAGE,
       learningGoal:
         defaultValues.learningGoal || WorkspaceLearningGoal.Vocabulary,
       level: defaultValues.level || WorkspaceLearningLevel.Beginner,
@@ -145,80 +253,36 @@ export function WorkspaceLearningStep({
             control={control}
             name="language"
             rules={{ required: 'Please select a language' }}
-            render={({ field }) => (
-              <>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {LANGUAGES.map((lang, idx) => {
-                    const active = field.value === lang.value;
-                    if (lang.featured) {
-                      return (
-                        <button
-                          type="button"
-                          key={lang.value}
-                          onClick={() => field.onChange(lang.value)}
-                          className={cn(
-                            'md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-6 md:p-8 text-left flex flex-col justify-between transition-all hover:shadow-xl',
-                            active && 'ring-4 ring-tertiary-fixed-dim/60',
-                          )}
-                        >
-                          {active && (
-                            <CheckCircle2
-                              className="absolute top-5 right-5 size-7 text-tertiary-fixed-dim"
-                              fill="currentColor"
-                              strokeWidth={1.5}
-                            />
-                          )}
-                          <div>
-                            <span className="text-4xl mb-4 block">
-                              {lang.flag}
-                            </span>
-                            <h3 className="text-3xl font-bold text-on-primary mb-2 font-headline">
-                              {lang.label}
-                            </h3>
-                            <p className="text-primary-fixed/80 text-sm max-w-xs">
-                              {lang.blurb}
-                            </p>
-                          </div>
-                          {lang.tagline && (
-                            <div className="flex items-center gap-2 text-[11px] font-medium tracking-widest uppercase mt-8 bg-white/10 w-fit px-3 py-1 rounded-full backdrop-blur-md text-on-primary">
-                              <span className="w-2 h-2 rounded-full bg-tertiary-fixed-dim" />
-                              {lang.tagline}
-                            </div>
-                          )}
-                        </button>
-                      );
-                    }
-                    return (
-                      <button
-                        type="button"
+            render={({ field }) => {
+              const selected = field.value ?? DEFAULT_FEATURED_LANGUAGE;
+              const ordered = [...LANGUAGES].sort((a, b) => {
+                if (a.value === selected) return -1;
+                if (b.value === selected) return 1;
+                return 0;
+              });
+              return (
+                <>
+                  <motion.div
+                    layout
+                    className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                  >
+                    {ordered.map((lang) => (
+                      <LanguageCard
                         key={lang.value}
-                        onClick={() => field.onChange(lang.value)}
-                        style={{ animationDelay: `${idx * 40}ms` }}
-                        className={cn(
-                          'group p-6 rounded-xl text-left transition-all',
-                          active
-                            ? 'bg-primary/10 ring-2 ring-primary'
-                            : 'bg-surface-container-low hover:bg-surface-container-high',
-                        )}
-                      >
-                        <span className="text-2xl mb-4 block">{lang.flag}</span>
-                        <h3 className="font-headline text-lg font-bold text-primary mb-1">
-                          {lang.label}
-                        </h3>
-                        <p className="text-on-surface-variant text-xs leading-relaxed">
-                          {lang.blurb}
-                        </p>
-                      </button>
-                    );
-                  })}
-                </div>
-                {errors.language && (
-                  <p className="mt-3 text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
-                    {errors.language.message}
-                  </p>
-                )}
-              </>
-            )}
+                        lang={lang}
+                        isFeatured={lang.value === selected}
+                        onSelect={() => field.onChange(lang.value)}
+                      />
+                    ))}
+                  </motion.div>
+                  {errors.language && (
+                    <p className="mt-3 text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
+                      {errors.language.message}
+                    </p>
+                  )}
+                </>
+              );
+            }}
           />
         </section>
 
