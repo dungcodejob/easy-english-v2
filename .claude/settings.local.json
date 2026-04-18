@@ -218,7 +218,8 @@
       "Bash(node -e \"const l = require\\('lucide-react'\\); const keys = Object.keys\\(l\\); const matches = keys.filter\\(k => k.toLowerCase\\(\\).includes\\('light'\\) || k.toLowerCase\\(\\).includes\\('lightning'\\) || k.toLowerCase\\(\\).includes\\('zap'\\)\\); console.log\\(matches.join\\('\\\\n'\\)\\);\")",
       "mcp__filesystem__edit_file",
       "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('react:', p.dependencies.react\\)\")",
-      "WebFetch(domain:dev.to)"
+      "WebFetch(domain:dev.to)",
+      "Bash(npm install *)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

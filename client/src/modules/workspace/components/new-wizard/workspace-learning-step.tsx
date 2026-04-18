@@ -22,6 +22,8 @@ import {
   School,
   Star,
 } from 'lucide-react';
+import * as Flags from 'country-flag-icons/react/3x2';
+import type { FlagComponent } from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceLearningGoal, WorkspaceLearningLevel } from '../../types';
@@ -34,7 +36,7 @@ interface Props {
 
 interface LangOption {
   value: Language;
-  flag: string;
+  flag: FlagComponent;
   label: string;
   blurb: string;
   tagline?: string;
@@ -43,32 +45,32 @@ interface LangOption {
 const LANGUAGES: LangOption[] = [
   {
     value: Language.FR,
-    flag: '🇫🇷',
+    flag: Flags.FR,
     label: 'French',
     blurb: 'Le Français — The language of diplomacy and philosophy.',
     tagline: 'Currently Popular',
   },
   {
     value: Language.JA,
-    flag: '🇯🇵',
+    flag: Flags.JP,
     label: 'Japanese',
     blurb: 'Modern commerce & classic literature.',
   },
   {
     value: Language.DE,
-    flag: '🇩🇪',
+    flag: Flags.DE,
     label: 'German',
     blurb: 'Technical precision and engineering.',
   },
   {
     value: Language.VI,
-    flag: '🇻🇳',
+    flag: Flags.VN,
     label: 'Vietnamese',
     blurb: 'Rich tonal history and culture.',
   },
   {
     value: Language.ES,
-    flag: '🇪🇸',
+    flag: Flags.ES,
     label: 'Spanish',
     blurb: 'Vibrant global communication.',
   },
@@ -83,6 +85,7 @@ interface LanguageCardProps {
 }
 
 function LanguageCard({ lang, isFeatured, onSelect }: LanguageCardProps) {
+  const FlagIcon = lang.flag;
   return (
     <motion.button
       type="button"
@@ -122,14 +125,16 @@ function LanguageCard({ lang, isFeatured, onSelect }: LanguageCardProps) {
         <motion.span
           layout
           className={cn(
-            'block mb-4 ',
-            isFeatured ? 'text-white text-4xl' : 'text-2xl',
+            'block mb-4 overflow-hidden rounded-md shadow-md ring-1',
+            isFeatured
+              ? 'w-20 h-14 ring-white/30'
+              : 'w-10 h-7 ring-outline-variant/30',
           )}
-          animate={{ scale: [1, 1.2, 1], rotate: [0, isFeatured ? -6 : 6, 0] }}
+          animate={{ scale: [1, 1.08, 1], rotate: [0, isFeatured ? -4 : 4, 0] }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
           key={`flag-${isFeatured}`}
         >
-          {lang.flag}
+          <FlagIcon className="w-full h-full object-cover" />
         </motion.span>
 
         <motion.h3
