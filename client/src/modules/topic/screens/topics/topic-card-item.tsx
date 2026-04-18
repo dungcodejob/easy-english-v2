@@ -8,7 +8,7 @@ import {
 } from '@/shared/ui/shadcn/dropdown-menu';
 import { Link } from '@tanstack/react-router';
 import { BookOpen, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import type { Topic } from '../services/topic.api';
+import type { Topic } from '../../services/topic.api';
 
 interface TopicCardProps {
   topic: Topic;
@@ -16,7 +16,7 @@ interface TopicCardProps {
   onDelete?: (topic: Topic) => void;
 }
 
-export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
+export function TopicCardItem({ topic, onEdit, onDelete }: TopicCardProps) {
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-xl bg-surface-container-lowest p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
       {/* Decorative corner blob */}
@@ -41,19 +41,6 @@ export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
               className="flex items-center gap-0.5"
               onClick={(e) => e.preventDefault()}
             >
-              {onEdit && (
-                <DsButton
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 text-on-surface-variant hover:text-on-surface"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onEdit(topic);
-                  }}
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                </DsButton>
-              )}
               {(onDelete || onEdit) && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -109,16 +96,21 @@ export function TopicCard({ topic, onEdit, onDelete }: TopicCardProps) {
           {topic.description || 'No description yet.'}
         </p>
 
-        {/* Date footer — pushed to bottom */}
-        <div className="mt-auto pt-4 border-t border-outline-variant/10">
-          <span className="text-xs text-on-surface-variant">
-            Created{' '}
-            {new Date(topic.createdAt).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </span>
+        <div className="mt-auto">
+          <div className="flex justify-between items-end mb-3">
+            <span className="text-xs font-bold text-primary tracking-wider uppercase">
+              940 Words
+            </span>
+            <span className="text-lg font-headline font-bold text-primary">
+              12%
+            </span>
+          </div>
+          <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+            <div
+              className="h-full bg-error rounded-full"
+              style={{ width: '12%' }}
+            ></div>
+          </div>
         </div>
       </div>
     </div>

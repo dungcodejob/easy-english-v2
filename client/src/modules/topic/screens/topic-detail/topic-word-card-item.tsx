@@ -15,7 +15,7 @@ import { DictionaryRoutes } from '@/shared/constants';
 import { Link } from '@tanstack/react-router';
 import { Trash2, Volume2 } from 'lucide-react';
 import { useMemo } from 'react';
-import type { TopicWord } from '../services/topic.api';
+import type { TopicWord } from '../../services/topic.api';
 
 interface TopicWordCardProps {
   word: TopicWord;
@@ -37,7 +37,7 @@ function getMasteryColor(pct: number): string {
   return 'bg-error/60';
 }
 
-export function TopicWordCard({ word, onRemove }: TopicWordCardProps) {
+export function TopicWordCardItem({ word, onRemove }: TopicWordCardProps) {
   // [MOCK] mastery — replace with real data when backend supports it
   const mastery = useMemo(() => mockMastery(word.id), [word.id]);
 

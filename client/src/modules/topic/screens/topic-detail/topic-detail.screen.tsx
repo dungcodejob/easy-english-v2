@@ -12,7 +12,6 @@
 
 import { DictionaryRoutes, TopicRoutes } from '@/shared/constants';
 import { DsPagination } from '@/shared/ui';
-import { useConfirm } from '@/shared/ui/common/confirm-dialog/use-confirm-dialog';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import {
   createFileRoute,
@@ -27,6 +26,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Trash2,
   Zap,
 } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -34,12 +34,12 @@ import {
   TopicDialog,
   type TopicDialogHandle,
 } from '../../components/create-or-update-topic/topic-dialog';
-import { DeleteTopicButton } from '../../components/delete-topic/delete-topic-button';
-import { TopicWordCard } from '../../components/topic-word-card';
+import { useDeleteTopic } from '../../components/delete-topic/use-delete-topic';
+import { useRemoveTopicWord } from '../../components/remove-word-from-topic/use-remove-word-from-topic';
 import { useTopicDetail } from '../../hooks/use-topic-detail';
-import { useRemoveTopicWord } from '../../hooks/use-topic-mutations';
 import { useTopicWords } from '../../hooks/use-topic-words';
 import type { TopicWord } from '../../services/topic.api';
+import { TopicWordCardItem } from './topic-word-card-item';
 
 export const Route = createFileRoute(
   '/_(authenticated)/learning/topics/$topicId',
@@ -74,29 +74,17 @@ export default function TopicDetailPage() {
     isError: isWordsError,
   } = useTopicWords(topicId, page, WORD_LIMIT);
 
-  const { mutate: removeWord } = useRemoveTopicWord(topicId);
-  const { confirm } = useConfirm();
+  const { mutateAsync: deleteTopic } = useDeleteTopic();
+
+  const { removeWordFromTopic } = useRemoveTopicWord(topicId);
   const navigate = useNavigate();
 
-  const handleRemoveWord = async (word: TopicWord) => {
-    const ok = await confirm({
-      title: 'Remove word?',
-      description: (
-        <>
-          This will remove{' '}
-          <strong className="text-foreground">
-            {word.wordText ?? 'this word'}
-          </strong>{' '}
-          from the topic. The word will still be in your learning list.
-        </>
-      ),
-      confirmText: 'Remove',
-      destructive: true,
-    });
-    if (ok) removeWord(word.id);
+  const onRemoveWord = (word: TopicWord) => {
+    removeWordFromTopic(word);
   };
 
-  const onDeleted = () => {
+  const onDelete = async () => {
+    await deleteTopic(topicId);
     navigate({ to: TopicRoutes.list() });
   };
 
@@ -205,22 +193,24 @@ export default function TopicDetailPage() {
                 <Pencil className="h-3.5 w-3.5" />
                 Edit
               </button>
-              <DeleteTopicButton topic={topic} onDeleted={onDeleted} />
+              <button
+                onClick={onDelete}
+                className="flex items-center gap-2 rounded-full bg-error-container/30 px-5 py-2.5 text-sm font-medium text-on-error-container transition-colors hover:bg-error-container"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Delete
+              </button>
             </div>
           </div>
 
           {/* Right: Asymmetric Floating Glass Card */}
           <div className="relative h-96 w-full shrink-0 overflow-hidden rounded-xl bg-surface-container-low shadow-sm md:w-80">
-            {/* Background gradient layers to simulate the image aesthetic */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-fixed/40 via-surface-container to-secondary-fixed/30" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
-
-            {/* Centered decorative icon */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-20">
-              <BookOpen className="h-32 w-32 text-primary" />
-            </div>
-
+            <img
+              alt="Executive meeting room"
+              className="w-full h-full object-cover grayscale-[20%] opacity-80"
+              data-alt="Modern high-end glass office building interior with soft natural light and blurred background for a professional look"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYokro-vL4L_9DKwCgvn__7PQCW418KIy5VCH_fAasSxnOc_0IUJlaDoV0_Y11Ai96CAdQoE7r9hHcHmSbjGKPrwPpGvZSO6EWlgEc1ZM1ivfPddioXsEzyIkJMF5NfvDoDU3XKbD0xyFUOUe-h_jkQ-_hkp1YRNgtJjTsJTin6DWVi6759U5BpIOnSTYvJHOcpEtyq14E-VuNoaHI1yuiIz4K2UlaLeAAif1br3_AD2mEO0jwvgUX_WjCqfDuL5ZzIIcbu-rzJhc"
+            ></img>
             {/* Bottom glass overlay — "Current Goal" */}
             <div className="absolute bottom-6 left-6 right-6 rounded-lg border border-white/20 bg-white/20 p-5 backdrop-blur-xl">
               <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/80">
@@ -317,10 +307,10 @@ export default function TopicDetailPage() {
         <>
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {words.map((word) => (
-              <TopicWordCard
+              <TopicWordCardItem
                 key={word.id}
                 word={word}
-                onRemove={handleRemoveWord}
+                onRemove={onRemoveWord}
               />
             ))}
 

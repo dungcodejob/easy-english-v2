@@ -5,13 +5,13 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 import { FlashcardModule } from '../../flashcard/flashcard.module';
 import { ProgressModule } from '../progress/progress.module';
-import { TopicModule } from '../topic/topic.module';
 
 import { WordExampleOrmEntity } from '../../dictionary/infrastructure/persistence/word-example.orm-entity';
 import { WordSenseOrmEntity } from '../../dictionary/infrastructure/persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../../dictionary/infrastructure/persistence/word.orm-entity';
 import { FlashcardOrmEntity } from '../../flashcard/infrastructure/persistence/flashcard.orm-entity';
 import { TopicOrmEntity } from '../topic/infrastructure/persistence/topic.orm-entity';
+import { TopicModule } from '../topic/topic.module';
 import { CompleteStudySessionHandler } from './application/commands/complete-study-session.handler';
 import { StartStudySessionHandler } from './application/commands/start-study-session.handler';
 import { StudySessionReviewHandler } from './application/commands/study-session-review.handler';

@@ -59,7 +59,7 @@ export function WordSenseCard({
           >
             <h4
               className={cn(
-                'font-headline text-3xl font-bold transition-colors',
+                'font-headline text-3xl font-bold transition-colors capitalize',
                 isLearned
                   ? 'text-[var(--on-secondary-fixed-variant)]'
                   : 'text-primary group-hover:text-on-primary-container',

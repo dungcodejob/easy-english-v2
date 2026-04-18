@@ -9,9 +9,9 @@ import {
   type TopicDialogHandle,
 } from '../../components/create-or-update-topic/topic-dialog';
 import { useDeleteTopic } from '../../components/delete-topic/use-delete-topic';
-import { TopicCard } from '../../components/topic-card';
 import { useTopics } from '../../hooks/use-topics';
 import type { Topic } from '../../services/topic.api';
+import { TopicCardItem } from './topic-card-item';
 
 export const Route = createFileRoute('/_(authenticated)/learning/topics')({
   component: TopicsPage,
@@ -143,7 +143,7 @@ export default function TopicsPage() {
         <>
           <div className="mb-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
             {topics.map((topic) => (
-              <TopicCard
+              <TopicCardItem
                 key={topic.id}
                 topic={topic}
                 onEdit={onHandleEdit}
