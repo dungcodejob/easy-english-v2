@@ -1,25 +1,24 @@
 /**
- * WorkspaceBasicsStep — wizard step component
- *
- * Migrated to Design System:
- *  - WizardStepLayout  → WizardStepShell (DS pattern)
- *  - shadcn Button     → DsButton (DS base)
- *  - shadcn Input      → DsInput (DS base)
- *  - shadcn Label      → FieldLabel (DS shadcn wrapper)
- *
- * UI: 100% DS components. Business logic: unchanged.
+ * WorkspaceBasicsStep — Clarion step 1 "Workspace Details"
  */
 
 import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { DsButton } from '@/shared/ui/base';
-import { DsInput } from '@/shared/ui/base';
-import { FieldLabel } from '@/shared/ui/shadcn/field';
-import { Label } from '@/shared/ui/shadcn/label';
-import { RadioGroup, RadioGroupItem } from '@/shared/ui/shadcn/radio-group';
-import { Textarea } from '@/shared/ui/shadcn/textarea';
+import {
+  ClarionButton,
+  ClarionInput,
+  ClarionLabel,
+  ClarionTextarea,
+} from '@/shared/ui/base';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import { cn } from '@/shared/utils';
-import { Briefcase, GraduationCap, User } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  GraduationCap,
+  Info,
+  User,
+} from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { WorkspaceType } from '../../types';
 
@@ -28,6 +27,27 @@ interface WorkspaceBasicsStepProps {
   onNext: (data: Partial<CreateWorkspaceWizardData>) => void;
   onBack?: () => void;
 }
+
+const TYPE_OPTIONS = [
+  {
+    value: WorkspaceType.Personal,
+    label: 'Personal',
+    description: 'For your own learning',
+    icon: User,
+  },
+  {
+    value: WorkspaceType.Team,
+    label: 'Team',
+    description: 'Collaborate with peers',
+    icon: Briefcase,
+  },
+  {
+    value: WorkspaceType.Classroom,
+    label: 'Classroom',
+    description: 'For teachers & students',
+    icon: GraduationCap,
+  },
+];
 
 export function WorkspaceBasicsStep({
   defaultValues,
@@ -47,145 +67,140 @@ export function WorkspaceBasicsStep({
     },
   });
 
-  const onSubmit = (data: Partial<CreateWorkspaceWizardData>) => {
-    onNext(data);
-  };
-
   return (
     <WizardStepShell
-      title="Let's start with the basics"
-      description="Give your workspace a name and choose how you'll use it."
+      eyebrow="Step 01 — Identity"
+      title={
+        <>
+          Begin your{' '}
+          <em className="text-primary italic font-normal">scholarly</em>{' '}
+          journey.
+        </>
+      }
+      description="Define the space where your linguistic mastery will grow. This is the foundation of your curated learning environment."
+      maxWidth="max-w-3xl"
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-4">
-          <FieldLabel htmlFor="name" className="text-sm font-medium">
-            Workspace Name <span className="text-destructive">*</span>
-          </FieldLabel>
-          <DsInput
-            id="name"
-            placeholder="e.g. My English Journey"
-            autoFocus
-            className={cn(
-              errors.name &&
-                'border-destructive focus-visible:ring-destructive',
-            )}
-            {...register('name', { required: 'Workspace name is required' })}
-          />
-          {errors.name && (
-            <p className="text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
-              {errors.name.message}
-            </p>
-          )}
+      <form onSubmit={handleSubmit(onNext)} className="space-y-10">
+        <div className="max-w-xl bg-surface-container-lowest p-8 md:p-10 rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.06)] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-1 bg-gradient-to-r from-transparent to-tertiary-fixed-dim/40" />
 
-          <div className="space-y-3">
-            <Label className="text-sm font-medium">Workspace Type</Label>
-            <Controller
-              control={control}
-              name="type"
-              render={({ field }) => (
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="grid grid-cols-1 md:grid-cols-3 gap-4"
-                >
-                  <div>
-                    <RadioGroupItem
-                      value={WorkspaceType.Personal}
-                      id="type-personal"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="type-personal"
-                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
-                    >
-                      <User className="mb-3 h-6 w-6 text-secondary" />
-                      <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">
-                          Personal
-                        </div>
-                        <div className="text-xs text-on-surface-variant">
-                          For your own learning
-                        </div>
-                      </div>
-                    </Label>
-                  </div>
-
-                  <div>
-                    <RadioGroupItem
-                      value={WorkspaceType.Team}
-                      id="type-team"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="type-team"
-                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
-                    >
-                      <Briefcase className="mb-3 h-6 w-6 text-secondary" />
-                      <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">
-                          Team
-                        </div>
-                        <div className="text-xs text-on-surface-variant">
-                          Collaborate with peers
-                        </div>
-                      </div>
-                    </Label>
-                  </div>
-
-                  <div>
-                    <RadioGroupItem
-                      value={WorkspaceType.Classroom}
-                      id="type-classroom"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="type-classroom"
-                      className="flex flex-col items-center justify-between rounded-2xl border-2 border-outline-variant/30 bg-surface-container p-4 hover:bg-surface-container-high cursor-pointer [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:bg-primary/5 transition-all text-center h-full"
-                    >
-                      <GraduationCap className="mb-3 h-6 w-6 text-secondary" />
-                      <div className="text-center">
-                        <div className="font-headline font-semibold mb-1">
-                          Classroom
-                        </div>
-                        <div className="text-xs text-on-surface-variant">
-                          For teachers & students
-                        </div>
-                      </div>
-                    </Label>
-                  </div>
-                </RadioGroup>
+          <div className="space-y-10">
+            {/* Workspace Name */}
+            <div>
+              <ClarionLabel
+                htmlFor="name"
+                className="uppercase tracking-wide text-on-surface-variant mb-2"
+              >
+                Workspace Name
+              </ClarionLabel>
+              <ClarionInput
+                id="name"
+                autoFocus
+                placeholder="e.g. Mandarin Morning Sanctuary"
+                className={cn(
+                  errors.name &&
+                    'border-destructive aria-invalid:border-destructive',
+                )}
+                {...register('name', {
+                  required: 'Workspace name is required',
+                })}
+              />
+              {errors.name ? (
+                <p className="mt-2 text-sm text-destructive font-medium animate-in slide-in-from-top-1 fade-in-0">
+                  {errors.name.message}
+                </p>
+              ) : (
+                <p className="mt-2 flex items-center gap-1.5 text-xs text-on-surface-variant">
+                  <Info className="size-3.5" />
+                  This will be the title of your study dashboard.
+                </p>
               )}
-            />
-          </div>
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium">
-              Description (Optional)
-            </Label>
-            <Textarea
-              id="description"
-              placeholder="What is this workspace for?"
-              className="resize-none min-h-[80px] bg-surface-container border-outline-variant/30 focus:border-primary"
-              {...register('description')}
-            />
+            {/* Workspace Type */}
+            <div>
+              <ClarionLabel className="uppercase tracking-wide text-on-surface-variant mb-4">
+                Workspace Type
+              </ClarionLabel>
+              <Controller
+                control={control}
+                name="type"
+                render={({ field }) => (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {TYPE_OPTIONS.map(
+                      ({ value, label, description, icon: Icon }) => {
+                        const active = field.value === value;
+                        return (
+                          <button
+                            type="button"
+                            key={value}
+                            onClick={() => field.onChange(value)}
+                            className={cn(
+                              'group flex flex-col items-start gap-2 rounded-xl border-2 p-4 text-left transition-all',
+                              active
+                                ? 'border-primary bg-primary/5'
+                                : 'border-outline-variant/30 bg-surface-container-low hover:border-primary/30',
+                            )}
+                          >
+                            <Icon
+                              className={cn(
+                                'size-5 transition-colors',
+                                active ? 'text-primary' : 'text-secondary',
+                              )}
+                            />
+                            <span className="font-headline font-semibold text-sm">
+                              {label}
+                            </span>
+                            <span className="text-xs text-on-surface-variant">
+                              {description}
+                            </span>
+                          </button>
+                        );
+                      },
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <ClarionLabel
+                htmlFor="description"
+                className="uppercase tracking-wide text-on-surface-variant mb-2"
+              >
+                Description{' '}
+                <span className="text-outline-variant italic font-normal normal-case">
+                  (Optional)
+                </span>
+              </ClarionLabel>
+              <ClarionTextarea
+                id="description"
+                rows={3}
+                placeholder="Briefly define your learning goals..."
+                className="bg-transparent rounded-none border-0 border-b-2 border-outline-variant/30 px-0 py-3 font-headline text-lg focus:ring-0 focus:border-secondary"
+                {...register('description')}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-between pt-6 border-t border-outline-variant/20 mt-8">
-          <DsButton
-            type="button"
-            variant="ghost"
+        {/* Action footer */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-4">
+          <ClarionButton
+            variant="ghost-back"
             onClick={onBack}
-            className="rounded-full border border-outline text-on-surface-variant hover:bg-surface-container"
+            leftIcon={<ArrowLeft />}
           >
-            Cancel
-          </DsButton>
-          <DsButton
+            Return to Selection
+          </ClarionButton>
+          <ClarionButton
             type="submit"
-            className="bg-gradient-to-br from-primary to-primary-container text-primary-foreground rounded-full px-8 py-3 font-headline font-bold shadow-lg"
+            variant="primary"
+            rightIcon={<ArrowRight />}
           >
-            Next Step
-          </DsButton>
+            Continue to Language Focus
+          </ClarionButton>
         </div>
       </form>
     </WizardStepShell>

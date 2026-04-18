@@ -1,107 +1,94 @@
 /**
- * WizardLayout — reusable multi-step onboarding wizard shell
+ * WizardLayout — Clarion setup wizard shell
  *
- * Replaces duplicated WizardStepLayout + WorkspaceWizard shell.
- * Encapsulates:
- * - Progress indicator (step dots + labels)
- * - Animated step transitions (AnimatePresence + Framer Motion)
- * - Step validation contract (can advance / cannot advance)
- * - Keyboard navigation (Enter to advance, Escape to cancel)
- * - Responsive card container
+ * Editorial sidebar layout: fixed sidebar with icon-labeled steps
+ * (amber active rule) + wide main content area for hero header + forms.
  *
  * Usage:
- *   <WizardLayout
- *     steps={['Basics', 'Learning', 'Preferences', 'Review']}
- *     currentStep={step}
- *     onCancel={() => navigate({ to: '/' })}
- *   >
- *     <AnimatedStep key={step}>
- *       <YourStepContent />
- *     </AnimatedStep>
+ *   <WizardLayout steps={WIZARD_STEPS} currentStep={step}>
+ *     <AnimatedStep key={step}><StepContent /></AnimatedStep>
  *   </WizardLayout>
  */
 
-import { AnimatePresence, motion } from 'motion/react';
-import type { ReactNode } from 'react';
 import { cn } from '@/shared/utils';
+import { CheckCircle2, FileEdit, Gauge, Languages } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import type { ComponentType, ReactNode } from 'react';
+
+export interface WizardStep {
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+}
 
 interface WizardLayoutProps {
   children: ReactNode;
-  /** Ordered list of step names (used for labels + count) */
-  steps: string[];
-  /** 0-based current step index */
+  steps: WizardStep[];
   currentStep: number;
-  /** Called when user clicks Cancel */
   onCancel?: () => void;
   className?: string;
 }
 
-/** Vertical stepper — left column */
-function WizardStepper({
+export const DEFAULT_WIZARD_STEPS: WizardStep[] = [
+  { label: 'Workspace Details', icon: FileEdit },
+  { label: 'Language Focus', icon: Languages },
+  { label: 'Learning Pace', icon: Gauge },
+  { label: 'Finalize', icon: CheckCircle2 },
+];
+
+function WizardSidebar({
   steps,
   currentStep,
 }: {
-  steps: string[];
+  steps: WizardStep[];
   currentStep: number;
 }) {
   return (
-    <div className="w-48 shrink-0">
-      <div className="space-y-0">
-        {steps.map((label, idx) => (
-          <div key={label} className="relative pl-6 py-3">
-            {/* Active indicator bar */}
-            {idx < currentStep && (
-              <div className="absolute left-2.5 top-0 bottom-0 w-0.5 bg-primary rounded-full" />
-            )}
-            {/* Step number circle */}
-            <div
-              className={cn(
-                'absolute left-0 top-3 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200',
-                idx < currentStep && 'bg-primary text-primary-foreground',
-                idx === currentStep &&
-                  'bg-primary text-primary-foreground ring-4 ring-primary/20',
-                idx > currentStep &&
-                  'bg-surface-container text-on-surface-variant',
-              )}
-            >
-              {idx < currentStep ? (
-                // Checkmark SVG for completed steps
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="size-3.5"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="2,8 6,12 14,4" />
-                </svg>
-              ) : (
-                idx + 1
-              )}
-            </div>
-            <div
-              className={cn(
-                'text-sm font-medium transition-colors',
-                idx === currentStep
-                  ? 'text-primary font-semibold'
-                  : 'text-on-surface-variant',
-              )}
-            >
-              {label}
-            </div>
-          </div>
-        ))}
+    <aside className="hidden md:flex flex-col py-8 px-4 h-screen w-64 bg-surface-container-low/60 sticky top-0 shrink-0">
+      <div className="mb-10 px-4">
+        <h2 className="font-headline text-lg font-bold text-primary">
+          Setup Wizard
+        </h2>
+        <p className="text-sm text-on-surface-variant font-medium">
+          Step {currentStep + 1} of {steps.length}
+        </p>
       </div>
-    </div>
+      <nav className="space-y-2">
+        {steps.map((step, idx) => {
+          const isActive = idx === currentStep;
+          const isDone = idx < currentStep;
+          const Icon = step.icon;
+          return (
+            <div
+              key={step.label}
+              className={cn(
+                'flex items-center gap-3 pl-4 py-2 font-headline transition-all duration-300',
+                isActive &&
+                  'text-primary font-bold border-l-4 border-tertiary-fixed-dim bg-surface-container/50 rounded-r-lg',
+                isDone && 'text-on-primary-fixed-variant',
+                !isActive && !isDone && 'text-outline-variant',
+              )}
+            >
+              <Icon className="size-5 shrink-0" />
+              <span className="text-sm">{step.label}</span>
+            </div>
+          );
+        })}
+      </nav>
+      <div className="mt-auto px-4">
+        <div className="p-4 rounded-xl bg-tertiary-fixed/60">
+          <p className="text-[10px] font-bold text-on-tertiary-fixed uppercase tracking-wider mb-1">
+            Academic Tip
+          </p>
+          <p className="text-xs text-on-tertiary-fixed-variant leading-relaxed">
+            Your progress is automatically saved as you curate your scholarly
+            sanctuary.
+          </p>
+        </div>
+      </div>
+    </aside>
   );
 }
 
-/**
- * AnimatedStep — wraps wizard content with entrance/exit animations.
- * Use inside WizardLayout only.
- */
 export function AnimatedStep({
   children,
   className,
@@ -111,10 +98,10 @@ export function AnimatedStep({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -123,32 +110,50 @@ export function AnimatedStep({
 }
 
 /**
- * WizardStepShell — the header inside the wizard card.
- * Renders title, description, and progress bar.
- * Can be used inside each step for consistent structure.
+ * WizardStepShell — editorial hero header for each step.
+ *
+ *   <WizardStepShell
+ *     eyebrow="Step 01 — Identity"
+ *     title={<>Begin your <em className="text-primary italic">scholarly</em> journey.</>}
+ *     description="..."
+ *   >
+ *     {form}
+ *   </WizardStepShell>
  */
 export function WizardStepShell({
+  eyebrow,
   title,
   description,
   children,
   className,
+  maxWidth = 'max-w-4xl',
 }: {
-  title: string;
-  description?: string;
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  description?: ReactNode;
   children: ReactNode;
   className?: string;
+  maxWidth?: string;
 }) {
   return (
-    <div className={cn('space-y-6', className ?? '')}>
-      <div className="space-y-1 text-center">
-        <h2 className="font-headline text-2xl font-bold tracking-tight text-primary">
-          {title}
-        </h2>
-        {description && (
-          <p className="text-on-surface-variant text-sm">{description}</p>
+    <div className={cn(maxWidth, 'mx-auto w-full', className)}>
+      <header className="mb-12 relative">
+        <div className="absolute -top-12 -left-12 w-32 h-32 bg-tertiary-fixed/30 rounded-full blur-3xl pointer-events-none" />
+        {eyebrow && (
+          <span className="inline-block text-secondary font-medium tracking-widest text-[11px] uppercase mb-3">
+            {eyebrow}
+          </span>
         )}
-      </div>
-      <div className="mx-auto max-w-md">{children}</div>
+        <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-bold text-on-primary-fixed tracking-tight mb-4 leading-[1.1]">
+          {title}
+        </h1>
+        {description && (
+          <p className="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+            {description}
+          </p>
+        )}
+      </header>
+      {children}
     </div>
   );
 }
@@ -158,54 +163,48 @@ export function WizardLayout({
   steps,
   currentStep,
   onCancel,
-  className = '',
+  className,
 }: WizardLayoutProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface p-4">
-      <div
-        className={cn(
-          'w-full max-w-5xl rounded-3xl border border-outline-variant/30 bg-surface-container-lowest shadow-xl',
-          className,
-        )}
-      >
-        {/* Two-column layout: stepper + content */}
-        <div className="flex gap-12 p-8">
-          {/* Left: vertical stepper */}
-          <WizardStepper steps={steps} currentStep={currentStep} />
+    <div className={cn('relative min-h-screen bg-surface', className)}>
+      {/* Ambient background decoration */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[30vw] h-[30vw] bg-secondary/5 rounded-full blur-[100px]" />
+      </div>
 
-          {/* Right: step content */}
-          <div className="flex-1">
-            {/* Cancel button — top right */}
-            {onCancel && (
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={onCancel}
-                  className="text-on-surface-variant hover:text-primary text-sm transition-colors rounded-full px-4 py-1.5 hover:bg-surface-container"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
+      <div className="flex min-h-screen">
+        <WizardSidebar steps={steps} currentStep={currentStep} />
 
-            {/* Progress bar */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
-                  style={{
-                    width: `${((currentStep + 1) / steps.length) * 100}%`,
-                  }}
-                />
-              </div>
-              <span className="text-xs font-medium text-on-surface-variant whitespace-nowrap font-headline">
-                STEP {currentStep + 1} OF {steps.length}
-              </span>
+        <main className="flex-1 px-6 py-10 md:px-12 lg:px-20 md:py-16">
+          {onCancel && (
+            <div className="flex justify-end mb-6">
+              <button
+                onClick={onCancel}
+                className="text-on-surface-variant hover:text-primary text-sm transition-colors rounded-full px-4 py-1.5 hover:bg-surface-container"
+              >
+                Cancel
+              </button>
             </div>
+          )}
 
-            {/* Animated content area */}
-            <AnimatePresence mode="wait">{children}</AnimatePresence>
+          {/* Mobile progress bar */}
+          <div className="md:hidden flex items-center gap-3 mb-8">
+            <div className="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
+                style={{
+                  width: `${((currentStep + 1) / steps.length) * 100}%`,
+                }}
+              />
+            </div>
+            <span className="text-xs font-medium text-on-surface-variant whitespace-nowrap font-headline">
+              STEP {currentStep + 1} / {steps.length}
+            </span>
           </div>
-        </div>
+
+          <AnimatePresence mode="wait">{children}</AnimatePresence>
+        </main>
       </div>
     </div>
   );

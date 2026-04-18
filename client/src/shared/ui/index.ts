@@ -53,6 +53,9 @@ export type { ClarionProgressProps } from './base/clarion-progress';
 export { DsSpinner } from './base/ds-spinner';
 export type { DsSpinnerProps } from './base/ds-spinner';
 
+export { ClarionButton } from './base/clarion-button';
+export type { ClarionButtonProps } from './base/clarion-button';
+
 export { ClarionInput } from './base/clarion-input';
 export { ClarionLabel } from './base/clarion-label';
 export { ClarionTextarea } from './base/clarion-textarea';

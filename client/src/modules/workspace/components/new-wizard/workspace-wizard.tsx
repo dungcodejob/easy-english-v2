@@ -1,18 +1,10 @@
 /**
- * WorkspaceWizard — Onboarding flow root
- *
- * Uses WizardLayout (Design System pattern) instead of raw Card + CardContent.
- * Step management is delegated to the Zustand wizard store (useWizardStore).
- *
- * Responsibilities:
- * - Renders the correct step component based on currentStep
- * - Handles step transitions (next/back)
- * - Triggers createWorkspace on final step submission
- * - Navigates away on cancel
+ * WorkspaceWizard — Clarion onboarding flow root
  */
 
 import {
   AnimatedStep,
+  DEFAULT_WIZARD_STEPS,
   WizardLayout,
 } from '@/shared/ui/patterns';
 import { useCreateWorkspace } from '../../hooks/use-create-workspace';
@@ -20,7 +12,6 @@ import {
   defaultWizardPreferences,
   useWizardActions,
   useWizardData,
-  useWizardStep,
 } from '../../stores/use-wizard-store';
 import type { CreateWorkspaceRequest } from '../../types/workspace.types';
 import { WorkspaceBasicsStep } from './workspace-basics-step';
@@ -28,12 +19,9 @@ import { WorkspaceLearningStep } from './workspace-learning-step';
 import { WorkspacePreferencesStep } from './workspace-preferences-step';
 import { WorkspaceReviewStep } from './workspace-review-step';
 
-const WIZARD_STEPS = ['Basics', 'Learning', 'Preferences', 'Review'];
-
 export const WorkspaceWizard = () => {
-  const step = useWizardStep();
+  const { step, formData } = useWizardData();
   const { setStep, updateData } = useWizardActions();
-  const wizardData = useWizardData();
   const { mutate: createWorkspace, isPending, isError } = useCreateWorkspace();
 
   const handleNext = (data: Partial<CreateWorkspaceRequest>) => {
@@ -49,7 +37,7 @@ export const WorkspaceWizard = () => {
   };
 
   const handleSubmit = () => {
-    createWorkspace(wizardData as CreateWorkspaceRequest);
+    createWorkspace(formData as CreateWorkspaceRequest);
   };
 
   const renderStep = () => {
@@ -57,7 +45,7 @@ export const WorkspaceWizard = () => {
       case 0:
         return (
           <WorkspaceBasicsStep
-            defaultValues={wizardData}
+            defaultValues={formData}
             onNext={handleNext}
             onBack={handleBack}
           />
@@ -65,7 +53,7 @@ export const WorkspaceWizard = () => {
       case 1:
         return (
           <WorkspaceLearningStep
-            defaultValues={wizardData}
+            defaultValues={formData}
             onNext={handleNext}
             onBack={handleBack}
           />
@@ -73,7 +61,7 @@ export const WorkspaceWizard = () => {
       case 2:
         return (
           <WorkspacePreferencesStep
-            defaultValues={wizardData}
+            defaultValues={formData}
             onNext={handleNext}
             onBack={handleBack}
             onSkip={handleSkip}
@@ -82,7 +70,7 @@ export const WorkspaceWizard = () => {
       case 3:
         return (
           <WorkspaceReviewStep
-            data={wizardData}
+            data={formData}
             onBack={handleBack}
             onSubmit={handleSubmit}
             isSubmitting={isPending}
@@ -95,13 +83,8 @@ export const WorkspaceWizard = () => {
   };
 
   return (
-    <WizardLayout
-      steps={WIZARD_STEPS}
-      currentStep={step}
-    >
-      <AnimatedStep key={step}>
-        {renderStep()}
-      </AnimatedStep>
+    <WizardLayout steps={DEFAULT_WIZARD_STEPS} currentStep={step}>
+      <AnimatedStep key={step}>{renderStep()}</AnimatedStep>
     </WizardLayout>
   );
 };
