@@ -34,8 +34,8 @@ export { DsStatCard } from './ds-stat-card';
 
 export { DsEmptyState } from './ds-empty-state';
 
-export { DsProgress } from './ds-progress';
-export type { DsProgressProps } from './ds-progress';
+export { ClarionProgress } from './clarion-progress';
+export type { ClarionProgressProps } from './clarion-progress';
 
 export { DsSpinner } from './ds-spinner';
 export type { DsSpinnerProps } from './ds-spinner';
@@ -63,5 +63,6 @@ export type {
   DsAlertDialogTriggerProps,
 } from './ds-alert-dialog';
 
-export { SurfaceInput } from './surface-input';
-export { SurfaceTextarea } from './surface-textarea';
+export { ClarionInput } from './clarion-input';
+export { ClarionLabel } from './clarion-label';
+export { ClarionTextarea } from './clarion-textarea';

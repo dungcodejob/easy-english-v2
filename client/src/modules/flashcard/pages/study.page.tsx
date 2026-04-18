@@ -20,7 +20,7 @@ import {
   Keyboard,
 } from 'lucide-react';
 
-import { DsButton, DsCard, DsProgress, DsSpinner } from '@/shared/ui';
+import { DsButton, DsCard, ClarionProgress, DsSpinner } from '@/shared/ui';
 import { useDueCards } from '../hooks/use-flashcards';
 
 export const Route = createFileRoute('/_(authenticated)/flashcards/study')({
@@ -166,7 +166,7 @@ function StudyPage() {
             {currentIndex + 1} / {cards.length}
           </span>
         </div>
-        <DsProgress value={progress} size="sm" />
+        <ClarionProgress value={progress} size="sm" />
       </div>
 
       {/* Flashcard */}

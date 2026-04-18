@@ -1,7 +1,7 @@
-import { DsProgress } from '@/shared/ui';
+import { ClarionProgress } from '@/shared/ui';
 
 interface StudyProgressProps {
-  current: number;   // 1-based
+  current: number; // 1-based
   total: number;
   label?: string;
 }
@@ -17,7 +17,7 @@ export function StudyProgress({ current, total, label }: StudyProgressProps) {
           {current} / {total}
         </span>
       </div>
-      <DsProgress value={progress} className="h-2" />
+      <ClarionProgress value={progress} className="h-2" />
     </div>
   );
 }

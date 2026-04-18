@@ -21,8 +21,8 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { SurfaceInput } from '@/shared/ui/base/surface-input';
-import { SurfaceTextarea } from '@/shared/ui/base/surface-textarea';
+import { ClarionInput } from '@/shared/ui/base/clarion-input';
+import { ClarionTextarea } from '@/shared/ui/base/clarion-textarea';
 import { FormField } from '@/shared/ui/common/form-field';
 import {
   topicFormSchema,
@@ -107,7 +107,7 @@ export function TopicForm({
       {/* Topic Name */}
       <FormField name="name" control={control} label="Topic Name">
         {({ field, fieldState }) => (
-          <SurfaceInput
+          <ClarionInput
             {...field}
             placeholder="e.g. Business Vocabulary"
             maxLength={100}
@@ -197,7 +197,7 @@ export function TopicForm({
       {/* Description */}
       <FormField name="description" control={control} label="Brief Description">
         {({ field, fieldState }) => (
-          <SurfaceTextarea
+          <ClarionTextarea
             {...field}
             placeholder="Describe the focus of this topic..."
             maxLength={500}

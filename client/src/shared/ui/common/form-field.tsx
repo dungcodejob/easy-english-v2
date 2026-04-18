@@ -38,7 +38,7 @@ import {
 } from 'react-hook-form';
 
 import { Field, FieldDescription, FieldError } from '@/shared/ui/shadcn/field';
-import { SurfaceLabel } from '../base/surface-label';
+import { ClarionLabel } from '../base/clarion-label';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -104,7 +104,7 @@ export function FormField<
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} {...divProps}>
-          <SurfaceLabel htmlFor={field.name}>{label}</SurfaceLabel>
+          <ClarionLabel htmlFor={field.name}>{label}</ClarionLabel>
 
           {children({
             field: {

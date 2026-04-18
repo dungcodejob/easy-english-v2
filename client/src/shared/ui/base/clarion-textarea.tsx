@@ -3,21 +3,21 @@ import * as React from 'react';
 import { cn } from '@/shared/utils/index';
 
 /**
- * SurfaceTextarea — MD3-styled filled textarea.
+ * ClarionTextarea — filled textarea for the Clarion design system.
  *
- * Matches the "Scholarly Sanctuary" form style: surface-container-low
- * background, rounded-xl, no visible border, focus ring on primary-container.
+ * surface-container-low background, rounded-xl, no visible border,
+ * focus ring on primary-container.
  *
  * Built as a thin wrapper so it stays compatible with shadcn patterns
  * (forwardRef-free in React 19, data-slot, same prop signature as <textarea>).
  */
-function SurfaceTextarea({
+function ClarionTextarea({
   className,
   ...props
 }: React.ComponentProps<'textarea'>) {
   return (
     <textarea
-      data-slot="surface-textarea"
+      data-slot="clarion-textarea"
       className={cn(
         'w-full resize-none rounded-xl border-none bg-surface-container-low px-5 py-4 text-on-surface transition-all',
         'placeholder:text-on-surface-variant/50',
@@ -31,4 +31,4 @@ function SurfaceTextarea({
   );
 }
 
-export { SurfaceTextarea };
+export { ClarionTextarea };

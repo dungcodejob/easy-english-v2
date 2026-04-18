@@ -18,7 +18,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-import { DsCard, DsProgress } from '@/shared/ui';
+import { DsCard, ClarionProgress } from '@/shared/ui';
 import { useStudyStats, useFlashcards } from '../hooks/use-flashcards';
 
 export const Route = createFileRoute('/_(authenticated)/flashcards/stats')({
@@ -155,14 +155,18 @@ function StatsPage() {
               <span className="text-muted-foreground">
                 {t('stats.overall_mastery') || 'Overall Mastery'}
               </span>
-              <span className="font-medium">{Math.round(masteryProgress)}%</span>
+              <span className="font-medium">
+                {Math.round(masteryProgress)}%
+              </span>
             </div>
-            <DsProgress value={masteryProgress} size="lg" />
+            <ClarionProgress value={masteryProgress} size="lg" />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-lg bg-muted/50 p-4 text-center">
-              <div className="text-2xl font-bold text-blue-500">{totalCards}</div>
+              <div className="text-2xl font-bold text-blue-500">
+                {totalCards}
+              </div>
               <div className="mt-1 text-sm text-muted-foreground">
                 {t('stats.total_cards') || 'Total Cards'}
               </div>
@@ -176,7 +180,9 @@ function StatsPage() {
               </div>
             </div>
             <div className="rounded-lg bg-muted/50 p-4 text-center">
-              <div className="text-2xl font-bold text-orange-500">{stats.streak}</div>
+              <div className="text-2xl font-bold text-orange-500">
+                {stats.streak}
+              </div>
               <div className="mt-1 text-sm text-muted-foreground">
                 {t('stats.day_streak') || 'Day Streak'}
               </div>
@@ -194,16 +200,15 @@ function StatsPage() {
           description={
             stats.lastStudyDate
               ? t('stats.keep_going') || 'Keep up the great work!'
-              : t('stats.start_studying') || 'Start studying to build your streak!'
+              : t('stats.start_studying') ||
+                'Start studying to build your streak!'
           }
         />
         <ActivityCard
           icon={<Zap className="size-5 text-muted-foreground" />}
           title={t('stats.this_week') || 'This Week'}
           value={`${stats.totalCardsReviewed}`}
-          description={
-            t('stats.cards_this_week') || 'cards reviewed'
-          }
+          description={t('stats.cards_this_week') || 'cards reviewed'}
         />
       </div>
     </div>
@@ -232,7 +237,9 @@ function StatCard({
   return (
     <DsCard className="hover:-translate-y-1 hover:shadow-md transition-all duration-200">
       <DsCard.Header className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <span className="text-sm font-medium text-muted-foreground">{title}</span>
+        <span className="text-sm font-medium text-muted-foreground">
+          {title}
+        </span>
         <div className={`rounded-full p-2 ${bgColor}`}>
           <Icon className={`size-4 ${color}`} />
         </div>

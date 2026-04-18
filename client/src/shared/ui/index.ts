@@ -47,15 +47,15 @@ export { DsEmptyState } from './base/ds-empty-state';
 
 export { DsPagination } from './base/ds-pagination';
 
-export { DsProgress } from './base/ds-progress';
-export type { DsProgressProps } from './base/ds-progress';
+export { ClarionProgress } from './base/clarion-progress';
+export type { ClarionProgressProps } from './base/clarion-progress';
 
 export { DsSpinner } from './base/ds-spinner';
 export type { DsSpinnerProps } from './base/ds-spinner';
 
-export { SurfaceInput } from './base/surface-input';
-export { SurfaceLabel } from './base/surface-label';
-export { SurfaceTextarea } from './base/surface-textarea';
+export { ClarionInput } from './base/clarion-input';
+export { ClarionLabel } from './base/clarion-label';
+export { ClarionTextarea } from './base/clarion-textarea';
 
 export {
   DsAlertDialog,

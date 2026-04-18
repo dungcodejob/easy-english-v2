@@ -1,5 +1,5 @@
 import { TopicRoutes } from '@/shared/constants';
-import { DsButton } from '@/shared/ui';
+import { DsButton, ClarionProgress } from '@/shared/ui';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -105,12 +105,7 @@ export function TopicCardItem({ topic, onEdit, onDelete }: TopicCardProps) {
               12%
             </span>
           </div>
-          <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-            <div
-              className="h-full bg-error rounded-full"
-              style={{ width: '12%' }}
-            ></div>
-          </div>
+          <ClarionProgress value={12} size="md" variant="error" />
         </div>
       </div>
     </div>
