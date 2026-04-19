@@ -3,40 +3,37 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
-import { LoginCommand } from './login.command';
 import { AuthProvider } from '../../domain/entities/auth-identity.entity';
 import { Session } from '../../domain/entities/session.entity';
 import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
+import { AuthResultDto } from '../../dto/auth-result.dto';
+import { UserResponseDto } from '../../dto/responses/user.response.dto';
 import {
   type IPasswordHasher,
   InjectPasswordHasher,
-} from '../../domain/ports/password-hasher.interface';
-import {
-  ITokenPayload,
-  TokenType,
-} from '../../domain/ports/token-generator.interface';
+} from '../ports/password-hasher.interface';
+import { ITokenPayload, TokenType } from '../ports/token-generator.interface';
 import {
   type ITokenHasher,
   InjectTokenHasher,
-} from '../../domain/ports/token-hasher.interface';
+} from '../ports/token-hasher.interface';
 import {
   type ITokenService,
   InjectTokenService,
-} from '../../domain/ports/token-service.interface';
+} from '../ports/token-service.interface';
 import {
   type IAuthIdentityRepository,
   InjectAuthIdentityRepository,
-} from '../../domain/repositories/auth-identity.repository.interface';
+} from '../repositories/auth-identity.repository.interface';
 import {
   type ISessionRepository,
   InjectSessionRepository,
-} from '../../domain/repositories/session.repository.interface';
+} from '../repositories/session.repository.interface';
 import {
   type IUserRepository,
   InjectUserRepository,
-} from '../../domain/repositories/user.repository.interface';
-import { AuthResultDto } from '../../dto/auth-result.dto';
-import { UserResponseDto } from '../../dto/responses/user.response.dto';
+} from '../repositories/user.repository.interface';
+import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<

@@ -3,7 +3,6 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
-import { RegisterCommand } from './register.command';
 import {
   AuthIdentity,
   AuthProvider,
@@ -12,32 +11,33 @@ import {
   UserRole,
 } from '../../domain/entities';
 import { EmailAlreadyExistsException } from '../../domain/exceptions/email-already-exists.exception';
+import { Email, Password, Username } from '../../domain/value-objects';
+import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
 import {
   InjectPasswordHasher,
   type IPasswordHasher,
-} from '../../domain/ports/password-hasher.interface';
+} from '../ports/password-hasher.interface';
 import {
   InjectUsernameAvailability,
   type IUsernameAvailabilityService,
-} from '../../domain/ports/username-availability.interface';
+} from '../ports/username-availability.interface';
 import {
   InjectUsernameGenerator,
   type IUsernameGenerator,
-} from '../../domain/ports/username-generator.interface';
+} from '../ports/username-generator.interface';
 import {
   InjectAuthIdentityRepository,
   type IAuthIdentityRepository,
-} from '../../domain/repositories/auth-identity.repository.interface';
+} from '../repositories/auth-identity.repository.interface';
 import {
   injectTenantRepository,
   type ITenantRepository,
-} from '../../domain/repositories/tenant.repository.interface';
+} from '../repositories/tenant.repository.interface';
 import {
   InjectUserRepository,
   type IUserRepository,
-} from '../../domain/repositories/user.repository.interface';
-import { Email, Password, Username } from '../../domain/value-objects';
-import { RegisterResponseDto } from '../../dto/responses/register.response.dto';
+} from '../repositories/user.repository.interface';
+import { RegisterCommand } from './register.command';
 
 @CommandHandler(RegisterCommand)
 export class RegisterHandler implements ICommandHandler<

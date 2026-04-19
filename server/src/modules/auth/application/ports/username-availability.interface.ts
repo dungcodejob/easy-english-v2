@@ -1,6 +1,6 @@
 import { createInjection } from '@shared/utils';
 
-import { type Username } from '../value-objects/username.vo';
+import { type Username } from '../../domain/value-objects/username.vo';
 
 /**
  * UsernameAvailabilityService (Domain Service)

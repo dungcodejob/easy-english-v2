@@ -1,5 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
+import {
+  InjectLearningReadRepository,
+  type ILearningReadRepository,
+} from '../../../learning/progress/application/repositories/learning-read.repository.interface';
 import {
   InjectWordReadRepository,
   type IWordReadRepository,
@@ -12,6 +15,8 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
   constructor(
     @InjectWordReadRepository()
     private readonly wordRepo: IWordReadRepository,
+    @InjectLearningReadRepository()
+    private readonly learningRepo: ILearningReadRepository,
   ) {}
 
   async execute(
@@ -23,6 +28,17 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
       query.skip,
     );
 
+    let learnedSenseIds = new Set<string>();
+
+    if (query.userId && searchItems.length > 0) {
+      const senseIds = searchItems.map((item) => item.senseId);
+      const learnedIdsList = await this.learningRepo.checkLearnedStatus(
+        query.userId,
+        senseIds,
+      );
+
+      learnedSenseIds = new Set(learnedIdsList);
+    }
     // Sort: exact match first, then by text length
     const sorted = searchItems.sort((a, b) => {
       const queryLower = query.query.toLowerCase();
@@ -43,6 +59,7 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
       definition: item.definition,
       definitionVi: item.definitionVi,
       cefrLevel: item.cefrLevel,
+      isLearned: query.userId ? learnedSenseIds.has(item.senseId) : undefined,
       pronunciations: item.pronunciations.map((pronunciation) => ({
         ipa: pronunciation.ipa,
         audioUrl: pronunciation.audioUrl || '',

@@ -3,9 +3,6 @@ import { CqrsModule } from '@nestjs/cqrs';
 
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 
-import { FlashcardModule } from '../../flashcard/flashcard.module';
-import { ProgressModule } from '../progress/progress.module';
-
 import { WordExampleOrmEntity } from '../../dictionary/infrastructure/persistence/word-example.orm-entity';
 import { WordSenseOrmEntity } from '../../dictionary/infrastructure/persistence/word-sense.orm-entity';
 import { WordOrmEntity } from '../../dictionary/infrastructure/persistence/word.orm-entity';
@@ -35,6 +32,8 @@ import { StudyStatsOrmEntity } from './infrastructure/persistence/study-stats.or
 import { StudySessionRepository } from './infrastructure/repositories/study-session.repository';
 import { StudyStatsRepository } from './infrastructure/repositories/study-stats.repository';
 import { StudySessionReviewLogListener } from './listeners/study-session-review-log.listener';
+import { FlashcardModule } from '../../flashcard/flashcard.module';
+import { ProgressModule } from '../progress/progress.module';
 
 const queryHandlers = [
   GetDueCardsHandler,

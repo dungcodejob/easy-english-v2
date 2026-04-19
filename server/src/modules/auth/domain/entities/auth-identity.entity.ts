@@ -2,8 +2,8 @@ import { v7 } from 'uuid';
 
 import { AggregateRoot, type CreateEntityProps } from '@core/ddd';
 
+import { type IPasswordHasher } from '../../application/ports/password-hasher.interface';
 import { AuthIdentityCreatedEvent } from '../events';
-import { type IPasswordHasher } from '../ports/password-hasher.interface';
 import { type Password } from '../value-objects/password.vo';
 
 export enum AuthProvider {

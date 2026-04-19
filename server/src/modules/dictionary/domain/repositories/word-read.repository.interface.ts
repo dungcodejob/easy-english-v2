@@ -12,6 +12,7 @@ export interface WordSenseSearchReadModel {
   shortDefinition: string | null;
   cefrLevel: string | null;
   pronunciations: { ipa: string; audioUrl: string | null; region: string }[];
+  isLearned?: boolean;
 }
 
 export interface WordSenseDetailReadModel {

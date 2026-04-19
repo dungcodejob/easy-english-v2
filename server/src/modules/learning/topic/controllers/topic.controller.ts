@@ -16,9 +16,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { ApiResponse as ApiResponseBuilder } from '@core/api';
 import {
   ApiPaginationParams,
+  ApiResponse as ApiResponseBuilder,
   PaginationParam,
   type ParsedPaginationParams,
 } from '@core/api';
@@ -45,7 +45,7 @@ import {
 } from '../dto/requests/topic-requests.dto';
 import { TopicDto, TopicWordDto } from '../dto/responses/topic.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Learning Topics')
 @Controller({ version: '1', path: 'learning/topics' })

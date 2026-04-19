@@ -9,35 +9,35 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { LoginHandler } from './application/commands/login.handler';
 import { RefreshHandler } from './application/commands/refresh.handler';
 import { RegisterHandler } from './application/commands/register.handler';
-import { GetSessionHandler } from './application/queries/get-session.handler';
-import { ValidateSessionHandler } from './application/queries/validate-session.handler';
-import { AuthController } from './controllers/auth.controller';
 import {
   passwordHasherToken,
   providePasswordHasher,
-} from './domain/ports/password-hasher.interface';
+} from './application/ports/password-hasher.interface';
 import {
   provideTokenHasher,
   tokenHasherToken,
-} from './domain/ports/token-hasher.interface';
+} from './application/ports/token-hasher.interface';
 import {
   provideTokenService,
   tokenServiceToken,
-} from './domain/ports/token-service.interface';
-import { provideTokenStrategies } from './domain/ports/token-strategy.interface';
+} from './application/ports/token-service.interface';
+import { provideTokenStrategies } from './application/ports/token-strategy.interface';
 import {
   provideUsernameAvailability,
   usernameAvailabilityToken,
-} from './domain/ports/username-availability.interface';
+} from './application/ports/username-availability.interface';
 import {
   provideUsernameGenerator,
   usernameGeneratorToken,
-} from './domain/ports/username-generator.interface';
-import { provideAuthIdentityRepository } from './domain/repositories/auth-identity.repository.interface';
-import { provideLoginAttemptTrackerRepository } from './domain/repositories/login-attempt-tracker.repository.interface';
-import { provideSessionRepository } from './domain/repositories/session.repository.interface';
-import { provideTenantRepository } from './domain/repositories/tenant.repository.interface';
-import { provideUserRepository } from './domain/repositories/user.repository.interface';
+} from './application/ports/username-generator.interface';
+import { GetSessionHandler } from './application/queries/get-session.handler';
+import { ValidateSessionHandler } from './application/queries/validate-session.handler';
+import { provideAuthIdentityRepository } from './application/repositories/auth-identity.repository.interface';
+import { provideLoginAttemptTrackerRepository } from './application/repositories/login-attempt-tracker.repository.interface';
+import { provideSessionRepository } from './application/repositories/session.repository.interface';
+import { provideTenantRepository } from './application/repositories/tenant.repository.interface';
+import { provideUserRepository } from './application/repositories/user.repository.interface';
+import { AuthController } from './controllers/auth.controller';
 import { UsernameGeneratorService } from './domain/services/username-generator.service';
 import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 import {

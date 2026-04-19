@@ -26,6 +26,11 @@ export interface ILearningReadRepository {
     top: number,
     skip: number,
   ): Promise<{ data: LearningListItemReadModel[]; count: number }>;
+
+  /**
+   * Returns a list of senseIds among the provided array that the user has learned/is learning.
+   */
+  checkLearnedStatus(userId: string, senseIds: string[]): Promise<string[]>;
 }
 
 const { inject, provider, token } = createInjection<ILearningReadRepository>(

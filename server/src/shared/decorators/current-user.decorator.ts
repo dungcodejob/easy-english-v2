@@ -1,6 +1,6 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): ITokenPayload => {

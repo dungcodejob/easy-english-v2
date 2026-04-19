@@ -1,6 +1,6 @@
 import { createInjection } from '@shared/utils';
 
-import { type UserWordSenseProgress } from '../entities/user-word-sense-progress.entity';
+import { type UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
 
 export interface ILearningWriteRepository {
   /**

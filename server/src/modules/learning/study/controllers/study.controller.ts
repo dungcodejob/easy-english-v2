@@ -26,7 +26,7 @@ import {
 } from '../dto/responses/study-card.response.dto';
 import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Learning Study')
 @ApiBearerAuth()

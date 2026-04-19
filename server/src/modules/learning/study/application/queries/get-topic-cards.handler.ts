@@ -10,11 +10,11 @@ import {
 import { TopicOrmEntity } from 'src/modules/learning/topic/infrastructure/persistence/topic.orm-entity';
 import { validate as isUuid } from 'uuid';
 
+import { GetTopicCardsQuery } from './get-topic-cards.query';
 import {
   StudyCardResponseDto,
   TopicStudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
-import { GetTopicCardsQuery } from './get-topic-cards.query';
 
 const PHASE1_CARD_CAP = 100;
 

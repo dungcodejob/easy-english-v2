@@ -4,13 +4,14 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { UserWordSenseProgressOrmEntity } from 'src/modules/learning/progress/infrastructure/persistence/user-word-sense-progress.orm-entity';
 
-import { InjectFlashcardRepository } from '../../../../flashcard/domain/repositories/flashcard.repository.interface';
-import type { IFlashcardRepository } from '../../../../flashcard/domain/repositories/flashcard.repository.interface';
 import { GetDueCardsQuery } from './get-due-cards.query';
+import { InjectFlashcardRepository } from '../../../../flashcard/domain/repositories/flashcard.repository.interface';
 import {
   StudyCardResponseDto,
   StudyCardsEnvelopeDto,
 } from '../../dto/responses/study-card.response.dto';
+
+import type { IFlashcardRepository } from '../../../../flashcard/domain/repositories/flashcard.repository.interface';
 
 const PHASE1_CARD_CAP = 100;
 

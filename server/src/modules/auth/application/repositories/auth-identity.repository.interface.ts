@@ -1,6 +1,6 @@
 import { createInjection } from '@shared/utils';
 
-import { type AuthIdentity } from '../entities';
+import { type AuthIdentity } from '../../domain/entities';
 
 export interface IAuthIdentityRepository {
   persist(identity: AuthIdentity): void;

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
+import { ILoginAttemptTrackerRepository } from '../../application/repositories/login-attempt-tracker.repository.interface';
 import { LoginAttemptTracker } from '../../domain/entities/login-attempt-tracker.entity';
-import { ILoginAttemptTrackerRepository } from '../../domain/repositories/login-attempt-tracker.repository.interface';
 import { LoginAttemptTrackerMapper } from '../mappers/login-attempt-tracker.mapper';
 import { LoginAttemptTrackerOrmEntity } from '../persistence/login-attempt-tracker.orm-entity';
 

@@ -31,7 +31,7 @@ import { CreateFlashcardRequestDto } from '../dto/requests/create-flashcard.requ
 import { UpdateFlashcardRequestDto } from '../dto/requests/update-flashcard.request.dto';
 import { FlashcardResponseDto } from '../dto/responses/flashcard.response.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Flashcards')
 @ApiBearerAuth()

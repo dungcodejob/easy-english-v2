@@ -5,8 +5,8 @@ import {
   ApiNoContentResponse,
   ApiOperation,
   ApiParam,
-  ApiResponse as SwaggerResponse,
   ApiTags,
+  ApiResponse as SwaggerResponse,
 } from '@nestjs/swagger';
 
 import { ReviewWordResponse } from 'src/modules/learning/progress/application/commands/review-word.handler';
@@ -32,7 +32,7 @@ import { StartStudySessionRequestDto } from '../dto/requests/start-study-session
 import { StudySessionReviewRequestDto } from '../dto/requests/study-session-review.request.dto';
 import { SessionSummaryResponseDto } from '../dto/responses/session-summary.response.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Learning Study Session')
 @ApiBearerAuth()

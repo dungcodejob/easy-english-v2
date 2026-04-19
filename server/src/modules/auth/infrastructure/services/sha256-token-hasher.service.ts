@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 
 import { Injectable } from '@nestjs/common';
 
-import { ITokenHasher } from '../../domain/ports/token-hasher.interface';
+import { ITokenHasher } from '../../application/ports/token-hasher.interface';
 
 @Injectable()
 export class Sha256TokenHasherService implements ITokenHasher {

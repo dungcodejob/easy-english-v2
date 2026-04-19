@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
   GenerateUsernameProps,
   IUsernameGenerator,
-} from '../ports/username-generator.interface';
+} from '../../application/ports/username-generator.interface';
 import { Username } from '../value-objects/username.vo';
 
 /**

@@ -29,6 +29,7 @@ import {
   ApiPublic,
 } from '../../../shared/decorators/http/http.decorator';
 import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../auth/infrastructure/guards/optional-jwt-auth.guard';
 import { GetWordSenseDetailQuery } from '../application/queries/get-word-sense-detail.query';
 import { LookupWordQuery } from '../application/queries/lookup-word.query';
 import { SearchWordSensesQuery } from '../application/queries/search-word-senses.query';
@@ -38,7 +39,7 @@ import { WordSenseDetailResponseDto } from '../dto/responses/word-sense-detail.r
 import { WordSenseSearchResultResponseDto } from '../dto/responses/word-sense-search-result.response.dto';
 import { WordResponseDto } from '../dto/responses/word.response.dto';
 
-import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '../../auth/application/ports/token-generator.interface';
 
 @ApiTags('Dictionary')
 @Controller({ version: '1', path: 'dictionary' })
@@ -54,14 +55,16 @@ export class DictionaryController {
     summary: 'Search for WordSenses by prefix',
   })
   @Public()
+  @UseGuards(OptionalJwtAuthGuard)
   async searchWordSenses(
     @Query() queryDto: SearchWordSensesRequestDto,
     @PaginationParam() pagination: ParsedPaginationParams,
+    @CurrentUser() user?: ITokenPayload,
   ) {
     const { q } = queryDto;
     const { top = 20, skip = 0 } = pagination;
 
-    const query = new SearchWordSensesQuery(q, top, skip);
+    const query = new SearchWordSensesQuery(q, top, skip, user?.userId);
     const result = await this.queryBus.execute<
       SearchWordSensesQuery,
       { data: WordSenseSearchResultResponseDto[]; count: number }

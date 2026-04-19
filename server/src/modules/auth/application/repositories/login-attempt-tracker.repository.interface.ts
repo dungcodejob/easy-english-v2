@@ -1,6 +1,6 @@
 import { createInjection } from '@shared/utils';
 
-import { type LoginAttemptTracker } from '../entities/login-attempt-tracker.entity';
+import { type LoginAttemptTracker } from '../../domain/entities/login-attempt-tracker.entity';
 
 export interface ILoginAttemptTrackerRepository {
   persist(tracker: LoginAttemptTracker): void;

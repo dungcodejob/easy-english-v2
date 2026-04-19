@@ -30,6 +30,12 @@ export class WordSenseSearchResultResponseDto {
   @ApiPropertyOptional({ description: 'CEFR level (A1, A2, B1, B2, C1, C2)' })
   readonly cefrLevel!: string | null;
 
+  @ApiPropertyOptional({
+    description:
+      'Indicates whether the user is currently learning or has learned this word sense',
+  })
+  readonly isLearned?: boolean;
+
   @ApiPropertyOptional({ description: 'Word pronunciation' })
   readonly pronunciations: WordPronunciationResponseDto[];
 }

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 
+import { ISessionRepository } from '../../application/repositories/session.repository.interface';
 import { Session, SessionStatus } from '../../domain/entities/session.entity';
-import { ISessionRepository } from '../../domain/repositories/session.repository.interface';
 import { SessionMapper } from '../mappers/session.mapper';
 import { SessionOrmEntity } from '../persistence/session.orm-entity';
 

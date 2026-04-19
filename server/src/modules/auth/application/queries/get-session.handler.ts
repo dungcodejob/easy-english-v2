@@ -1,12 +1,12 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { GetSessionQuery } from './get-session.query';
 import { Session } from '../../domain/entities/session.entity';
 import { SessionNotFoundException } from '../../domain/exceptions/email-already-exists.exception';
 import {
   type ISessionRepository,
   InjectSessionRepository,
-} from '../../domain/repositories/session.repository.interface';
+} from '../repositories/session.repository.interface';
+import { GetSessionQuery } from './get-session.query';
 
 @QueryHandler(GetSessionQuery)
 export class GetSessionHandler implements IQueryHandler<GetSessionQuery> {

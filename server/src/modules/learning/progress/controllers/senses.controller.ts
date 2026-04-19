@@ -42,7 +42,7 @@ import { AddToLearningRequestDto } from '../dto/requests/add-to-learning.request
 import { ReviewWordRequestDto } from '../dto/requests/review-word.request.dto';
 import { LearningListItemResponseDto } from '../dto/responses/learning-list-item.response.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Learning Senses')
 @ApiBearerAuth()
