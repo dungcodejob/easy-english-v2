@@ -13,6 +13,10 @@ export const useAddToLearning = () => {
         queryKey: dictionaryKeys.detail(senseId),
       });
 
+      queryClient.invalidateQueries({
+        queryKey: learningKeys.state(senseId),
+      });
+
       // Invalidate existing learning lists
       queryClient.invalidateQueries({
         queryKey: learningKeys.lists(),

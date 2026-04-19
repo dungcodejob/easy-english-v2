@@ -1,4 +1,5 @@
 import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
+import { WorkspaceSwitcher } from '@/modules/workspace/components/workspace-switcher';
 import {
   AchievementsRoutes,
   DictionaryRoutes,
@@ -100,19 +101,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<'aside'>) {
       className="h-screen w-64 fixed left-0 top-0 z-50 rounded-r-[3rem] bg-surface-container-low shadow-xl flex flex-col py-8"
       {...props}
     >
-      {/* Brand Header */}
-      <div className="px-8 mb-10 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-sm shrink-0">
-          <School className="size-5" />
-        </div>
-        <div className="overflow-hidden">
-          <h2 className="font-headline font-bold text-primary leading-none truncate">
-            Scholar
-          </h2>
-          <p className="text-[10px] text-on-surface-variant font-medium truncate">
-            Level 12 Philosopher
-          </p>
-        </div>
+      {/* Current Workspace + Switcher */}
+      <div className="px-5 mb-10">
+        <WorkspaceSwitcher />
       </div>
 
       {/* Navigation */}

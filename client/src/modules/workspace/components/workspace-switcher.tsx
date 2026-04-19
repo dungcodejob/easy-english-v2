@@ -1,3 +1,7 @@
+import {
+  MOCK_WORKSPACES,
+  type WorkspacePreview,
+} from '@/modules/workspace/data/mock-workspaces';
 import { useWorkspaceStore } from '@/modules/workspace/stores/workspace.store';
 import {
   Popover,
@@ -10,61 +14,12 @@ import { cn } from '@/shared/utils';
 import {
   BookOpen,
   BrainCircuit,
-  Building,
+  ChevronsUpDown,
   Flame,
   ListChecks,
+  School,
 } from 'lucide-react';
 import { useState } from 'react';
-
-/** Mock workspaces — replace with real API data when available */
-interface WorkspacePreview {
-  id: string;
-  name: string;
-  plan: string;
-  wordCount: number;
-  masteredCount: number;
-  reviewDueCount: number;
-  streak: number;
-  isActive: boolean;
-}
-
-const MOCK_WORKSPACES: WorkspacePreview[] = [
-  {
-    id: 'default-workspace',
-    name: 'Easy English',
-    plan: 'Free Plan',
-    wordCount: 120,
-    masteredCount: 45,
-    reviewDueCount: 12,
-    streak: 7,
-    isActive: true,
-  },
-  {
-    id: 'ws-spanish',
-    name: 'Spanish Basics',
-    plan: 'Pro Plan',
-    wordCount: 340,
-    masteredCount: 210,
-    reviewDueCount: 28,
-    streak: 21,
-    isActive: false,
-  },
-  {
-    id: 'ws-french',
-    name: 'French Journey',
-    plan: 'Free Plan',
-    wordCount: 60,
-    masteredCount: 8,
-    reviewDueCount: 5,
-    streak: 2,
-    isActive: false,
-  },
-];
-
-const PLAN_COLORS: Record<string, string> = {
-  'Free Plan': 'bg-surface-container text-on-surface-variant',
-  'Pro Plan': 'bg-secondary/10 text-secondary',
-};
 
 export function WorkspaceSwitcher() {
   const { currentWorkspaceId, setCurrentWorkspaceId } = useWorkspaceStore();
@@ -95,19 +50,25 @@ export function WorkspaceSwitcher() {
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="data-[state=open]:bg-surface-container-high data-[state=open]:text-primary flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className={cn(
+            'group flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left transition-all',
+            'hover:bg-surface-container-high/60',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+            'data-[state=open]:bg-surface-container-high data-[state=open]:shadow-sm',
+          )}
         >
-          <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Building className="size-4" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-sm shrink-0 transition-transform group-hover:scale-105 group-active:scale-95">
+            <School className="size-5" />
           </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-headline font-semibold text-on-surface">
+          <div className="flex-1 overflow-hidden">
+            <h2 className="font-headline font-bold text-primary leading-none truncate">
               {activeWorkspace.name}
-            </span>
-            <span className="truncate text-xs text-on-surface-variant">
+            </h2>
+            <p className="text-[10px] text-on-surface-variant font-medium truncate mt-1">
               {activeWorkspace.plan}
-            </span>
+            </p>
           </div>
+          <ChevronsUpDown className="size-4 shrink-0 text-on-surface-variant opacity-0 transition-opacity group-hover:opacity-100 group-data-[state=open]:opacity-100" />
         </button>
       </PopoverTrigger>
 

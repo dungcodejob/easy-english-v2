@@ -219,7 +219,10 @@
       "mcp__filesystem__edit_file",
       "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('react:', p.dependencies.react\\)\")",
       "WebFetch(domain:dev.to)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(npx tsr *)",
+      "Bash(xargs ls *)",
+      "Bash(find *)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

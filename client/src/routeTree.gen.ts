@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './root'
 import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from './modules/shell/pages/unauthenticated-layout'
+import { Route as DotModulesShellPagesAuthenticatedFullscreenLayoutRouteImport } from './modules/shell/pages/authenticated-fullscreen-layout'
 import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
 import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
 import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
 import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
+import { Route as DotModulesWorkspacePagesWorkspacesDotpageRouteImport } from './modules/workspace/pages/workspaces.page'
 import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
 import { Route as DotModulesFlashcardPagesFlashcardsDotpageRouteImport } from './modules/flashcard/pages/flashcards.page'
 import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
@@ -30,6 +32,11 @@ import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } fro
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
   DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
     id: '/_(unauthenticated)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotModulesShellPagesAuthenticatedFullscreenLayoutRoute =
+  DotModulesShellPagesAuthenticatedFullscreenLayoutRouteImport.update({
+    id: '/_(authenticated-fullscreen)',
     getParentRoute: () => rootRouteImport,
   } as any)
 const DotModulesShellPagesAuthenticatedLayoutRoute =
@@ -54,6 +61,12 @@ const DotModulesAuthPagesLoginPageRoute =
     id: '/login',
     path: '/login',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
+  } as any)
+const DotModulesWorkspacePagesWorkspacesDotpageRoute =
+  DotModulesWorkspacePagesWorkspacesDotpageRouteImport.update({
+    id: '/workspace',
+    path: '/workspace',
+    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
 const DotModulesLearningPagesMyLearningDotpageRoute =
   DotModulesLearningPagesMyLearningDotpageRouteImport.update({
@@ -83,7 +96,8 @@ const DotModulesWorkspacePagesNewWorkspaceDotpageRoute =
   DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport.update({
     id: '/workspace/new',
     path: '/workspace/new',
-    getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
+    getParentRoute: () =>
+      DotModulesShellPagesAuthenticatedFullscreenLayoutRoute,
   } as any)
 const DotModulesTopicScreensTopicsTopicsDotscreenRoute =
   DotModulesTopicScreensTopicsTopicsDotscreenRouteImport.update({
@@ -134,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
@@ -150,6 +165,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
   '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
   '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
@@ -165,11 +181,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof modulesShellPagesLandingPageRoute
   '/_(authenticated)': typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
+  '/_(authenticated-fullscreen)': typeof DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren
   '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
   '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
   '/_(authenticated)/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   '/_(authenticated)/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
   '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/_(authenticated)/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
   '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
@@ -177,7 +195,7 @@ export interface FileRoutesById {
   '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/_(authenticated)/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  '/_(authenticated)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
+  '/_(authenticated-fullscreen)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
   '/_(authenticated)/learning/topics/$topicId': typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
 }
@@ -189,6 +207,7 @@ export interface FileRouteTypes {
     | '/dictionary'
     | '/flashcards'
     | '/learning'
+    | '/workspace'
     | '/login'
     | '/register'
     | '/dictionary/'
@@ -205,6 +224,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/flashcards'
     | '/learning'
+    | '/workspace'
     | '/login'
     | '/register'
     | '/dictionary'
@@ -219,11 +239,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_(authenticated)'
+    | '/_(authenticated-fullscreen)'
     | '/_(unauthenticated)'
     | '/_(authenticated)/dashboard'
     | '/_(authenticated)/dictionary'
     | '/_(authenticated)/flashcards'
     | '/_(authenticated)/learning'
+    | '/_(authenticated)/workspace'
     | '/_(unauthenticated)/login'
     | '/_(unauthenticated)/register'
     | '/_(authenticated)/dictionary/'
@@ -231,7 +253,7 @@ export interface FileRouteTypes {
     | '/_(authenticated)/flashcards/study'
     | '/_(authenticated)/learning/study'
     | '/_(authenticated)/learning/topics'
-    | '/_(authenticated)/workspace/new'
+    | '/_(authenticated-fullscreen)/workspace/new'
     | '/_(authenticated)/dictionary/senses/$senseId'
     | '/_(authenticated)/learning/topics/$topicId'
   fileRoutesById: FileRoutesById
@@ -239,6 +261,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   modulesShellPagesLandingPageRoute: typeof modulesShellPagesLandingPageRoute
   DotModulesShellPagesAuthenticatedLayoutRoute: typeof DotModulesShellPagesAuthenticatedLayoutRouteWithChildren
+  DotModulesShellPagesAuthenticatedFullscreenLayoutRoute: typeof DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren
   DotModulesShellPagesUnauthenticatedLayoutRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
 }
 
@@ -249,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_(authenticated-fullscreen)': {
+      id: '/_(authenticated-fullscreen)'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DotModulesShellPagesAuthenticatedFullscreenLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_(authenticated)': {
@@ -279,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport
       parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
+    '/_(authenticated)/workspace': {
+      id: '/_(authenticated)/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof DotModulesWorkspacePagesWorkspacesDotpageRouteImport
+      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+    }
     '/_(authenticated)/learning': {
       id: '/_(authenticated)/learning'
       path: '/learning'
@@ -307,12 +344,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotModulesDashboardPagesDashboardPageRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
-    '/_(authenticated)/workspace/new': {
-      id: '/_(authenticated)/workspace/new'
+    '/_(authenticated-fullscreen)/workspace/new': {
+      id: '/_(authenticated-fullscreen)/workspace/new'
       path: '/workspace/new'
       fullPath: '/workspace/new'
       preLoaderRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport
-      parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
+      parentRoute: typeof DotModulesShellPagesAuthenticatedFullscreenLayoutRoute
     }
     '/_(authenticated)/learning/topics': {
       id: '/_(authenticated)/learning/topics'
@@ -389,11 +426,11 @@ interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
   DotModulesFlashcardPagesFlashcardsDotpageRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
   DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
+  DotModulesWorkspacePagesWorkspacesDotpageRoute: typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute
   DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute
   DotModulesLearningPagesStudySessionDotpageRoute: typeof DotModulesLearningPagesStudySessionDotpageRoute
   DotModulesTopicScreensTopicsTopicsDotscreenRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
-  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
   DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute: typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
 }
 
@@ -407,6 +444,8 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesFlashcardPagesFlashcardsDotpageRoute,
     DotModulesLearningPagesMyLearningDotpageRoute:
       DotModulesLearningPagesMyLearningDotpageRoute,
+    DotModulesWorkspacePagesWorkspacesDotpageRoute:
+      DotModulesWorkspacePagesWorkspacesDotpageRoute,
     DotModulesFlashcardPagesStatsDotpageRoute:
       DotModulesFlashcardPagesStatsDotpageRoute,
     DotModulesFlashcardPagesStudyDotpageRoute:
@@ -415,8 +454,6 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesLearningPagesStudySessionDotpageRoute,
     DotModulesTopicScreensTopicsTopicsDotscreenRoute:
       DotModulesTopicScreensTopicsTopicsDotscreenRoute,
-    DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
-      DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
     DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute:
       DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute,
   }
@@ -424,6 +461,21 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
 const DotModulesShellPagesAuthenticatedLayoutRouteWithChildren =
   DotModulesShellPagesAuthenticatedLayoutRoute._addFileChildren(
     DotModulesShellPagesAuthenticatedLayoutRouteChildren,
+  )
+
+interface DotModulesShellPagesAuthenticatedFullscreenLayoutRouteChildren {
+  DotModulesWorkspacePagesNewWorkspaceDotpageRoute: typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
+}
+
+const DotModulesShellPagesAuthenticatedFullscreenLayoutRouteChildren: DotModulesShellPagesAuthenticatedFullscreenLayoutRouteChildren =
+  {
+    DotModulesWorkspacePagesNewWorkspaceDotpageRoute:
+      DotModulesWorkspacePagesNewWorkspaceDotpageRoute,
+  }
+
+const DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren =
+  DotModulesShellPagesAuthenticatedFullscreenLayoutRoute._addFileChildren(
+    DotModulesShellPagesAuthenticatedFullscreenLayoutRouteChildren,
   )
 
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
@@ -447,6 +499,8 @@ const rootRouteChildren: RootRouteChildren = {
   modulesShellPagesLandingPageRoute: modulesShellPagesLandingPageRoute,
   DotModulesShellPagesAuthenticatedLayoutRoute:
     DotModulesShellPagesAuthenticatedLayoutRouteWithChildren,
+  DotModulesShellPagesAuthenticatedFullscreenLayoutRoute:
+    DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren,
   DotModulesShellPagesUnauthenticatedLayoutRoute:
     DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren,
 }

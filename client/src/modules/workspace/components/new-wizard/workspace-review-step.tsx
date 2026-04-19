@@ -58,19 +58,22 @@ export function WorkspaceReviewStep({
       maxWidth="max-w-5xl"
     >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Hero identity card — span 8 */}
-        <div className="md:col-span-8 overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 md:p-10 text-on-primary relative min-h-[240px] flex flex-col justify-end">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-tertiary-fixed-dim/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary-fixed-dim mb-3 block">
+        {/* Hero image card — span 8 */}
+        <div className="md:col-span-8 overflow-hidden rounded-xl bg-surface-container-low relative group min-h-[260px]">
+          <img
+            alt="Workspace hero"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5uBMvJ_5qTAAwZSyin68PEJa6_gXVF6FH8XRDamaOAWW8ZfNYXLuoD4As14QR2rpXpwLCeSHOMrVVf_st7vM2G6GvIwTuuCVDzYws7M9hGV8tLAnzqWAM-P3yX_lHMhsCXNYeFoLEERJySyg0gkSpKifBH1Y8f454nnoRfGdWBatlf7zAZM6WrnIfh4hT6WxZ96Hc9XdhDLgghb35QtL06RnFXs2PnZe_NVnPa1dbGuDwGhyfAk_Hp1xFBhoDJyZV1l1e1nL2qYs"
+            className="w-full h-64 min-h-[260px] object-cover opacity-80 mix-blend-multiply transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/40 to-transparent flex flex-col justify-end p-8 md:p-10">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-fixed-dim mb-3 block">
               {data.type ?? 'Personal'} Workspace
             </span>
-            <h3 className="font-headline text-3xl md:text-4xl font-bold mb-2 leading-tight">
+            <h3 className="font-headline text-white text-3xl md:text-4xl font-bold mb-2 leading-tight">
               {data.name || 'Untitled Workspace'}
             </h3>
             {data.description && (
-              <p className="text-primary-fixed/80 max-w-lg">
+              <p className="text-white/80 max-w-lg text-sm">
                 {data.description}
               </p>
             )}
@@ -193,6 +196,60 @@ export function WorkspaceReviewStep({
             </div>
           </div>
         </div>
+
+        {/* Curriculum Preview — 3 module cards */}
+        <section className="md:col-span-12 mt-12">
+          <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-8 text-center">
+            Initial Curriculum Preview
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col gap-3 group">
+              <div className="aspect-video rounded-xl overflow-hidden bg-surface-container-low grayscale group-hover:grayscale-0 transition-all duration-500">
+                <img
+                  alt="Module 1"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg4iwxOkAdhX6lGUS-AIdYzd4j7EnxXLTuUh5JCcXsuAX6PkIulbZGorj06jrgINA22LwRYBDBNi4sOgrTZFSI7ktOdKYfnq-_-tIJByFjcOdhGLQ7E3LIt7Bbz0Ek0bsMNTNbpD-Dd0LfKBNRtdxloJlIJfp6-VS-vWdRLLYGSG-1SKfuhlDwJS4ec8zD9hBSSw-JL436_3W_eU6LlmheLTfOBT93OEh2kc-TifIFXHQxlmr_gm53kbfdX6L87E5zRHA9J6cMrHs"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+              <p className="text-[11px] font-bold text-secondary uppercase tracking-widest">
+                Module 1
+              </p>
+              <h5 className="font-headline font-bold text-on-surface">
+                Linguistic foundations
+              </h5>
+            </div>
+            <div className="flex flex-col gap-3 group opacity-60">
+              <div className="aspect-video rounded-xl overflow-hidden bg-surface-container-low grayscale">
+                <img
+                  alt="Module 2"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-_mWsGJD1nh1eQVgMyfdXzG8BmlnsucqOuTnHNOftNLyVxTb9PvPVHuAW49EZmo1cjsG-C_AFO68FajFmfMOMmyp-stTzSaB6yRkPYjMmQUb5FmYzuhzzNPJRtS8p-xN_MYdJMzBHPb0jmVi-xIMhZ-q1GKYF8Vw75etU30ZU9KgwPM2CzM9eKodc1xdSg4RIDt2xtuBNCiL8WxYY1cbw7PfNINAh7YB3C9sgLmgzlgfIMtv2WRGsHv168BXFzv7D5_SAvmmjZFs"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">
+                Module 2
+              </p>
+              <h5 className="font-headline font-bold text-on-surface">
+                Conversational context
+              </h5>
+            </div>
+            <div className="flex flex-col gap-3 group opacity-40">
+              <div className="aspect-video rounded-xl overflow-hidden bg-surface-container-low grayscale">
+                <img
+                  alt="Module 3"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRgnjevAfkNuF0JLyBWMFE0SrotA8yI5pzlUGt6HV2zAWG1BWohV_FNLFLBEgRikBRYLrzT9I1W5z37ohbe1DAJU6ewr3I-342fj-rk1igatUuYbUxs5dPZA3N22l_4fCjFQjlTe3RkVgDp51M3C8vFdUBxhCVKUYVaMfe1O8PwbANqO9S9aSoTstE_vlw_MTEgmH5PS4HYJkvUH88pxRxobc16ZeQN6F6c6HgHDhNSJZD8L9m5YGG-ocXZZCqnjZucbYJ5YHNCI8"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest">
+                Module 3
+              </p>
+              <h5 className="font-headline font-bold text-on-surface">
+                Advanced syntax
+              </h5>
+            </div>
+          </div>
+        </section>
 
         {/* Glass action bar */}
         <div className="md:col-span-12 mt-4">

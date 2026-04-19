@@ -46,8 +46,8 @@ export const routes = rootRoute('root.tsx', [
     route(FlashcardsRoutes.study(), './modules/flashcard/pages/study.page.tsx'),
     route(FlashcardsRoutes.stats(), './modules/flashcard/pages/stats.page.tsx'),
     route(
-      WorkspaceRoutes.new(),
-      './modules/workspace/pages/new-workspace.page.tsx',
+      WorkspaceRoutes.list(),
+      './modules/workspace/pages/workspaces.page.tsx',
     ),
     // Dictionary Routes (Now Inside App Shell)
     route(
@@ -63,6 +63,17 @@ export const routes = rootRoute('root.tsx', [
       ],
     ),
   ]),
+
+  layout(
+    '(authenticated-fullscreen)',
+    './modules/shell/pages/authenticated-fullscreen-layout.tsx',
+    [
+      route(
+        WorkspaceRoutes.new(),
+        './modules/workspace/pages/new-workspace.page.tsx',
+      ),
+    ],
+  ),
   // ========== LAYOUT AUTHENTICATED ==========
   // layout('(authenticated)', './modules/shell/pages/authenticated-layout.tsx', [
   //   index('./modules/home/pages/home-page.tsx'),

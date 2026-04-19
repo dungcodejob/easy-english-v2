@@ -67,7 +67,7 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
           {/* Pronunciation + POS */}
           {defaultPronunciation?.ipa && (
             <p className="text-xl text-on-surface-variant font-medium">
-              /{defaultPronunciation.ipa}/ &bull;{' '}
+              {defaultPronunciation.ipa} &bull;{' '}
               <span className="italic">{detail.partOfSpeech}</span>
             </p>
           )}
