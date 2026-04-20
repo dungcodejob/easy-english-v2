@@ -12,6 +12,7 @@ export const AuthRoutes = {
 export const WorkspaceRoutes = {
   new: () => '/workspace/new',
   list: () => '/workspace',
+  settings: () => '/workspace/settings',
 };
 
 export const TopicRoutes = {

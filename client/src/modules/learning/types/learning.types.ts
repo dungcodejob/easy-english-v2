@@ -36,5 +36,6 @@ export interface WordSenseSearchResult {
   definitionVi: string | null;
   shortDefinition: string | null;
   cefrLevel: string | null;
+  isLearned?: boolean;
   pronunciations: WordPronunciationResponseDto[];
 }

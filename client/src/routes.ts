@@ -5,6 +5,8 @@ import {
   DictionaryRoutes,
   FlashcardsRoutes,
   LearnRoutes,
+  ProgressRoutes,
+  SettingsRoutes,
   TopicRoutes,
   WorkspaceRoutes,
 } from './shared/constants';
@@ -49,6 +51,12 @@ export const routes = rootRoute('root.tsx', [
       WorkspaceRoutes.list(),
       './modules/workspace/pages/workspaces.page.tsx',
     ),
+    route(
+      WorkspaceRoutes.settings(),
+      './modules/workspace/pages/workspace-settings.page.tsx',
+    ),
+    route(ProgressRoutes.list(), './modules/progress/pages/progress.page.tsx'),
+    route(SettingsRoutes.list(), './modules/settings/pages/settings.page.tsx'),
     // Dictionary Routes (Now Inside App Shell)
     route(
       DictionaryRoutes.search(),
