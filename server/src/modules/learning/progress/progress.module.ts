@@ -6,6 +6,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AddToLearningHandler } from './application/commands/add-to-learning.handler';
 import { RemoveFromLearningHandler } from './application/commands/remove-from-learning.handler';
 import { ReviewWordHandler } from './application/commands/review-word.handler';
+import { GetLearnedStatusHandler } from './application/queries/get-learned-status.handler';
 import { GetLearningListHandler } from './application/queries/get-learning-list.handler';
 import { GetLearningStateHandler } from './application/queries/get-learning-state.handler';
 import { provideLearningReadRepository } from './application/repositories/learning-read.repository.interface';
@@ -21,7 +22,11 @@ const repositories = [
   provideLearningWriteRepository(LearningWriteRepository),
 ];
 
-const queryHandlers = [GetLearningStateHandler, GetLearningListHandler];
+const queryHandlers = [
+  GetLearningStateHandler,
+  GetLearningListHandler,
+  GetLearnedStatusHandler,
+];
 const commandHandlers = [
   AddToLearningHandler,
   RemoveFromLearningHandler,

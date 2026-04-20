@@ -3,6 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
+import { RefreshCommand } from './refresh.command';
 import { InvalidRefreshTokenException } from '../../domain/exceptions/email-already-exists.exception';
 import { AuthResultDto } from '../../dto/auth-result.dto';
 import { UserResponseDto } from '../../dto/responses/user.response.dto';
@@ -26,7 +27,6 @@ import {
   type IUserRepository,
   InjectUserRepository,
 } from '../repositories/user.repository.interface';
-import { RefreshCommand } from './refresh.command';
 
 @CommandHandler(RefreshCommand)
 export class RefreshHandler implements ICommandHandler<

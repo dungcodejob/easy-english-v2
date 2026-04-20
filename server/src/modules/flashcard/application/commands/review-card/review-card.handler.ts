@@ -3,6 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/postgresql';
 
+import { ReviewCardCommand } from './review-card.command';
 import {
   InjectLearningWriteRepository,
   type ILearningWriteRepository,
@@ -20,7 +21,6 @@ import {
 import { FlashcardId } from '../../../domain/value-objects/flashcard-id.vo';
 import { ReviewRating } from '../../../domain/value-objects/review-rating.vo';
 import { ReviewResultResponseDto } from '../../../dto/responses/review-result.response.dto';
-import { ReviewCardCommand } from './review-card.command';
 
 @CommandHandler(ReviewCardCommand)
 export class ReviewCardHandler implements ICommandHandler<

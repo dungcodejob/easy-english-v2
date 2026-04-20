@@ -3,6 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
+import { RegisterCommand } from './register.command';
 import {
   AuthIdentity,
   AuthProvider,
@@ -37,7 +38,6 @@ import {
   InjectUserRepository,
   type IUserRepository,
 } from '../repositories/user.repository.interface';
-import { RegisterCommand } from './register.command';
 
 @CommandHandler(RegisterCommand)
 export class RegisterHandler implements ICommandHandler<

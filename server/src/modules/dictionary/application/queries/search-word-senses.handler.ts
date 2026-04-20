@@ -1,22 +1,19 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import {
-  InjectLearningReadRepository,
-  type ILearningReadRepository,
-} from '../../../learning/progress/application/repositories/learning-read.repository.interface';
+import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs';
+
+import { SearchWordSensesQuery } from './search-word-senses.query';
+import { GetLearnedStatusQuery } from '../../../learning/progress/application/queries/get-learned-status.query';
 import {
   InjectWordReadRepository,
   type IWordReadRepository,
 } from '../../domain/repositories/word-read.repository.interface';
 import { WordSenseSearchResultResponseDto } from '../../dto/responses/word-sense-search-result.response.dto';
-import { SearchWordSensesQuery } from './search-word-senses.query';
 
 @QueryHandler(SearchWordSensesQuery)
 export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQuery> {
   constructor(
     @InjectWordReadRepository()
     private readonly wordRepo: IWordReadRepository,
-    @InjectLearningReadRepository()
-    private readonly learningRepo: ILearningReadRepository,
+    private readonly queryBus: QueryBus,
   ) {}
 
   async execute(
@@ -32,10 +29,10 @@ export class SearchWordSensesHandler implements IQueryHandler<SearchWordSensesQu
 
     if (query.userId && searchItems.length > 0) {
       const senseIds = searchItems.map((item) => item.senseId);
-      const learnedIdsList = await this.learningRepo.checkLearnedStatus(
-        query.userId,
-        senseIds,
-      );
+      const learnedIdsList = await this.queryBus.execute<
+        GetLearnedStatusQuery,
+        string[]
+      >(new GetLearnedStatusQuery(query.userId, senseIds));
 
       learnedSenseIds = new Set(learnedIdsList);
     }

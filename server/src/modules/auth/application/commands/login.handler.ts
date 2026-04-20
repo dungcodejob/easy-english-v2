@@ -3,6 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/core';
 
+import { LoginCommand } from './login.command';
 import { AuthProvider } from '../../domain/entities/auth-identity.entity';
 import { Session } from '../../domain/entities/session.entity';
 import { InvalidCredentialsException } from '../../domain/exceptions/email-already-exists.exception';
@@ -33,7 +34,6 @@ import {
   type IUserRepository,
   InjectUserRepository,
 } from '../repositories/user.repository.interface';
-import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<

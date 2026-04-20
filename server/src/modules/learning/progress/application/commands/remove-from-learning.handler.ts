@@ -3,8 +3,8 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
 import { RemoveFromLearningCommand } from './remove-from-learning.command';
+import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
 import type { ILearningWriteRepository } from '../repositories/learning-write.repository.interface';
 

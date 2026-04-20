@@ -3,9 +3,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { EntityManager } from '@mikro-orm/postgresql';
 
+import { AddToLearningCommand } from './add-to-learning.command';
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
 import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
-import { AddToLearningCommand } from './add-to-learning.command';
 
 import type { ILearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
