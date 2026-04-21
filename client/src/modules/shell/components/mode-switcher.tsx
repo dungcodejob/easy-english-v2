@@ -1,18 +1,23 @@
-import { theme, useTheme } from '@/shared/contexts';
 import { useMetaColor } from '@/shared/hooks';
+import {
+  Theme,
+  useAppearanceActions,
+  useAppearanceState,
+} from '@/shared/stores';
 import { metaThemeColor } from '@/shared/types';
 import { Button } from '@/shared/ui/shadcn/button';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import * as React from 'react';
 
 export function ModeSwitcher() {
-  const { setTheme, resolvedTheme } = useTheme();
+  const { setTheme } = useAppearanceActions();
+  const { resolvedTheme } = useAppearanceState();
   const { setMetaColor } = useMetaColor();
 
   const toggleTheme = React.useCallback(() => {
-    setTheme(resolvedTheme === theme.dark ? theme.light : theme.dark);
+    setTheme(resolvedTheme === Theme.Dark ? Theme.Light : Theme.Dark);
     setMetaColor(
-      resolvedTheme === theme.dark ? metaThemeColor.light : metaThemeColor.dark,
+      resolvedTheme === Theme.Dark ? metaThemeColor.light : metaThemeColor.dark,
     );
   }, [resolvedTheme, setTheme, setMetaColor]);
 

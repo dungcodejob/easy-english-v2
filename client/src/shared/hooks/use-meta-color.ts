@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { theme, useTheme } from '../contexts';
+
+import { Theme, useAppearanceStore } from '../stores';
 import { metaThemeColor } from '../types';
 
 export function useMetaColor() {
-  const { resolvedTheme } = useTheme();
+  const { resolvedTheme } = useAppearanceStore();
 
   const metaColor = React.useMemo(() => {
-    return resolvedTheme !== theme.dark
+    return resolvedTheme !== Theme.Dark
       ? metaThemeColor.light
       : metaThemeColor.dark;
   }, [resolvedTheme]);

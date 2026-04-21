@@ -1,6 +1,10 @@
+import {
+  useAppearanceActions,
+  useAppearanceStore,
+} from '@/shared/stores/appearance.store';
 import { cn } from '@/shared/utils';
 import { Check, Monitor, Moon, Sun } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   GhostSelect,
@@ -57,23 +61,17 @@ const THEMES: {
 ];
 
 export function GeneralTab() {
-  const [theme, setTheme] = useState<Theme>('light');
-  const [systemPrefers, setSystemPrefers] = useState<'light' | 'dark'>('light');
+  const theme = useAppearanceStore((s) => s.resolvedTheme);
+  const textScale = useAppearanceStore((s) => s.textScale);
+  const useBrowserFont = useAppearanceStore((s) => s.useBrowserFont);
+  const dyslexicFont = useAppearanceStore((s) => s.dyslexicFont);
+  const language = useAppearanceStore((s) => s.language);
+  const region = useAppearanceStore((s) => s.region);
+  const dateFormat = useAppearanceStore((s) => s.dateFormat);
+  const accentColor = useAppearanceStore((s) => s.accentColor);
+  const actions = useAppearanceActions();
 
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    setSystemPrefers(mq.matches ? 'dark' : 'light');
-    const handler = (e: MediaQueryListEvent) =>
-      setSystemPrefers(e.matches ? 'dark' : 'light');
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-  const [textScale, setTextScale] = useState(50);
-  const [dyslexicFont, setDyslexicFont] = useState(false);
-  const [language, setLanguage] = useState(LANGUAGES[0]);
-  const [region, setRegion] = useState(REGIONS[0]);
-  const [dateFormat, setDateFormat] = useState(DATE_FORMATS[0]);
-  const [accentColor, setAccentColor] = useState('amber');
+  const [systemPrefers, setSystemPrefers] = useState<'light' | 'dark'>('light');
 
   const scaleLabel =
     textScale < 30
@@ -101,7 +99,7 @@ export function GeneralTab() {
               <button
                 key={t.id}
                 type="button"
-                onClick={() => setTheme(t.id)}
+                onClick={() => actions.setTheme(t.id)}
                 className={cn(
                   'cursor-pointer relative rounded-lg p-5 border-2 transition-all text-left group',
                   isActive
@@ -109,7 +107,6 @@ export function GeneralTab() {
                     : 'border-transparent bg-surface hover:bg-surface-container-low hover:border-outline-variant/30',
                 )}
               >
-                {/* Radio + Icon row */}
                 <div className="flex items-center justify-between mb-4">
                   <div
                     className={cn(
@@ -133,7 +130,6 @@ export function GeneralTab() {
                   </div>
                 </div>
 
-                {/* Preview thumbnail */}
                 {t.id === 'light' && (
                   <div className="h-14 rounded-md bg-[#f8f8f5] border border-outline-variant/20 overflow-hidden flex flex-col p-2 gap-1.5 mb-4">
                     <div className="h-2 w-2/5 bg-[#e2e2dd] rounded-sm" />
@@ -148,21 +144,15 @@ export function GeneralTab() {
                 )}
                 {t.id === 'system' && (
                   <div className="h-14 rounded-md overflow-hidden border border-outline-variant/20 mb-4 relative">
-                    {/* Left half — light */}
                     <div className="absolute inset-y-0 left-0 w-1/2 bg-[#f8f8f5] flex flex-col p-2 gap-1.5">
                       <div className="h-2 w-3/5 bg-[#e2e2dd] rounded-sm" />
                       <div className="h-7 w-full bg-[#eeede9] rounded-sm" />
                     </div>
-                    {/* Right half — dark */}
                     <div className="absolute inset-y-0 right-0 w-1/2 bg-[#1a1b1e] flex flex-col p-2 gap-1.5">
                       <div className="h-2 w-3/5 bg-[#2f3033] rounded-sm" />
                       <div className="h-7 w-full bg-[#26272b] rounded-sm" />
                     </div>
-                    {/* Diagonal divider */}
-                    <div
-                      className="absolute inset-y-0 left-1/2 w-px bg-outline-variant/30 -translate-x-1/2"
-                      style={{ clipPath: 'none' }}
-                    />
+                    <div className="absolute inset-y-0 left-1/2 w-px bg-outline-variant/30 -translate-x-1/2" />
                   </div>
                 )}
 
@@ -185,15 +175,25 @@ export function GeneralTab() {
         subtitle="Adjust typography and scale for optimal comprehension."
       >
         <div>
-          <div className="flex justify-between items-center mb-4">
+          <div
+            className={cn(
+              'flex justify-between items-center mb-4',
+              useBrowserFont && 'opacity-40',
+            )}
+          >
             <h3 className="font-headline text-on-surface font-medium">
               Text Scale
             </h3>
             <span className="text-sm text-on-surface-variant font-medium bg-surface-container-high px-2 py-1 rounded-md">
-              {scaleLabel}
+              {useBrowserFont ? 'Browser default' : scaleLabel}
             </span>
           </div>
-          <div className="flex items-center gap-4 mb-8">
+          <div
+            className={cn(
+              'flex items-center gap-4 mb-8',
+              useBrowserFont && 'opacity-40 pointer-events-none',
+            )}
+          >
             <span className="text-sm text-on-surface-variant font-headline">
               A
             </span>
@@ -202,18 +202,32 @@ export function GeneralTab() {
               min="1"
               max="100"
               value={textScale}
-              onChange={(e) => setTextScale(Number(e.target.value))}
-              className="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer accent-secondary"
+              disabled={useBrowserFont}
+              onChange={(e) => actions.setTextScale(Number(e.target.value))}
+              className="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer accent-secondary disabled:cursor-not-allowed"
             />
             <span className="text-xl text-on-surface-variant font-headline">
               A
             </span>
           </div>
           <SettingRow
+            title="Respect Browser Font Size"
+            description="Scale text relative to your browser's default font size. Disable to use a fixed baseline unaffected by browser settings."
+            control={
+              <Toggle
+                checked={useBrowserFont}
+                onChange={actions.setUseBrowserFont}
+              />
+            }
+          />
+          <SettingRow
             title="OpenDyslexic Font"
             description="Override editorial typography with an accessibility-focused typeface designed to mitigate symptoms of dyslexia."
             control={
-              <Toggle checked={dyslexicFont} onChange={setDyslexicFont} />
+              <Toggle
+                checked={dyslexicFont}
+                onChange={actions.setDyslexicFont}
+              />
             }
           />
         </div>
@@ -225,19 +239,19 @@ export function GeneralTab() {
             label="Primary Instruction Language"
             options={LANGUAGES}
             value={language}
-            onChange={setLanguage}
+            onChange={actions.setLanguage}
           />
           <GhostSelect
             label="Region"
             options={REGIONS}
             value={region}
-            onChange={setRegion}
+            onChange={actions.setRegion}
           />
           <GhostSelect
             label="Date & Time Format"
             options={DATE_FORMATS}
             value={dateFormat}
-            onChange={setDateFormat}
+            onChange={actions.setDateFormat}
           />
         </div>
       </Card>
@@ -259,7 +273,11 @@ export function GeneralTab() {
               <button
                 key={color.id}
                 type="button"
-                onClick={() => setAccentColor(color.id)}
+                onClick={() =>
+                  actions.setAccentColor(
+                    color.id as 'amber' | 'teal' | 'blue' | 'umber',
+                  )
+                }
                 className={cn(
                   'rounded-full flex items-center justify-center transition-all hover:scale-110',
                   color.bg,
