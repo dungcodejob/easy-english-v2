@@ -1,6 +1,45 @@
 import { cn } from '@/shared/utils';
 import { ChevronDown } from 'lucide-react';
 
+export function UnderlineField({
+  label,
+  id,
+  type = 'text',
+  value,
+  onChange,
+  placeholder,
+  disabled,
+}: {
+  label: string;
+  id?: string;
+  type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="group relative">
+      <label
+        htmlFor={id}
+        className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+      >
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        disabled={disabled}
+        className="w-full font-headline text-xl font-medium bg-transparent border-b border-outline-variant/30 focus:border-secondary focus:ring-0 transition-colors py-2 outline-none text-on-surface disabled:opacity-50 disabled:cursor-not-allowed"
+      />
+      <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-focus-within:w-full" />
+    </div>
+  );
+}
+
 export function GhostSelect({
   label,
   options,

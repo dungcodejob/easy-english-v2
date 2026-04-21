@@ -45,6 +45,9 @@ export { DsStatCard } from './base/ds-stat-card';
 
 export { DsEmptyState } from './base/ds-empty-state';
 
+export { DsErrorState } from './base/ds-error-state';
+export type { DsErrorStateProps } from './base/ds-error-state';
+
 export { DsPagination } from './base/ds-pagination';
 
 export { ClarionProgress } from './base/clarion-progress';

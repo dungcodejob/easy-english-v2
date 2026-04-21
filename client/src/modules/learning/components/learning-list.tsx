@@ -11,6 +11,8 @@ import {
   DsAlertDialogTrigger,
   DsBadge,
   DsButton,
+  DsEmptyState,
+  DsErrorState,
 } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link } from '@tanstack/react-router';
@@ -49,12 +51,15 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-destructive/50 bg-destructive/10 p-12 text-center text-destructive">
-        <p className="mb-4">Failed to load learning list. {error?.message}</p>
-        <DsButton variant="outline" onClick={() => window.location.reload()}>
-          Try Again
-        </DsButton>
-      </div>
+      <DsErrorState
+        title="Failed to load learning list"
+        message={error?.message}
+        action={
+          <DsButton variant="outline" onClick={() => window.location.reload()}>
+            Try Again
+          </DsButton>
+        }
+      />
     );
   }
 
@@ -63,19 +68,16 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
 
   if (list.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center text-muted-foreground bg-muted/30">
-        <BookOpen className="mb-4 h-12 w-12 opacity-50" />
-        <h3 className="mb-2 text-lg font-medium text-foreground">
-          Your learning list is empty
-        </h3>
-        <p className="mb-6 max-w-sm">
-          You haven't added any words to your learning list yet. Search the
-          dictionary to add words!
-        </p>
-        <DsButton asChild>
-          <Link to={DictionaryRoutes.search()}>Explore Dictionary</Link>
-        </DsButton>
-      </div>
+      <DsEmptyState
+        icon={<BookOpen className="h-6 w-6" />}
+        title="Your learning list is empty"
+        description="You haven't added any words to your learning list yet. Search the dictionary to add words!"
+        action={
+          <DsButton asChild>
+            <Link to={DictionaryRoutes.search()}>Explore Dictionary</Link>
+          </DsButton>
+        }
+      />
     );
   }
 

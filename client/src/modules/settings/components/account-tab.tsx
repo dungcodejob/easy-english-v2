@@ -1,12 +1,32 @@
-import { useState } from 'react';
+import { ClarionInput, FormField } from '@/shared/ui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Card, TabHeader } from './settings-ui';
 
+const accountFormSchema = z.object({
+  displayName: z.string().min(1, 'Display name is required'),
+  email: z.email('Invalid email address'),
+  bio: z.string().optional(),
+});
+
+type AccountFormValues = z.infer<typeof accountFormSchema>;
+
+const accountFormDefaultValues: AccountFormValues = {
+  displayName: 'Scholar',
+  email: 'scholar@sanctuary.edu',
+  bio: 'Pursuing excellence in academic vocabulary and linguistic mastery.',
+};
+
 export function AccountTab() {
-  const [displayName, setDisplayName] = useState('Scholar');
-  const [email, setEmail] = useState('scholar@sanctuary.edu');
-  const [bio, setBio] = useState(
-    'Pursuing excellence in academic vocabulary and linguistic mastery.',
-  );
+  const { control, handleSubmit, watch } = useForm<AccountFormValues>({
+    resolver: zodResolver(accountFormSchema),
+    defaultValues: {
+      ...accountFormDefaultValues,
+    },
+  });
+
+  const displayName = watch('displayName');
 
   return (
     <div className="space-y-8">
@@ -32,34 +52,49 @@ export function AccountTab() {
             </button>
           </div>
           <div className="flex-1 space-y-8">
-            <div className="group relative">
-              <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                Display Name
-              </label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full font-headline text-xl font-medium bg-transparent border-b border-outline-variant/30 focus:border-secondary focus:ring-0 transition-colors py-2 outline-none text-on-surface"
-              />
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-focus-within:w-full" />
-            </div>
-            <div className="group relative">
-              <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full font-headline text-xl font-medium bg-transparent border-b border-outline-variant/30 focus:border-secondary focus:ring-0 transition-colors py-2 outline-none text-on-surface"
-              />
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-focus-within:w-full" />
-            </div>
+            <FormField
+              name="displayName"
+              control={control}
+              label="Display Name"
+            >
+              {({ field, fieldState }) => (
+                <ClarionInput
+                  {...field}
+                  placeholder="e.g. Scholar"
+                  maxLength={100}
+                  autoFocus
+                  aria-invalid={fieldState.invalid}
+                />
+              )}
+            </FormField>
+
+            <FormField name="email" control={control} label="Email Address">
+              {({ field, fieldState }) => (
+                <ClarionInput
+                  {...field}
+                  type="email"
+                  placeholder="e.g. [EMAIL_ADDRESS]"
+                  maxLength={100}
+                  autoFocus
+                  aria-invalid={fieldState.invalid}
+                />
+              )}
+            </FormField>
           </div>
         </div>
+
         <div className="mt-8 group relative">
-          <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+          <FormField name="bio" control={control} label="Scholar Bio">
+            {({ field, fieldState }) => (
+              <textarea
+                {...field}
+                rows={3}
+                className="w-full bg-surface-container-low rounded-lg p-4 text-sm text-on-surface resize-none focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all"
+              />
+            )}
+          </FormField>
+
+          {/* <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
             Scholar Bio
           </label>
           <textarea
@@ -67,7 +102,7 @@ export function AccountTab() {
             onChange={(e) => setBio(e.target.value)}
             rows={3}
             className="w-full bg-surface-container-low rounded-lg p-4 text-sm text-on-surface resize-none focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all"
-          />
+          /> */}
         </div>
       </Card>
 

@@ -9,6 +9,7 @@
  *   <DsSpinner size="lg" label="Loading your data..." />
  */
 
+import { cn } from '@/shared/utils';
 import { Loader2Icon } from 'lucide-react';
 
 export interface DsSpinnerProps {
@@ -29,7 +30,7 @@ export function DsSpinner({ size = 'md', label = 'Loading', className }: DsSpinn
     <Loader2Icon
       role="status"
       aria-label={label}
-      className={`animate-spin ${sizeMap[size]} ${className ?? ''}`}
+      className={cn('animate-spin', sizeMap[size], className)}
     />
   );
 }

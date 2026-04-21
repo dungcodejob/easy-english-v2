@@ -34,6 +34,9 @@ export { DsStatCard } from './ds-stat-card';
 
 export { DsEmptyState } from './ds-empty-state';
 
+export { DsErrorState } from './ds-error-state';
+export type { DsErrorStateProps } from './ds-error-state';
+
 export { ClarionProgress } from './clarion-progress';
 export type { ClarionProgressProps } from './clarion-progress';
 

@@ -15,7 +15,7 @@ function ClarionLabel({ className, ...props }: React.ComponentProps<'label'>) {
     <label
       data-slot="clarion-label"
       className={cn(
-        'block text-sm font-semibold tracking-wide text-on-primary-fixed-variant',
+        'block text-base font-semibold tracking-wide text-on-primary-fixed-variant',
         className,
       )}
       {...props}

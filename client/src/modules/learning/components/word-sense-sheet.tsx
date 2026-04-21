@@ -1,3 +1,4 @@
+import { DsErrorState } from '@/shared/ui';
 import { Button } from '@/shared/ui/shadcn/button';
 import {
   Sheet,
@@ -53,16 +54,16 @@ export function WordSenseSheet({ senseId, onOpenChange }: WordSenseSheetProps) {
           )}
 
           {error && !isLoading && (
-            <div className="text-center py-16 px-4 border rounded-xl bg-destructive/5 text-destructive border-destructive/20 mt-4">
-              <h2 className="text-2xl font-bold mb-2">Sense Not Found</h2>
-              <p className="mb-6">
-                The word sense you are looking for does not exist or an error
-                occurred.
-              </p>
-              <Button onClick={() => onOpenChange(false)} variant="outline">
-                Close
-              </Button>
-            </div>
+            <DsErrorState
+              title="Sense Not Found"
+              message="The word sense you are looking for does not exist or an error occurred."
+              action={
+                <Button onClick={() => onOpenChange(false)} variant="outline">
+                  Close
+                </Button>
+              }
+              className="mt-4"
+            />
           )}
 
           {result && !isLoading && (

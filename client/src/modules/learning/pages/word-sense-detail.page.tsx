@@ -1,4 +1,5 @@
 import { DictionaryRoutes } from '@/shared/constants';
+import { DsErrorState } from '@/shared/ui';
 import { Button } from '@/shared/ui/shadcn/button';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link, createFileRoute } from '@tanstack/react-router';
@@ -65,23 +66,21 @@ export default function WordSenseDetailPage() {
 
       {/* Error state */}
       {error && !isLoading && (
-        <div className="mt-8 rounded-xl border-2 border-dashed border-error/20 bg-error-container/10 px-4 py-20 text-center shadow-sm">
-          <h2 className="mb-3 font-headline text-3xl font-black text-error">
-            Sense Not Found
-          </h2>
-          <p className="mx-auto mb-8 max-w-md text-lg text-on-surface-variant">
-            The word sense you are looking for does not exist or an error
-            occurred while fetching it.
-          </p>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="rounded-full font-bold"
-          >
-            <Link to={DictionaryRoutes.search()}>Return to Dictionary</Link>
-          </Button>
-        </div>
+        <DsErrorState
+          title="Sense Not Found"
+          message="The word sense you are looking for does not exist or an error occurred while fetching it."
+          action={
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="rounded-full font-bold"
+            >
+              <Link to={DictionaryRoutes.search()}>Return to Dictionary</Link>
+            </Button>
+          }
+          className="mt-8"
+        />
       )}
 
       {result && <WordSenseDetail detail={result.data} />}

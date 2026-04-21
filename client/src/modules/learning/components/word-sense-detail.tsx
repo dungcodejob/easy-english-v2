@@ -1,3 +1,4 @@
+import { ClarionProgress } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { CheckCircle, GraduationCap, Volume2 } from 'lucide-react';
 import { useRef } from 'react';
@@ -89,12 +90,11 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
                 {masteryPercent}%
               </span>
             </div>
-            <div className="h-3 w-full overflow-hidden rounded-full bg-surface-container">
-              <div
-                className="h-full rounded-full bg-tertiary-fixed-dim transition-all duration-500"
-                style={{ width: `${masteryPercent}%` }}
-              />
-            </div>
+            <ClarionProgress
+              value={masteryPercent}
+              size="lg"
+              indicatorClassName="[&>*]:!bg-tertiary-fixed-dim"
+            />
             <p className="text-xs text-on-surface-variant">
               Reviewed {learningState.reviewCount}
               {learningState.reviewCount === 1 ? ' time' : ' times'}.{' '}
