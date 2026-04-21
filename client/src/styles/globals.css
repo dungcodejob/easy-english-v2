@@ -47,6 +47,7 @@
   --surface-container: #efedf1;
   --surface-container-high: #e9e7eb;
   --surface-container-highest: #e3e2e6;
+  --surface-variant: #e3e2e6;
 
   /* Background (alias for surface in this theme) */
   --background: #faf9fd;
@@ -112,87 +113,88 @@
 
 /* ===== Dark Theme Variables ===== */
 .dark {
-  --primary: #aec7f7;
-  --primary-foreground: #001b3d;
-  --primary-container: #1b365d;
-  --on-primary-container: #d6e3ff;
+  --primary: #d1e1fc;
+  --primary-foreground: #16181d;
+  --primary-container: #232e42;
+  --on-primary-container: #a6bedb;
   --primary-fixed: #d6e3ff;
   --primary-fixed-dim: #aec7f7;
   --on-primary-fixed: #001b3d;
   --on-primary-fixed-variant: #2e476f;
 
-  --secondary: #4fdfc7;
-  --secondary-foreground: #00201b;
+  --secondary: #2ab7a2;
+  --secondary-foreground: #16181d;
   --secondary-container: #005047;
-  --on-secondary-container: #97f3e2;
+  --on-secondary-container: #94f0df;
   --secondary-fixed: #97f3e2;
   --on-secondary-fixed: #00201b;
-  --secondary-fixed-dim: #4fdfc7;
-  --on-secondary-fixed-variant: #4fdfc7;
+  --secondary-fixed-dim: #7ad7c6;
+  --on-secondary-fixed-variant: #005047;
 
-  --tertiary: #ffb954;
-  --tertiary-foreground: #291800;
-  --tertiary-container: #633f00;
+  --tertiary: #e6ad65;
+  --tertiary-foreground: #1e222a;
+  --tertiary-container: #4d3000;
   --tertiary-fixed: #ffddb4;
   --tertiary-fixed-dim: #ffb954;
   --on-tertiary-fixed: #291800;
-  --on-tertiary-fixed-variant: #8b5a00;
+  --on-tertiary-fixed-variant: #633f00;
   --on-tertiary-container: #ffddb4;
 
-  --surface: #1a1b1e;
-  --surface-bright: #2f3033;
-  --surface-dim: #141416;
-  --surface-container-lowest: #0f1011;
-  --surface-container-low: #1a1b1e;
-  --surface-container: #2f3033;
-  --surface-container-high: #3a3a3e;
-  --surface-container-highest: #45454a;
+  --surface: #121418;
+  --surface-bright: #383c46;
+  --surface-dim: #0e1013;
+  --surface-container-lowest: #16181d;
+  --surface-container-low: #1a1c22;
+  --surface-container: #1e2128;
+  --surface-container-high: #272a33;
+  --surface-container-highest: #30343e;
+  --surface-variant: #3f434d;
 
-  --background: #1a1b1e;
-  --foreground: #f4f3f7;
+  --background: #121418;
+  --foreground: #e4e5e8;
 
-  --card: #2f3033;
-  --card-foreground: #f4f3f7;
-  --popover: #2f3033;
-  --popover-foreground: #f4f3f7;
-  --muted: #2f3033;
-  --muted-foreground: #9a9a9e;
-  --accent: #2f3033;
-  --accent-foreground: #f4f3f7;
+  --card: #1e2128;
+  --card-foreground: #e4e5e8;
+  --popover: #1e2128;
+  --popover-foreground: #e4e5e8;
+  --muted: #1e2128;
+  --muted-foreground: #a3a7af;
+  --accent: #272a33;
+  --accent-foreground: #e4e5e8;
   --destructive: #ffb4ab;
-  --destructive-foreground: #690005;
+  --destructive-foreground: #ffffff;
 
   --border: #44474e;
-  --input: #44474e;
-  --ring: #aec7f7;
-  --outline: #74777f;
+  --input: #3f434d;
+  --ring: #d1e1fc;
+  --outline: #8f929a;
   --outline-variant: #44474e;
-  --on-surface: #e3e2e6;
-  --on-surface-variant: #c4c6cf;
+  --on-surface: #e4e5e8;
+  --on-surface-variant: #a3a7af;
 
-  --inverse-surface: #f4f3f7;
-  --inverse-on-surface: #2f3033;
-  --inverse-primary: #465f88;
+  --inverse-surface: #e4e5e8;
+  --inverse-on-surface: #121418;
+  --inverse-primary: #aec7f7;
 
   --error: #ffb4ab;
-  --error-container: #93000a;
-  --on-error: #690005;
+  --error-container: #661f1a;
+  --on-error: #ffffff;
   --on-error-container: #ffdad6;
 
-  --sidebar: #1a1b1e;
-  --sidebar-foreground: #f4f3f7;
-  --sidebar-primary: #aec7f7;
-  --sidebar-primary-foreground: #001b3d;
-  --sidebar-accent: #2f3033;
-  --sidebar-accent-foreground: #f4f3f7;
+  --sidebar: #16181d;
+  --sidebar-foreground: #e4e5e8;
+  --sidebar-primary: #d1e1fc;
+  --sidebar-primary-foreground: #16181d;
+  --sidebar-accent: #1e2128;
+  --sidebar-accent-foreground: #e4e5e8;
   --sidebar-border: #44474e;
-  --sidebar-ring: #aec7f7;
+  --sidebar-ring: #d1e1fc;
 
-  --chart-1: #aec7f7;
-  --chart-2: #4fdfc7;
-  --chart-3: #ffb954;
-  --chart-4: #87a0cd;
-  --chart-5: #94f3df;
+  --chart-1: #d1e1fc;
+  --chart-2: #2ab7a2;
+  --chart-3: #e6ad65;
+  --chart-4: #a6bedb;
+  --chart-5: #94f0df;
 }
 
 /* ===== Tailwind Theme Mapping ===== */
@@ -235,6 +237,7 @@
   --color-surface-container: var(--surface-container);
   --color-surface-container-high: var(--surface-container-high);
   --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-variant: var(--surface-variant);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);

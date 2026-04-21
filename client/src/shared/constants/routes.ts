@@ -50,6 +50,7 @@ export const AchievementsRoutes = {
 
 export const SettingsRoutes = {
   list: () => '/settings',
+  profile: () => '/settings/profile',
 };
 
 export const DashboardRoutes = {
