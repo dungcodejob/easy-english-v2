@@ -1,9 +1,9 @@
-import { SearchBar } from '@/modules/dictionary/features/search-bar/search-bar';
-import { SearchResultsList } from '@/modules/dictionary/features/word-sense-list/word-sense-list';
 import { URLParamKeys } from '@/shared/constants';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Sparkles } from 'lucide-react';
 import { z } from 'zod';
+import { SearchBar } from '../features/search-bar/search-bar';
+import { WordSenseList } from '../features/word-sense-list/word-sense-list';
 
 const searchSchema = z.object({
   [URLParamKeys.query]: z.string().optional().default(''),
@@ -11,13 +11,15 @@ const searchSchema = z.object({
   [URLParamKeys.pageSize]: z.string().optional(),
 });
 
-export const Route = createFileRoute('/_(authenticated)/dictionary/')({
-  validateSearch: searchSchema,
-  component: DictionarySearchPage,
-});
+export const DictionaryRoute = createFileRoute('/_(authenticated)/dictionary/')(
+  {
+    validateSearch: searchSchema,
+    component: DictionarySearchPage,
+  },
+);
 
 export default function DictionarySearchPage() {
-  const { [URLParamKeys.query]: urlKeyword = '' } = Route.useSearch();
+  const { [URLParamKeys.query]: urlKeyword = '' } = DictionaryRoute.useSearch();
 
   return (
     <section className="mx-auto max-w-6xl px-6 pb-12 pt-6 md:px-8 md:pt-10">
@@ -32,15 +34,15 @@ export default function DictionarySearchPage() {
         </p>
       </div>
 
-      {/* Search input — self-contained, owns URL keyword state */}
+      {/* Search input */}
       <SearchBar />
 
       {/* Results — self-contained, reads query + pagination from URL */}
       <div className="min-h-[400px]">
-        <SearchResultsList />
+        <WordSenseList />
       </div>
 
-      {/* CTA Banner — shown only when no search is active */}
+      {/* CTA Banner */}
       {!urlKeyword && (
         <div className="relative mt-12 overflow-hidden rounded-xl bg-primary p-10 text-white md:p-12">
           <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-surface-container-lowest/5 blur-3xl" />

@@ -125,9 +125,7 @@ export function DsButton({
                 className={cn(!isIconOnly && 'mr-2')}
               />
               {children && <span>{children}</span>}
-              {isIconOnly && (
-                <span className="sr-only">{loadingLabel}</span>
-              )}
+              {isIconOnly && <span className="sr-only">{loadingLabel}</span>}
             </>
           ) : (
             <>

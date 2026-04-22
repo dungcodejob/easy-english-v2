@@ -46,7 +46,9 @@ function NotificationItem({
             <span>{type}</span>
           </div>
         </div>
-        {unread && <div className="size-2 rounded-full bg-primary mt-1 shrink-0" />}
+        {unread && (
+          <div className="size-2 rounded-full bg-primary mt-1 shrink-0" />
+        )}
       </div>
       {children}
     </DropdownMenuItem>

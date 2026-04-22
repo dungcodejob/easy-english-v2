@@ -1,3 +1,4 @@
+import { WordSenseDetail } from '@/modules/learning/components/word-sense-detail';
 import { DictionaryRoutes } from '@/shared/constants';
 import { DsErrorState } from '@/shared/ui';
 import { Button } from '@/shared/ui/shadcn/button';
@@ -5,7 +6,6 @@ import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useWordSenseDetail } from '../../dictionary/features/word-sense-detail/use-word-sense-detail';
-import { WordSenseDetail } from '../components/word-sense-detail';
 
 export const Route = createFileRoute(
   '/_(authenticated)/dictionary/senses/$senseId',

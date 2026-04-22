@@ -25,7 +25,11 @@ const sizeMap = {
   lg: 'size-8',
 };
 
-export function DsSpinner({ size = 'md', label = 'Loading', className }: DsSpinnerProps) {
+export function DsSpinner({
+  size = 'md',
+  label = 'Loading',
+  className,
+}: DsSpinnerProps) {
   return (
     <Loader2Icon
       role="status"

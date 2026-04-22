@@ -1,3 +1,4 @@
+import { URLParamKeys } from '@/shared/constants';
 import { Button } from '@/shared/ui/shadcn/button';
 import {
   Empty,
@@ -14,31 +15,27 @@ import {
 } from '@/shared/ui/shadcn/pagination';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { SearchX } from 'lucide-react';
-import { useSearchStore } from '../stores/use-search-store';
-import type { WordSenseSearchResult } from '../types/learning.types';
-import { WordSenseCard } from './word-sense-card';
+import { WordSenseCard } from '../../../learning/components/word-sense-card';
+import { DictionaryRoute } from '../../screens/dictionary-search.screen';
+import { useSearchWordSenses } from './use-search-word-senses';
 
-interface SearchResultsListProps {
-  isLoading: boolean;
-  isFetching: boolean;
-  results?: WordSenseSearchResult[];
-  pagination?: {
-    top: number;
-    skip: number;
-    count: number;
-    hasMore: boolean;
-  };
-  onPageChange: (newSkip: number) => void;
-}
+export function WordSenseList() {
+  const { [URLParamKeys.query]: query = '' } = DictionaryRoute.useSearch();
 
-export function SearchResultsList({
-  isLoading,
-  isFetching,
-  results,
-  pagination,
-  onPageChange,
-}: SearchResultsListProps) {
-  const { debouncedQuery } = useSearchStore();
+  const {
+    data,
+    isLoading,
+    isFetching,
+    page,
+    count,
+    hasMore,
+    setPage,
+    hasPrev,
+  } = useSearchWordSenses({ query });
+
+  const results = data?.data ?? [];
+
+  if (!query) return null;
 
   if (isLoading) {
     return (
@@ -50,13 +47,7 @@ export function SearchResultsList({
     );
   }
 
-  // No search entered yet
-  if (!debouncedQuery) {
-    return null;
-  }
-
-  // Search performed but no results
-  if (!results?.length) {
+  if (!results.length) {
     return (
       <Empty>
         <EmptyMedia variant="icon">
@@ -64,8 +55,8 @@ export function SearchResultsList({
         </EmptyMedia>
         <EmptyTitle>No words found</EmptyTitle>
         <EmptyDescription>
-          We couldn't find any definitions matching "{debouncedQuery}". Try
-          checking for typos or searching a different term.
+          We couldn't find any definitions matching "{query}". Try checking for
+          typos or searching a different term.
         </EmptyDescription>
       </Empty>
     );
@@ -83,34 +74,31 @@ export function SearchResultsList({
         ))}
       </div>
 
-      {pagination && (pagination.skip > 0 || pagination.hasMore) && (
+      {(hasPrev || hasMore) && (
         <Pagination>
           <PaginationContent>
             <PaginationItem>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() =>
-                  onPageChange(Math.max(0, pagination.skip - pagination.top))
-                }
-                disabled={pagination.skip === 0 || isFetching}
+                onClick={() => setPage(page - 1)}
+                disabled={!hasPrev || isFetching}
               >
                 <PaginationPrevious className="px-0 py-0 hover:bg-transparent" />
               </Button>
             </PaginationItem>
             <PaginationItem>
-              <div className="text-sm text-muted-foreground px-4">
-                {pagination.skip + 1} -{' '}
-                {Math.min(pagination.skip + pagination.top, pagination.count)}{' '}
-                of {pagination.count}
-              </div>
+              <span className="text-sm text-muted-foreground px-4">
+                Page {page}
+                {count != null ? ` · ${count} results` : ''}
+              </span>
             </PaginationItem>
             <PaginationItem>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onPageChange(pagination.skip + pagination.top)}
-                disabled={!pagination.hasMore || isFetching}
+                onClick={() => setPage(page + 1)}
+                disabled={!hasMore || isFetching}
               >
                 <PaginationNext className="px-0 py-0 hover:bg-transparent" />
               </Button>

@@ -1,4 +1,4 @@
-import { useSearchWordSenses } from '@/modules/learning/hooks/use-search-word-senses';
+import { useSearchWordSenses } from '@/modules/dictionary/features/word-sense-list/use-search-word-senses';
 import { DictionaryRoutes } from '@/shared/constants';
 import {
   RiArrowDownLine,

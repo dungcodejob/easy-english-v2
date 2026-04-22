@@ -8,7 +8,7 @@ import {
   SheetTitle,
 } from '@/shared/ui/shadcn/sheet';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
-import { useWordSenseDetail } from '../hooks/use-word-sense-detail';
+import { useWordSenseDetail } from '../../dictionary/features/word-sense-detail/use-word-sense-detail';
 import { WordSenseDetail } from './word-sense-detail';
 
 interface WordSenseSheetProps {
