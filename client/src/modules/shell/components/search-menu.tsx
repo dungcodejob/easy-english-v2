@@ -1,4 +1,4 @@
-import { useSearchWordSenses } from '@/modules/dictionary/features/word-sense-list/use-search-word-senses';
+import { useSearchWordSensesSimple } from '@/modules/dictionary/features/word-sense-list/use-search-word-senses-simple';
 import { DictionaryRoutes } from '@/shared/constants';
 import {
   RiArrowDownLine,
@@ -83,7 +83,7 @@ export function SearchMenu() {
     data: result,
     isLoading,
     isFetching,
-  } = useSearchWordSenses({
+  } = useSearchWordSensesSimple({
     query: debouncedQuery,
     top: 5,
     skip: 0,

@@ -11,15 +11,13 @@ const searchSchema = z.object({
   [URLParamKeys.pageSize]: z.string().optional(),
 });
 
-export const DictionaryRoute = createFileRoute('/_(authenticated)/dictionary/')(
-  {
-    validateSearch: searchSchema,
-    component: DictionarySearchPage,
-  },
-);
+export const Route = createFileRoute('/_(authenticated)/dictionary/')({
+  validateSearch: searchSchema,
+  component: WordSearchPage,
+});
 
-export default function DictionarySearchPage() {
-  const { [URLParamKeys.query]: urlKeyword = '' } = DictionaryRoute.useSearch();
+export default function WordSearchPage() {
+  const { [URLParamKeys.query]: urlKeyword = '' } = Route.useSearch();
 
   return (
     <section className="mx-auto max-w-6xl px-6 pb-12 pt-6 md:px-8 md:pt-10">

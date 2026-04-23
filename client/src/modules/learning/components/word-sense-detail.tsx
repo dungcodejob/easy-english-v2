@@ -2,9 +2,9 @@ import { ClarionProgress } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { CheckCircle, GraduationCap, Volume2 } from 'lucide-react';
 import { useRef } from 'react';
+import { AddToLearningButton } from '../../dictionary/features/add-word-sense-to-learning/add-to-learning-button';
 import { useLearningState } from '../hooks/use-learning-state';
 import type { WordSenseDetail as WordSenseDetailType } from '../services/dictionary.api';
-import { AddToLearningButton } from './add-to-learning-button';
 
 interface WordSenseDetailProps {
   detail: WordSenseDetailType;

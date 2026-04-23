@@ -63,10 +63,10 @@ export const routes = rootRoute('root.tsx', [
 
       './modules/learning/pages/dictionary-layout.tsx',
       [
-        index('./modules/learning/pages/dictionary-search.page.tsx'),
+        index('./modules/dictionary/screens/word-search.screen.tsx'),
         route(
           '/senses/$senseId',
-          './modules/learning/pages/word-sense-detail.page.tsx',
+          './modules/dictionary/screens/word-sense-detail.screen.tsx',
         ),
       ],
     ),

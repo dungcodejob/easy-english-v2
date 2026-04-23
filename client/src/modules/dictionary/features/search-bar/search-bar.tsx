@@ -1,7 +1,7 @@
 import { URLParamKeys } from '@/shared/constants';
 import { useUrlSearch } from '@/shared/hooks';
 import { History, Search, X } from 'lucide-react';
-import { DictionaryRoute } from '../../screens/dictionary-search.screen';
+import { Route } from '../../screens/word-search.screen';
 
 interface SearchInputProps {
   value: string;
@@ -58,13 +58,10 @@ const RECENT_SUGGESTIONS = [
 ];
 
 export const SearchBar: React.FC = () => {
-  const { keyword, updateKeyword, urlKeyword, clear } = useUrlSearch(
-    DictionaryRoute.id,
-    {
-      paramKey: URLParamKeys.query,
-      delay: 300,
-    },
-  );
+  const { keyword, updateKeyword, urlKeyword, clear } = useUrlSearch(Route.id, {
+    paramKey: URLParamKeys.query,
+    delay: 300,
+  });
   return (
     <>
       <div className="mb-4">

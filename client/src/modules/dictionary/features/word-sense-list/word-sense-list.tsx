@@ -16,11 +16,11 @@ import {
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { SearchX } from 'lucide-react';
 import { WordSenseCard } from '../../../learning/components/word-sense-card';
-import { DictionaryRoute } from '../../screens/dictionary-search.screen';
+import { Route } from '../../screens/word-search.screen';
 import { useSearchWordSenses } from './use-search-word-senses';
 
 export function WordSenseList() {
-  const { [URLParamKeys.query]: query = '' } = DictionaryRoute.useSearch();
+  const { [URLParamKeys.query]: query = '' } = Route.useSearch();
 
   const {
     data,

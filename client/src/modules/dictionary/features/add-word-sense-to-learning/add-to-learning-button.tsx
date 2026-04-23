@@ -12,9 +12,9 @@ import { cn } from '@/shared/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { ArrowRight, BookmarkCheck, FolderPlus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAddWordToTopic } from '../../topic/hooks/use-topic-mutations';
-import { useTopics } from '../../topic/hooks/use-topics';
-import { useAddToLearning } from '../hooks/use-add-to-learning';
+import { useAddWordToTopic } from '../../../topic/hooks/use-topic-mutations';
+import { useTopics } from '../../../topic/hooks/use-topics';
+import { useAddToLearning } from './use-add-to-learning';
 
 interface AddToLearningButtonProps {
   senseId: string;

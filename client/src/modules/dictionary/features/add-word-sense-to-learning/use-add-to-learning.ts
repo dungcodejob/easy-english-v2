@@ -1,6 +1,6 @@
 import { dictionaryKeys, learningKeys } from '@/shared/constants/common-key';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LearningApi } from '../services/learning.api';
+import { LearningApi } from '../../../learning/services/learning.api';
 
 export const useAddToLearning = () => {
   const queryClient = useQueryClient();

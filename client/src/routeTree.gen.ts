@@ -28,9 +28,9 @@ import { Route as DotModulesTopicScreensTopicsTopicsDotscreenRouteImport } from 
 import { Route as DotModulesLearningPagesStudySessionDotpageRouteImport } from './modules/learning/pages/study-session.page'
 import { Route as DotModulesFlashcardPagesStudyDotpageRouteImport } from './modules/flashcard/pages/study.page'
 import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page'
-import { Route as DotModulesLearningPagesDictionarySearchDotpageRouteImport } from './modules/learning/pages/dictionary-search.page'
+import { Route as DotModulesDictionaryScreensWordSearchDotscreenRouteImport } from './modules/dictionary/screens/word-search.screen'
 import { Route as DotModulesTopicScreensTopicDetailTopicDetailDotscreenRouteImport } from './modules/topic/screens/topic-detail/topic-detail.screen'
-import { Route as DotModulesLearningPagesWordSenseDetailDotpageRouteImport } from './modules/learning/pages/word-sense-detail.page'
+import { Route as DotModulesDictionaryScreensWordSenseDetailDotscreenRouteImport } from './modules/dictionary/screens/word-sense-detail.screen'
 
 const DotModulesShellPagesUnauthenticatedLayoutRoute =
   DotModulesShellPagesUnauthenticatedLayoutRouteImport.update({
@@ -144,8 +144,8 @@ const DotModulesFlashcardPagesStatsDotpageRoute =
     path: '/flashcards/stats',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningPagesDictionarySearchDotpageRoute =
-  DotModulesLearningPagesDictionarySearchDotpageRouteImport.update({
+const DotModulesDictionaryScreensWordSearchDotscreenRoute =
+  DotModulesDictionaryScreensWordSearchDotscreenRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
@@ -156,8 +156,8 @@ const DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute =
     path: '/learning/topics/$topicId',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningPagesWordSenseDetailDotpageRoute =
-  DotModulesLearningPagesWordSenseDetailDotpageRouteImport.update({
+const DotModulesDictionaryScreensWordSenseDetailDotscreenRoute =
+  DotModulesDictionaryScreensWordSenseDetailDotscreenRouteImport.update({
     id: '/senses/$senseId',
     path: '/senses/$senseId',
     getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
@@ -174,14 +174,14 @@ export interface FileRoutesByFullPath {
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
+  '/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  '/dictionary/senses/$senseId': typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRoute
   '/learning/topics/$topicId': typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
 }
 export interface FileRoutesByTo {
@@ -194,14 +194,14 @@ export interface FileRoutesByTo {
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/login': typeof DotModulesAuthPagesLoginPageRoute
   '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
+  '/dictionary': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  '/dictionary/senses/$senseId': typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRoute
   '/learning/topics/$topicId': typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
 }
 export interface FileRoutesById {
@@ -219,14 +219,14 @@ export interface FileRoutesById {
   '/_(authenticated)/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
   '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
-  '/_(authenticated)/dictionary/': typeof DotModulesLearningPagesDictionarySearchDotpageRoute
+  '/_(authenticated)/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
   '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
   '/_(authenticated)/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/_(authenticated)/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/_(authenticated-fullscreen)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
-  '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  '/_(authenticated)/dictionary/senses/$senseId': typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRoute
   '/_(authenticated)/learning/topics/$topicId': typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
 }
 export interface FileRouteTypes {
@@ -443,7 +443,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/dictionary/'
       path: '/'
       fullPath: '/dictionary/'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRouteImport
+      preLoaderRoute: typeof DotModulesDictionaryScreensWordSearchDotscreenRouteImport
       parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
     }
     '/_(authenticated)/learning/topics/$topicId': {
@@ -457,23 +457,23 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/dictionary/senses/$senseId'
       path: '/senses/$senseId'
       fullPath: '/dictionary/senses/$senseId'
-      preLoaderRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRouteImport
+      preLoaderRoute: typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRouteImport
       parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
     }
   }
 }
 
 interface DotModulesLearningPagesDictionaryLayoutRouteChildren {
-  DotModulesLearningPagesDictionarySearchDotpageRoute: typeof DotModulesLearningPagesDictionarySearchDotpageRoute
-  DotModulesLearningPagesWordSenseDetailDotpageRoute: typeof DotModulesLearningPagesWordSenseDetailDotpageRoute
+  DotModulesDictionaryScreensWordSearchDotscreenRoute: typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
+  DotModulesDictionaryScreensWordSenseDetailDotscreenRoute: typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRoute
 }
 
 const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPagesDictionaryLayoutRouteChildren =
   {
-    DotModulesLearningPagesDictionarySearchDotpageRoute:
-      DotModulesLearningPagesDictionarySearchDotpageRoute,
-    DotModulesLearningPagesWordSenseDetailDotpageRoute:
-      DotModulesLearningPagesWordSenseDetailDotpageRoute,
+    DotModulesDictionaryScreensWordSearchDotscreenRoute:
+      DotModulesDictionaryScreensWordSearchDotscreenRoute,
+    DotModulesDictionaryScreensWordSenseDetailDotscreenRoute:
+      DotModulesDictionaryScreensWordSenseDetailDotscreenRoute,
   }
 
 const DotModulesLearningPagesDictionaryLayoutRouteWithChildren =
