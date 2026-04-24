@@ -98,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<'aside'>) {
 
   return (
     <aside
-      className="h-screen w-64 fixed left-0 top-0 z-50 rounded-r-[3rem] bg-surface-container-low shadow-xl flex flex-col py-8"
+      className="h-screen w-64 fixed left-0 top-0 z-50 rounded-r-[3rem] bg-surface-container-low shadow-xl flex flex-col py-8 dark:bg-surface-container dark:shadow-2xl dark:border-r dark:border-white/5"
       {...props}
     >
       {/* Current Workspace + Switcher */}
@@ -111,7 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<'aside'>) {
         <NavGroup items={navItems} />
       </nav>
 
-      <Separator className="mx-4 border-t border-outline-variant/10" />
+      <Separator className="mx-4 border-t border-outline-variant/10 dark:border-white/5" />
 
       {/* System Navigation */}
       <div className="mt-auto pt-2 space-y-1">

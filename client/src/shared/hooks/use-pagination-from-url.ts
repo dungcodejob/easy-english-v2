@@ -7,8 +7,16 @@ export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 20;
 
 const paginationSchema = z.object({
-  [URLParamKeys.pageIndex]: z.coerce.number().int().positive().catch(DEFAULT_PAGE),
-  [URLParamKeys.pageSize]: z.coerce.number().int().positive().catch(DEFAULT_PAGE_SIZE),
+  [URLParamKeys.pageIndex]: z.coerce
+    .number()
+    .int()
+    .positive()
+    .catch(DEFAULT_PAGE),
+  [URLParamKeys.pageSize]: z.coerce
+    .number()
+    .int()
+    .positive()
+    .catch(DEFAULT_PAGE_SIZE),
 });
 
 export function usePaginationFromUrl() {

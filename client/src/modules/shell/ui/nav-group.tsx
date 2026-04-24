@@ -41,8 +41,8 @@ export function NavGroup({
             className={cn(
               'relative flex items-center gap-4 rounded-full mx-4 py-3 px-6 text-sm font-medium transition-all duration-300',
               isActive
-                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg shadow-primary/10 scale-105'
-                : 'text-on-surface-variant hover:bg-surface-container-high',
+                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg shadow-primary/10 scale-105 dark:from-navy-surface dark:to-navy-surface-dim dark:border dark:border-navy-outline dark:shadow-navy-surface/10'
+                : 'text-on-surface-variant hover:bg-surface-container-high dark:hover:text-on-surface',
             )}
           >
             {item.icon && <item.icon className="h-5 w-5 shrink-0" />}
