@@ -33,9 +33,9 @@ import { useRef, useState } from 'react';
 import {
   TopicDialog,
   type TopicDialogHandle,
-} from '../../components/create-or-update-topic/topic-dialog';
-import { useDeleteTopic } from '../../components/delete-topic/use-delete-topic';
-import { useRemoveTopicWord } from '../../components/remove-word-from-topic/use-remove-word-from-topic';
+} from '../../features/create-or-update-topic/topic-dialog';
+import { useDeleteTopic } from '../../features/delete-topic/use-delete-topic';
+import { useRemoveTopicWord } from '../../features/remove-word-from-topic/use-remove-word-from-topic';
 import { useTopicDetail } from '../../hooks/use-topic-detail';
 import { useTopicWords } from '../../hooks/use-topic-words';
 import type { TopicWord } from '../../services/topic.api';

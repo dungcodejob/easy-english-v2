@@ -7,8 +7,8 @@ import { useRef, useState } from 'react';
 import {
   TopicDialog,
   type TopicDialogHandle,
-} from '../../components/create-or-update-topic/topic-dialog';
-import { useDeleteTopic } from '../../components/delete-topic/use-delete-topic';
+} from '../../features/create-or-update-topic/topic-dialog';
+import { useDeleteTopic } from '../../features/delete-topic/use-delete-topic';
 import { useTopics } from '../../hooks/use-topics';
 import type { Topic } from '../../services/topic.api';
 import { TopicCardItem } from './topic-card-item';

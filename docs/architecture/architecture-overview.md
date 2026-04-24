@@ -104,9 +104,11 @@ server/src/modules/
 ├── auth/           # Authentication, sessions, JWT tokens
 ├── workspace/      # Multi-tenant workspace management
 ├── dictionary/     # Word/dictionary management (read-only data)
-└── learning/       # Learning progress, flashcards, topics, study sessions
-    ├── progress/   # User word learning progress
-    └── topic/      # User-created word groups
+├── flashcard/      # User flashcards and review logs
+└── learning/       # Learning progress, topics, and study sessions
+    ├── progress/   # User word-sense learning progress (FSRS state)
+    ├── topic/      # User-created word groups
+    └── study/      # Study sessions, quiz cards, study statistics
 ```
 
 ### Module Dependencies (top-down only)
@@ -115,7 +117,7 @@ server/src/modules/
 auth ──────► workspace
              │
              ▼
-        learning
+        learning ◄──── flashcard
              │
              ▼
          dictionary
@@ -125,6 +127,7 @@ Rules:
 - `auth` has no dependencies on other modules
 - `workspace` depends only on `auth`
 - `learning` depends on `workspace` and `dictionary`
+- `flashcard` depends on `learning/progress` (for scheduling via FSRS)
 - `dictionary` is a leaf — no downstream dependencies
 
 ---

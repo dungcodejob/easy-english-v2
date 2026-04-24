@@ -81,13 +81,16 @@ Modules can only depend on modules below them in the dependency hierarchy:
 auth ──────► workspace
              │
              ▼
-        learning
+        learning ◄──── flashcard
              │
              ▼
          dictionary
 ```
 
 **Dependency direction**: `auth` → `workspace` means `workspace` imports nothing from `auth`. Higher modules define interfaces; lower modules implement them.
+
+- `flashcard` exports its repository token; `learning/study` imports it to query cards during sessions.
+- `learning/progress` exports its FSRS scheduler; `flashcard` imports it to calculate review intervals.
 
 ### Shared Kernel
 
@@ -107,92 +110,102 @@ Modules import from `shared-kernel` freely — it has zero dependencies.
 
 ---
 
-## 4. Module Example: Learning Module
+## 4. Module Examples
 
-The `learning` module is the most complex. Here's its full structure:
+### Flashcard Module (`/modules/flashcard`)
+
+The `flashcard` module owns the flashcard aggregate and its review log. It depends on `learning/progress` for FSRS scheduling and exports its repository token for use by `learning/study`.
 
 ```
-server/src/modules/learning/
+server/src/modules/flashcard/
 │
 ├── domain/
-│   ├── entities/
-│   │   ├── flashcard.entity.ts          # Flashcard aggregate root
-│   │   ├── card-progress.entity.ts      # Card progress entity
-│   │   ├── study-session.entity.ts       # Study session entity
-│   │   ├── topic.entity.ts              # Topic aggregate root
-│   │   └── review-log.entity.ts         # Review history
-│   │
-│   ├── value-objects/
-│   │   ├── card-rating.vo.ts            # Again | Hard | Good | Easy
-│   │   ├── card-state.vo.ts             # New | Learning | Review | Relearning
-│   │   ├── fsrs-parameters.vo.ts         # Stability, difficulty, interval
-│   │   └── study-mode.vo.ts             # Learn | Review | Quiz
-│   │
-│   ├── repositories/
-│   │   ├── flashcard.repository.ts      # Interface
-│   │   ├── card-progress.repository.ts  # Interface
-│   │   ├── study-session.repository.ts   # Interface
-│   │   └── topic.repository.ts          # Interface
-│   │
-│   └── events/
-│       ├── card-reviewed.event.ts
-│       ├── session-started.event.ts
-│       └── topic-updated.event.ts
+│   └── entities/
+│       └── flashcard.entity.ts          # Flashcard aggregate root
 │
 ├── application/
 │   ├── commands/
 │   │   ├── create-flashcard/
 │   │   │   ├── create-flashcard.command.ts
 │   │   │   └── create-flashcard.handler.ts
-│   │   ├── review-card/
-│   │   │   ├── review-card.command.ts
-│   │   │   └── review-card.handler.ts
-│   │   ├── start-study-session/
-│   │   │   └── ...
-│   │   └── create-topic/
-│   │       └── ...
+│   │   ├── update-flashcard/
+│   │   ├── delete-flashcard/
+│   │   └── review-card/                 # Calls FsrsSchedulerService from learning/progress
 │   │
 │   └── queries/
-│       ├── get-due-cards/
-│       │   ├── get-due-cards.query.ts
-│       │   └── get-due-cards.handler.ts
-│       ├── get-study-session/
-│       │   └── ...
-│       └── get-topic-detail/
-│           └── ...
+│       └── get-flashcards/
 │
 ├── infrastructure/
 │   ├── persistence/
-│   │   ├── flashcard.repository.ts       # MikroORM implementation
-│   │   ├── card-progress.repository.ts
-│   │   ├── study-session.repository.ts
-│   │   └── topic.repository.ts
-│   │
+│   │   └── flashcard.repository.ts      # MikroORM implementation
 │   └── orm-entities/
 │       ├── flashcard.orm-entity.ts
-│       ├── card-progress.orm-entity.ts
-│       ├── study-session.orm-entity.ts
-│       └── topic.orm-entity.ts
+│       └── review-log.orm-entity.ts
 │
 └── presentation/
     ├── dto/
-    │   ├── flashcard/
-    │   │   ├── create-flashcard.dto.ts
-    │   │   ├── update-flashcard.dto.ts
-    │   │   └── flashcard.response.dto.ts
-    │   ├── study/
-    │   │   ├── review-card.dto.ts
-    │   │   ├── start-session.dto.ts
-    │   │   └── study-session.response.dto.ts
-    │   └── topic/
-    │       └── ...
-    │
+    │   ├── create-flashcard.dto.ts
+    │   ├── update-flashcard.dto.ts
+    │   └── flashcard.response.dto.ts
     ├── controllers/
-    │   ├── flashcard.controller.ts
-    │   ├── study.controller.ts
-    │   └── topic.controller.ts
-    │
-    └── learning.module.ts
+    │   └── flashcard.controller.ts
+    └── flashcard.module.ts              # Exports: FlashcardMapper, flashcardRepositoryToken
+```
+
+### Learning Module (`/modules/learning`)
+
+The `learning` module is a composite of three sub-modules: `progress`, `topic`, and `study`.
+
+```
+server/src/modules/learning/
+│
+├── progress/                            # FSRS state machine for word-sense learning
+│   ├── domain/entities/
+│   │   └── user-word-sense-progress.entity.ts
+│   ├── application/
+│   │   ├── commands/                    # AddToLearning, RemoveFromLearning, ReviewWord
+│   │   └── queries/                     # GetLearningState, GetLearningList, GetLearnedStatus
+│   ├── infrastructure/
+│   │   ├── persistence/
+│   │   │   ├── learning-read.repository.ts
+│   │   │   └── learning-write.repository.ts
+│   │   ├── orm-entities/
+│   │   │   └── user-word-sense-progress.orm-entity.ts
+│   │   └── services/
+│   │       └── fsrs-scheduler.service.ts   # FSRS algorithm
+│   └── presentation/
+│       ├── senses.controller.ts
+│       └── progress.module.ts              # Exports: FsrsSchedulerService, read/write repos
+│
+├── topic/                               # User-created word groups
+│   ├── domain/entities/
+│   │   └── topic.entity.ts
+│   ├── application/
+│   │   ├── commands/                    # CreateTopic, UpdateTopic, DeleteTopic
+│   │   └── queries/                     # GetTopics, GetTopicDetail
+│   ├── infrastructure/
+│   │   └── persistence/
+│   │       └── topic.repository.ts
+│   └── presentation/
+│       └── topic.controller.ts
+│
+├── study/                               # Study sessions, quiz cards, statistics
+│   ├── application/
+│   │   ├── commands/                    # StartStudySession, StudySessionReview, CompleteStudySession
+│   │   └── queries/                     # GetDueCards, GetQuizCards, GetTopicCards, GetStudyStats
+│   ├── infrastructure/
+│   │   ├── persistence/
+│   │   │   ├── study-session.repository.ts
+│   │   │   └── study-stats.repository.ts
+│   │   └── orm-entities/
+│   │       ├── study-session.orm-entity.ts
+│   │       ├── study-review-log.orm-entity.ts
+│   │       └── study-stats.orm-entity.ts
+│   └── presentation/
+│       ├── study.controller.ts
+│       └── study-session.controller.ts
+│
+└── learning.module.ts                   # Root module composing progress + topic + study
 ```
 
 ---
@@ -307,29 +320,31 @@ export class FlashcardOrmEntity extends Flashcard {
 ## 7. Module NestJS Wiring
 
 ```typescript
-// presentation/learning.module.ts
+// flashcard.module.ts — owns the flashcard aggregate
 @Module({
   imports: [
     CqrsModule,
-    MikroOrmModule.forFeature([FlashcardOrmEntity, CardProgressOrmEntity]),
-    WorkspaceModule,        // Dependency
+    MikroOrmModule.forFeature([FlashcardOrmEntity, ReviewLogOrmEntity]),
+    ProgressModule,          // Imports FsrsSchedulerService for review scheduling
   ],
-  controllers: [FlashcardController, StudyController, TopicController],
+  controllers: [FlashcardController],
   providers: [
-    // Command handlers
     CreateFlashcardHandler,
+    UpdateFlashcardHandler,
+    DeleteFlashcardHandler,
     ReviewCardHandler,
-    StartStudySessionHandler,
-    // Query handlers
-    GetDueCardsHandler,
-    GetStudySessionHandler,
-    // Repository implementations
-    FlashcardRepository,
-    CardProgressRepository,
-    // Domain services
-    FsrsService,
+    GetFlashcardsHandler,
+    { provide: flashcardRepositoryToken, useClass: FlashcardRepository },
+    { provide: ReviewLogRepositoryToken, useClass: ReviewLogRepository },
+    FlashcardMapper,
   ],
-  exports: [FlashcardRepository, CardProgressRepository],
+  exports: [FlashcardMapper, flashcardRepositoryToken, ReviewLogRepositoryToken],
+})
+export class FlashcardModule {}
+
+// learning.module.ts — composes progress + topic + study sub-modules
+@Module({
+  imports: [ProgressModule, TopicModule, StudyModule],
 })
 export class LearningModule {}
 ```
