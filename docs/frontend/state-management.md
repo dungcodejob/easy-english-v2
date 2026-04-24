@@ -257,7 +257,136 @@ const queryClient = new QueryClient({
 
 ---
 
-## 7. Related Documentation
+## 7. Generic Shared Hooks (`shared/hooks/`)
+
+Reusable hooks that abstract common async patterns. Use these instead of writing raw `useMutation` or URL boilerplate.
+
+---
+
+### `useToastMutation`
+
+Wraps `useMutation` with `toast.promise` (loading / success / error feedback) without any custom invalidation logic. Use for any mutation where you want user feedback but don't need optimistic updates.
+
+```typescript
+import { useToastMutation } from '@/shared/hooks/use-toast-mutation';
+
+export function useCreateTopic() {
+  return useToastMutation({
+    options: {
+      mutationFn: (data: CreateTopicInput) => TopicApi.createTopic(data),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: topicKeys.lists() }),
+    },
+    toast: {
+      loading: 'Creating topic...',
+      success: 'Topic created!',
+      error: (err) => err.message,
+    },
+  });
+}
+```
+
+- `mutateAsync` is replaced with a version that wraps the call in `toast.promise`.
+- `toast` messages can be strings or functions receiving variables/error.
+- For complex mutations (auth, navigation), use raw `useMutation` directly.
+
+---
+
+### `useOptimisticMutation`
+
+Full optimistic update lifecycle: cancel refetches → snapshot → apply → rollback on error → invalidate on settled. Only shows an error toast (no loading/success toast — those contradict the instant UI update).
+
+Four built-in strategies:
+
+| Strategy | When to use |
+|---|---|
+| `updateInList` | Edit an item inside a cached array |
+| `addToList` | Insert a new item (prepend or append) |
+| `removeFromList` | Remove an item from a cached array |
+| `custom` | Full control — provide your own updater |
+
+```typescript
+// Delete with removeFromList
+useOptimisticMutation({
+  options: { mutationFn: (id: string) => TopicApi.deleteTopic(id) },
+  queryKey: topicKeys.lists(),
+  updater: {
+    type: 'removeFromList',
+    getId: (item) => item.id,
+    getIdFromVars: (id) => id,
+  },
+  errorToast: 'Delete failed — change reverted.',
+});
+
+// Edit with updateInList
+useOptimisticMutation({
+  options: { mutationFn: ({ id, name }) => TopicApi.updateTopic(id, { name }) },
+  queryKey: topicKeys.lists(),
+  updater: {
+    type: 'updateInList',
+    getId: (item) => item.id,
+    getIdFromVars: (vars) => vars.id,
+    merge: (old, vars) => ({ ...old, name: vars.name }),
+  },
+  errorToast: (err) => `Update failed: ${err.message}`,
+});
+```
+
+---
+
+### `usePaginationFromUrl`
+
+Reads `page` and `pageSize` from URL search params (via `URLParamKeys`) and exposes a `setPagination` setter that updates the URL. URL is the single source of truth — shareable links, browser back/forward work automatically.
+
+```typescript
+const { page, pageSize, top, skip, setPagination } = usePaginationFromUrl();
+// top = pageSize, skip = (page - 1) * pageSize — ready to pass to API
+```
+
+- Defaults: `page = 1`, `pageSize = 20`
+- Invalid/missing params fall back to defaults via Zod `.catch()`
+
+---
+
+### `usePaginationQuery`
+
+Combines `usePaginationFromUrl` + `useQuery` into one hook. Automatically extracts `count`, `hasMore`, and `paginationMeta` from the API envelope's `pagination` field.
+
+```typescript
+const {
+  data, isLoading,
+  page, pageSize, setPage, setPageSize,
+  totalPages, count, hasMore, hasPrev,
+} = usePaginationQuery({
+  queryKey: (params) => topicKeys.list(params),
+  queryFn: ({ top, skip }) => TopicApi.getTopics({ top, skip }),
+});
+```
+
+- `setPageSize(n)` resets to page 1 to avoid empty result sets.
+- `placeholderData` keeps previous page visible while loading next.
+
+---
+
+### `useUrlSearch`
+
+Manages a single text search param in the URL with debounced writes. Input updates are instant (local state); URL writes are debounced by `delay` ms. Use `urlKeyword` for API calls, `keyword` for the input's `value` prop.
+
+```typescript
+const { keyword, updateKeyword, urlKeyword, clear } = useUrlSearch(
+  '/_(authenticated)/dictionary/',
+  { paramKey: 'q', delay: 300 },
+);
+
+// <input value={keyword} onChange={(e) => updateKeyword(e.target.value)} />
+// API query: useQuery({ queryFn: () => search(urlKeyword) })
+```
+
+- `clear()` cancels the pending debounce and removes the param from URL immediately.
+- Syncs `keyword` back when URL changes externally (browser back/forward).
+
+---
+
+## 8. Related Documentation
 
 - [API Layer](./api-layer.md) — Request/response models, interceptors
 - [Routing](./routing.md) — Route definitions and navigation
