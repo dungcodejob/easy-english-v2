@@ -1,8 +1,8 @@
+import type { WordSenseDetail } from '@/modules/learning/services/dictionary.api';
 import { ClarionProgress } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Volume2 } from 'lucide-react';
 import { useRef } from 'react';
-import type { WordSenseDetail } from '@/modules/learning/services/dictionary.api';
 import type { LearningStateData } from './types';
 
 interface WordHeroProps {
@@ -47,13 +47,18 @@ export function WordHero({
         )}
 
         <div className="flex items-center gap-6">
-          <h1 className="font-headline text-6xl font-extrabold tracking-tighter text-primary md:text-8xl capitalize">
+          <h1 className="font-headline text-6xl font-extrabold tracking-tighter text-primary dark:text-on-surface md:text-8xl capitalize">
             {detail.wordText}
           </h1>
           {defaultPronunciation?.audioUrl && (
             <button
               onClick={() => playAudio(defaultPronunciation.audioUrl!)}
-              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-primary shadow-md transition-all hover:bg-primary-fixed-dim active:scale-90"
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-on-surface 
+              shadow-md transition-all hover:bg-primary-fixed-dim 
+              dark:bg-surface-container dark:hover:bg-surface-container-high
+              dark:border dark:border-white/10
+              border border-white/5
+              active:scale-90"
               aria-label="Play pronunciation"
             >
               <Volume2 className="h-7 w-7" />

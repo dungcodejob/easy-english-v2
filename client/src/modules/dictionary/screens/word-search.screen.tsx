@@ -23,7 +23,7 @@ export default function WordSearchPage() {
     <section className="mx-auto max-w-6xl px-6 pb-12 pt-6 md:px-8 md:pt-10">
       {/* Hero */}
       <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-headline font-extrabold text-on-primary-fixed mb-4 tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-headline font-extrabold text-on-primary-fixed dark:text-on-surface mb-4 tracking-tight">
           Easy English Dictionary
         </h1>
         <p className="text-on-surface-variant max-w-xl text-lg leading-relaxed">

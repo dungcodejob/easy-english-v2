@@ -8,7 +8,12 @@ interface LearningCtaCardProps {
 
 export function LearningCtaCard({ senseId, isLearning }: LearningCtaCardProps) {
   return (
-    <div className="flex flex-col items-center gap-6 rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-center text-white shadow-xl">
+    <div
+      className="flex flex-col items-center gap-6 rounded-xl bg-gradient-to-br from-primary to-primary-container
+    
+    dark:from-primary-container dark:to-surface
+    p-8 text-center text-white shadow-xl"
+    >
       <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-md">
         <GraduationCap className="h-10 w-10 text-tertiary-fixed-dim" />
       </div>

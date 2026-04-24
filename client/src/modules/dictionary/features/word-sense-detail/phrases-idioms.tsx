@@ -16,17 +16,21 @@ export function PhrasesIdioms({ phrases, idioms }: PhrasesIdiomsProps) {
           {phrases.map((phrase) => (
             <div
               key={phrase}
-              className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm"
+              className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm dark:bg-surface-container/80 "
             >
-              <h5 className="mb-1 font-bold text-primary">{phrase}</h5>
+              <h5 className="mb-1 dark:text-on-surface font-bold text-primary">
+                {phrase}
+              </h5>
             </div>
           ))}
           {idioms.map((idiom) => (
             <div
               key={idiom}
-              className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm"
+              className="rounded-lg border-l-4 border-tertiary-fixed-dim bg-white/60 p-4 backdrop-blur-sm dark:bg-surface-container/80"
             >
-              <h5 className="mb-1 font-bold text-primary">{idiom}</h5>
+              <h5 className="mb-1 dark:text-on-surface font-bold text-primary">
+                {idiom}
+              </h5>
             </div>
           ))}
         </div>

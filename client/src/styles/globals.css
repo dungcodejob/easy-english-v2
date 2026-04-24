@@ -252,6 +252,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-outline: var(--outline);
+  --color-on-surface: var(--on-surface);
   --color-outline-variant: var(--outline-variant);
   --color-inverse-surface: var(--inverse-surface);
   --color-inverse-on-surface: var(--inverse-on-surface);
