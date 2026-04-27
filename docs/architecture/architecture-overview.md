@@ -203,12 +203,16 @@ ReviewCommandHandler
 
 | Principle | Implementation |
 |-----------|---------------|
+| **Hexagonal Architecture** | Domain core is framework-agnostic. Infrastructure adapters implement application ports. Dependencies point inward. |
 | **CQRS** | Commands mutate state; queries read state. Separate handler classes. |
-| **DDD** | Each module has domain entities, value objects, and repository interfaces. |
+| **DDD** | Each module has domain entities, value objects, repository ports, and mappers. |
+| **Ports & Adapters** | Application layer defines interfaces (ports); infrastructure implements them (adapters). |
 | **Multi-tenancy** | All queries scoped by `workspaceId` from JWT. Middleware enforces isolation. |
-| **Event-driven** | Domain events emitted via `@nestjs/event-emitter`. Async event handlers for side effects. |
+| **Event-driven** | Aggregate roots emit domain events via `addEvent()`. Repositories publish after save. |
 | **Result pattern** | `Result<T, E>` from `neverthrow` for explicit error propagation. |
 | **Type-safe API** | DTOs with `class-validator` decorators. Swagger auto-generated from DTOs. |
+
+> Reference: [domain-driven-hexagon](https://github.com/Sairyss/domain-driven-hexagon) — the server architecture follows this pattern.
 
 ---
 
@@ -224,10 +228,11 @@ easy-english-v2/
 │   │   ├── migrations/        # Database migrations
 │   │   ├── modules/           # DDD bounded contexts
 │   │   │   └── <module>/
-│   │   │       ├── application/    # Commands, queries, handlers
-│   │   │       ├── domain/         # Entities, value objects, events
-│   │   │       ├── infrastructure/  # Repository implementations, persistence
-│   │   │       └── presentation/    # Controllers, DTOs
+│   │   │       ├── application/    # Commands, queries, ports (interfaces)
+│   │   │       ├── domain/         # Entities, value objects, events, exceptions
+│   │   │       ├── infrastructure/ # Mappers, ORM entities, repo/service impls
+│   │   │       ├── controllers/    # HTTP controllers
+│   │   │       └── dto/            # Request/response DTOs
 │   │   └── shared/            # Cross-cutting concerns
 │   └── test/                  # Test utilities
 │
