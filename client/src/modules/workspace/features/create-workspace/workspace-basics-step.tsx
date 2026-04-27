@@ -1,15 +1,11 @@
-/**
- * WorkspaceBasicsStep — Clarion step 1 "Workspace Details"
- */
-
-import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
+import type { CreateWorkspaceWizardData } from '@/modules/workspace/services/workspace.types';
+import { WorkspaceType } from '@/modules/workspace/services/workspace.types';
 import { ClarionInput, ClarionLabel, ClarionTextarea } from '@/shared/ui/base';
 import { BackButton, CTAButton } from '@/shared/ui/semantic';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import { cn } from '@/shared/utils';
 import { ArrowRight, Briefcase, GraduationCap, Info, User } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { WorkspaceType } from '../../types';
 
 interface WorkspaceBasicsStepProps {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -74,7 +70,6 @@ export function WorkspaceBasicsStep({
           <div className="absolute top-0 right-0 w-1/3 h-1 bg-gradient-to-r from-transparent to-tertiary-fixed-dim/40" />
 
           <div className="space-y-10">
-            {/* Workspace Name */}
             <div>
               <ClarionLabel
                 htmlFor="name"
@@ -106,7 +101,6 @@ export function WorkspaceBasicsStep({
               )}
             </div>
 
-            {/* Workspace Type */}
             <div>
               <ClarionLabel className="uppercase tracking-wide text-on-surface-variant mb-4">
                 Workspace Type
@@ -152,7 +146,6 @@ export function WorkspaceBasicsStep({
               />
             </div>
 
-            {/* Description */}
             <div>
               <ClarionLabel
                 htmlFor="description"
@@ -174,7 +167,6 @@ export function WorkspaceBasicsStep({
           </div>
         </div>
 
-        {/* Action footer */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-4">
           <BackButton onClick={onBack}>Return to Selection</BackButton>
           <CTAButton type="submit" endIcon={<ArrowRight />}>

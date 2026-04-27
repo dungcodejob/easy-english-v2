@@ -222,7 +222,10 @@
       "Bash(npm install *)",
       "Bash(npx tsr *)",
       "Bash(xargs ls *)",
-      "Bash(find *)"
+      "Bash(find *)",
+      "Bash(rm -f \"client/src/modules/workspace/pages/new-workspace.page.tsx\" \"client/src/modules/workspace/pages/workspaces.page.tsx\" \"client/src/modules/workspace/pages/workspace-settings.page.tsx\" \"client/src/modules/workspace/hooks/use-create-workspace.ts\" \"client/src/modules/workspace/components/language-picker.tsx\" \"client/src/modules/workspace/components/wizard-progress-bar.tsx\" \"client/src/modules/workspace/index.ts\" \"client/src/modules/workspace/components/new-wizard/workspace-wizard.tsx\" \"client/src/modules/workspace/components/new-wizard/workspace-basics-step.tsx\" \"client/src/modules/workspace/components/new-wizard/workspace-learning-step.tsx\" \"client/src/modules/workspace/components/new-wizard/workspace-preferences-step.tsx\" \"client/src/modules/workspace/components/new-wizard/workspace-review-step.tsx\")",
+      "Bash(rm -f \"client/src/modules/workspace/types/index.ts\" \"client/src/modules/workspace/types/workspace-learning-goal.enum.ts\" \"client/src/modules/workspace/types/workspace-learning-level.enum.ts\" \"client/src/modules/workspace/types/workspace-learning-mode.enum.ts\" \"client/src/modules/workspace/types/workspace-type.enum.ts\" \"client/src/modules/workspace/types/workspace.types.ts\")",
+      "Bash(rmdir \"client/src/modules/workspace/types\" \"client/src/modules/workspace/components/new-wizard\" \"client/src/modules/workspace/pages\")"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"

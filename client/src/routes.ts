@@ -58,11 +58,11 @@ export const routes = rootRoute('root.tsx', [
     route(FlashcardsRoutes.stats(), './modules/flashcard/pages/stats.page.tsx'),
     route(
       WorkspaceRoutes.list(),
-      './modules/workspace/pages/workspaces.page.tsx',
+      './modules/workspace/screens/workspaces/workspaces.screen.tsx',
     ),
     route(
       WorkspaceRoutes.settings(),
-      './modules/workspace/pages/workspace-settings.page.tsx',
+      './modules/workspace/screens/workspace-settings/workspace-settings.screen.tsx',
     ),
     route(ProgressRoutes.list(), './modules/progress/pages/progress.page.tsx'),
     route(SettingsRoutes.list(), './modules/settings/pages/settings.page.tsx'),
@@ -87,7 +87,7 @@ export const routes = rootRoute('root.tsx', [
     [
       route(
         WorkspaceRoutes.new(),
-        './modules/workspace/pages/new-workspace.page.tsx',
+        './modules/workspace/screens/new-workspace/new-workspace.screen.tsx',
       ),
     ],
   ),

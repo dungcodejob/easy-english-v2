@@ -1,12 +1,5 @@
-/**
- * WorkspaceReviewStep — Clarion step 4 "Finalize"
- *
- * Editorial bento summary grid: hero identity card + language focus
- * + pace/intensity card + glass action bar.
- */
-
 import { defaultWizardPreferences } from '@/modules/workspace/stores/use-wizard-store';
-import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
+import type { CreateWorkspaceWizardData } from '@/modules/workspace/services/workspace.types';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import { BackButton, CTAButton, InlineEditButton } from '@/shared/ui/semantic';
 import { cn } from '@/shared/utils';
@@ -58,7 +51,6 @@ export function WorkspaceReviewStep({
       maxWidth="max-w-5xl"
     >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Hero image card — span 8 */}
         <div className="md:col-span-8 overflow-hidden rounded-xl bg-surface-container-low relative group min-h-[260px]">
           <img
             alt="Workspace hero"
@@ -80,7 +72,6 @@ export function WorkspaceReviewStep({
           </div>
         </div>
 
-        {/* Identity small card */}
         <div className="md:col-span-4 p-6 md:p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
           <div className="mb-4 flex items-center justify-between">
             <FileEdit className="size-5 text-secondary" />
@@ -98,7 +89,6 @@ export function WorkspaceReviewStep({
           </div>
         </div>
 
-        {/* Language focus card */}
         <div className="md:col-span-6 p-6 md:p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -129,7 +119,6 @@ export function WorkspaceReviewStep({
           </div>
         </div>
 
-        {/* Pace card */}
         <div className="md:col-span-6 p-6 md:p-8 rounded-xl bg-surface-container-lowest border border-outline-variant/10 shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -197,7 +186,6 @@ export function WorkspaceReviewStep({
           </div>
         </div>
 
-        {/* Curriculum Preview — 3 module cards */}
         <section className="md:col-span-12 mt-12">
           <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-8 text-center">
             Initial Curriculum Preview
@@ -237,7 +225,7 @@ export function WorkspaceReviewStep({
               <div className="aspect-video rounded-xl overflow-hidden bg-surface-container-low grayscale">
                 <img
                   alt="Module 3"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRgnjevAfkNuF0JLyBWMFE0SrotA8yI5pzlUGt6HV2zAWG1BWohV_FNLFLBEgRikBRYLrzT9I1W5z37ohbe1DAJU6ewr3I-342fj-rk1igatUuYbUxs5dPZA3N22l_4fCjFQjlTe3RkVgDp51M3C8vFdUBxhCVKUYVaMfe1O8PwbANqO9S9aSoTstE_vlw_MTEgmH5PS4HYJkvUH88pxRxobc16ZeQN6F6c6HgHDhNSJZD8L9m5YGG-ocXZZCqnjZucbYJ5YHNCI8"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRgnjevAfkNuF0JLyBWMFE0SrotA8yI5pzlUGt6HV2zAWG1BWohV_FLBEgRikBRYLrzT9I1W5z37ohbe1DAJU6ewr3I-342fj-rk1igatUuYbUxs5dPZA3N22l_4fCjFQjlTe3RkVgDp51M3C8vFdUBxhCVKUYVaMfe1O8PwbANqO9S9aSoTstE_vlw_MTEgmH5PS4HYJkvUH88pxRxobc16ZeQN6F6c6HgHDhNSJZD8L9m5YGG-ocXZZCqnjZucbYJ5YHNCI8"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -251,7 +239,6 @@ export function WorkspaceReviewStep({
           </div>
         </section>
 
-        {/* Glass action bar */}
         <div className="md:col-span-12 mt-4">
           <div className="bg-surface-container-low/60 backdrop-blur-xl p-6 md:p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant/15">
             <div className="flex items-center gap-4">

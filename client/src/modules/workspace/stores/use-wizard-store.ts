@@ -1,15 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
+  type CreateWorkspaceRequest,
+  Language,
   WorkspaceLearningGoal,
   WorkspaceLearningLevel,
   WorkspaceLearningMode,
   WorkspaceType,
-} from '../types';
-import {
-  type CreateWorkspaceRequest,
-  Language,
-} from '../types/workspace.types';
+} from '../services/workspace.types';
 
 export const defaultWizardPreferences = {
   dailyTarget: 30,

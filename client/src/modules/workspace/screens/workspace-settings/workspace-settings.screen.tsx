@@ -14,7 +14,11 @@ import { useState } from 'react';
 
 type LearningMode = 'spaced' | 'immersion';
 
-function WorkspaceSettingsPage() {
+export const Route = createFileRoute('/_(authenticated)/workspace/settings')({
+  component: WorkspaceSettingsScreen,
+});
+
+function WorkspaceSettingsScreen() {
   const { currentWorkspaceId } = useWorkspaceStore();
   const workspace =
     MOCK_WORKSPACES.find((ws) => ws.id === currentWorkspaceId) ??
@@ -29,7 +33,6 @@ function WorkspaceSettingsPage() {
 
   return (
     <main className="px-6 md:px-12 py-16 max-w-5xl mx-auto">
-      {/* Hero */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
         <div className="flex-1">
           <h1 className="font-headline text-5xl font-extrabold text-on-primary-fixed tracking-tight mb-4 leading-none">
@@ -43,7 +46,6 @@ function WorkspaceSettingsPage() {
           </p>
         </div>
 
-        {/* Active Module Widget */}
         <div className="relative group shrink-0">
           <div className="absolute -inset-1 bg-gradient-to-r from-tertiary-fixed-dim to-secondary-fixed rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
           <div className="relative w-48 h-48 bg-surface-container-lowest rounded-xl flex flex-col items-center justify-center p-6 shadow-sm border border-outline-variant/10">
@@ -61,18 +63,14 @@ function WorkspaceSettingsPage() {
         </div>
       </div>
 
-      {/* Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Left column — forms */}
         <div className="md:col-span-8 space-y-8">
-          {/* Core Identity */}
           <section className="bg-surface-container-lowest p-10 rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
             <h3 className="font-headline text-2xl font-bold text-primary mb-8 flex items-center gap-3">
               <Edit3 className="size-6 text-secondary" strokeWidth={1.75} />
               Core Identity
             </h3>
             <div className="space-y-10">
-              {/* Workspace Name */}
               <div className="group relative">
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
                   Workspace Name
@@ -88,7 +86,6 @@ function WorkspaceSettingsPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-                {/* Daily Target */}
                 <div className="group relative">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
                     Daily Target
@@ -107,7 +104,6 @@ function WorkspaceSettingsPage() {
                   </div>
                 </div>
 
-                {/* Study Reminder */}
                 <div className="group relative">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
                     Study Reminder
@@ -130,14 +126,12 @@ function WorkspaceSettingsPage() {
             </div>
           </section>
 
-          {/* Learning Methodology */}
           <section className="bg-surface-container-lowest p-10 rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.04)]">
             <h3 className="font-headline text-2xl font-bold text-primary mb-8 flex items-center gap-3">
               <Brain className="size-6 text-secondary" strokeWidth={1.75} />
               Learning Methodology
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Spaced Repetition */}
               <button
                 type="button"
                 onClick={() => setLearningMode('spaced')}
@@ -180,7 +174,6 @@ function WorkspaceSettingsPage() {
                 </p>
               </button>
 
-              {/* Immersion Sprint */}
               <button
                 type="button"
                 onClick={() => setLearningMode('immersion')}
@@ -226,9 +219,7 @@ function WorkspaceSettingsPage() {
           </section>
         </div>
 
-        {/* Right column — sidebar widgets */}
         <div className="md:col-span-4 space-y-8">
-          {/* Library image */}
           <div className="rounded-xl overflow-hidden relative h-64 shadow-lg group">
             <img
               alt="Library"
@@ -247,7 +238,6 @@ function WorkspaceSettingsPage() {
             </div>
           </div>
 
-          {/* Progress Widget */}
           <div className="bg-surface-container-highest/30 backdrop-blur-md p-8 rounded-xl border border-white/40">
             <div className="flex justify-between items-center mb-6">
               <h4 className="font-headline font-bold text-primary">
@@ -277,7 +267,6 @@ function WorkspaceSettingsPage() {
             </div>
           </div>
 
-          {/* Danger Zone */}
           <div className="p-8 rounded-xl bg-error-container/20 border border-error/10">
             <h4 className="font-headline text-sm font-bold text-on-error-container mb-4 flex items-center gap-2">
               <AlertTriangle className="size-4" strokeWidth={1.75} />
@@ -293,7 +282,6 @@ function WorkspaceSettingsPage() {
         </div>
       </div>
 
-      {/* Bottom Action Bar */}
       <div className="mt-12 pt-8 border-t border-outline-variant/10 flex justify-between items-center">
         <button
           type="button"
@@ -312,8 +300,4 @@ function WorkspaceSettingsPage() {
   );
 }
 
-export const Route = createFileRoute('/_(authenticated)/workspace/settings')({
-  component: WorkspaceSettingsPage,
-});
-
-export default WorkspaceSettingsPage;
+export default WorkspaceSettingsScreen;

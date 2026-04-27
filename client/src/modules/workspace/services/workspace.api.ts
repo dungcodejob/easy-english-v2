@@ -3,7 +3,7 @@ import type {
   CheckHasWorkspaceResponse,
   CreateWorkspaceRequest,
   Workspace,
-} from '../types/workspace.types';
+} from './workspace.types';
 
 export const workspaceApi = {
   create: async (

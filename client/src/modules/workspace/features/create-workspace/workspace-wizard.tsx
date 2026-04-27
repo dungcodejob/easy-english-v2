@@ -1,19 +1,15 @@
-/**
- * WorkspaceWizard — Clarion onboarding flow root
- */
-
 import {
   AnimatedStep,
   DEFAULT_WIZARD_STEPS,
   WizardLayout,
 } from '@/shared/ui/patterns';
-import { useCreateWorkspace } from '../../hooks/use-create-workspace';
+import { useCreateWorkspace } from './use-create-workspace';
 import {
   defaultWizardPreferences,
   useWizardActions,
   useWizardData,
 } from '../../stores/use-wizard-store';
-import type { CreateWorkspaceRequest } from '../../types/workspace.types';
+import type { CreateWorkspaceRequest } from '../../services/workspace.types';
 import { WorkspaceBasicsStep } from './workspace-basics-step';
 import { WorkspaceLearningStep } from './workspace-learning-step';
 import { WorkspacePreferencesStep } from './workspace-preferences-step';

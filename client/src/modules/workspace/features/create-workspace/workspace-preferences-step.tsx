@@ -1,11 +1,5 @@
-/**
- * WorkspacePreferencesStep — Clarion step 3 "Learning Pace"
- *
- * Daily target slider + study reminder toggle + learning mode picker
- * (4 asymmetric cards, Smart AI highlighted).
- */
-
-import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
+import type { CreateWorkspaceWizardData } from '@/modules/workspace/services/workspace.types';
+import { WorkspaceLearningMode } from '@/modules/workspace/services/workspace.types';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import { BackButton, CTAButton } from '@/shared/ui/semantic';
 import { cn } from '@/shared/utils';
@@ -18,7 +12,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { WorkspaceLearningMode } from '../../types';
 
 interface Props {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -60,9 +53,7 @@ export function WorkspacePreferencesStep({
     >
       <form onSubmit={handleSubmit(onNext)} className="space-y-10">
         <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Left: slider + reminder */}
           <div className="md:col-span-7 space-y-6">
-            {/* Daily Target */}
             <Controller
               control={control}
               name="dailyTarget"
@@ -102,7 +93,6 @@ export function WorkspacePreferencesStep({
               )}
             />
 
-            {/* Reminder Toggle */}
             <Controller
               control={control}
               name="studyReminder"
@@ -145,7 +135,6 @@ export function WorkspacePreferencesStep({
             />
           </div>
 
-          {/* Right: Mode selection */}
           <div className="md:col-span-5 flex flex-col gap-4">
             <h3 className="font-headline text-xs font-bold text-on-surface-variant uppercase tracking-widest px-2">
               Learning Mode
@@ -243,7 +232,6 @@ export function WorkspacePreferencesStep({
           </div>
         </section>
 
-        {/* Footer */}
         <footer className="pt-8 border-t border-outline-variant/10 flex items-center justify-between gap-4 flex-wrap">
           <BackButton onClick={onBack}>Back to Focus</BackButton>
           <div className="flex items-center gap-3">
@@ -255,7 +243,6 @@ export function WorkspacePreferencesStep({
         </footer>
       </form>
 
-      {/* Range thumb style */}
       <style>{`
         .clarion-range::-webkit-slider-thumb {
           -webkit-appearance: none;

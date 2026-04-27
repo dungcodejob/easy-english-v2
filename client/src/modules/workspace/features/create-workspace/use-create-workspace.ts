@@ -3,12 +3,12 @@ import { AppRoutes, workspaceKeys } from '@/shared/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { workspaceApi } from '../services/workspace.api';
-import { useWizardActions } from '../stores/use-wizard-store';
+import { workspaceApi } from '../../services/workspace.api';
+import { useWizardActions } from '../../stores/use-wizard-store';
 import type {
   CreateWorkspaceRequest,
   Workspace,
-} from '../types/workspace.types';
+} from '../../services/workspace.types';
 
 export const useCreateWorkspace = () => {
   const queryClient = useQueryClient();

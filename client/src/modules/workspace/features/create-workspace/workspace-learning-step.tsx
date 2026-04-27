@@ -1,12 +1,9 @@
-/**
- * WorkspaceLearningStep — Clarion step 2 "Language Focus"
- *
- * Asymmetric bento language grid + proficiency segmented control +
- * learning-goal radio cards.
- */
-
-import type { CreateWorkspaceWizardData } from '@/modules/workspace/types/workspace.types';
-import { Language } from '@/modules/workspace/types/workspace.types';
+import type { CreateWorkspaceWizardData } from '@/modules/workspace/services/workspace.types';
+import {
+  Language,
+  WorkspaceLearningGoal,
+  WorkspaceLearningLevel,
+} from '@/modules/workspace/services/workspace.types';
 import { WizardStepShell } from '@/shared/ui/patterns';
 import {
   BackButton,
@@ -26,7 +23,6 @@ import * as Flags from 'country-flag-icons/react/3x2';
 import type { FlagComponent } from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
-import { WorkspaceLearningGoal, WorkspaceLearningLevel } from '../../types';
 
 interface Props {
   defaultValues: Partial<CreateWorkspaceWizardData>;
@@ -244,7 +240,6 @@ export function WorkspaceLearningStep({
       description="Select the linguistic landscape and workspace environment that best supports your current academic goals."
     >
       <form onSubmit={handleSubmit(onNext)} className="space-y-16">
-        {/* Language Grid — bento layout */}
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-headline text-xl font-semibold text-primary">
@@ -291,9 +286,7 @@ export function WorkspaceLearningStep({
           />
         </section>
 
-        {/* Workspace focus + Proficiency */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Workspace focus (learning goal radio cards) */}
           <section>
             <h2 className="font-headline text-xl font-semibold text-primary mb-6">
               Workspace Focus
@@ -364,7 +357,6 @@ export function WorkspaceLearningStep({
             />
           </section>
 
-          {/* Proficiency Level */}
           <section className="bg-surface-container-low p-8 rounded-xl relative overflow-hidden">
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
             <div className="relative">
@@ -411,7 +403,6 @@ export function WorkspaceLearningStep({
           </section>
         </div>
 
-        {/* Footer */}
         <footer className="pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row items-center justify-between gap-6">
           <BackButton onClick={onBack}>Back to Details</BackButton>
           <CTAButton type="submit" endIcon={<ArrowRight />}>
