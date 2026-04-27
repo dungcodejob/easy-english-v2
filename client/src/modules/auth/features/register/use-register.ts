@@ -1,11 +1,13 @@
 import { ApiRequestError, type ApiSuccessResponse } from '@/core/api';
-
 import { AuthRoutes } from '@/shared/constants';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { authApi } from '../services/auth.api';
-import type { RegisterRequest, RegisterResponse } from '../types/auth.types';
+import { authApi } from '../../services/auth.api';
+import type {
+  RegisterRequest,
+  RegisterResponse,
+} from '../../services/auth.types';
 
 export const useRegister = () => {
   const navigate = useNavigate();

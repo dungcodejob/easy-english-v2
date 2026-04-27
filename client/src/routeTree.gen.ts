@@ -13,8 +13,8 @@ import { Route as DotModulesShellPagesUnauthenticatedLayoutRouteImport } from '.
 import { Route as DotModulesShellPagesAuthenticatedFullscreenLayoutRouteImport } from './modules/shell/pages/authenticated-fullscreen-layout'
 import { Route as DotModulesShellPagesAuthenticatedLayoutRouteImport } from './modules/shell/pages/authenticated-layout'
 import { Route as modulesShellPagesLandingPageRouteImport } from './modules/shell/pages/landing-page'
-import { Route as DotModulesAuthPagesRegisterDotpageRouteImport } from './modules/auth/pages/register.page'
-import { Route as DotModulesAuthPagesLoginPageRouteImport } from './modules/auth/pages/login-page'
+import { Route as DotModulesAuthScreensRegisterRegisterDotscreenRouteImport } from './modules/auth/screens/register/register.screen'
+import { Route as DotModulesAuthScreensLoginLoginDotscreenRouteImport } from './modules/auth/screens/login/login.screen'
 import { Route as DotModulesWorkspacePagesWorkspacesDotpageRouteImport } from './modules/workspace/pages/workspaces.page'
 import { Route as DotModulesSettingsPagesSettingsDotpageRouteImport } from './modules/settings/pages/settings.page'
 import { Route as DotModulesProgressPagesProgressDotpageRouteImport } from './modules/progress/pages/progress.page'
@@ -53,14 +53,14 @@ const modulesShellPagesLandingPageRoute =
     path: '/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotModulesAuthPagesRegisterDotpageRoute =
-  DotModulesAuthPagesRegisterDotpageRouteImport.update({
+const DotModulesAuthScreensRegisterRegisterDotscreenRoute =
+  DotModulesAuthScreensRegisterRegisterDotscreenRouteImport.update({
     id: '/register',
     path: '/register',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
   } as any)
-const DotModulesAuthPagesLoginPageRoute =
-  DotModulesAuthPagesLoginPageRouteImport.update({
+const DotModulesAuthScreensLoginLoginDotscreenRoute =
+  DotModulesAuthScreensLoginLoginDotscreenRouteImport.update({
     id: '/login',
     path: '/login',
     getParentRoute: () => DotModulesShellPagesUnauthenticatedLayoutRoute,
@@ -172,8 +172,8 @@ export interface FileRoutesByFullPath {
   '/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
-  '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/login': typeof DotModulesAuthScreensLoginLoginDotscreenRoute
+  '/register': typeof DotModulesAuthScreensRegisterRegisterDotscreenRoute
   '/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
@@ -192,8 +192,8 @@ export interface FileRoutesByTo {
   '/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
-  '/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/login': typeof DotModulesAuthScreensLoginLoginDotscreenRoute
+  '/register': typeof DotModulesAuthScreensRegisterRegisterDotscreenRoute
   '/dictionary': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
@@ -217,8 +217,8 @@ export interface FileRoutesById {
   '/_(authenticated)/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/_(authenticated)/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/_(authenticated)/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
-  '/_(unauthenticated)/login': typeof DotModulesAuthPagesLoginPageRoute
-  '/_(unauthenticated)/register': typeof DotModulesAuthPagesRegisterDotpageRoute
+  '/_(unauthenticated)/login': typeof DotModulesAuthScreensLoginLoginDotscreenRoute
+  '/_(unauthenticated)/register': typeof DotModulesAuthScreensRegisterRegisterDotscreenRoute
   '/_(authenticated)/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
@@ -338,14 +338,14 @@ declare module '@tanstack/react-router' {
       id: '/_(unauthenticated)/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof DotModulesAuthPagesRegisterDotpageRouteImport
+      preLoaderRoute: typeof DotModulesAuthScreensRegisterRegisterDotscreenRouteImport
       parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
     '/_(unauthenticated)/login': {
       id: '/_(unauthenticated)/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof DotModulesAuthPagesLoginPageRouteImport
+      preLoaderRoute: typeof DotModulesAuthScreensLoginLoginDotscreenRouteImport
       parentRoute: typeof DotModulesShellPagesUnauthenticatedLayoutRoute
     }
     '/_(authenticated)/workspace': {
@@ -548,15 +548,16 @@ const DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren =
   )
 
 interface DotModulesShellPagesUnauthenticatedLayoutRouteChildren {
-  DotModulesAuthPagesLoginPageRoute: typeof DotModulesAuthPagesLoginPageRoute
-  DotModulesAuthPagesRegisterDotpageRoute: typeof DotModulesAuthPagesRegisterDotpageRoute
+  DotModulesAuthScreensLoginLoginDotscreenRoute: typeof DotModulesAuthScreensLoginLoginDotscreenRoute
+  DotModulesAuthScreensRegisterRegisterDotscreenRoute: typeof DotModulesAuthScreensRegisterRegisterDotscreenRoute
 }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteChildren: DotModulesShellPagesUnauthenticatedLayoutRouteChildren =
   {
-    DotModulesAuthPagesLoginPageRoute: DotModulesAuthPagesLoginPageRoute,
-    DotModulesAuthPagesRegisterDotpageRoute:
-      DotModulesAuthPagesRegisterDotpageRoute,
+    DotModulesAuthScreensLoginLoginDotscreenRoute:
+      DotModulesAuthScreensLoginLoginDotscreenRoute,
+    DotModulesAuthScreensRegisterRegisterDotscreenRoute:
+      DotModulesAuthScreensRegisterRegisterDotscreenRoute,
   }
 
 const DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren =

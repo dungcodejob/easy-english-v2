@@ -1,15 +1,4 @@
-/**
- * SocialAuthButtons — OAuth provider buttons for auth pages
- *
- * Renders Google, Facebook, and GitHub sign-in buttons.
- * Used on login and register pages.
- *
- * Usage:
- *   <SocialAuthButtons />
- */
-
 interface SocialAuthButtonsProps {
-  /** Callback fired when any provider button is clicked */
   onProviderClick?: (provider: 'google' | 'facebook' | 'github') => void;
   className?: string;
 }

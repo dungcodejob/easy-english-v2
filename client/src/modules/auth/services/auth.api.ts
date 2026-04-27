@@ -1,12 +1,12 @@
 import { api, type ApiSuccessResponse } from '@/core/api';
 import { bareApi } from '@/core/api/bare-api';
 import { useAuthStore } from '@/shared/stores/auth-store';
-import type { LoginResponseDto } from '../types';
 import type {
   LoginRequest,
+  LoginResponseDto,
   RegisterRequest,
   RegisterResponse,
-} from '../types/auth.types';
+} from './auth.types';
 
 let isRefreshing = false;
 let failedQueue: Array<{

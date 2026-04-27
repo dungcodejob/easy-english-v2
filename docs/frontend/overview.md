@@ -45,12 +45,11 @@ client/src/
 │
 ├── modules/                    # Feature modules (DDD-aligned with server)
 │   │
-│   ├── auth/                  # [legacy] Authentication — components/hooks/pages/services/types
-│   │   ├── components/        # Login form, register form, social buttons
-│   │   ├── hooks/             # use-login.ts, use-register.ts
-│   │   ├── pages/             # Login page, register page
-│   │   ├── services/          # auth.api.ts — login/register/refresh calls
-│   │   └── types/             # Auth DTO types
+│   ├── auth/                  # Authentication — features/screens/models/services
+│   │   ├── features/          # login/ (form + hook), register/ (form + hook + password-input)
+│   │   ├── screens/           # login/ (screen + social buttons), register/
+│   │   ├── models/            # login-form.schema.ts, register-form.schema.ts
+│   │   └── services/          # auth.api.ts, auth.types.ts
 │   │
 │   └── <module>/              # [new convention] — follow this for all new modules
 │       ├── features/          # One folder per user interaction (create, delete, edit…)
@@ -171,7 +170,7 @@ module/
 
 ### Legacy Convention (being migrated)
 
-Older modules (`auth`, `learning`, `workspace`, `flashcard`, `settings`) still use:
+Older modules (`learning`, `workspace`, `flashcard`, `settings`) still use:
 
 ```
 module/

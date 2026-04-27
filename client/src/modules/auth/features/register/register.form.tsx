@@ -1,28 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import * as z from 'zod';
 
-import { DsButton } from '@/shared/ui/base';
-import { DsInput } from '@/shared/ui/base';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/shared/ui/shadcn/field';
-import { useRegister } from '../hooks/use-register';
+import { DsButton, DsInput } from '@/shared/ui/base';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/shared/ui/shadcn/field';
+import {
+  registerSchema,
+  type RegisterFormValues,
+} from '../../models/register-form.schema';
 import { PasswordInput } from './password-input';
-
-const registerSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Must contain at least one number')
-    .regex(/[^A-Za-z0-9]/, 'Must contain at least one special character'),
-  tenantName: z.string().optional(),
-});
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
+import { useRegister } from './use-register';
 
 export function RegisterForm() {
   const { mutate: register, isPending } = useRegister();
@@ -43,7 +35,7 @@ export function RegisterForm() {
         email: data.email,
         password: data.password,
         name: data.name,
-        tenantName: data.tenantName || data.name, // Default tenant name to user name if empty
+        tenantName: data.tenantName || data.name,
       },
       {
         onSuccess: () => {

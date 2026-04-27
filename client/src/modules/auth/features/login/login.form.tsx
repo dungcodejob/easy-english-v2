@@ -1,16 +1,3 @@
-/**
- * LoginForm — Auth module
- *
- * Business logic:
- * - Validates email + password with Zod
- * - Calls the useLogin mutation on submit
- * - Handles server-side error display
- * - "Remember me" persists auth preference
- *
- * UI: 100% delegated to Design System components.
- * No inline Tailwind. No layout logic.
- */
-
 import { DsButton, DsInput } from '@/shared/ui/base';
 import { Field, FieldError, FieldLabel } from '@/shared/ui/shadcn/field';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,18 +5,14 @@ import { useRouter } from '@tanstack/react-router';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { AppRoutes } from '@/shared/constants';
 import { Input } from '@/shared/ui';
-import { useLogin } from '../hooks/use-login';
-
-const loginSchema = z.object({
-  email: z.email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import {
+  loginSchema,
+  type LoginFormData,
+} from '../../models/login-form.schema';
+import { useLogin } from './use-login';
 
 export const LoginForm = () => {
   const { mutate: login, isPending } = useLogin();
@@ -52,9 +35,9 @@ export const LoginForm = () => {
       onSuccess: () => {
         router.navigate({ to: AppRoutes.root() });
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError: (err: any) => {
-        setServerError(err.response?.data?.message || 'Failed to login');
+      onError: (err: unknown) => {
+        const error = err as { response?: { data?: { message?: string } } };
+        setServerError(error.response?.data?.message || 'Failed to login');
       },
     });
   };
@@ -90,7 +73,6 @@ export const LoginForm = () => {
         {errors.password && <FieldError errors={[errors.password]} />}
       </Field>
 
-      {/* Remember me — checkbox is a shadcn primitive, not a DS component */}
       <label className="flex cursor-pointer items-center gap-2.5 text-sm text-muted-foreground">
         <input
           type="checkbox"

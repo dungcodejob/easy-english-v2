@@ -1,10 +1,9 @@
 import { ApiRequestError, type ApiSuccessResponse } from '@/core/api';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { useAuthActions } from '../../../shared/stores/auth-store';
-import { authApi } from '../services/auth.api';
-import type { LoginResponseDto } from '../types';
-import type { LoginRequest } from '../types/auth.types';
+import { useAuthActions } from '@/shared/stores/auth-store';
+import { authApi } from '../../services/auth.api';
+import type { LoginResponseDto, LoginRequest } from '../../services/auth.types';
 
 export const useLogin = () => {
   const { setToken, setUser } = useAuthActions();

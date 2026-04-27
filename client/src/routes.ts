@@ -18,8 +18,14 @@ export const routes = rootRoute('root.tsx', [
     '(unauthenticated)',
     './modules/shell/pages/unauthenticated-layout.tsx',
     [
-      route(AuthRoutes.login(), './modules/auth/pages/login-page.tsx'),
-      route(AuthRoutes.register(), './modules/auth/pages/register.page.tsx'),
+      route(
+        AuthRoutes.login(),
+        './modules/auth/screens/login/login.screen.tsx',
+      ),
+      route(
+        AuthRoutes.register(),
+        './modules/auth/screens/register/register.screen.tsx',
+      ),
     ],
   ),
 
