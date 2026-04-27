@@ -1,5 +1,5 @@
 import { DsButton } from '@/shared/ui';
-import type { RatingValue } from '../types/study.types';
+import type { RatingValue } from '../../types/study.types';
 
 const RATING_CONFIG: Array<{
   rating: RatingValue;

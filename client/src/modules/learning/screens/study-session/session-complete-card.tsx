@@ -3,12 +3,10 @@ import { BookOpen, CheckCircle2 } from 'lucide-react';
 
 import { LearnRoutes } from '@/shared/constants';
 import { DsButton } from '@/shared/ui';
-import type { RatingBreakdown, SessionSummary } from '../types/study.types';
+import type { RatingBreakdown, SessionSummary } from '../../types/study.types';
 
 interface SessionCompleteCardProps {
-  /** Primary — server-computed summary (rendered when available) */
   sessionSummary?: SessionSummary;
-  /** Fallback — client-side counters when server summary unavailable */
   reviewedCount?: number;
   correctLikeCount?: number;
   elapsedMs?: number;
@@ -44,12 +42,10 @@ export function SessionCompleteCard({
 
   return (
     <div className="flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-8 py-8 mx-auto">
-      {/* Icon */}
       <div className="flex size-20 items-center justify-center rounded-full bg-tertiary/10 ring-1 ring-tertiary/20">
         <CheckCircle2 className="size-10 text-tertiary" />
       </div>
 
-      {/* Heading */}
       <div className="space-y-2 text-center">
         <h2 className="font-headline text-3xl font-bold text-primary">
           Session complete!
@@ -59,7 +55,6 @@ export function SessionCompleteCard({
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid w-full grid-cols-3 gap-4">
         <StatCell value={stats.reviewed} label="Reviewed" />
         <StatCell value={`${stats.accuracy}%`} label="Accuracy" />
@@ -69,10 +64,8 @@ export function SessionCompleteCard({
         />
       </div>
 
-      {/* Rating breakdown */}
       {stats.ratingBreakdown && <RatingRow breakdown={stats.ratingBreakdown} />}
 
-      {/* CTA */}
       <DsButton
         leftIcon={<BookOpen className="size-4" />}
         onClick={() => navigate({ to: LearnRoutes.base() })}
@@ -83,8 +76,6 @@ export function SessionCompleteCard({
     </div>
   );
 }
-
-/* ─── Shared sub-components ─────────────────────────────────────── */
 
 function StatCell({ value, label }: { value: string | number; label: string }) {
   return (

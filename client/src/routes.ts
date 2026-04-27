@@ -34,10 +34,13 @@ export const routes = rootRoute('root.tsx', [
       DashboardRoutes.list(),
       './modules/dashboard/pages/dashboard-page.tsx',
     ),
-    route(LearnRoutes.base(), './modules/learning/pages/my-learning.page.tsx'),
+    route(
+      LearnRoutes.base(),
+      './modules/learning/screens/my-learning/my-learning.screen.tsx',
+    ),
     route(
       LearnRoutes.study(),
-      './modules/learning/pages/study-session.page.tsx',
+      './modules/learning/screens/study-session/study-session.screen.tsx',
     ),
     route(
       TopicRoutes.list(),
@@ -67,7 +70,7 @@ export const routes = rootRoute('root.tsx', [
     route(
       DictionaryRoutes.search(),
 
-      './modules/learning/pages/dictionary-layout.tsx',
+      './modules/learning/screens/dictionary-layout.tsx',
       [
         index('./modules/dictionary/screens/word-search.screen.tsx'),
         route(

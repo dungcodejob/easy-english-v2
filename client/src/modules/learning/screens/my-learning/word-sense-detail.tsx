@@ -2,9 +2,9 @@ import { ClarionProgress } from '@/shared/ui';
 import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { CheckCircle, GraduationCap, Volume2 } from 'lucide-react';
 import { useRef } from 'react';
-import { AddToLearningButton } from '../../dictionary/features/add-word-sense-to-learning/add-to-learning-button';
-import { useLearningState } from '../hooks/use-learning-state';
-import type { WordSenseDetail as WordSenseDetailType } from '../services/dictionary.api';
+import { AddToLearningButton } from '../../../dictionary/features/add-word-sense-to-learning/add-to-learning-button';
+import { useLearningState } from '../../hooks/use-learning-state';
+import type { WordSenseDetail as WordSenseDetailType } from '../../services/dictionary.api';
 
 interface WordSenseDetailProps {
   detail: WordSenseDetailType;
@@ -39,17 +39,14 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
 
   return (
     <div className="space-y-12 pb-12">
-      {/* ── Hero Section ─────────────────────────────────────────── */}
       <section className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div className="space-y-4">
-          {/* CEFR badge */}
           {detail.cefrLevel && (
             <div className="inline-flex items-center rounded-full bg-secondary-container px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-on-secondary-container">
               Level: {detail.cefrLevel}
             </div>
           )}
 
-          {/* Word + audio */}
           <div className="flex items-center gap-6">
             <h1 className="font-headline text-6xl font-extrabold tracking-tighter text-primary md:text-8xl capitalize">
               {detail.wordText}
@@ -65,7 +62,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
             )}
           </div>
 
-          {/* Pronunciation + POS */}
           {defaultPronunciation?.ipa && (
             <p className="text-xl text-on-surface-variant font-medium">
               {defaultPronunciation.ipa} &bull;{' '}
@@ -79,7 +75,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
           )}
         </div>
 
-        {/* Mastery Indicator Card */}
         {!isLoadingState && learningState && (
           <div className="flex min-w-[280px] flex-col gap-4 rounded-xl bg-surface-container-lowest p-6 shadow-[0_12px_32px_rgba(26,27,30,0.06)]">
             <div className="flex items-center justify-between">
@@ -107,11 +102,8 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
         {isLoadingState && <Skeleton className="h-32 w-72 rounded-xl" />}
       </section>
 
-      {/* ── Bento Grid ───────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        {/* Definition + Examples (8 cols) */}
         <div className="space-y-6 rounded-xl bg-surface-container-low p-8 md:col-span-8">
-          {/* Definition */}
           <div>
             <h3 className="mb-4 font-headline text-2xl font-bold text-primary">
               Definition
@@ -131,7 +123,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
             )}
           </div>
 
-          {/* Examples */}
           {detail.examples.length > 0 && (
             <div>
               <h3 className="mb-4 font-headline text-xl font-semibold text-primary">
@@ -163,9 +154,7 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
           )}
         </div>
 
-        {/* Action Sidebar (4 cols) */}
         <div className="space-y-6 md:col-span-4">
-          {/* CTA Card */}
           <div className="flex flex-col items-center gap-6 rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-center text-white shadow-xl">
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-md">
               <GraduationCap className="h-10 w-10 text-tertiary-fixed-dim" />
@@ -186,7 +175,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
             />
           </div>
 
-          {/* Etymology / Origins card (static placeholder — extend with real data when available) */}
           <div className="rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 shadow-sm">
             <h4 className="mb-2 font-headline font-bold text-primary">
               Origins
@@ -201,7 +189,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
           </div>
         </div>
 
-        {/* Synonyms & Antonyms (6 cols) */}
         {(detail.synonyms.length > 0 || detail.antonyms.length > 0) && (
           <div className="rounded-xl border border-outline-variant/5 bg-surface-container-lowest p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] md:col-span-6">
             {detail.synonyms.length > 0 && (
@@ -241,7 +228,6 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
           </div>
         )}
 
-        {/* Phrases & Idioms (6 cols) */}
         {((detail.phrases && detail.phrases.length > 0) ||
           (detail.idioms && detail.idioms.length > 0)) && (
           <div className="relative overflow-hidden rounded-xl bg-surface-container-low p-8 md:col-span-6">
@@ -268,8 +254,7 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
                 ))}
               </div>
             </div>
-            {/* Abstract decorative blur */}
-            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-tertiary-fixed-dim opacity-20 blur-3xl transition-transform duration-700 group-hover:scale-150" />
+            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-tertiary-fixed-dim opacity-20 blur-3xl" />
           </div>
         )}
 
@@ -278,34 +263,22 @@ export function WordSenseDetail({ detail }: WordSenseDetailProps) {
             Expand Your Vocabulary
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
-              <p className="lexend font-bold text-lg text-primary">Ephemeral</p>
-              <p className="text-xs text-on-surface-variant mt-1 italic">
-                adj. short-lived
-              </p>
-            </div>
-            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
-              <p className="lexend font-bold text-lg text-primary">
-                Melancholy
-              </p>
-              <p className="text-xs text-on-surface-variant mt-1 italic">
-                n. pensive sadness
-              </p>
-            </div>
-            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
-              <p className="lexend font-bold text-lg text-primary">
-                Resilience
-              </p>
-              <p className="text-xs text-on-surface-variant mt-1 italic">
-                n. capacity to recover
-              </p>
-            </div>
-            <div className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer">
-              <p className="lexend font-bold text-lg text-primary">Ethereal</p>
-              <p className="text-xs text-on-surface-variant mt-1 italic">
-                adj. extremely delicate
-              </p>
-            </div>
+            {[
+              { word: 'Ephemeral', pos: 'adj. short-lived' },
+              { word: 'Melancholy', pos: 'n. pensive sadness' },
+              { word: 'Resilience', pos: 'n. capacity to recover' },
+              { word: 'Ethereal', pos: 'adj. extremely delicate' },
+            ].map(({ word, pos }) => (
+              <div
+                key={word}
+                className="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 text-center hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <p className="lexend font-bold text-lg text-primary">{word}</p>
+                <p className="text-xs text-on-surface-variant mt-1 italic">
+                  {pos}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
       </div>

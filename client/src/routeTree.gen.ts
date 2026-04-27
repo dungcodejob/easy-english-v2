@@ -18,14 +18,14 @@ import { Route as DotModulesAuthScreensLoginLoginDotscreenRouteImport } from './
 import { Route as DotModulesWorkspacePagesWorkspacesDotpageRouteImport } from './modules/workspace/pages/workspaces.page'
 import { Route as DotModulesSettingsPagesSettingsDotpageRouteImport } from './modules/settings/pages/settings.page'
 import { Route as DotModulesProgressPagesProgressDotpageRouteImport } from './modules/progress/pages/progress.page'
-import { Route as DotModulesLearningPagesMyLearningDotpageRouteImport } from './modules/learning/pages/my-learning.page'
+import { Route as DotModulesLearningScreensMyLearningMyLearningDotscreenRouteImport } from './modules/learning/screens/my-learning/my-learning.screen'
 import { Route as DotModulesFlashcardPagesFlashcardsDotpageRouteImport } from './modules/flashcard/pages/flashcards.page'
-import { Route as DotModulesLearningPagesDictionaryLayoutRouteImport } from './modules/learning/pages/dictionary-layout'
+import { Route as DotModulesLearningScreensDictionaryLayoutRouteImport } from './modules/learning/screens/dictionary-layout'
 import { Route as DotModulesDashboardPagesDashboardPageRouteImport } from './modules/dashboard/pages/dashboard-page'
 import { Route as DotModulesWorkspacePagesNewWorkspaceDotpageRouteImport } from './modules/workspace/pages/new-workspace.page'
 import { Route as DotModulesWorkspacePagesWorkspaceSettingsDotpageRouteImport } from './modules/workspace/pages/workspace-settings.page'
 import { Route as DotModulesTopicScreensTopicsTopicsDotscreenRouteImport } from './modules/topic/screens/topics/topics.screen'
-import { Route as DotModulesLearningPagesStudySessionDotpageRouteImport } from './modules/learning/pages/study-session.page'
+import { Route as DotModulesLearningScreensStudySessionStudySessionDotscreenRouteImport } from './modules/learning/screens/study-session/study-session.screen'
 import { Route as DotModulesFlashcardPagesStudyDotpageRouteImport } from './modules/flashcard/pages/study.page'
 import { Route as DotModulesFlashcardPagesStatsDotpageRouteImport } from './modules/flashcard/pages/stats.page'
 import { Route as DotModulesDictionaryScreensWordSearchDotscreenRouteImport } from './modules/dictionary/screens/word-search.screen'
@@ -83,8 +83,8 @@ const DotModulesProgressPagesProgressDotpageRoute =
     path: '/progress',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningPagesMyLearningDotpageRoute =
-  DotModulesLearningPagesMyLearningDotpageRouteImport.update({
+const DotModulesLearningScreensMyLearningMyLearningDotscreenRoute =
+  DotModulesLearningScreensMyLearningMyLearningDotscreenRouteImport.update({
     id: '/learning',
     path: '/learning',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
@@ -95,8 +95,8 @@ const DotModulesFlashcardPagesFlashcardsDotpageRoute =
     path: '/flashcards',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningPagesDictionaryLayoutRoute =
-  DotModulesLearningPagesDictionaryLayoutRouteImport.update({
+const DotModulesLearningScreensDictionaryLayoutRoute =
+  DotModulesLearningScreensDictionaryLayoutRouteImport.update({
     id: '/dictionary',
     path: '/dictionary',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
@@ -126,8 +126,8 @@ const DotModulesTopicScreensTopicsTopicsDotscreenRoute =
     path: '/learning/topics',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
   } as any)
-const DotModulesLearningPagesStudySessionDotpageRoute =
-  DotModulesLearningPagesStudySessionDotpageRouteImport.update({
+const DotModulesLearningScreensStudySessionStudySessionDotscreenRoute =
+  DotModulesLearningScreensStudySessionStudySessionDotscreenRouteImport.update({
     id: '/learning/study',
     path: '/learning/study',
     getParentRoute: () => DotModulesShellPagesAuthenticatedLayoutRoute,
@@ -148,7 +148,7 @@ const DotModulesDictionaryScreensWordSearchDotscreenRoute =
   DotModulesDictionaryScreensWordSearchDotscreenRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
+    getParentRoute: () => DotModulesLearningScreensDictionaryLayoutRoute,
   } as any)
 const DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute =
   DotModulesTopicScreensTopicDetailTopicDetailDotscreenRouteImport.update({
@@ -160,15 +160,15 @@ const DotModulesDictionaryScreensWordSenseDetailDotscreenRoute =
   DotModulesDictionaryScreensWordSenseDetailDotscreenRouteImport.update({
     id: '/senses/$senseId',
     path: '/senses/$senseId',
-    getParentRoute: () => DotModulesLearningPagesDictionaryLayoutRoute,
+    getParentRoute: () => DotModulesLearningScreensDictionaryLayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof modulesShellPagesLandingPageRoute
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
-  '/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
+  '/dictionary': typeof DotModulesLearningScreensDictionaryLayoutRouteWithChildren
   '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/learning': typeof DotModulesLearningScreensMyLearningMyLearningDotscreenRoute
   '/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
@@ -177,7 +177,7 @@ export interface FileRoutesByFullPath {
   '/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
+  '/learning/study': typeof DotModulesLearningScreensStudySessionStudySessionDotscreenRoute
   '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -188,7 +188,7 @@ export interface FileRoutesByTo {
   '/': typeof modulesShellPagesLandingPageRoute
   '/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
   '/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/learning': typeof DotModulesLearningScreensMyLearningMyLearningDotscreenRoute
   '/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
@@ -197,7 +197,7 @@ export interface FileRoutesByTo {
   '/dictionary': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
+  '/learning/study': typeof DotModulesLearningScreensStudySessionStudySessionDotscreenRoute
   '/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -211,9 +211,9 @@ export interface FileRoutesById {
   '/_(authenticated-fullscreen)': typeof DotModulesShellPagesAuthenticatedFullscreenLayoutRouteWithChildren
   '/_(unauthenticated)': typeof DotModulesShellPagesUnauthenticatedLayoutRouteWithChildren
   '/_(authenticated)/dashboard': typeof DotModulesDashboardPagesDashboardPageRoute
-  '/_(authenticated)/dictionary': typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
+  '/_(authenticated)/dictionary': typeof DotModulesLearningScreensDictionaryLayoutRouteWithChildren
   '/_(authenticated)/flashcards': typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  '/_(authenticated)/learning': typeof DotModulesLearningPagesMyLearningDotpageRoute
+  '/_(authenticated)/learning': typeof DotModulesLearningScreensMyLearningMyLearningDotscreenRoute
   '/_(authenticated)/progress': typeof DotModulesProgressPagesProgressDotpageRoute
   '/_(authenticated)/settings': typeof DotModulesSettingsPagesSettingsDotpageRoute
   '/_(authenticated)/workspace': typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
@@ -222,7 +222,7 @@ export interface FileRoutesById {
   '/_(authenticated)/dictionary/': typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   '/_(authenticated)/flashcards/stats': typeof DotModulesFlashcardPagesStatsDotpageRoute
   '/_(authenticated)/flashcards/study': typeof DotModulesFlashcardPagesStudyDotpageRoute
-  '/_(authenticated)/learning/study': typeof DotModulesLearningPagesStudySessionDotpageRoute
+  '/_(authenticated)/learning/study': typeof DotModulesLearningScreensStudySessionStudySessionDotscreenRoute
   '/_(authenticated)/learning/topics': typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   '/_(authenticated)/workspace/settings': typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   '/_(authenticated-fullscreen)/workspace/new': typeof DotModulesWorkspacePagesNewWorkspaceDotpageRoute
@@ -373,7 +373,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/learning'
       path: '/learning'
       fullPath: '/learning'
-      preLoaderRoute: typeof DotModulesLearningPagesMyLearningDotpageRouteImport
+      preLoaderRoute: typeof DotModulesLearningScreensMyLearningMyLearningDotscreenRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
     '/_(authenticated)/flashcards': {
@@ -387,7 +387,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/dictionary'
       path: '/dictionary'
       fullPath: '/dictionary'
-      preLoaderRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteImport
+      preLoaderRoute: typeof DotModulesLearningScreensDictionaryLayoutRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
     '/_(authenticated)/dashboard': {
@@ -422,7 +422,7 @@ declare module '@tanstack/react-router' {
       id: '/_(authenticated)/learning/study'
       path: '/learning/study'
       fullPath: '/learning/study'
-      preLoaderRoute: typeof DotModulesLearningPagesStudySessionDotpageRouteImport
+      preLoaderRoute: typeof DotModulesLearningScreensStudySessionStudySessionDotscreenRouteImport
       parentRoute: typeof DotModulesShellPagesAuthenticatedLayoutRoute
     }
     '/_(authenticated)/flashcards/study': {
@@ -444,7 +444,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/dictionary/'
       preLoaderRoute: typeof DotModulesDictionaryScreensWordSearchDotscreenRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
+      parentRoute: typeof DotModulesLearningScreensDictionaryLayoutRoute
     }
     '/_(authenticated)/learning/topics/$topicId': {
       id: '/_(authenticated)/learning/topics/$topicId'
@@ -458,17 +458,17 @@ declare module '@tanstack/react-router' {
       path: '/senses/$senseId'
       fullPath: '/dictionary/senses/$senseId'
       preLoaderRoute: typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRouteImport
-      parentRoute: typeof DotModulesLearningPagesDictionaryLayoutRoute
+      parentRoute: typeof DotModulesLearningScreensDictionaryLayoutRoute
     }
   }
 }
 
-interface DotModulesLearningPagesDictionaryLayoutRouteChildren {
+interface DotModulesLearningScreensDictionaryLayoutRouteChildren {
   DotModulesDictionaryScreensWordSearchDotscreenRoute: typeof DotModulesDictionaryScreensWordSearchDotscreenRoute
   DotModulesDictionaryScreensWordSenseDetailDotscreenRoute: typeof DotModulesDictionaryScreensWordSenseDetailDotscreenRoute
 }
 
-const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPagesDictionaryLayoutRouteChildren =
+const DotModulesLearningScreensDictionaryLayoutRouteChildren: DotModulesLearningScreensDictionaryLayoutRouteChildren =
   {
     DotModulesDictionaryScreensWordSearchDotscreenRoute:
       DotModulesDictionaryScreensWordSearchDotscreenRoute,
@@ -476,22 +476,22 @@ const DotModulesLearningPagesDictionaryLayoutRouteChildren: DotModulesLearningPa
       DotModulesDictionaryScreensWordSenseDetailDotscreenRoute,
   }
 
-const DotModulesLearningPagesDictionaryLayoutRouteWithChildren =
-  DotModulesLearningPagesDictionaryLayoutRoute._addFileChildren(
-    DotModulesLearningPagesDictionaryLayoutRouteChildren,
+const DotModulesLearningScreensDictionaryLayoutRouteWithChildren =
+  DotModulesLearningScreensDictionaryLayoutRoute._addFileChildren(
+    DotModulesLearningScreensDictionaryLayoutRouteChildren,
   )
 
 interface DotModulesShellPagesAuthenticatedLayoutRouteChildren {
   DotModulesDashboardPagesDashboardPageRoute: typeof DotModulesDashboardPagesDashboardPageRoute
-  DotModulesLearningPagesDictionaryLayoutRoute: typeof DotModulesLearningPagesDictionaryLayoutRouteWithChildren
+  DotModulesLearningScreensDictionaryLayoutRoute: typeof DotModulesLearningScreensDictionaryLayoutRouteWithChildren
   DotModulesFlashcardPagesFlashcardsDotpageRoute: typeof DotModulesFlashcardPagesFlashcardsDotpageRoute
-  DotModulesLearningPagesMyLearningDotpageRoute: typeof DotModulesLearningPagesMyLearningDotpageRoute
+  DotModulesLearningScreensMyLearningMyLearningDotscreenRoute: typeof DotModulesLearningScreensMyLearningMyLearningDotscreenRoute
   DotModulesProgressPagesProgressDotpageRoute: typeof DotModulesProgressPagesProgressDotpageRoute
   DotModulesSettingsPagesSettingsDotpageRoute: typeof DotModulesSettingsPagesSettingsDotpageRoute
   DotModulesWorkspacePagesWorkspacesDotpageRoute: typeof DotModulesWorkspacePagesWorkspacesDotpageRoute
   DotModulesFlashcardPagesStatsDotpageRoute: typeof DotModulesFlashcardPagesStatsDotpageRoute
   DotModulesFlashcardPagesStudyDotpageRoute: typeof DotModulesFlashcardPagesStudyDotpageRoute
-  DotModulesLearningPagesStudySessionDotpageRoute: typeof DotModulesLearningPagesStudySessionDotpageRoute
+  DotModulesLearningScreensStudySessionStudySessionDotscreenRoute: typeof DotModulesLearningScreensStudySessionStudySessionDotscreenRoute
   DotModulesTopicScreensTopicsTopicsDotscreenRoute: typeof DotModulesTopicScreensTopicsTopicsDotscreenRoute
   DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute: typeof DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute
   DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute: typeof DotModulesTopicScreensTopicDetailTopicDetailDotscreenRoute
@@ -501,12 +501,12 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
   {
     DotModulesDashboardPagesDashboardPageRoute:
       DotModulesDashboardPagesDashboardPageRoute,
-    DotModulesLearningPagesDictionaryLayoutRoute:
-      DotModulesLearningPagesDictionaryLayoutRouteWithChildren,
+    DotModulesLearningScreensDictionaryLayoutRoute:
+      DotModulesLearningScreensDictionaryLayoutRouteWithChildren,
     DotModulesFlashcardPagesFlashcardsDotpageRoute:
       DotModulesFlashcardPagesFlashcardsDotpageRoute,
-    DotModulesLearningPagesMyLearningDotpageRoute:
-      DotModulesLearningPagesMyLearningDotpageRoute,
+    DotModulesLearningScreensMyLearningMyLearningDotscreenRoute:
+      DotModulesLearningScreensMyLearningMyLearningDotscreenRoute,
     DotModulesProgressPagesProgressDotpageRoute:
       DotModulesProgressPagesProgressDotpageRoute,
     DotModulesSettingsPagesSettingsDotpageRoute:
@@ -517,8 +517,8 @@ const DotModulesShellPagesAuthenticatedLayoutRouteChildren: DotModulesShellPages
       DotModulesFlashcardPagesStatsDotpageRoute,
     DotModulesFlashcardPagesStudyDotpageRoute:
       DotModulesFlashcardPagesStudyDotpageRoute,
-    DotModulesLearningPagesStudySessionDotpageRoute:
-      DotModulesLearningPagesStudySessionDotpageRoute,
+    DotModulesLearningScreensStudySessionStudySessionDotscreenRoute:
+      DotModulesLearningScreensStudySessionStudySessionDotscreenRoute,
     DotModulesTopicScreensTopicsTopicsDotscreenRoute:
       DotModulesTopicScreensTopicsTopicsDotscreenRoute,
     DotModulesWorkspacePagesWorkspaceSettingsDotpageRoute:

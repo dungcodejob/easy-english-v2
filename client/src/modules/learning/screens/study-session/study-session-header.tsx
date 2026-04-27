@@ -37,9 +37,7 @@ export function StudySessionHeader({
   return (
     <header className="w-full px-6 py-4 flex flex-col gap-4 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
       <div className="max-w-4xl mx-auto w-full flex flex-col gap-4">
-        {/* Top row: close + workspace + stats */}
         <div className="flex justify-between items-center gap-4">
-          {/* Left: exit + workspace */}
           <div className="flex items-center gap-4">
             <Button
               aria-label="Close study session"
@@ -55,9 +53,7 @@ export function StudySessionHeader({
             </span>
           </div>
 
-          {/* Right: stats */}
           <div className="flex items-center gap-3">
-            {/* Streak */}
             {streak > 0 && (
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-100 text-orange-700 font-headline font-bold text-sm">
                 <span>🔥</span>
@@ -65,7 +61,6 @@ export function StudySessionHeader({
               </div>
             )}
 
-            {/* Session type */}
             {sessionType && (
               <div className="hidden md:flex items-center gap-2 text-on-surface-variant font-label text-sm font-medium">
                 <span>🎓</span>
@@ -73,7 +68,6 @@ export function StudySessionHeader({
               </div>
             )}
 
-            {/* Timer */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-headline font-semibold text-sm">
               <span>⏱</span>
               <span>{timer}</span>
@@ -81,7 +75,6 @@ export function StudySessionHeader({
           </div>
         </div>
 
-        {/* Progress row */}
         {total > 0 && (
           <div className="w-full flex items-center gap-4">
             <div

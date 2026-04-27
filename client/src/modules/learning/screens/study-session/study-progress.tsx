@@ -1,7 +1,7 @@
 import { ClarionProgress } from '@/shared/ui';
 
 interface StudyProgressProps {
-  current: number; // 1-based
+  current: number;
   total: number;
   label?: string;
 }

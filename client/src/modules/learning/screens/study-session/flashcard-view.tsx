@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import type { StudyCard } from '../types/study.types';
+import type { StudyCard } from '../../types/study.types';
 
 interface FlashcardViewProps {
   card: StudyCard;

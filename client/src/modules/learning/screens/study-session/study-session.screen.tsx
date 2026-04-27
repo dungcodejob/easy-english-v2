@@ -4,22 +4,22 @@ import { DsButton, DsSpinner } from '@/shared/ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
-import { FlashcardView } from '../components/flashcard-view';
-import { QuizView } from '../components/quiz-view';
-import { RatingButtons } from '../components/rating-buttons';
-import { SessionCompleteCard } from '../components/session-complete-card';
-import { StudySessionLayout } from '../components/study-session-layout';
-import { useCompleteSession } from '../hooks/use-complete-session';
-import { useReviewCard } from '../hooks/use-review-card';
-import { useSessionSummary } from '../hooks/use-session-summary';
-import { useStartSession } from '../hooks/use-start-session';
-import { useStudySessionStore } from '../stores/use-study-session-store';
+import { useCompleteSession } from '../../features/complete-session/use-complete-session';
+import { useReviewCard } from '../../features/review-card/use-review-card';
+import { useStartSession } from '../../features/start-session/use-start-session';
+import { useSessionSummary } from '../../hooks/use-session-summary';
+import { useStudySessionStore } from '../../stores/use-study-session-store';
 import type {
   QuizCard,
   RatingValue,
   ReviewResult,
   StudyScope,
-} from '../types/study.types';
+} from '../../types/study.types';
+import { FlashcardView } from './flashcard-view';
+import { QuizView } from './quiz-view';
+import { RatingButtons } from './rating-buttons';
+import { SessionCompleteCard } from './session-complete-card';
+import { StudySessionLayout } from './study-session-layout';
 
 const FEEDBACK_DURATION_MS = 800;
 
@@ -33,37 +33,32 @@ type StudySessionQueryParams = {
 };
 
 export const Route = createFileRoute('/_(authenticated)/learning/study')({
-  component: StudySessionPage,
+  component: StudySessionScreen,
   validateSearch: () => ({}) as Partial<StudySessionQueryParams>,
 });
 
-function StudySessionPage() {
+function StudySessionScreen() {
   const navigate = useNavigate();
 
   const { filters } = useFilters(Route.id);
 
-  // URL search params
   const sessionId = filters.sessionId;
   const completed = filters.completed === 'true';
   const mode = filters.mode || 'due';
   const topicId = filters.topicId;
 
-  // Server session summary (for completed sessions)
   const { data: summaryData } = useSessionSummary(sessionId ?? '');
 
   const store = useStudySessionStore();
   const startMutation = useStartSession();
   const completeMutation = useCompleteSession();
 
-  // Review card with optional sessionId context
   const reviewMutation = useReviewCard(sessionId);
 
-  // Derived state
   const currentCard = store.cards[store.currentIndex];
   const isSessionComplete =
     store.currentIndex >= store.cards.length && store.cards.length > 0;
 
-  // Show server summary if this is a completed navigation
   if (completed && sessionId) {
     const summary = summaryData?.data;
     if (summary) {
@@ -78,7 +73,6 @@ function StudySessionPage() {
         </StudySessionLayout>
       );
     }
-    // Summary still loading — show a spinner
     return (
       <StudySessionLayout sessionType="Session Complete">
         <div className="flex min-h-[60vh] items-center justify-center">
@@ -88,8 +82,6 @@ function StudySessionPage() {
     );
   }
 
-  // If we have a sessionId in URL but no cards loaded yet, start the session
-  // This handles page refresh mid-session (URL resumption)
   const [pendingAutoStart, setPendingAutoStart] = useState(false);
 
   const handleExit = useCallback(() => {
@@ -123,7 +115,6 @@ function StudySessionPage() {
     }
   };
 
-  // Quiz mode — render QuizView
   if (mode === 'quiz' && store.cards.length > 0) {
     return (
       <StudySessionLayout
@@ -149,9 +140,8 @@ function StudySessionPage() {
 
   useEffect(() => {
     if (!sessionId || store.sessionId === sessionId) return;
-    if (store.cards.length > 0) return; // Already have cards
+    if (store.cards.length > 0) return;
 
-    // Trigger start — server will return the enrolled card set
     setPendingAutoStart(true);
     const scope: StudyScope = mode === 'topic' && topicId ? 'TOPIC' : 'DUE';
     startMutation.mutate(
@@ -187,7 +177,6 @@ function StudySessionPage() {
           store.setSubmittingRating(false);
 
           if (store.currentIndex >= store.cards.length) {
-            // All cards reviewed — call complete and redirect to summary
             if (store.sessionId) {
               store.finishSession();
               store.setSessionCompleted();
@@ -207,7 +196,6 @@ function StudySessionPage() {
 
   const [feedback, setFeedback] = useState<ReviewResult | null>(null);
 
-  // Loading states
   if (startMutation.isPending || pendingAutoStart) {
     return (
       <StudySessionLayout sessionType="Loading...">
@@ -218,7 +206,6 @@ function StudySessionPage() {
     );
   }
 
-  // No cards (empty due/topic set)
   if (store.cards.length === 0 && !sessionId) {
     return (
       <StudySessionLayout
@@ -241,7 +228,6 @@ function StudySessionPage() {
     );
   }
 
-  // Session complete (non-redirect path — e.g. completed session still in store)
   if (isSessionComplete && !completed) {
     return (
       <StudySessionLayout
@@ -281,7 +267,6 @@ function StudySessionPage() {
       onExit={handleExit}
     >
       <div className="relative w-full max-w-3xl mx-auto flex flex-col items-center gap-8">
-        {/* Card */}
         {currentCard && (
           <div className="relative w-full">
             <FlashcardView
@@ -290,7 +275,6 @@ function StudySessionPage() {
               onFlip={store.flipCard}
             />
 
-            {/* Feedback overlay */}
             <AnimatePresence>
               {feedback && (
                 <motion.div
@@ -321,7 +305,6 @@ function StudySessionPage() {
           </div>
         )}
 
-        {/* Flip / Rating */}
         {!store.flipped ? (
           <button
             type="button"

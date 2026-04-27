@@ -18,9 +18,9 @@ import { Skeleton } from '@/shared/ui/shadcn/skeleton';
 import { Link } from '@tanstack/react-router';
 import { ArrowRight, BookOpen, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { useLearningList } from '../hooks/use-learning-list';
-import { useRemoveFromLearning } from '../hooks/use-remove-from-learning';
-import type { LearningListItem } from '../types/learning.types';
+import { useLearningList } from '../../hooks/use-learning-list';
+import { useRemoveFromLearning } from '../../hooks/use-remove-from-learning';
+import type { LearningListItem } from '../../types/learning.types';
 import { WordSenseSheet } from './word-sense-sheet';
 
 interface LearningListProps {
@@ -143,8 +143,6 @@ export function LearningList({ page, onPageChange }: LearningListProps) {
   );
 }
 
-/* ─── WordCard ─────────────────────────────────────────────────── */
-
 function WordCard({
   item,
   isRemoving,
@@ -158,7 +156,6 @@ function WordCard({
 }) {
   return (
     <div className="group relative flex flex-col justify-between rounded-xl border bg-card p-5 text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-md cursor-pointer">
-      {/* Invisible full-card button for accessibility */}
       <button
         type="button"
         onClick={onSelect}

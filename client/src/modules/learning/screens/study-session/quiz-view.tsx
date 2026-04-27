@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { StudyProgress } from './study-progress';
-import type { QuizCard } from '../types/study.types';
+import type { QuizCard } from '../../types/study.types';
 
 interface QuizViewProps {
   cards: QuizCard[];
@@ -19,7 +19,6 @@ export function QuizView({
   onComplete,
   onAnswer,
 }: QuizViewProps) {
-  // sessionId kept for future session-aware features
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizState, setQuizState] = useState<QuizState>('selecting');
   const [selectedLabel, setSelectedLabel] = useState<
@@ -27,7 +26,6 @@ export function QuizView({
   >(null);
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Use refs for stable function references to avoid exhaustive-deps warnings
   const onCompleteRef = useRef(onComplete);
   const onAnswerRef = useRef(onAnswer);
   useEffect(() => {
@@ -38,7 +36,6 @@ export function QuizView({
   const currentCard = cards[currentIndex];
   const isLastCard = currentIndex >= cards.length - 1;
 
-  // Cleanup timer on unmount
   useEffect(() => {
     return () => {
       if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
@@ -66,7 +63,6 @@ export function QuizView({
     }
   };
 
-  // Auto-advance after 1200ms feedback
   useEffect(() => {
     if (quizState !== 'answered') return;
 
@@ -77,11 +73,9 @@ export function QuizView({
     return () => {
       if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
     };
-    // advance is stable — intentionally omitted from deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizState, currentIndex]);
 
-  // Keyboard shortcuts: 1/2/3/4 → A/B/C/D
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (quizState !== 'selecting') return;
@@ -96,7 +90,6 @@ export function QuizView({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-    // handleSelectOption is stable — intentionally omitted from deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizState]);
 
@@ -115,7 +108,6 @@ export function QuizView({
 
   return (
     <div className="flex min-h-[calc(100vh-180px)] w-full flex-col items-center justify-center gap-8 py-8 px-4">
-      {/* Header with progress */}
       <div className="flex w-full items-center justify-between">
         <div className="text-xs text-on-surface-variant font-medium uppercase tracking-widest">
           Quiz Mode
@@ -124,7 +116,6 @@ export function QuizView({
         <div className="w-16" />
       </div>
 
-      {/* Question */}
       <div className="text-center">
         <h2 className="font-headline text-4xl font-bold text-primary text-center mb-4">
           {currentCard.question}
@@ -134,7 +125,6 @@ export function QuizView({
         </p>
       </div>
 
-      {/* Options */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl">
         {currentCard.options.map((option) => {
           const isSelected = option.label === selectedLabel;
@@ -170,7 +160,6 @@ export function QuizView({
               className={optionClass}
               whileTap={quizState === 'selecting' ? { scale: 0.98 } : undefined}
             >
-              {/* Label badge */}
               <span
                 className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${
                   showAsCorrect
@@ -183,7 +172,6 @@ export function QuizView({
                 {option.label}
               </span>
 
-              {/* Option text */}
               <span
                 className={`flex-1 text-sm leading-relaxed ${
                   showAsCorrect
@@ -196,7 +184,6 @@ export function QuizView({
                 {option.text}
               </span>
 
-              {/* Icon */}
               {showAsCorrect && (
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500" />
               )}
@@ -208,7 +195,6 @@ export function QuizView({
         })}
       </div>
 
-      {/* Feedback banner */}
       <AnimatePresence>
         {quizState === 'answered' && (
           <motion.div

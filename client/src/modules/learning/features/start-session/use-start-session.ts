@@ -1,38 +1,30 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { StudyApi } from '../services/study.api';
 import { studyKeys } from '@/shared/constants';
+import { StudyApi } from '../../services/study.api';
 import type {
   StartSessionPayload,
   StartSessionResponse,
-  StudyScope,
-  StudyType,
-} from '../types/study.types';
+} from '../../types/study.types';
 
 export const useStartSession = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  return useMutation<
-    StartSessionResponse,
-    Error,
-    StartSessionPayload
-  >({
+  return useMutation<StartSessionResponse, Error, StartSessionPayload>({
     mutationFn: (payload) => StudyApi.startSession(payload),
-    onSuccess: (data) => {
-      // Invalidate due list so counts refresh after session ends
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: studyKeys.due() });
 
-      // Navigate to session page with sessionId in URL
       const search: Record<string, string> = {
         sessionId: data.sessionId,
       };
 
-      if (payload.scope === 'TOPIC' && payload.topicId) {
+      if (variables.scope === 'TOPIC' && variables.topicId) {
         search.mode = 'topic';
-        search.topicId = payload.topicId;
-      } else if (payload.studyType === 'QUIZ') {
+        search.topicId = variables.topicId;
+      } else if (variables.studyType === 'QUIZ') {
         search.mode = 'quiz';
       } else {
         search.mode = 'due';

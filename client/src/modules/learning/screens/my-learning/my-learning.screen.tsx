@@ -1,17 +1,3 @@
-/**
- * MyLearningPage — Study Hub
- *
- * Layout matches the "Scholarly Sanctuary — Study Hub" HTML mockup:
- * Asymmetric hero header with "Resume Last Session" pill, prominent
- * Words Due banner (dark primary-container), bento grid study modes
- * (Daily Review large card, Speed Quiz, Study by Topic, Achievement),
- * footer quote + CTAs, vocabulary list.
- *
- * [MOCK] Achievement milestone — backend does not support this yet.
- * [MOCK] "Currently studying" avatars in Daily Review card.
- * [MOCK] Speed Quiz weekly progress — UI only.
- */
-
 import { useTopics } from '@/modules/topic/hooks/use-topics';
 import { LearnRoutes, TopicRoutes } from '@/shared/constants';
 import { DsSpinner } from '@/shared/ui';
@@ -30,15 +16,15 @@ import {
   UtensilsCrossed,
 } from 'lucide-react';
 import { useState } from 'react';
-import { LearningList } from '../components/learning-list';
-import { useDueCards } from '../hooks/use-due-cards';
-import { useStartSession } from '../hooks/use-start-session';
+import { useDueCards } from '../../hooks/use-due-cards';
+import { useStartSession } from '../../features/start-session/use-start-session';
+import { LearningList } from './learning-list';
 
 export const Route = createFileRoute('/_(authenticated)/learning')({
-  component: MyLearningPage,
+  component: MyLearningScreen,
 });
 
-export default function MyLearningPage() {
+export default function MyLearningScreen() {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const { data: dueData, isLoading: loadingDue } = useDueCards();
@@ -61,7 +47,6 @@ export default function MyLearningPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-6 pb-12 pt-6 md:px-8">
-      {/* ── Header Hero (Asymmetric) ──────────────────────────────── */}
       <header className="mb-16 flex flex-col items-end justify-between gap-8 pt-8 md:flex-row">
         <div className="flex-1">
           <h1 className="mb-4 font-headline text-5xl font-extrabold leading-tight tracking-tight text-on-primary-fixed lg:text-6xl">
@@ -92,10 +77,8 @@ export default function MyLearningPage() {
         </div>
       </header>
 
-      {/* ── Prominent Due Section ─────────────────────────────────── */}
       <section className="mb-16">
         <div className="group relative flex flex-col items-center justify-between gap-8 overflow-hidden rounded-xl bg-primary-container p-8 md:flex-row lg:p-12">
-          {/* Background texture */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-10" />
 
           <div className="relative z-10">
@@ -108,7 +91,6 @@ export default function MyLearningPage() {
           </div>
 
           <div className="relative z-10 flex items-center gap-6">
-            {/* Due count */}
             <div className="text-center">
               <div className="font-headline text-6xl font-extrabold text-tertiary-fixed-dim">
                 {loadingDue ? <DsSpinner size="lg" /> : dueCount}
@@ -118,7 +100,7 @@ export default function MyLearningPage() {
               </div>
             </div>
             <div className="h-16 w-px bg-white/20" />
-            {/* [MOCK] Phrases count — backend does not track this separately */}
+            {/* [MOCK] Phrases count */}
             <div className="text-center">
               <div className="font-headline text-6xl font-extrabold text-secondary-fixed">
                 12
@@ -138,12 +120,9 @@ export default function MyLearningPage() {
         </div>
       </section>
 
-      {/* ── Bento Grid Study Modes ────────────────────────────────── */}
       <section className="mb-16">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
-          {/* Daily Review — Large Action Card (2-col) */}
           <div className="group relative flex h-96 cursor-pointer flex-col justify-end overflow-hidden rounded-xl border border-transparent bg-surface-container-low p-8 transition-all hover:border-outline-variant/20 md:col-span-2">
-            {/* Background gradient layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary-fixed/50 via-surface-container to-secondary-fixed/30 opacity-40 transition-opacity group-hover:opacity-60" />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent" />
 
@@ -161,7 +140,7 @@ export default function MyLearningPage() {
                 Scientific algorithms tailored to your individual learning pace.
                 Maintain your streak.
               </p>
-              {/* [MOCK] Avatars — UI only */}
+              {/* [MOCK] Avatars */}
               <div className="flex gap-4">
                 <div className="flex -space-x-3">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary bg-primary-fixed text-[10px] font-bold">
@@ -181,7 +160,6 @@ export default function MyLearningPage() {
             </div>
           </div>
 
-          {/* Speed Quiz */}
           <div className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-secondary-container p-8 transition-all hover:shadow-2xl">
             <div className="flex flex-1 items-center justify-center">
               <Timer className="h-20 w-20 text-on-secondary-container opacity-20 transition-transform group-hover:scale-110" />
@@ -194,7 +172,7 @@ export default function MyLearningPage() {
                 Pressure-test your recall under time constraints. Level up your
                 fluency speed.
               </p>
-              {/* [MOCK] Weekly progress — UI only */}
+              {/* [MOCK] Weekly progress */}
               <div className="h-1 w-full overflow-hidden rounded-full bg-white/30">
                 <div className="h-full w-3/4 bg-secondary" />
               </div>
@@ -209,7 +187,6 @@ export default function MyLearningPage() {
             </div>
           </div>
 
-          {/* Study by Topic */}
           <div className="flex flex-col gap-6 rounded-xl border border-transparent bg-surface-container-lowest p-8 shadow-sm transition-all hover:border-outline-variant/15 md:col-span-1">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-tertiary-fixed text-on-tertiary-fixed">
               <FolderOpen className="h-6 w-6" />
@@ -234,7 +211,6 @@ export default function MyLearningPage() {
                 </div>
               ) : topics.length === 0 ? (
                 <ul className="space-y-4">
-                  {/* Fallback static items when no topics exist */}
                   {[
                     { icon: Briefcase, label: 'Professional' },
                     { icon: UtensilsCrossed, label: 'Gastronomy' },
@@ -281,7 +257,7 @@ export default function MyLearningPage() {
             </Link>
           </div>
 
-          {/* Recent Achievement — [MOCK] */}
+          {/* [MOCK] Achievement */}
           <div className="group relative overflow-hidden rounded-xl bg-surface-container-highest p-8 md:col-span-2">
             <div className="relative z-10 flex flex-col items-center gap-8 md:flex-row">
               <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-tertiary-fixed to-tertiary-fixed-dim shadow-inner">
@@ -300,13 +276,11 @@ export default function MyLearningPage() {
                 </button>
               </div>
             </div>
-            {/* Decorative blur */}
             <div className="pointer-events-none absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
           </div>
         </div>
       </section>
 
-      {/* ── Vocabulary List ───────────────────────────────────────── */}
       <section>
         <div className="mb-5 flex items-center justify-between">
           <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
@@ -316,7 +290,6 @@ export default function MyLearningPage() {
         <LearningList page={page} onPageChange={setPage} />
       </section>
 
-      {/* ── Footer Quote + CTAs ───────────────────────────────────── */}
       <footer className="mt-24 pb-12 text-center">
         <div className="inline-flex flex-col items-center gap-6">
           <div className="h-px w-16 bg-outline-variant/30" />
