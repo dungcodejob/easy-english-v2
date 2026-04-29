@@ -227,7 +227,8 @@
       "Bash(rm -f \"client/src/modules/workspace/types/index.ts\" \"client/src/modules/workspace/types/workspace-learning-goal.enum.ts\" \"client/src/modules/workspace/types/workspace-learning-level.enum.ts\" \"client/src/modules/workspace/types/workspace-learning-mode.enum.ts\" \"client/src/modules/workspace/types/workspace-type.enum.ts\" \"client/src/modules/workspace/types/workspace.types.ts\")",
       "Bash(rmdir \"client/src/modules/workspace/types\" \"client/src/modules/workspace/components/new-wizard\" \"client/src/modules/workspace/pages\")",
       "Bash(awk '{print $NF}')",
-      "Bash(grep -E \"\\(module|controller|service\\)\\\\.ts$\")"
+      "Bash(grep -E \"\\(module|controller|service\\)\\\\.ts$\")",
+      "Bash(node *)"
     ],
     "additionalDirectories": [
       "e:\\Projects\\multi-tenant\\easy-english-v2\\server\\src\\modules\\flashcard\\infrastructure\\persistence"
