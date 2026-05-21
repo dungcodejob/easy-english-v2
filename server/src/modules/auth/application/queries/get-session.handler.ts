@@ -6,7 +6,7 @@ import { SessionNotFoundException } from '../../domain/exceptions/email-already-
 import {
   type ISessionRepository,
   InjectSessionRepository,
-} from '../../domain/repositories/session.repository.interface';
+} from '../repositories/session.repository.interface';
 
 @QueryHandler(GetSessionQuery)
 export class GetSessionHandler implements IQueryHandler<GetSessionQuery> {

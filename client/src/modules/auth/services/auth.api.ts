@@ -1,12 +1,12 @@
 import { api, type ApiSuccessResponse } from '@/core/api';
 import { bareApi } from '@/core/api/bare-api';
 import { useAuthStore } from '@/shared/stores/auth-store';
-import type { LoginResponseDto } from '../types';
 import type {
   LoginRequest,
+  LoginResponseDto,
   RegisterRequest,
   RegisterResponse,
-} from '../types/auth.types';
+} from './auth.types';
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -54,10 +54,10 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     if (response.data && response.data.success && response.data.data) {
       const { accessToken, user } = response.data.data;
 
-      const { updateAccessToken, setUser } = useAuthStore.getState().actions;
+      const { setToken, setUser } = useAuthStore.getState().actions;
 
       setUser(user); // Important to ensure user is up to date (this handles updating state if changed)
-      updateAccessToken(accessToken);
+      setToken(accessToken);
 
       processQueue(null, accessToken.token);
       return accessToken.token;

@@ -44,51 +44,33 @@ client/src/
 │       └── use-hotkey-scope.ts  # Hook to manage hotkey scopes
 │
 ├── modules/                    # Feature modules (DDD-aligned with server)
-│   ├── auth/                  # Authentication
-│   │   ├── components/        # Login form, register form, social buttons
-│   │   ├── hooks/            # use-login.ts, use-register.ts
-│   │   ├── pages/            # Login page, register page
-│   │   ├── services/        # auth.api.ts — login/register/refresh calls
-│   │   └── types/           # Auth DTO types
 │   │
-│   ├── dashboard/            # Dashboard page
-│   │   └── pages/
+│   ├── auth/                  # Authentication — features/screens/models/services
+│   │   ├── features/          # login/ (form + hook), register/ (form + hook + password-input)
+│   │   ├── screens/           # login/ (screen + social buttons), register/
+│   │   ├── models/            # login-form.schema.ts, register-form.schema.ts
+│   │   └── services/          # auth.api.ts, auth.types.ts
 │   │
-│   ├── flashcard/            # Flashcard management
-│   │   ├── hooks/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── types/
-│   │
-│   ├── home/
-│   │
-│   ├── learning/            # Learning module (core feature)
-│   │   ├── components/      # Flashcard view, quiz view, rating buttons
-│   │   ├── hooks/           # use-start-session, use-due-cards, use-review-card
-│   │   ├── pages/           # my-learning, study-session, dictionary-search
-│   │   ├── services/        # API calls for learning/study/dictionary
-│   │   ├── stores/          # Zustand stores (search store, study session)
-│   │   └── types/
-│   │
-│   ├── shell/               # App shell (layouts, navigation, header)
-│   │   ├── components/      # AppHeader, AppSidebar, ProtectedRoute
-│   │   ├── pages/           # AuthenticatedLayout, UnauthenticatedLayout
-│   │   └── ui/              # NavGroup, NavUser
-│   │
-│   ├── topic/               # Topic management
-│   │   ├── components/      # CreateTopicDialog, TopicCard
-│   │   ├── hooks/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── types/
-│   │
-│   └── workspace/           # Workspace creation wizard
-│       ├── components/       # Wizard steps, workspace basics/preferences
-│       ├── hooks/
-│       ├── pages/
-│       ├── services/
-│       ├── stores/
-│       └── types/
+│   └── <module>/              # [new convention] — follow this for all new modules
+│       ├── features/          # One folder per user interaction (create, delete, edit…)
+│       │   └── <feature>/     # e.g. create-or-update-topic/
+│       │       ├── <feature>.form.tsx         # Form component (if applicable)
+│       │       ├── <feature>-dialog.tsx       # Dialog or drawer shell
+│       │       └── use-<action>.ts            # Mutation hook for this action
+│       │
+│       ├── screens/           # Route-target components + screen-local UI
+│       │   └── <screen>/      # e.g. topics/, topic-detail/
+│       │       ├── <screen>.screen.tsx        # Page component (thin orchestrator)
+│       │       └── <item>-card.tsx            # Dumb component used only here
+│       │
+│       ├── hooks/             # Shared data hooks (TanStack Query) used across screens
+│       │   └── use-<entity>.ts
+│       │
+│       ├── models/            # Zod schemas and form types specific to this module
+│       │   └── <entity>-form.schema.ts
+│       │
+│       └── services/          # API call functions only — no hooks, no state
+│           └── <entity>.api.ts
 │
 ├── shared/                    # Cross-cutting shared code
 │   ├── constants/           # Routes, API endpoints, defaults
@@ -149,19 +131,58 @@ rootRoute
 
 ## 4. Module Convention
 
-Each feature module follows a consistent structure:
+New modules follow a `features/screens/hooks/models/services` structure. Older modules still use the legacy `components/hooks/pages/services/types` layout and are being migrated incrementally.
+
+### New Convention (reference: `topic`, `dictionary`)
 
 ```
 module/
-├── components/      # Dumb UI components (receive data as props)
+├── features/                       # Self-contained user interactions
+│   └── <feature-name>/             # e.g. create-or-update-topic/, delete-topic/
+│       ├── <feature>.form.tsx       # Form component (if applicable)
+│       ├── <feature>-dialog.tsx     # Dialog shell
+│       ├── use-<action>.ts          # Mutation/action hook specific to this feature
+│       └── ...                     # Other UI components + hooks for this interaction
+│
+├── screens/                        # Route-target components + their screen-local UI
+│   └── <screen-name>/              # e.g. topics/, topic-detail/
+│       ├── <screen-name>.screen.tsx # Page component (thin orchestrator)
+│       └── <item>-card-item.tsx    # Dumb components used only in this screen
+│
+├── hooks/                          # Shared data hooks used across multiple screens
+│   └── use-<entity>.ts             # e.g. use-topics.ts, use-topic-detail.ts
+│
+├── models/                         # Zod schemas, form models, module-scoped DTOs
+│   └── <entity>-form.schema.ts
+│
+└── services/                       # API call functions, mappers, related services
+    └── <entity>.api.ts             # e.g. topic.api.ts
+```
+
+**Rules:**
+- `features/<name>/` — contains only the UI and hooks for one user action (create, delete, edit). Not shared across screens.
+- `screens/<name>/<name>.screen.tsx` — the route target component. Thin: it calls hooks and composes components. No business logic.
+- `screens/<name>/` can include dumb components (e.g. `topic-card-item.tsx`) that are specific to that screen.
+- `hooks/` — data hooks (TanStack Query) that are shared by multiple screens or features within the module.
+- `models/` — Zod schemas and form types. Not API response types (those live in `shared/` or the service file).
+- `services/` — API call functions only. No hooks, no state.
+- If a component or hook is shared between screens within the module, place it in `components/` or `hooks/` at the module root.
+
+### Legacy Convention (being migrated)
+
+Older modules (`learning`, `workspace`, `flashcard`, `settings`) still use:
+
+```
+module/
+├── components/      # Dumb UI components
 ├── hooks/          # TanStack Query hooks + custom hooks
-├── pages/          # Route page components (orchestrate hooks + components)
-├── services/      # API call functions (api.*.ts)
-├── stores/         # Zustand stores (for module-level state)
+├── pages/          # Route page components
+├── services/      # API call functions
+├── stores/         # Zustand stores (module-level state)
 └── types/          # Module-specific types and DTOs
 ```
 
-**Key principle:** Pages are thin — they orchestrate hooks and components. Business logic lives in hooks. API calls live in services.
+When working in a legacy module, follow its existing convention. When creating a new module, use the new convention.
 
 ---
 

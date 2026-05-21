@@ -102,8 +102,8 @@ export class AzVocabAdapter {
         if (!seenMap.has(key)) {
           prons.push(
             new WordPronunciationVO({
-              ipa: entry.pron_uk || '',
-              audioUrl: entry.uk || null,
+              ipa: entry.uk || '',
+              audioUrl: entry.pron_uk || null,
               region: 'UK',
             }),
           );
@@ -117,8 +117,8 @@ export class AzVocabAdapter {
         if (!seenMap.has(key)) {
           prons.push(
             new WordPronunciationVO({
-              ipa: entry.pron_us || '',
-              audioUrl: entry.us || null,
+              ipa: entry.us || '',
+              audioUrl: entry.pron_us || null,
               region: 'US',
             }),
           );

@@ -3,8 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { WordSenseOrmEntity } from 'src/modules/dictionary/infrastructure/persistence/word-sense.orm-entity';
 
+import { ILearningWriteRepository } from '../../application/repositories/learning-write.repository.interface';
 import { UserWordSenseProgress } from '../../domain/entities/user-word-sense-progress.entity';
-import { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { UserWordSenseProgressMapper } from '../mappers/user-word-sense-progress.mapper';
 import { UserWordSenseProgressOrmEntity } from '../persistence/user-word-sense-progress.orm-entity';
 

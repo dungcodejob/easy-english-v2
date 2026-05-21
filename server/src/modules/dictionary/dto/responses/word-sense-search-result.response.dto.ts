@@ -1,5 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+export class WordPronunciationResponseDto {
+  @ApiProperty({ description: 'The IPA of the word' })
+  readonly ipa!: string;
+
+  @ApiPropertyOptional({ description: 'The audio URL of the word' })
+  readonly audioUrl!: string | null;
+
+  @ApiProperty({ description: 'The region of the word' })
+  readonly region!: string;
+}
+
 export class WordSenseSearchResultResponseDto {
   @ApiProperty({ description: 'The unique identifier of the WordSense' })
   readonly senseId!: string;
@@ -18,4 +29,13 @@ export class WordSenseSearchResultResponseDto {
 
   @ApiPropertyOptional({ description: 'CEFR level (A1, A2, B1, B2, C1, C2)' })
   readonly cefrLevel!: string | null;
+
+  @ApiPropertyOptional({
+    description:
+      'Indicates whether the user is currently learning or has learned this word sense',
+  })
+  readonly isLearned?: boolean;
+
+  @ApiPropertyOptional({ description: 'Word pronunciation' })
+  readonly pronunciations: WordPronunciationResponseDto[];
 }

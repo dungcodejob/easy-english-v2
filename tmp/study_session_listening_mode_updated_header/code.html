@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Sanctuary - Listening Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Be+Vietnam+Pro:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dad9dd",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "surface-variant": "#e3e2e6",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#465f88",
+                    "inverse-on-surface": "#f1f0f4",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "tertiary-container": "#4d3000",
+                    "inverse-primary": "#aec7f7",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#002046",
+                    "on-surface": "#1a1b1e",
+                    "secondary-fixed-dim": "#7ad7c6",
+                    "tertiary-fixed": "#ffddb4",
+                    "tertiary": "#311d00",
+                    "inverse-surface": "#2f3033",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "secondary-container": "#94f0df",
+                    "primary-fixed-dim": "#aec7f7",
+                    "on-tertiary-fixed": "#291800",
+                    "on-secondary-container": "#006f62",
+                    "on-primary-fixed": "#001b3d",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#1b365d",
+                    "on-background": "#1a1b1e",
+                    "background": "#faf9fd",
+                    "surface-container-low": "#f4f3f7",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#d4922a",
+                    "on-surface-variant": "#44474e",
+                    "secondary-fixed": "#97f3e2",
+                    "surface": "#faf9fd",
+                    "on-primary-container": "#87a0cd",
+                    "on-secondary-fixed-variant": "#005047",
+                    "outline": "#74777f",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e9e7eb",
+                    "on-secondary-fixed": "#00201b",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e3e2e6",
+                    "secondary": "#006b5e",
+                    "surface-bright": "#faf9fd",
+                    "outline-variant": "#c4c6cf",
+                    "surface-container": "#efedf1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .listening-glow {
+            box-shadow: 0 12px 32px rgba(26, 27, 30, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body leading-relaxed overflow-x-hidden">
+<!-- Updated Consistent Header -->
+<header class="bg-surface/80 backdrop-blur-xl border-b border-surface-variant text-on-surface font-lexend flex flex-col md:flex-row items-center w-full px-6 py-3 md:py-4 sticky top-0 z-50 gap-4">
+<div class="flex items-center justify-between w-full md:w-auto md:gap-8">
+<div class="flex items-center gap-3">
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">close</span>
+</button>
+<span class="text-lg font-bold text-primary hidden sm:inline-block">Scholarly Sanctuary</span>
+</div>
+<!-- Mobile only stats toggle or visibility -->
+<div class="flex items-center gap-4 md:hidden">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full text-sm font-semibold">
+<span class="text-xs">⏱</span> 00:42
+            </div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-container text-tertiary-fixed rounded-full text-sm font-semibold">
+                🔥 5
+            </div>
+</div>
+</div>
+<!-- Progress and Session Info -->
+<div class="flex-1 w-full flex flex-col items-center gap-1">
+<div class="flex items-center justify-between w-full max-w-md text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">
+<span>Session: Advanced Business</span>
+<span>12 / 20</span>
+</div>
+<div class="w-full max-w-md bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary w-[60%] h-full rounded-full transition-all duration-500"></div>
+</div>
+</div>
+<!-- Desktop Stats -->
+<div class="hidden md:flex items-center gap-6">
+<div class="flex items-center gap-2 font-medium text-on-surface-variant">
+<span class="text-xl">⏱</span>
+<span class="tabular-nums">00:42</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-bold shadow-sm">
+<span>🔥</span>
+<span>5</span>
+</div>
+</div>
+</header>
+<main class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-center px-6 pb-24 md:pb-12 max-w-5xl mx-auto">
+<!-- Header Instruction -->
+<div class="text-center mb-12">
+<h1 class="font-headline text-3xl md:text-4xl font-bold text-on-primary-fixed tracking-tight mb-3">Listening Mode</h1>
+<p class="text-on-surface-variant font-medium tracking-wide uppercase text-xs">Listen to the phrase and select the correct meaning</p>
+</div>
+<!-- Central Audio Interface (The Hero Component) -->
+<div class="w-full flex flex-col items-center mb-16">
+<div class="relative group">
+<!-- Decorative background pulse for focus -->
+<div class="absolute inset-0 bg-primary/5 rounded-full scale-125 blur-3xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
+<!-- Main Playback Button -->
+<button class="relative bg-gradient-to-br from-primary to-primary-container text-white w-48 h-48 md:w-56 md:h-56 rounded-full flex flex-col items-center justify-center listening-glow border-8 border-surface-container-lowest scale-100 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-6xl md:text-7xl mb-2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<span class="font-headline text-sm font-semibold tracking-widest uppercase opacity-80">Listen</span>
+</button>
+</div>
+<!-- Sub-controls Cluster -->
+<div class="flex gap-6 mt-12 items-center">
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant group-hover:text-primary transition-colors">Repeat Audio</span>
+</button>
+<div class="h-8 w-px bg-surface-variant"></div>
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">
+<span class="text-sm font-bold">0.5x</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant group-hover:text-primary transition-colors">Slow Playback</span>
+</button>
+</div>
+</div>
+<!-- Answer Selection Bento/Grid Layout -->
+<div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Option A -->
+<button class="bg-surface-container-lowest p-6 rounded-xl text-left border border-transparent hover:border-primary/20 hover:bg-white transition-all flex items-center gap-5 group shadow-sm active:scale-98">
+<span class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center font-headline font-bold text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">A</span>
+<span class="text-on-surface font-medium text-lg">To make better</span>
+</button>
+<!-- Option B -->
+<button class="bg-surface-container-lowest p-6 rounded-xl text-left border border-transparent hover:border-primary/20 hover:bg-white transition-all flex items-center gap-5 group shadow-sm active:scale-98">
+<span class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center font-headline font-bold text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">B</span>
+<span class="text-on-surface font-medium text-lg">To understand</span>
+</button>
+<!-- Option C -->
+<button class="bg-surface-container-lowest p-6 rounded-xl text-left border border-transparent hover:border-primary/20 hover:bg-white transition-all flex items-center gap-5 group shadow-sm active:scale-98">
+<span class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center font-headline font-bold text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">C</span>
+<span class="text-on-surface font-medium text-lg">To reach an agreement</span>
+</button>
+<!-- Option D -->
+<button class="bg-surface-container-lowest p-6 rounded-xl text-left border border-transparent hover:border-primary/20 hover:bg-white transition-all flex items-center gap-5 group shadow-sm active:scale-98">
+<span class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center font-headline font-bold text-on-primary-fixed-variant group-hover:bg-primary-fixed transition-colors">D</span>
+<span class="text-on-surface font-medium text-lg">To go away</span>
+</button>
+</div>
+</main>
+<!-- Mobile Question Counter (Contextual) -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface-container-low py-4 px-8 flex justify-between items-center border-t border-surface-variant md:hidden">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Question 12 of 20</span>
+<div class="flex gap-1">
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<div class="w-4 h-1 rounded-full bg-primary"></div>
+<div class="w-1 h-1 rounded-full bg-surface-dim"></div>
+</div>
+</footer>
+<!-- Background Illustration Detail -->
+<div class="fixed top-1/4 -right-24 -z-10 opacity-20 pointer-events-none">
+<div class="w-96 h-96 rounded-full bg-primary-container/20 blur-3xl"></div>
+</div>
+<div class="fixed bottom-1/4 -left-24 -z-10 opacity-20 pointer-events-none">
+<div class="w-96 h-96 rounded-full bg-tertiary-fixed-dim/10 blur-3xl"></div>
+</div>
+</body></html>

@@ -12,5 +12,11 @@
 
 export { FormWrapper } from './form-wrapper';
 export { PageHeader, PageLayout } from './page-layout';
-export { AnimatedStep, WizardLayout, WizardStepShell } from './wizard-layout';
+export {
+  AnimatedStep,
+  DEFAULT_WIZARD_STEPS,
+  WizardLayout,
+  WizardStepShell,
+} from './wizard-layout';
+export type { WizardStep } from './wizard-layout';
 export { ModalWrapper } from './modal-wrapper';

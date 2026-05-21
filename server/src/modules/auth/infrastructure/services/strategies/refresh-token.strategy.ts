@@ -4,12 +4,12 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { type StringValue } from 'ms';
 
 import { InjectJwtConfig, type JwtConfig } from '../../../../../configs';
-import { InvalidTokenPurposeException } from '../../../domain/exceptions/email-already-exists.exception';
 import {
   ITokenPayload,
   TokenType,
-} from '../../../domain/ports/token-generator.interface';
-import { ITokenStrategy } from '../../../domain/ports/token-strategy.interface';
+} from '../../../application/ports/token-generator.interface';
+import { ITokenStrategy } from '../../../application/ports/token-strategy.interface';
+import { InvalidTokenPurposeException } from '../../../domain/exceptions/email-already-exists.exception';
 
 type RefreshTokenPayload = ITokenPayload & { purpose: TokenType };
 

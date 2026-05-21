@@ -40,7 +40,7 @@ export class ApiErrorDto {
   @ApiProperty()
   message: string;
 
-  @ApiProperty({ type: [ErrorDetailDto], required: false })
+  @ApiProperty({ type: () => ErrorDetailDto, isArray: true, required: false })
   details?: ErrorDetailDto[];
 }
 

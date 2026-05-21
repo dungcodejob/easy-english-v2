@@ -26,3 +26,4 @@ server/.env
 # Logs
 *.log
 logs
+

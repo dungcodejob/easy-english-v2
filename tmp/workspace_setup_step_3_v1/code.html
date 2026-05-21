@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary-fixed": "#ffddb4",
+                  "primary": "#002046",
+                  "outline": "#74777f",
+                  "on-tertiary-fixed-variant": "#633f00",
+                  "surface-container-low": "#f4f3f7",
+                  "secondary-fixed-dim": "#7ad7c6",
+                  "on-error": "#ffffff",
+                  "primary-container": "#1b365d",
+                  "primary-fixed": "#d6e3ff",
+                  "secondary-container": "#94f0df",
+                  "on-tertiary": "#ffffff",
+                  "on-tertiary-fixed": "#291800",
+                  "tertiary": "#311d00",
+                  "primary-fixed-dim": "#aec7f7",
+                  "on-primary": "#ffffff",
+                  "inverse-surface": "#2f3033",
+                  "surface-container-highest": "#e3e2e6",
+                  "outline-variant": "#c4c6cf",
+                  "surface-tint": "#465f88",
+                  "surface-variant": "#e3e2e6",
+                  "tertiary-fixed-dim": "#ffb954",
+                  "surface-container-lowest": "#ffffff",
+                  "on-primary-fixed": "#001b3d",
+                  "surface-dim": "#dad9dd",
+                  "on-secondary-container": "#006f62",
+                  "on-surface": "#1a1b1e",
+                  "surface": "#faf9fd",
+                  "tertiary-container": "#4d3000",
+                  "error": "#ba1a1a",
+                  "inverse-on-surface": "#f1f0f4",
+                  "on-tertiary-container": "#d4922a",
+                  "on-error-container": "#93000a",
+                  "secondary": "#006b5e",
+                  "inverse-primary": "#aec7f7",
+                  "error-container": "#ffdad6",
+                  "surface-container-high": "#e9e7eb",
+                  "on-primary-fixed-variant": "#2e476f",
+                  "on-secondary-fixed": "#00201b",
+                  "surface-bright": "#faf9fd",
+                  "secondary-fixed": "#97f3e2",
+                  "on-surface-variant": "#44474e",
+                  "on-primary-container": "#87a0cd",
+                  "on-background": "#1a1b1e",
+                  "surface-container": "#efedf1",
+                  "on-secondary-fixed-variant": "#005047",
+                  "on-secondary": "#ffffff",
+                  "background": "#faf9fd"
+          },
+          "borderRadius": {
+                  "DEFAULT": "1rem",
+                  "lg": "2rem",
+                  "xl": "3rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Lexend"],
+                  "body": ["Be Vietnam Pro"],
+                  "label": ["Be Vietnam Pro"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .custom-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: #002046;
+      border: 4px solid #ffffff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 32, 70, 0.2);
+    }
+    .custom-range::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      background: #002046;
+      border: 4px solid #ffffff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 32, 70, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopNavBar (Fixed) -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center justify-between px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-blue-950 dark:text-blue-50 font-lexend tracking-tight">Clarion Study</span>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="text-slate-500 hover:text-blue-700 transition-colors font-lexend" href="#">Dashboard</a>
+<a class="text-blue-900 font-semibold transition-colors font-lexend" href="#">Setup</a>
+<a class="text-slate-500 hover:text-blue-700 transition-colors font-lexend" href="#">Library</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 active:scale-95 duration-200" data-icon="help_outline">help_outline</button>
+</div>
+</div>
+<div class="bg-slate-100/50 dark:bg-slate-800/50 h-[1px]"></div>
+</nav>
+<div class="flex min-h-screen pt-16">
+<!-- SideNavBar (Setup Wizard) -->
+<aside class="hidden md:flex flex-col py-8 px-4 h-screen w-64 bg-slate-50 dark:bg-slate-950 border-r-0 font-lexend">
+<div class="mb-10 px-4">
+<h2 class="text-lg font-bold text-blue-900 dark:text-blue-100">Setup Wizard</h2>
+<p class="text-sm text-slate-500">Step 3 of 4</p>
+</div>
+<nav class="space-y-6">
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span>Workspace Details</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="translate">translate</span>
+<span>Language Focus</span>
+</div>
+<div class="flex items-center gap-3 text-blue-900 dark:text-blue-200 font-bold border-l-4 border-amber-500 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="speed">speed</span>
+<span>Learning Pace</span>
+</div>
+<div class="flex items-center gap-3 text-slate-400 dark:text-slate-600 pl-4 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+<span>Finalize</span>
+</div>
+</nav>
+<div class="mt-auto p-4 bg-surface-container-low rounded-lg">
+<p class="text-xs font-medium text-on-surface-variant uppercase tracking-wider mb-2">Estimated Time</p>
+<p class="text-sm font-semibold text-primary">2 minutes left</p>
+</div>
+</aside>
+<!-- Main Content (The Scholarly Sanctuary) -->
+<main class="flex-1 px-6 py-12 md:px-16 lg:px-24 bg-surface">
+<div class="max-w-4xl mx-auto">
+<!-- Editorial Header -->
+<header class="mb-12">
+<h1 class="font-headline text-5xl font-extrabold text-on-primary-fixed tracking-tight mb-4 leading-tight">
+            Design Your <br/><span class="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">Daily Rhythm.</span>
+</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-xl">
+            Success in language learning isn't about intensity; it's about consistency. Tailor your study environment to fit your life.
+          </p>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Preferences Configuration Panel -->
+<div class="md:col-span-7 space-y-8">
+<!-- Daily Target Slider -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.06)]">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="font-headline text-xl font-bold text-on-surface mb-1">Daily Target</h3>
+<p class="text-sm text-on-surface-variant">How many words per day?</p>
+</div>
+<span class="text-3xl font-extrabold text-secondary leading-none">25 <span class="text-sm font-medium text-on-surface-variant uppercase tracking-widest">words</span></span>
+</div>
+<input class="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer custom-range" max="100" min="5" type="range" value="25"/>
+<div class="flex justify-between mt-4 text-xs font-bold text-outline uppercase tracking-tighter">
+<span>Casual</span>
+<span>Balanced</span>
+<span>Intense</span>
+</div>
+</div>
+<!-- Reminder Toggle -->
+<div class="bg-surface-container-low p-8 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">Study Reminder</h3>
+<p class="text-sm text-on-surface-variant">Gentle nudges to keep your streak</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-14 h-7 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Action Area -->
+<div class="pt-8 flex items-center justify-between">
+<button class="text-on-primary-fixed-variant font-semibold px-6 py-3 rounded-full hover:bg-surface-container-high transition-colors">
+                Back to Focus
+              </button>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-lexend font-bold px-10 py-4 rounded-full shadow-lg active:scale-95 transition-all">
+                Continue to Final Step
+              </button>
+</div>
+</div>
+<!-- Mode Selection (Asymmetric Grid) -->
+<div class="md:col-span-5 flex flex-col gap-4">
+<h3 class="font-headline text-sm font-bold text-on-surface-variant uppercase tracking-widest px-2">Learning Mode</h3>
+<!-- Flashcard Card (Selected) -->
+<div class="relative group cursor-pointer p-6 rounded-xl bg-surface-container-lowest border-2 border-secondary shadow-md transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="style">style</span>
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline font-bold text-lg text-on-surface mb-1">Flashcard</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Spaced repetition for deep memorization.</p>
+</div>
+<!-- Quiz Card -->
+<div class="relative group cursor-pointer p-6 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all border-2 border-transparent">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl group-hover:text-primary transition-colors" data-icon="quiz">quiz</span>
+</div>
+<h4 class="font-headline font-bold text-lg text-on-surface mb-1">Quiz</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Test your recall under pressure.</p>
+</div>
+<!-- Mixed Card -->
+<div class="relative group cursor-pointer p-6 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all border-2 border-transparent">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl group-hover:text-primary transition-colors" data-icon="dashboard_customize">dashboard_customize</span>
+</div>
+<h4 class="font-headline font-bold text-lg text-on-surface mb-1">Mixed</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">A balanced blend of all methodologies.</p>
+</div>
+<!-- Smart AI Card -->
+<div class="relative overflow-hidden group cursor-pointer p-6 rounded-xl bg-primary text-on-primary shadow-xl border-2 border-transparent">
+<div class="absolute -top-4 -right-4 w-24 h-24 bg-primary-container/50 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-3xl" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] font-bold bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded-full uppercase tracking-tighter">Recommended</span>
+</div>
+<h4 class="font-headline font-bold text-lg mb-1">Smart AI</h4>
+<p class="text-sm text-primary-fixed-dim leading-relaxed">Adaptive learning that evolves with you.</p>
+</div>
+</div>
+</section>
+<!-- Decorative Footer Quote -->
+<footer class="mt-20 border-t border-outline-variant/15 pt-8 text-center md:text-left">
+<p class="font-headline italic text-on-surface-variant/60 text-lg">
+            "The limits of my language mean the limits of my world."
+          </p>
+<p class="text-xs font-bold text-outline uppercase tracking-widest mt-2">— Ludwig Wittgenstein</p>
+</footer>
+</div>
+</main>
+</div>
+<!-- Mobile Floating Action Navigation -->
+<div class="md:hidden fixed bottom-6 right-6 z-50">
+<button class="bg-primary text-on-primary w-16 h-16 rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</body></html>

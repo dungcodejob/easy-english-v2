@@ -23,6 +23,7 @@ export default defineConfig({
       '@shared': './src/shared',
       '@core': './src/core',
       '@modules': './src/modules',
+      '@features': './src/features',
     },
   },
   html: {

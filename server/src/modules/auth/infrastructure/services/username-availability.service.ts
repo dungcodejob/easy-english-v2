@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { EntityManager } from '@mikro-orm/core';
 
-import { IUsernameAvailabilityService } from '../../domain/ports/username-availability.interface';
+import { IUsernameAvailabilityService } from '../../application/ports/username-availability.interface';
 import { Username } from '../../domain/value-objects/username.vo';
 import { UserOrmEntity } from '../persistence/user.orm-entity';
 

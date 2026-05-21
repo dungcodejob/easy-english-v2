@@ -1,4 +1,7 @@
-import type { TokenResultDto, UserResponseDto } from '@/modules/auth/types';
+import type {
+  TokenResultDto,
+  UserResponseDto,
+} from '@/modules/auth/services/auth.types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 

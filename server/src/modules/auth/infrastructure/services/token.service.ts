@@ -3,12 +3,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   ITokenPayload,
   TokenType,
-} from '../../domain/ports/token-generator.interface';
-import { ITokenService } from '../../domain/ports/token-service.interface';
+} from '../../application/ports/token-generator.interface';
+import { ITokenService } from '../../application/ports/token-service.interface';
 import {
   InjectTokenStrategy,
   ITokenStrategy,
-} from '../../domain/ports/token-strategy.interface';
+} from '../../application/ports/token-strategy.interface';
 
 @Injectable()
 export class TokenService implements ITokenService {

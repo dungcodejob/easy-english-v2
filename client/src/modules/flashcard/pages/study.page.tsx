@@ -20,12 +20,10 @@ import {
   Keyboard,
 } from 'lucide-react';
 
-import { DsButton, DsCard, DsProgress } from '@/shared/ui';
-import {
-  useDueCards,
-} from '../hooks/use-flashcards';
+import { DsButton, DsCard, ClarionProgress, DsSpinner } from '@/shared/ui';
+import { useDueCards } from '../hooks/use-flashcards';
 
-export const Route = createFileRoute('/_(authenticated)/study')({
+export const Route = createFileRoute('/_(authenticated)/flashcards/study')({
   component: StudyPage,
 });
 
@@ -44,7 +42,8 @@ function StudyPage() {
 
   const cards = dueCardsData?.data ?? [];
   const currentCard = cards[currentIndex];
-  const progress = cards.length > 0 ? ((currentIndex + 1) / cards.length) * 100 : 0;
+  const progress =
+    cards.length > 0 ? ((currentIndex + 1) / cards.length) * 100 : 0;
 
   // Hide keyboard hint after first interaction
   useEffect(() => {
@@ -102,16 +101,7 @@ function StudyPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <svg
-          className="size-8 animate-spin text-muted-foreground"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
+        <DsSpinner size="lg" className="text-muted-foreground" />
       </div>
     );
   }
@@ -130,10 +120,14 @@ function StudyPage() {
             {t('study.all_done') || 'All caught up!'}
           </h2>
           <p className="text-muted-foreground">
-            {t('study.no_cards_due') || 'No cards are due for review right now.'}
+            {t('study.no_cards_due') ||
+              'No cards are due for review right now.'}
           </p>
         </div>
-        <DsButton leftIcon={<BookOpen />} onClick={() => navigate({ to: '/flashcards' })}>
+        <DsButton
+          leftIcon={<BookOpen />}
+          onClick={() => navigate({ to: '/flashcards' })}
+        >
           {t('study.go_to_cards') || 'Go to My Flashcards'}
         </DsButton>
       </div>
@@ -172,7 +166,7 @@ function StudyPage() {
             {currentIndex + 1} / {cards.length}
           </span>
         </div>
-        <DsProgress value={progress} size="sm" />
+        <ClarionProgress value={progress} size="sm" />
       </div>
 
       {/* Flashcard */}
@@ -199,7 +193,10 @@ function StudyPage() {
                 content={currentCard.front}
                 hint={currentCard.hint}
                 label={t('study.question') || 'Question'}
-                hintLabel={t('study.click_to_flip') || 'Click or press Space to reveal answer'}
+                hintLabel={
+                  t('study.click_to_flip') ||
+                  'Click or press Space to reveal answer'
+                }
               />
 
               {/* Back */}
@@ -231,12 +228,18 @@ function StudyPage() {
             >
               <Keyboard className="size-4 text-muted-foreground" />
               <span className="text-muted-foreground">
-                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">Space</kbd>{' '}
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">
+                  Space
+                </kbd>{' '}
                 flip
               </span>
               <span className="text-muted-foreground">
-                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">&#8592;</kbd>
-                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">&#8594;</kbd>{' '}
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">
+                  &#8592;
+                </kbd>
+                <kbd className="rounded bg-background px-1.5 py-0.5 font-mono text-xs">
+                  &#8594;
+                </kbd>{' '}
                 navigate
               </span>
             </motion.div>
@@ -246,23 +249,25 @@ function StudyPage() {
 
       {/* Navigation dots */}
       <div className="flex gap-2">
-        {cards.slice(Math.max(0, currentIndex - 2), currentIndex + 3).map((_, i) => {
-          const actualIndex = Math.max(0, currentIndex - 2) + i;
-          return (
-            <button
-              key={actualIndex}
-              onClick={() => {
-                setCurrentIndex(actualIndex);
-                setIsFlipped(false);
-              }}
-              className={`h-2 w-2 rounded-full transition-all ${
-                actualIndex === currentIndex
-                  ? 'w-6 bg-primary'
-                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-              }`}
-            />
-          );
-        })}
+        {cards
+          .slice(Math.max(0, currentIndex - 2), currentIndex + 3)
+          .map((_, i) => {
+            const actualIndex = Math.max(0, currentIndex - 2) + i;
+            return (
+              <button
+                key={actualIndex}
+                onClick={() => {
+                  setCurrentIndex(actualIndex);
+                  setIsFlipped(false);
+                }}
+                className={`h-2 w-2 rounded-full transition-all ${
+                  actualIndex === currentIndex
+                    ? 'w-6 bg-primary'
+                    : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                }`}
+              />
+            );
+          })}
       </div>
     </div>
   );
@@ -315,9 +320,7 @@ function FlashcardFace({
                 : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
             }`}
           >
-            {source === 'custom'
-              ? 'Custom'
-              : 'Learning List'}
+            {source === 'custom' ? 'Custom' : 'Learning List'}
           </span>
         </div>
 

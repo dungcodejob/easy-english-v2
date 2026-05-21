@@ -1,14 +1,8 @@
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/shared/ui/shadcn/sidebar';
+import { Badge } from '@/shared/ui/shadcn/badge';
+import { cn } from '@/shared/utils';
 import { Link, useRouterState } from '@tanstack/react-router';
 import type { ElementType } from 'react';
+import { motion } from 'motion/react';
 
 export interface MenuItem {
   id: string;
@@ -23,50 +17,44 @@ export function NavGroup({
   title,
   items,
 }: {
-  title: string;
+  title?: string;
   items: MenuItem[];
 }) {
   const routerState = useRouterState();
   const location = routerState.location;
 
   if (!items?.length) return null;
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel className="text-xs uppercase tracking-widest font-semibold text-muted-foreground mt-4 mb-2">
-        {title}
-      </SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {items.map((item) => {
-            const isActive = location.pathname === item.url;
-            return (
-              <SidebarMenuItem key={item.id}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={item.title}
-                  isActive={isActive}
-                  className="transition-colors duration-200"
-                >
-                  {item.url ? (
-                    <Link to={item.url}>
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </Link>
-                  ) : (
-                    <div>
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </div>
-                  )}
-                </SidebarMenuButton>
-                {item.badge !== undefined && (
-                  <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                )}
-              </SidebarMenuItem>
-            );
-          })}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+    <div className="flex flex-col">
+      {title && (
+        <div className="px-5 py-1 text-[10px] font-semibold uppercase tracking-widest text-on-surface-variant">
+          {title}
+        </div>
+      )}
+      {items.map((item) => {
+        const isActive = item.url ? location.pathname === item.url : false;
+        return (
+          <Link
+            key={item.id}
+            to={item.url ?? '#'}
+            className={cn(
+              'relative flex items-center gap-4 rounded-full mx-4 py-3 px-6 text-sm font-medium transition-all duration-300',
+              isActive
+                ? 'bg-gradient-to-br from-primary to-primary-container text-white shadow-lg shadow-primary/10 scale-105 dark:from-navy-surface dark:to-navy-surface-dim dark:border dark:border-navy-outline dark:shadow-navy-surface/10'
+                : 'text-on-surface-variant hover:bg-surface-container-high dark:hover:text-on-surface',
+            )}
+          >
+            {item.icon && <item.icon className="h-5 w-5 shrink-0" />}
+            <span className="font-headline">{item.title}</span>
+            {item.badge != null && (
+              <Badge className="ml-auto bg-surface-container-high text-on-surface-variant rounded-full px-2 py-0.5 text-xs">
+                {item.badge}
+              </Badge>
+            )}
+          </Link>
+        );
+      })}
+    </div>
   );
 }

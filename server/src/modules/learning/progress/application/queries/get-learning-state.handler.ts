@@ -1,9 +1,9 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { GetLearningStateQuery } from './get-learning-state.query';
-import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
-import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import type { ILearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
 @QueryHandler(GetLearningStateQuery)
 export class GetLearningStateHandler implements IQueryHandler<GetLearningStateQuery> {

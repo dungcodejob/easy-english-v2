@@ -4,9 +4,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { RemoveFromLearningCommand } from './remove-from-learning.command';
-import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
-import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import type { ILearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
 /**
  * Remove From Learning Command Handler

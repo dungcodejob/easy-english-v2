@@ -5,7 +5,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import {
   ILearningReadRepository,
   LearningListItemReadModel,
-} from '../../domain/repositories/learning-read.repository.interface';
+} from '../../application/repositories/learning-read.repository.interface';
 import { UserWordSenseProgressOrmEntity } from '../persistence/user-word-sense-progress.orm-entity';
 
 @Injectable()
@@ -61,5 +61,26 @@ export class LearningReadRepository implements ILearningReadRepository {
       }),
       count,
     };
+  }
+
+  async checkLearnedStatus(
+    userId: string,
+    senseIds: string[],
+  ): Promise<string[]> {
+    if (!senseIds || senseIds.length === 0) {
+      return [];
+    }
+
+    const records = await this.em.find(
+      UserWordSenseProgressOrmEntity,
+      {
+        userId,
+        wordSense: { $in: senseIds },
+        archivedAt: null,
+      },
+      { fields: ['wordSense'] },
+    );
+
+    return records.map((r) => r.wordSense.id);
   }
 }

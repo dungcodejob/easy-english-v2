@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Sanctuary - Topics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#1b365d",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1b1e",
+                    "tertiary-container": "#4d3000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#87a0cd",
+                    "secondary": "#006b5e",
+                    "on-surface-variant": "#44474e",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "surface-container-high": "#e9e7eb",
+                    "secondary-fixed": "#97f3e2",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-primary-fixed": "#001b3d",
+                    "surface-container": "#efedf1",
+                    "surface": "#faf9fd",
+                    "surface-dim": "#dad9dd",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2f3033",
+                    "inverse-primary": "#aec7f7",
+                    "primary-fixed-dim": "#aec7f7",
+                    "surface-tint": "#465f88",
+                    "tertiary": "#311d00",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f0f4",
+                    "surface-container-low": "#f4f3f7",
+                    "on-secondary-fixed-variant": "#005047",
+                    "primary-fixed": "#d6e3ff",
+                    "surface-variant": "#e3e2e6",
+                    "on-primary": "#ffffff",
+                    "on-background": "#1a1b1e",
+                    "on-tertiary-fixed": "#291800",
+                    "outline": "#74777f",
+                    "tertiary-fixed": "#ffddb4",
+                    "secondary-container": "#94f0df",
+                    "primary": "#002046",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "on-secondary-container": "#006f62",
+                    "outline-variant": "#c4c6cf",
+                    "on-tertiary-container": "#d4922a",
+                    "surface-bright": "#faf9fd",
+                    "on-secondary-fixed": "#00201b",
+                    "background": "#faf9fd",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "secondary-fixed-dim": "#7ad7c6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .font-headline { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-glass {
+            background: rgba(250, 249, 253, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-40 bg-[#faf9fd]/80 dark:bg-[#1a1b1e]/80 backdrop-blur-xl shadow-[0_12px_32px_rgba(26,27,30,0.06)] flex justify-between items-center px-8 py-4 w-full">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-[#002046] dark:text-[#d6e3ff] font-['Lexend'] tracking-tight">Scholarly Sanctuary</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8 font-['Lexend'] font-medium tracking-tight">
+<a class="text-[#44474e] dark:text-[#c4c6cf] hover:bg-[#e3e2e6]/50 transition-colors px-3 py-1 rounded-full" href="#">Dashboard</a>
+<a class="text-[#002046] dark:text-[#d6e3ff] border-b-2 border-[#002046] px-3 py-1" href="#">Topics</a>
+<a class="text-[#44474e] dark:text-[#c4c6cf] hover:bg-[#e3e2e6]/50 transition-colors px-3 py-1 rounded-full" href="#">Flashcards</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-full hover:bg-[#e3e2e6]/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#002046]">account_circle</span>
+</button>
+<button class="p-2 rounded-full hover:bg-[#e3e2e6]/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#002046]">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 rounded-r-[3rem] z-50 bg-[#f4f3f7] dark:bg-[#1a1b1e] shadow-xl hidden md:flex flex-col py-8">
+<div class="px-8 mb-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<p class="font-headline font-bold text-primary leading-tight">Scholar</p>
+<p class="text-xs text-on-surface-variant">Level 12 Philosopher</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span>Dictionary</span>
+</a>
+<a class="flex items-center gap-4 bg-gradient-to-br from-[#002046] to-[#1b365d] text-white rounded-full mx-4 py-3 px-6 shadow-lg font-['Lexend'] text-sm scale-105 duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">category</span>
+<span>Topics</span>
+</a>
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">school</span>
+<span>Study Hub</span>
+</a>
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">style</span>
+<span>Flashcards</span>
+</a>
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span>Progress</span>
+</a>
+</nav>
+<div class="px-6 mb-6">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-headline font-semibold shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Session
+            </button>
+</div>
+<div class="border-t border-outline-variant/10 pt-6 space-y-1">
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-4 text-[#44474e] mx-4 py-3 px-6 hover:bg-[#e3e2e6] rounded-full transition-all font-['Lexend'] text-sm" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 px-6 md:px-12 pb-12">
+<!-- Hero Header -->
+<div class="relative mb-16 mt-8">
+<div class="max-w-4xl">
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold text-on-primary-fixed tracking-tighter leading-tight mb-4">
+                    Explore Your <br/> <span class="text-secondary italic font-light">Linguistic Realms</span>
+</h1>
+<p class="text-lg text-on-surface-variant max-w-xl leading-relaxed">
+                    Master English through curated thematic domains. From high-stakes boardrooms to the quiet corners of global travel.
+                </p>
+</div>
+<!-- Asymmetric Floating Action -->
+<div class="absolute -top-4 right-0 hidden lg:block">
+<div class="custom-glass p-8 rounded-xl shadow-[0_12px_32px_rgba(26,27,30,0.06)] border border-white/20 max-w-xs rotate-3">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline font-bold text-primary">Daily Goal</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">You're 3 topics away from completing your <span class="text-primary font-bold">Academic Master</span> badge.</p>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 70%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter & Action Row -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+<div class="flex items-center gap-4 overflow-x-auto pb-2 w-full md:w-auto">
+<button class="px-6 py-2 bg-primary text-white rounded-full font-headline text-sm whitespace-nowrap">All Topics</button>
+<button class="px-6 py-2 bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full font-headline text-sm whitespace-nowrap">Professional</button>
+<button class="px-6 py-2 bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full font-headline text-sm whitespace-nowrap">Leisure</button>
+<button class="px-6 py-2 bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full font-headline text-sm whitespace-nowrap">Foundation</button>
+</div>
+<button class="flex items-center gap-3 bg-gradient-to-r from-secondary to-[#00897b] text-white px-8 py-4 rounded-full font-headline font-bold shadow-xl hover:scale-[1.02] transition-transform active:scale-95 whitespace-nowrap">
+<span class="material-symbols-outlined">add_circle</span>
+                Create New Topic
+            </button>
+</div>
+<!-- Topics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Topic Card: Business -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden cursor-pointer">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 duration-700"></div>
+<div class="flex flex-col h-full relative z-10">
+<div class="w-14 h-14 bg-primary-fixed rounded-xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">business_center</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">Business</h3>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed">Master negotiations, professional presentations, and executive communication.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-3">
+<span class="text-xs font-bold text-primary tracking-wider uppercase">1,240 Words</span>
+<span class="text-lg font-headline font-bold text-primary">68%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full group-hover:bg-primary transition-colors" style="width: 68%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Topic Card: Travel -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden cursor-pointer">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 duration-700"></div>
+<div class="flex flex-col h-full relative z-10">
+<div class="w-14 h-14 bg-secondary-container rounded-xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl" style="font-variation-settings: 'FILL' 1;">flight_takeoff</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">Travel</h3>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed">Navigate airports, hotels, and vibrant local cultures with confidence.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-3">
+<span class="text-xs font-bold text-primary tracking-wider uppercase">850 Words</span>
+<span class="text-lg font-headline font-bold text-primary">92%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 92%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Topic Card: Academic -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden cursor-pointer lg:col-span-1">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary-fixed/30 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 duration-700"></div>
+<div class="flex flex-col h-full relative z-10">
+<div class="w-14 h-14 bg-tertiary-fixed rounded-xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-3xl" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">Academic</h3>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed">Critical analysis, thesis writing, and scholarly debate vocabularies.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-3">
+<span class="text-xs font-bold text-primary tracking-wider uppercase">2,100 Words</span>
+<span class="text-lg font-headline font-bold text-primary">41%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 41%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Topic Card: Technology (Large Asymmetric) -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden cursor-pointer md:col-span-2">
+<div class="absolute top-0 right-0 w-1/2 h-full bg-[#f8fafc] -z-10 skew-x-12 translate-x-1/2 transition-transform group-hover:translate-x-1/3 duration-1000"></div>
+<div class="grid md:grid-cols-2 gap-8 h-full items-center">
+<div class="relative z-10">
+<div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-blue-800 text-3xl" style="font-variation-settings: 'FILL' 1;">biotech</span>
+</div>
+<h3 class="text-3xl font-headline font-bold text-primary mb-4">Technology</h3>
+<p class="text-on-surface-variant text-base mb-6 leading-relaxed">From AI to cloud infrastructure, speak the language of the future.</p>
+<div class="flex items-center gap-2 text-secondary font-bold text-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                            New modules added today
+                        </div>
+</div>
+<div class="flex flex-col justify-center relative z-10">
+<div class="mb-6 flex gap-4">
+<div class="bg-surface p-4 rounded-lg flex-1 text-center">
+<p class="text-xs text-on-surface-variant uppercase font-bold mb-1">Words</p>
+<p class="text-2xl font-headline font-bold text-primary">1,840</p>
+</div>
+<div class="bg-surface p-4 rounded-lg flex-1 text-center">
+<p class="text-xs text-on-surface-variant uppercase font-bold mb-1">Status</p>
+<p class="text-2xl font-headline font-bold text-secondary">Expert</p>
+</div>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-blue-500 rounded-full" style="width: 85%;"></div>
+</div>
+<div class="mt-2 text-right">
+<span class="text-sm font-headline font-bold text-primary">85% Complete</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Topic Card: Healthcare -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-br from-error-container/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="flex flex-col h-full relative z-10">
+<div class="w-14 h-14 bg-error-container rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-on-error-container text-3xl" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">Healthcare</h3>
+<p class="text-on-surface-variant text-sm mb-8 leading-relaxed">Medical terminology, patient care dialogues, and wellness concepts.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-3">
+<span class="text-xs font-bold text-primary tracking-wider uppercase">940 Words</span>
+<span class="text-lg font-headline font-bold text-primary">12%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination/Footer Context -->
+<div class="mt-20 flex justify-center">
+<div class="bg-surface-container-low px-8 py-3 rounded-full flex items-center gap-4 shadow-sm">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="flex gap-2">
+<span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-headline text-sm">1</span>
+<span class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container-high text-on-surface-variant font-headline text-sm cursor-pointer">2</span>
+<span class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container-high text-on-surface-variant font-headline text-sm cursor-pointer">3</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest/90 backdrop-blur-lg flex justify-around items-center py-4 px-2 border-t border-outline-variant/10 z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-headline">Dash</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="text-[10px] font-headline font-bold">Topics</span>
+</button>
+<div class="relative -top-6">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">style</span>
+<span class="text-[10px] font-headline">Cards</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-headline">Profile</span>
+</button>
+</nav>
+</body></html>

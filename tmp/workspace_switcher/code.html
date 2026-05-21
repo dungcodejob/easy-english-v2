@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1a1b1e",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#2e476f",
+                    "secondary-fixed": "#97f3e2",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#d4922a",
+                    "on-secondary-container": "#006f62",
+                    "tertiary": "#311d00",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "surface-container-high": "#e9e7eb",
+                    "primary-fixed": "#d6e3ff",
+                    "surface-tint": "#465f88",
+                    "surface-container-low": "#f4f3f7",
+                    "inverse-surface": "#2f3033",
+                    "surface-container": "#efedf1",
+                    "on-surface": "#1a1b1e",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#87a0cd",
+                    "primary": "#002046",
+                    "surface": "#faf9fd",
+                    "background": "#faf9fd",
+                    "secondary-fixed-dim": "#7ad7c6",
+                    "inverse-primary": "#aec7f7",
+                    "secondary": "#006b5e",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "secondary-container": "#94f0df",
+                    "outline-variant": "#c4c6cf",
+                    "on-primary-fixed": "#001b3d",
+                    "surface-bright": "#faf9fd",
+                    "on-secondary-fixed": "#00201b",
+                    "primary-container": "#1b365d",
+                    "on-secondary-fixed-variant": "#005047",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e3e2e6",
+                    "surface-variant": "#e3e2e6",
+                    "inverse-on-surface": "#f1f0f4",
+                    "outline": "#74777f",
+                    "on-surface-variant": "#44474e",
+                    "tertiary-container": "#4d3000",
+                    "surface-dim": "#dad9dd",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#291800",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffddb4",
+                    "primary-fixed-dim": "#aec7f7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen selection:bg-primary-fixed">
+<header class="bg-[#faf9fd]/80 backdrop-blur-xl fixed top-0 z-50 w-full shadow-[0_12px_32px_rgba(26,27,30,0.06)]">
+<div class="flex justify-between items-center w-full px-8 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+</div>
+<span class="text-xl font-bold text-[#1b365d] font-headline tracking-tight">Scholarly Sanctuary</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#1b365d] border-b-2 border-[#1b365d] font-headline font-medium py-1" href="#">Workspaces</a>
+<a class="text-[#44474e] hover:bg-[#f4f3f7] transition-colors rounded-lg px-3 py-1 font-headline font-medium" href="#">Library</a>
+<a class="text-[#44474e] hover:bg-[#f4f3f7] transition-colors rounded-lg px-3 py-1 font-headline font-medium" href="#">Achievements</a>
+<a class="text-[#44474e] hover:bg-[#f4f3f7] transition-colors rounded-lg px-3 py-1 font-headline font-medium" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#1b365d] hover:bg-[#f4f3f7] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-[#1b365d] hover:bg-[#f4f3f7] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+<section class="mb-16 relative">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<span class="text-secondary font-headline font-semibold tracking-widest text-sm uppercase mb-4 block">Select Your Journey</span>
+<h1 class="text-5xl md:text-6xl font-black text-on-primary-fixed leading-tight tracking-tighter">Your Learning Sanctuary.</h1>
+<p class="mt-6 text-on-surface-variant text-lg leading-relaxed font-light">Switch between your specialized academic environments or create a new space for focused inquiry.</p>
+</div>
+<div>
+<button class="group relative inline-flex items-center gap-3 bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-headline font-bold">New Workspace</span>
+<div class="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="group cursor-pointer bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] hover:shadow-[0_20px_48px_rgba(26,27,30,0.12)] transition-all duration-500 flex flex-col justify-between border-b-4 border-primary">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="school">school</span>
+</div>
+<span class="px-4 py-1 bg-primary-fixed text-on-primary-fixed rounded-full text-xs font-bold font-headline uppercase tracking-wider">Active</span>
+</div>
+<h3 class="text-2xl font-bold text-on-surface mb-2 font-headline">IELTS Prep</h3>
+<p class="text-on-surface-variant text-sm mb-8 line-clamp-2">Academic reading and listening focusing on vocabulary for band 8.0+</p>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Words Learned</span>
+<span class="text-xl font-black text-on-surface">1,420 <span class="text-sm font-normal text-on-surface-variant">/ 3,000</span></span>
+</div>
+<div class="text-right">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Mastery</span>
+<span class="text-xl font-black text-secondary">68%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-secondary to-secondary-fixed h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+</div>
+<div class="group cursor-pointer bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.04)] hover:shadow-[0_20px_48px_rgba(26,27,30,0.1)] transition-all duration-500 flex flex-col justify-between hover:-translate-y-2">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="business_center">business_center</span>
+</div>
+</div>
+<h3 class="text-2xl font-bold text-on-surface mb-2 font-headline">Business English</h3>
+<p class="text-on-surface-variant text-sm mb-8 line-clamp-2">Formal negotiation patterns and professional presentation lexicons.</p>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Words Learned</span>
+<span class="text-xl font-black text-on-surface">845 <span class="text-sm font-normal text-on-surface-variant">/ 1,500</span></span>
+</div>
+<div class="text-right">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Mastery</span>
+<span class="text-xl font-black text-on-primary-container">42%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-primary-container to-primary-fixed-dim h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+<div class="group cursor-pointer bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.04)] hover:shadow-[0_20px_48px_rgba(26,27,30,0.1)] transition-all duration-500 flex flex-col justify-between hover:-translate-y-2">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="forum">forum</span>
+</div>
+</div>
+<h3 class="text-2xl font-bold text-on-surface mb-2 font-headline">Daily Conversation</h3>
+<p class="text-on-surface-variant text-sm mb-8 line-clamp-2">Idiomatic expressions and common slang for natural communication.</p>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Words Learned</span>
+<span class="text-xl font-black text-on-surface">2,110 <span class="text-sm font-normal text-on-surface-variant">/ 2,500</span></span>
+</div>
+<div class="text-right">
+<span class="text-on-surface-variant text-xs font-headline uppercase tracking-widest mb-1">Mastery</span>
+<span class="text-xl font-black text-tertiary-fixed-dim">91%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-tertiary-fixed-dim to-tertiary-fixed h-full rounded-full" style="width: 91%"></div>
+</div>
+</div>
+</div>
+<div class="group cursor-pointer border-2 border-dashed border-outline-variant bg-transparent rounded-xl p-8 hover:bg-surface-container-low transition-all duration-500 flex items-center justify-center min-h-[320px]">
+<div class="text-center">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center text-on-surface-variant mx-auto mb-4 group-hover:bg-primary-container group-hover:text-white transition-all duration-500">
+<span class="material-symbols-outlined text-4xl" data-icon="add">add</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface-variant font-headline">Create New Space</h3>
+<p class="text-on-surface-variant text-sm mt-2 max-w-[180px] mx-auto">Define a new goal for your linguistic growth.</p>
+</div>
+</div>
+</section>
+<section class="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="relative rounded-xl overflow-hidden shadow-2xl h-[400px]">
+<img alt="library" class="w-full h-full object-cover" data-alt="high-angle shot of a grand classic library with wooden shelves, soft natural light streaming through windows and dust motes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSj0n6AZK54eO2H2U1v2_dZOlhJx39uJBUwf8rzMRamYcsZxZpMGxSvSaj19KEl8-pajyBjnHyvfG2UMThq7xUKy3XDtWwYlj7n_smZXODqcnH0VykVfPSm52p0OwF_MrBeymz5qzs4TxQvERAbDkJsePfjJDK_XX96ekYUve4wjkEtKKyGaqREceUxNYzhnoWbrczRCYy1LdkIAGNZMu1y3vKzdinjkW3dzl4SOnWU5WAbnTdHAgqgnF7qIOEwzYqVthbWSMA1FU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-10">
+<h2 class="text-3xl font-black text-white font-headline leading-tight">Focus is the key to deep mastery.</h2>
+<p class="text-primary-fixed mt-4 font-light italic">"The limit of my language is the limit of my world." — Wittgenstein</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4" data-icon="timer">timer</span>
+<h4 class="text-on-surface font-bold font-headline mb-2">Study Streak</h4>
+<p class="text-3xl font-black text-on-surface">14 Days</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl mb-4" data-icon="military_tech">military_tech</span>
+<h4 class="text-on-surface font-bold font-headline mb-2">Rank</h4>
+<p class="text-3xl font-black text-on-surface">Scholar</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<span class="material-symbols-outlined text-on-primary-container text-4xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h4 class="text-on-surface font-bold font-headline mb-2">New Insights</h4>
+<p class="text-3xl font-black text-on-surface">28</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="history_edu">history_edu</span>
+<h4 class="text-on-surface font-bold font-headline mb-2">Review Ready</h4>
+<p class="text-3xl font-black text-on-surface">112</p>
+</div>
+</div>
+</section>
+</main>
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-[#faf9fd]/90 backdrop-blur-xl flex justify-around items-center py-4 px-2 z-50 shadow-[0_-8px_32px_rgba(26,27,30,0.06)]">
+<button class="flex flex-col items-center gap-1 text-[#1b365d]">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="text-[10px] font-bold font-headline uppercase">Workspaces</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#44474e]">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="text-[10px] font-bold font-headline uppercase">Library</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#44474e]">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="text-[10px] font-bold font-headline uppercase">Awards</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#44474e]">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="text-[10px] font-bold font-headline uppercase">Settings</span>
+</button>
+</div>
+</body></html>

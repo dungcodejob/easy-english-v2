@@ -5,5 +5,6 @@ export class SearchWordSensesQuery implements IQuery {
     public readonly query: string,
     public readonly top = 20,
     public readonly skip = 0,
+    public readonly userId?: string,
   ) {}
 }

@@ -60,6 +60,6 @@ export const DictionaryApi = {
         `/dictionary/senses/${senseId}`,
       ),
     );
-    return result; // Return the inner data object
+    return result;
   },
 };

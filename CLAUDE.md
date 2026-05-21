@@ -13,7 +13,7 @@ easy-english-v2/
 ├── server/           # NestJS backend (API)
 ├── client/           # React frontend (SPA)
 ├── design-system/    # Shared UI components
-└── docs/           # Setup guides and documentation
+└── docs/             # Architecture, domain, API, and developer docs
 ```
 
 ## Commands
@@ -80,7 +80,8 @@ npm run format            # Format with Prettier
 - `auth` - Authentication, sessions, JWT tokens
 - `workspace` - Multi-tenant workspace management
 - `dictionary` - Word/dictionary management
-- `learning` - Learning progress and topics (nested: progress, topic)
+- `flashcard` - User flashcards and spaced repetition reviews
+- `learning` - Learning progress, topics, and study sessions (nested: progress, topic, study)
 
 **Database**:
 - PostgreSQL with MikroORM ORM
@@ -99,7 +100,7 @@ npm run format            # Format with Prettier
 **Key Libraries**:
 - **Routing**: TanStack Router (`@tanstack/react-router`)
 - **Data Fetching**: TanStack Query (`@tanstack/react-query`)
-- **UI Components**: Radix UI + Base UI (`@base-ui/react`)
+- **UI Components**: Radix UI + shadcn UI
 - **Styling**: Tailwind CSS 4
 - **State Management**: Zustand
 - **Forms**: React Hook Form + Zod validation
@@ -108,7 +109,7 @@ npm run format            # Format with Prettier
 
 **Project Structure**:
 - `client/src/core/` - API client, routing configuration
-- `client/src/modules/` - Feature modules (auth, workspace, shell, learning)
+- `client/src/modules/` - Feature modules (auth, workspace, shell, learning, flashcard, dashboard, etc.)
 - `client/src/shared/` - Shared components, hooks, utilities, stores
 
 ## Environment Variables
@@ -126,104 +127,81 @@ Both server and client require `.env` files. Check the configs directory for req
 - Client uses TanStack Router with route tree generation (`routeTree.gen.ts`)
 - UI components are built on Radix UI primitives with Tailwind styling
 
-<!-- gitnexus:start -->
-# GitNexus — Code Intelligence
+## MCP Tools
 
-This project is indexed by GitNexus as **easy-english-v2** (5368 symbols, 11646 relationships, 247 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+Available MCP servers and when to use each one.
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+| When you need to... | Use this MCP |
+|---|---|
+| Look up docs for any library or framework (React, NestJS, TanStack, Tailwind, MikroORM, Zod…) | `context7` — `mcp__context7__resolve-library-id` then `mcp__context7__query-docs` |
+| Browse or add shadcn UI components | `shadcn` — `mcp__shadcn__search_items_in_registries`, `mcp__shadcn__get_add_command_for_items` |
+| Read/write/search files at scale (multi-file reads, directory trees) | `filesystem` — `mcp__filesystem__read_multiple_files`, `mcp__filesystem__directory_tree` |
+| Generate UI screens or design system tokens | `stitch` — `mcp__stitch__generate_screen_from_text`, `mcp__stitch__create_design_system` |
+| Scrape web content, crawl pages, extract structured data from URLs | `firecrawl` — `mcp__firecrawl__firecrawl_scrape`, `mcp__firecrawl__firecrawl_search` |
+| Search the web for current information | `exa` — `mcp__exa__web_search_exa`, `mcp__exa__web_fetch_exa` |
+| Run browser automation or E2E spot-checks | `playwright` — `mcp__plugin_everything-claude-code_playwright__browser_*` |
+| Get TypeScript type errors and LSP diagnostics | `ide` — `mcp__ide__getDiagnostics` |
+| Manage GitHub issues or pull requests | `github` — `mcp__github__create_issue`, `mcp__github__create_pull_request` |
+| Persist knowledge across sessions (entities, relations) | `memory` — `mcp__memory__create_entities`, `mcp__memory__search_nodes` |
 
-## Always Do
+## Documentation Map
 
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+When you need context on a topic, read the doc listed below rather than guessing from code alone.
 
-## When Debugging
+### Architecture & Design
 
-1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows related to the issue
-2. `gitnexus_context({name: "<suspect function>"})` — see all callers, callees, and process participation
-3. `READ gitnexus://repo/easy-english-v2/process/{processName}` — trace the full execution flow step by step
-4. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})` — see what your branch changed
+| Topic | Doc |
+|---|---|
+| System architecture overview | `docs/architecture/architecture-overview.md` |
+| CQRS command/query patterns | `docs/architecture/cqrs-guidelines.md` |
+| DDD module structure conventions | `docs/architecture/module-structure.md` |
+| Multi-tenant isolation strategy | `docs/architecture/multi-tenant-design.md` |
+| Infrastructure & deployment | `docs/architecture/system-design.md` |
+| Why we made key tech decisions | `docs/adr/` (ADR-001 through ADR-005) |
 
-## When Refactoring
+### Domain Models
 
-- **Renaming**: MUST use `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` first. Review the preview — graph edits are safe, text_search edits need manual review. Then run with `dry_run: false`.
-- **Extracting/Splitting**: MUST run `gitnexus_context({name: "target"})` to see all incoming/outgoing refs, then `gitnexus_impact({target: "target", direction: "upstream"})` to find all external callers before moving code.
-- After any refactor: run `gitnexus_detect_changes({scope: "all"})` to verify only expected files changed.
+| Topic | Doc |
+|---|---|
+| Auth domain (users, sessions, tenants) | `docs/domain/auth/README.md` |
+| Dictionary domain (words, senses) | `docs/domain/dictionary/README.md` |
+| Flashcard domain | `docs/domain/flashcard/README.md` |
+| Learning domain (progress, study, topics) | `docs/domain/learning/README.md` |
+| Workspace domain | `docs/domain/workspace/README.md` |
 
-## Never Do
+### API Reference
 
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
+| Topic | Doc |
+|---|---|
+| Authentication endpoints | `docs/api/authentication.md` |
+| Flashcard endpoints | `docs/api/flashcard.md` |
+| Study session endpoints | `docs/api/study.md` |
+| Workspace endpoints | `docs/api/workspace.md` |
 
-## Tools Quick Reference
+### Frontend
 
-| Tool | When to use | Command |
-|------|-------------|---------|
-| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
-| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
-| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
-| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
-| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
-| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
+| Topic | Doc |
+|---|---|
+| Frontend architecture overview | `docs/frontend/overview.md` |
+| Routing (TanStack Router) | `docs/frontend/routing.md` |
+| State management (Zustand + React Query) | `docs/frontend/state-management.md` |
+| API client layer (axios + interceptors) | `docs/frontend/api-layer.md` |
 
-## Impact Risk Levels
+### Developer Guides
 
-| Depth | Meaning | Action |
-|-------|---------|--------|
-| d=1 | WILL BREAK — direct callers/importers | MUST update these |
-| d=2 | LIKELY AFFECTED — indirect deps | Should test |
-| d=3 | MAY NEED TESTING — transitive | Test if critical path |
+| Topic | Doc |
+|---|---|
+| Project setup (NestJS server) | `docs/nestjs-setup-guide.md` |
+| Project setup (React client) | `docs/frontend-setup-guide.md` |
+| Coding standards | `docs/dev/coding-standards.md` |
+| Git workflow & branching | `docs/dev/git-workflow.md` |
+| Commit message format | `docs/dev/commit-guidelines.md` |
+| Folder structure conventions | `docs/dev/folder-structure.md` |
 
-## Resources
+### Features & Planning
 
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/easy-english-v2/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/easy-english-v2/clusters` | All functional areas |
-| `gitnexus://repo/easy-english-v2/processes` | All execution flows |
-| `gitnexus://repo/easy-english-v2/process/{name}` | Step-by-step execution trace |
-
-## Self-Check Before Finishing
-
-Before completing any code modification task, verify:
-1. `gitnexus_impact` was run for all modified symbols
-2. No HIGH/CRITICAL risk warnings were ignored
-3. `gitnexus_detect_changes()` confirms changes match expected scope
-4. All d=1 (WILL BREAK) dependents were updated
-
-## Keeping the Index Fresh
-
-After committing code changes, the GitNexus index becomes stale. Re-run analyze to update it:
-
-```bash
-npx gitnexus analyze
-```
-
-If the index previously included embeddings, preserve them by adding `--embeddings`:
-
-```bash
-npx gitnexus analyze --embeddings
-```
-
-To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.embeddings` field shows the count (0 means no embeddings). **Running analyze without `--embeddings` will delete any previously generated embeddings.**
-
-> Claude Code users: A PostToolUse hook handles this automatically after `git commit` and `git merge`.
-
-## CLI
-
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
-
-<!-- gitnexus:end -->
+| Topic | Doc |
+|---|---|
+| Active feature specs | `docs/superpowers/specs/` |
+| Active implementation plans | `docs/superpowers/plans/` |
+| Feature descriptions | `docs/features/feature-descriptions.md` |

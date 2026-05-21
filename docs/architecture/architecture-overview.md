@@ -85,7 +85,7 @@ Easy English V2 is a full-stack, multi-tenant SaaS application designed for voca
 | Language | TypeScript | 5.x | Type safety |
 | Routing | TanStack Router | 1.x | Type-safe routing |
 | Data Fetching | TanStack Query | 5.x | Server state |
-| State | Zustand | 4.x | Client state |
+| State | Zustand | 5.x | Client state |
 | Forms | React Hook Form + Zod | — | Form handling |
 | UI Primitives | Radix UI | — | Accessible components |
 | UI Components | Shadcn UI | — | Design system |
@@ -104,9 +104,11 @@ server/src/modules/
 ├── auth/           # Authentication, sessions, JWT tokens
 ├── workspace/      # Multi-tenant workspace management
 ├── dictionary/     # Word/dictionary management (read-only data)
-└── learning/       # Learning progress, flashcards, topics, study sessions
-    ├── progress/   # User word learning progress
-    └── topic/      # User-created word groups
+├── flashcard/      # User flashcards and review logs
+└── learning/       # Learning progress, topics, and study sessions
+    ├── progress/   # User word-sense learning progress (FSRS state)
+    ├── topic/      # User-created word groups
+    └── study/      # Study sessions, quiz cards, study statistics
 ```
 
 ### Module Dependencies (top-down only)
@@ -115,7 +117,7 @@ server/src/modules/
 auth ──────► workspace
              │
              ▼
-        learning
+        learning ◄──── flashcard
              │
              ▼
          dictionary
@@ -125,6 +127,7 @@ Rules:
 - `auth` has no dependencies on other modules
 - `workspace` depends only on `auth`
 - `learning` depends on `workspace` and `dictionary`
+- `flashcard` depends on `learning/progress` (for scheduling via FSRS)
 - `dictionary` is a leaf — no downstream dependencies
 
 ---
@@ -200,12 +203,16 @@ ReviewCommandHandler
 
 | Principle | Implementation |
 |-----------|---------------|
+| **Hexagonal Architecture** | Domain core is framework-agnostic. Infrastructure adapters implement application ports. Dependencies point inward. |
 | **CQRS** | Commands mutate state; queries read state. Separate handler classes. |
-| **DDD** | Each module has domain entities, value objects, and repository interfaces. |
+| **DDD** | Each module has domain entities, value objects, repository ports, and mappers. |
+| **Ports & Adapters** | Application layer defines interfaces (ports); infrastructure implements them (adapters). |
 | **Multi-tenancy** | All queries scoped by `workspaceId` from JWT. Middleware enforces isolation. |
-| **Event-driven** | Domain events emitted via `@nestjs/event-emitter`. Async event handlers for side effects. |
+| **Event-driven** | Aggregate roots emit domain events via `addEvent()`. Repositories publish after save. |
 | **Result pattern** | `Result<T, E>` from `neverthrow` for explicit error propagation. |
 | **Type-safe API** | DTOs with `class-validator` decorators. Swagger auto-generated from DTOs. |
+
+> Reference: [domain-driven-hexagon](https://github.com/Sairyss/domain-driven-hexagon) — the server architecture follows this pattern.
 
 ---
 
@@ -221,10 +228,11 @@ easy-english-v2/
 │   │   ├── migrations/        # Database migrations
 │   │   ├── modules/           # DDD bounded contexts
 │   │   │   └── <module>/
-│   │   │       ├── application/    # Commands, queries, handlers
-│   │   │       ├── domain/         # Entities, value objects, events
-│   │   │       ├── infrastructure/  # Repository implementations, persistence
-│   │   │       └── presentation/    # Controllers, DTOs
+│   │   │       ├── application/    # Commands, queries, ports (interfaces)
+│   │   │       ├── domain/         # Entities, value objects, events, exceptions
+│   │   │       ├── infrastructure/ # Mappers, ORM entities, repo/service impls
+│   │   │       ├── controllers/    # HTTP controllers
+│   │   │       └── dto/            # Request/response DTOs
 │   │   └── shared/            # Cross-cutting concerns
 │   └── test/                  # Test utilities
 │

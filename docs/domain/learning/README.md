@@ -1,15 +1,40 @@
-# Learning Module — Domain Reference
+# Learning Module — Tài liệu Nghiệp vụ
 
 > Handles learning progress, study sessions, and topic management. The most complex module in the system.
+> **Updated:** 2026-04-06
 
 ---
 
-## 1. Overview
+## 1. Tổng quan kiến trúc
 
-The learning module is divided into three sub-domains:
+### 1.1 Hai modules liên quan — Hệ thống học tập song song
+
+Dự án có **2 modules riêng biệt** cùng phục vụ nghiệp vụ học tập:
+
+```
+server/src/modules/
+├── learning/           # Nghiệp vụ học từ vựng (dictionary-based)
+│   ├── topic/          # Quản lý chủ đề (flashcard deck)
+│   ├── progress/       # Spaced repetition engine (FSRS)
+│   └── study/          # Study sessions orchestration
+│
+└── flashcard/          # Nghiệp vụ flashcard tự tạo (custom cards)
+    └── Hoàn toàn độc lập, KHÔNG phụ thuộc learning/topic
+```
+
+| Khía cạnh | `learning/` (Dictionary-based) | `flashcard/` (Custom cards) |
+|---|---|---|
+| **Nguồn từ** | WordSense từ dictionary module | User tự tạo (front/back/hint/notes) |
+| **Tổ chức** | Topic (deck), max 50 topics, max 200 words/topic | Không có deck — cards phẳng theo user |
+| **Spaced repetition** | `UserWordSenseProgress` + `FsrsSchedulerService` | `flashcard.fsrsParams` + `FsrsSchedulerService` |
+| **Scheduling** | `dueDate` in `user_word_sense_progress` | `dueDate` in `flashcards` |
+| **Tracking** | `UserWordSenseProgress` (mastery, review count) | `ReviewLog` + `StudyStats` |
+| **Study session** | `StudySession` aggregate trong `learning/study` | `StudyController` riêng trong `flashcard/` |
+
+### 1.2 Ba sub-domains trong `learning/`
 
 | Sub-Domain | Purpose | Entities |
-|-----------|---------|----------|
+|------------|---------|----------|
 | `progress` | Word learning progress tracking | `UserWordSenseProgress` |
 | `study` | Study sessions and review scheduling | `StudySession`, `StudyReviewLog` |
 | `topic` | User-organized word groups | `Topic`, `TopicWord` |
@@ -294,8 +319,230 @@ export class ReviewWordCommand {
 
 ---
 
-## 7. Related Documentation
+## 8. Luồng nghiệp vụ chi tiết (Business Flows)
+
+### Flow 1: Thêm từ vào danh sách học
+
+```
+User duyệt dictionary → chọn wordSense
+  → POST /api/v1/learning/senses { wordSenseId }
+  → AddToLearningHandler.execute()
+    ├── Tìm UserWordSenseProgress hiện tại
+    │   ├── Đã archive? → restore()
+    │   └── Chưa có? → create() với state=NEW, stability ban đầu
+    └── Emit WordLearningStartedEvent
+  → Trả về progress record (isDue=true, masteryLevel=0)
+```
+
+### Flow 2: Học due cards (dictionary-based)
+
+```
+User nhấn "Học bài"
+  → GET /api/v1/learning/study/due
+    → GetDueCardsHandler: archivedAt=null && dueDate<=now
+    → Deduplicate by wordSenseId, cap 100
+
+Hoặc bắt đầu session:
+  → POST /api/v1/learning/study/session/start { scope=DUE }
+    → Tạo StudySession (InProgress)
+    → Emit StudySessionStartedEvent
+```
+
+### Flow 3: Học theo chủ đề (topic-based)
+
+```
+User chọn Topic → nhấn "Học chủ đề này"
+  → GET /api/v1/learning/study/topic/:topicId
+    → Lấy TopicWord[] → join UserWordSenseProgress
+    → Deduplicate, chỉ lấy active progress, cap 100
+
+Hoặc bắt đầu session:
+  → POST /api/v1/learning/study/session/start
+    { scope=TOPIC, topicId, studyType=FLASHCARD|QUIZ }
+```
+
+### Flow 4: Quiz mode (4 đáp án)
+
+```
+POST /api/v1/learning/study/session/start
+  { scope=DUE|TOPIC, studyType=QUIZ }
+  → StartStudySessionHandler
+  → GetQuizCardsHandler: mỗi card → tìm 3 distractors cùng POS → shuffle → cap 20
+User trả lời → POST /api/v1/learning/study/session/review
+```
+
+### Flow 5: Review trong session
+
+```
+User chọn rating (Again/Hard/Good/Easy)
+  → POST /api/v1/learning/study/session/review
+    { sessionId, wordSenseId, rating, reviewDurationMs }
+  → StudySessionReviewHandler:
+    a. Validate: session đúng, card trong enrolledCards
+    b. Dispatch ReviewWordCommand
+    c. ReviewWordHandler: FsrsSchedulerService.calculateNext() → progress.applyReview()
+    d. Emit WordReviewedEvent (with sessionId)
+    e. StudySessionReviewLogListener: tạo StudyReviewLog (skip duplicate)
+    f. session.recordReview(rating) → cập nhật counts
+  → Trả về next card
+```
+
+### Flow 6: Review ngoài session (dictionary mode)
+
+```
+User đang ở dictionary → nhấn "Đánh giá" trên 1 từ
+  → POST /api/v1/learning/senses/:senseId/review { rating, reviewDurationMs }
+  → ReviewWordHandler: tính FSRS params → progress.applyReview()
+  → Emit WordReviewedEvent (NO sessionId)
+  → Trả về { nextDueDate, intervalDays, isMastered }
+  ⚠️ Nếu word đã archived → ConflictException(409)
+```
+
+### Flow 7: Hoàn thành phiên học
+
+```
+User đã review hết cards → nhấn "Kết thúc"
+  → POST /api/v1/learning/study/session/:sessionId/complete
+  → CompleteStudySessionHandler: session.complete() → emit StudySessionCompletedEvent
+  → GET /api/v1/learning/study/session/:sessionId
+  → GetSessionSummaryHandler: aggregate StudyReviewLog[] → tính rating breakdown, accuracy %, time spent
+```
+
+### Flow 8: Tổ chức từ vào chủ đề
+
+```
+User tạo Topic
+  → POST /api/v1/topics { name, description }
+  → Check 50-limit → Topic.create() → emit TopicCreated
+
+User thêm từ vào Topic
+  → POST /api/v1/topics/:id/words { wordSenseId }
+  → Check 200-limit + duplicate → Topic.addWord() → emit TopicWordAdded
+
+Đọc words trong Topic
+  → GET /api/v1/topics/:id/words
+  → ListTopicWordsHandler: join TopicWord + UserWordSenseProgress
+  → Derive status (NEW/LEARNING/MASTERED) tại read time
+  ⚠️ TopicWord._status bị bỏ qua hoàn toàn
+```
+
+### Flow 9: Xóa/hủy học từ
+
+```
+DELETE /api/v1/learning/senses/:senseId
+  → RemoveFromLearningHandler → progress.archive() (archivedAt = now)
+  → Emit WordLearningRemovedEvent
+  → Card KHÔNG còn xuất hiện trong due cards
+
+User khôi phục:
+  → POST /api/v1/learning/senses { wordSenseId }
+  → Tìm thấy archived → progress.restore()
+  → Card quay lại danh sách học
+```
+
+### Flow 10: Custom Flashcard (standalone)
+
+```
+Tạo flashcard:
+  → POST /api/v1/flashcards { front, back, hint?, source }
+  → Flashcard.create() → save
+
+Lấy due flashcards:
+  → GET /api/v1/study/due?limit=N
+
+Review flashcard (standalone, không có session):
+  → POST /api/v1/study/review { cardId, rating, durationMs }
+  → ReviewCardHandler: FsrsSchedulerService.calculateNext()
+  → flashcard.updateFsrsParams() → ReviewLog.create() → studyStats.recordReview()
+
+Xem stats:
+  → GET /api/v1/study/stats → Current streak, total reviewed, mastered cards
+```
+
+---
+
+## 9. Các câu hỏi đã được giải đáp
+
+### Q1: `studyType = Flashcard` KHÔNG gọi sang flashcard module
+
+**Thực tế:** `studyType = Flashcard` không có logic riêng — rơi vào nhánh default → gọi `GetDueCardsQuery` từ **`UserWordSenseProgress`** table, hoàn toàn không liên quan đến `flashcard` table.
+
+```typescript
+// StartStudySessionHandler — routing logic
+if (scope === Topic)  → GetTopicCardsQuery
+else if (studyType === Quiz) → GetQuizCardsQuery
+else  → GetDueCardsQuery (Flashcard + Due đều vào đây)
+```
+
+**Hệ quả:** Có 2 hệ thống học hoàn toàn tách biệt:
+- `StudySession` + `UserWordSenseProgress` → dictionary-based learning
+- Flashcard `StudyController` → custom flashcard learning (standalone)
+
+### Q2: KHÔNG có conflict routing — nhưng có naming confusion
+
+**Thực tế:** Paths hoàn toàn khác nhau nên không có routing conflict:
+- `/api/v1/study` → FlashcardModule/StudyController
+- `/api/v1/learning/study` → StudyModule/StudyController
+
+**Tuy nhiên** developer/client dễ nhầm 2 hệ thống. Đề xuất: đổi `/api/v1/study` → `/api/v1/flashcards/study`.
+
+### Q3: Hệ thống update cả hai
+
+**Thực tế:** Khi `flashcard.source = 'dictionary'` + có `wordSenseId`, `ReviewCardHandler`:
+1. Tìm `UserWordSenseProgress` theo `wordSenseId`
+2. Lấy FSRS params hiện tại từ progress
+3. Tính FSRS params tiếp theo
+4. `progress.applyReview()` → cập nhật `UserWordSenseProgress`
+5. Tạo `ReviewLog` với đầy đủ thông tin cả 2 worlds
+
+→ Không cần thay đổi.
+
+### Q4: Silent skip — graceful design
+
+**Thực tế:** `StudySessionReviewLogListener` có guard `if (!event.sessionId) return;` → silent skip khi review ngoài session. ReviewLog (flashcard module) vẫn được tạo đầy đủ → audit trail vẫn có.
+
+→ Không cần thay đổi.
+
+### Đề xuất cải thiện
+
+1. **Q1 — Chọn 1 trong 2:**
+   - Option A: Thêm branch trong `StartStudySessionHandler` để gọi sang `flashcard.module` khi `studyType = Flashcard`
+   - Option B: Giữ 2 hệ thống riêng biệt là design chủ đích, document rõ ràng
+
+2. **Q2 — Rename flashcard routes:**
+   - Đổi `/api/v1/study` → `/api/v1/flashcards/study` để tránh confusion
+
+---
+
+## 10. Tóm tắt nhanh
+
+```
+Learning = Dictionary-based vocabulary learning
+Flashcard = Custom card learning (standalone)
+
+Dictionary learning flow:
+  Dictionary → [Add to Learning] → Progress (FSRS)
+                              ↓
+  [Study Due] ←→ StudySession → Review → FSRS Update
+                              ↓
+                        Session Summary
+
+Topic flow:
+  Topics (deck) → [Study Topic] → StudySession → Review → FSRS
+              ↓
+         Word Status (derived from Progress)
+
+Custom flashcard flow:
+  Create Flashcard → Due Cards → Review → FSRS Update
+                  ↓
+              Study Stats
+```
+
+---
+
+## 11. Related Documentation
 
 - [Architecture Overview](../../architecture/architecture-overview.md) — System map
 - [CQRS Guidelines](../../architecture/cqrs-guidelines.md) — Command/query patterns
 - [Flashcard Module](../flashcard/README.md) — Card-level review
+- [Study API](../../api/study.md) — REST API reference

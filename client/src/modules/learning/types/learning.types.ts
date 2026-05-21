@@ -21,6 +21,12 @@ export interface LearningListItem {
   addedAt: string;
 }
 
+export interface WordPronunciationResponseDto {
+  ipa: string;
+  audioUrl: string;
+  region: string;
+}
+
 export interface WordSenseSearchResult {
   senseId: string;
   wordText: string;
@@ -30,4 +36,6 @@ export interface WordSenseSearchResult {
   definitionVi: string | null;
   shortDefinition: string | null;
   cefrLevel: string | null;
+  isLearned?: boolean;
+  pronunciations: WordPronunciationResponseDto[];
 }

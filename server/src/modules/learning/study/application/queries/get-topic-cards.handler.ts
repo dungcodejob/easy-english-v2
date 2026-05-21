@@ -36,11 +36,17 @@ export class GetTopicCardsHandler implements IQueryHandler<
       throw new BadRequestException('Invalid topicId format');
     }
 
-    const topic = await this.em.findOne(TopicOrmEntity, {
-      id: query.topicId,
-      tenantId: query.tenantId,
-      userId: query.userId,
-    });
+    const topic = await this.em.findOne(
+      TopicOrmEntity,
+      {
+        id: query.topicId,
+        tenantId: query.tenantId,
+        userId: query.userId,
+      },
+      {
+        populate: ['words'],
+      },
+    );
 
     if (!topic) {
       throw new NotFoundException('Topic not found');
@@ -76,7 +82,7 @@ export class GetTopicCardsHandler implements IQueryHandler<
     );
 
     const now = new Date();
-    const cards: (StudyCardResponseDto & { __addedAt: Date })[] = [];
+    const cards: (StudyCardResponseDto & { topicAddedAt: Date })[] = [];
 
     for (const topicWord of topicWords) {
       const progress = progressBySense.get(topicWord.wordSenseId);
@@ -91,13 +97,13 @@ export class GetTopicCardsHandler implements IQueryHandler<
         continue;
       }
 
-      cards.push({ ...mapped, __addedAt: topicWord.addedAt });
+      cards.push({ ...mapped, topicAddedAt: topicWord.addedAt });
     }
 
     const deduped = this.dedupeByWordSenseWithAddedAt(cards);
 
     deduped.sort((a, b) => {
-      const timeDiff = a.__addedAt.getTime() - b.__addedAt.getTime();
+      const timeDiff = a.topicAddedAt.getTime() - b.topicAddedAt.getTime();
 
       if (timeDiff !== 0) return timeDiff;
 
@@ -108,7 +114,7 @@ export class GetTopicCardsHandler implements IQueryHandler<
     const finalCards = deduped
       .slice(0, PHASE1_CARD_CAP)
 
-      .map(({ __addedAt: _, ...card }) => card);
+      .map(({ topicAddedAt: _unused, ...card }) => card);
 
     return {
       cards: finalCards,
@@ -119,17 +125,17 @@ export class GetTopicCardsHandler implements IQueryHandler<
   }
 
   private dedupeByWordSenseWithAddedAt(
-    cards: (StudyCardResponseDto & { __addedAt: Date })[],
-  ): (StudyCardResponseDto & { __addedAt: Date })[] {
+    cards: (StudyCardResponseDto & { topicAddedAt: Date })[],
+  ): (StudyCardResponseDto & { topicAddedAt: Date })[] {
     const bySense = new Map<
       string,
-      StudyCardResponseDto & { __addedAt: Date }
+      StudyCardResponseDto & { topicAddedAt: Date }
     >();
 
     for (const card of cards) {
       const existing = bySense.get(card.wordSenseId);
 
-      if (!existing || card.__addedAt < existing.__addedAt) {
+      if (!existing || card.topicAddedAt < existing.topicAddedAt) {
         bySense.set(card.wordSenseId, card);
       }
     }

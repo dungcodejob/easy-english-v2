@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 
+import { IAuthIdentityRepository } from '../../application/repositories/auth-identity.repository.interface';
 import { AuthIdentity } from '../../domain/entities';
-import { IAuthIdentityRepository } from '../../domain/repositories/auth-identity.repository.interface';
 import { AuthIdentityMapper } from '../mappers/auth-identity.mapper';
 import { AuthIdentityOrmEntity } from '../persistence/auth-identity.orm-entity';
 

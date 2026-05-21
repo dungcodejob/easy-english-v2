@@ -2,7 +2,7 @@ import { ApiRequestError } from '@/core/api';
 import { workspaceKeys } from '@/shared/constants';
 import { useQuery } from '@tanstack/react-query';
 import { workspaceApi } from '../services/workspace.api';
-import type { CheckHasWorkspaceResponse } from '../types/workspace.types';
+import type { CheckHasWorkspaceResponse } from '../services/workspace.types';
 
 export const useHasWorkspace = () => {
   return useQuery<CheckHasWorkspaceResponse, ApiRequestError>({

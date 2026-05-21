@@ -7,7 +7,7 @@ import { ReviewCardCommand } from './review-card.command';
 import {
   InjectLearningWriteRepository,
   type ILearningWriteRepository,
-} from '../../../../learning/progress/domain/repositories/learning-write.repository.interface';
+} from '../../../../learning/progress/application/repositories/learning-write.repository.interface';
 import { FsrsSchedulerService } from '../../../../learning/progress/domain/services/fsrs-scheduler.service';
 import { ReviewLog } from '../../../domain/entities/review-log.entity';
 import {

@@ -4,11 +4,11 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { ReviewWordCommand } from './review-word.command';
-import { InjectLearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
 import { FsrsSchedulerService } from '../../domain/services/fsrs-scheduler.service';
 import { ReviewRating } from '../../domain/value-objects/review-rating.vo';
+import { InjectLearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
-import type { ILearningWriteRepository } from '../../domain/repositories/learning-write.repository.interface';
+import type { ILearningWriteRepository } from '../repositories/learning-write.repository.interface';
 
 export interface ReviewWordResponse {
   wordSenseId: string;

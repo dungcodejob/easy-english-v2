@@ -1,0 +1,123 @@
+import { useNavigate } from '@tanstack/react-router';
+import { BookOpen, CheckCircle2 } from 'lucide-react';
+
+import { LearnRoutes } from '@/shared/constants';
+import { DsButton } from '@/shared/ui';
+import type { RatingBreakdown, SessionSummary } from '../../types/study.types';
+
+interface SessionCompleteCardProps {
+  sessionSummary?: SessionSummary;
+  reviewedCount?: number;
+  correctLikeCount?: number;
+  elapsedMs?: number;
+}
+
+export function SessionCompleteCard({
+  sessionSummary,
+  reviewedCount,
+  correctLikeCount,
+  elapsedMs,
+}: SessionCompleteCardProps) {
+  const navigate = useNavigate();
+
+  const stats = sessionSummary
+    ? {
+        reviewed: sessionSummary.reviewedCount,
+        accuracy: sessionSummary.accuracy,
+        elapsedMs: sessionSummary.timeSpentMs,
+        ratingBreakdown: sessionSummary.ratingBreakdown,
+      }
+    : {
+        reviewed: reviewedCount ?? 0,
+        accuracy:
+          (reviewedCount ?? 0) > 0
+            ? Math.round(((correctLikeCount ?? 0) / (reviewedCount ?? 0)) * 100)
+            : 0,
+        elapsedMs: elapsedMs ?? 0,
+        ratingBreakdown: null,
+      };
+
+  const elapsedMin = Math.floor(stats.elapsedMs / 60000);
+  const elapsedSec = Math.floor((stats.elapsedMs % 60000) / 1000);
+
+  return (
+    <div className="flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-8 py-8 mx-auto">
+      <div className="flex size-20 items-center justify-center rounded-full bg-tertiary/10 ring-1 ring-tertiary/20">
+        <CheckCircle2 className="size-10 text-tertiary" />
+      </div>
+
+      <div className="space-y-2 text-center">
+        <h2 className="font-headline text-3xl font-bold text-primary">
+          Session complete!
+        </h2>
+        <p className="text-on-surface-variant text-lg">
+          Great work — keep it up.
+        </p>
+      </div>
+
+      <div className="grid w-full grid-cols-3 gap-4">
+        <StatCell value={stats.reviewed} label="Reviewed" />
+        <StatCell value={`${stats.accuracy}%`} label="Accuracy" />
+        <StatCell
+          value={`${elapsedMin}:${elapsedSec.toString().padStart(2, '0')}`}
+          label="Time"
+        />
+      </div>
+
+      {stats.ratingBreakdown && <RatingRow breakdown={stats.ratingBreakdown} />}
+
+      <DsButton
+        leftIcon={<BookOpen className="size-4" />}
+        onClick={() => navigate({ to: LearnRoutes.base() })}
+        className="w-full bg-gradient-to-br from-primary to-primary-container text-white shadow-md hover:shadow-lg"
+      >
+        Back to My Learning
+      </DsButton>
+    </div>
+  );
+}
+
+function StatCell({ value, label }: { value: string | number; label: string }) {
+  return (
+    <div className="flex flex-col items-center rounded-2xl border border-outline-variant/30 bg-surface-container px-4 py-3">
+      <span className="font-headline text-2xl font-bold text-primary tabular-nums">
+        {value}
+      </span>
+      <span className="text-xs text-on-surface-variant">{label}</span>
+    </div>
+  );
+}
+
+const RATING_LABELS: Array<{
+  key: keyof RatingBreakdown;
+  label: string;
+  color: string;
+}> = [
+  { key: 'again', label: 'Again', color: 'text-red-500' },
+  { key: 'hard', label: 'Hard', color: 'text-orange-500' },
+  { key: 'good', label: 'Good', color: 'text-green-500' },
+  { key: 'easy', label: 'Easy', color: 'text-blue-500' },
+];
+
+function RatingRow({ breakdown }: { breakdown: RatingBreakdown }) {
+  const hasAny = RATING_LABELS.some(({ key }) => breakdown[key] > 0);
+  if (!hasAny) return null;
+
+  return (
+    <div className="flex w-full gap-3">
+      {RATING_LABELS.map(({ key, label, color }) => (
+        <div
+          key={key}
+          className="flex flex-1 flex-col items-center rounded-2xl border border-outline-variant/30 bg-surface-container px-2 py-2"
+        >
+          <span
+            className={`font-headline text-lg font-bold tabular-nums ${color}`}
+          >
+            {breakdown[key]}
+          </span>
+          <span className="text-xs text-on-surface-variant">{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}

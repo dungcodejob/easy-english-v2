@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>General Settings - Scholarly Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Lexend:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006b5e",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "on-tertiary-container": "#d4922a",
+                      "on-surface-variant": "#44474e",
+                      "on-secondary-fixed": "#00201b",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#4d3000",
+                      "inverse-on-surface": "#f1f0f4",
+                      "on-background": "#1a1b1e",
+                      "tertiary-fixed-dim": "#ffb954",
+                      "on-primary-fixed": "#001b3d",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#94f0df",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed-variant": "#2e476f",
+                      "outline-variant": "#c4c6cf",
+                      "on-secondary-fixed-variant": "#005047",
+                      "secondary-fixed-dim": "#7ad7c6",
+                      "surface": "#faf9fd",
+                      "surface-container": "#efedf1",
+                      "surface-container-highest": "#e3e2e6",
+                      "inverse-surface": "#2f3033",
+                      "on-secondary-container": "#006f62",
+                      "primary-container": "#1b365d",
+                      "inverse-primary": "#aec7f7",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#faf9fd",
+                      "primary-fixed-dim": "#aec7f7",
+                      "secondary-fixed": "#97f3e2",
+                      "on-tertiary-fixed": "#291800",
+                      "surface-variant": "#e3e2e6",
+                      "on-surface": "#1a1b1e",
+                      "surface-dim": "#dad9dd",
+                      "primary-fixed": "#d6e3ff",
+                      "surface-tint": "#465f88",
+                      "surface-container-high": "#e9e7eb",
+                      "tertiary": "#311d00",
+                      "on-primary-container": "#87a0cd",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#ffddb4",
+                      "primary": "#002046",
+                      "outline": "#74777f",
+                      "surface-container-low": "#f4f3f7",
+                      "background": "#faf9fd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Lexend"
+                      ],
+                      "body": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label": [
+                              "Be Vietnam Pro"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Lexend', sans-serif; }
+        
+        /* Custom scrollbar for scholarly feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e3e2e6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c4c6cf; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex antialiased">
+<!-- Shell SideNavBar -->
+<!-- Executing styles from JSON mapping -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full py-6 px-4 space-y-8 h-screen w-64 flex-col bg-slate-100/50 dark:bg-slate-950/50 font-['Lexend'] text-sm font-medium z-50">
+<!-- Header -->
+<div class="flex items-center space-x-3 px-4 mb-4">
+<img alt="Institution Logo" class="w-10 h-10 rounded-lg object-cover" data-alt="abstract geometric crest logo in navy and gold colors with a minimalist shield shape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbhhHDB5GwlR9rVkzxKNAMZh7HXzuI2ABuat2ZIoS3bIlP2hZhpX-zh6s_KUlhBdjxVJctzhArKuhYxIAo68eg6H-rZWsoF9cv6_ZxECIZexdm1-NGj_RFlRm6IVuYFa7DiW5CLCARn_GJAspASEmXH2fIIBVq2OjCVyPcOuWCZWuJ0hou6KleHKmEHowsD8p1A24ehZeo-2xQ9MsFpD3l9kzFnePxc3RvLlV-8ZyGgm_pfz2MOYvuluvHEHwpw8U-Sqj4IgPUS00"/>
+<div>
+<h2 class="text-lg font-black tracking-tighter text-blue-950 dark:text-blue-100">The Sanctuary</h2>
+<p class="text-xs text-slate-500">General Settings</p>
+</div>
+</div>
+<!-- Main Navigation -->
+<div class="flex-1 space-y-2">
+<!-- Inactive -->
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+<span>Curriculum</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">local_library</span>
+<span>Library</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span>Insights</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center space-x-3 px-4 py-3 bg-white dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 rounded-full shadow-sm active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<!-- Upgrade CTA & Footer -->
+<div class="pt-6 relative before:absolute before:top-0 before:left-4 before:right-4 before:h-px before:bg-slate-200/50 dark:before:bg-slate-800/50">
+<button class="w-full flex items-center justify-center space-x-2 bg-gradient-to-br from-primary to-primary-container text-white py-3 px-4 rounded-full mb-6 shadow-[0_12px_32px_rgba(26,27,30,0.06)] hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Upgrade Plan</span>
+</button>
+<div class="space-y-1">
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span>Support</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-600 dark:text-slate-400 hover:translate-x-1 transition-transform hover:bg-white/80 dark:hover:bg-slate-800/80 rounded-full active:scale-98 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen bg-surface relative">
+<!-- Shell TopAppBar -->
+<header class="flex justify-between items-center w-full px-8 h-16 sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl docked full-width z-40 shadow-sm shadow-blue-900/5 font-['Lexend'] tracking-tight">
+<!-- Left: Brand/Search area depending on config -->
+<div class="flex items-center space-x-6">
+<!-- Mobile Menu Icon (hidden on desktop) -->
+<button class="md:hidden text-slate-500 hover:text-blue-800 hover:bg-blue-50/50 dark:hover:bg-blue-900/30 transition-colors p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="text-xl font-bold text-blue-950 dark:text-white hidden md:block">Scholarly Sanctuary</div>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center space-x-4">
+<button class="text-slate-500 dark:text-slate-400 hover:text-blue-800 hover:bg-blue-50/50 dark:hover:bg-blue-900/30 transition-colors p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 dark:text-slate-400 hover:text-blue-800 hover:bg-blue-50/50 dark:hover:bg-blue-900/30 transition-colors p-2 rounded-full scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-px bg-slate-200/50 dark:bg-slate-800/50 mx-2"></div>
+<img alt="Academic profile avatar" class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="portrait of a professional person with glasses smiling warmly against a soft grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoGxPxdSoJUquXdrNtsowjasl-Ccmrt-LT5PCzBc2IyI9I-QkIXxCxnvccJAhHR3yO4_OYpjpnQ_VixdwxY-Cb5XlW64m8g99d_ZuneOvkN1QP_hbTUYHdgmqmupunzky8CwbwQNgsW09g4iAmOkdIfZW54ZfoCT2EhUVOPYON1r-FSqsRJSb0JBX4Yx1bP1EoRZmtJeVB1Vd8yXbHfv7Tf6qSwrdufvrVPd_T-8UIWRDD1DEXDzxpj3SIZ3XXu-tWu6--BaShhMs"/>
+</div>
+</header>
+<!-- Page Canvas: Modern Hybrid Dashboard -->
+<main class="flex-1 px-4 sm:px-8 lg:px-12 py-10 overflow-y-auto bg-surface">
+<!-- Settings Navigation Tabs -->
+<div class="max-w-6xl mx-auto mb-10 border-b border-outline-variant/30">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8 overflow-x-auto font-headline font-medium">
+<a aria-current="page" class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 text-sm md:text-base" href="#">General</a>
+<a class="border-transparent text-on-surface-variant hover:border-outline-variant hover:text-on-surface whitespace-nowrap py-4 px-1 border-b-2 text-sm md:text-base transition-colors" href="#">Account Profile</a>
+<a class="border-transparent text-on-surface-variant hover:border-outline-variant hover:text-on-surface whitespace-nowrap py-4 px-1 border-b-2 text-sm md:text-base transition-colors" href="#">Notifications</a>
+<a class="border-transparent text-on-surface-variant hover:border-outline-variant hover:text-on-surface whitespace-nowrap py-4 px-1 border-b-2 text-sm md:text-base transition-colors" href="#">Privacy &amp; Security</a>
+<a class="border-transparent text-on-surface-variant hover:border-outline-variant hover:text-on-surface whitespace-nowrap py-4 px-1 border-b-2 text-sm md:text-base transition-colors" href="#">Billing &amp; Plans</a>
+</nav>
+</div>
+<!-- Hero Header Section -->
+<div class="max-w-6xl mx-auto mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<h1 class="text-[2.5rem] leading-tight font-headline font-semibold text-on-primary-fixed mb-3">System Preferences</h1>
+<p class="text-lg text-on-surface-variant font-body leading-relaxed">Customize your Scholarly Sanctuary. Adjust typography, interface themes, and regional logic to perfectly suit your study habits.</p>
+</div>
+<button class="self-start md:self-auto bg-gradient-to-br from-primary to-primary-container text-white px-8 py-3 rounded-full font-headline font-medium shadow-[0_12px_32px_rgba(26,27,30,0.06)] hover:opacity-95 transition-all">
+                    Save Changes
+                </button>
+</div>
+<!-- Interface Theme (100% Width) -->
+<div class="max-w-6xl mx-auto mb-8">
+<section class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] border border-outline-variant/15">
+<header class="mb-8">
+<h2 class="text-2xl font-headline font-medium text-on-primary-fixed">Interface Theme</h2>
+<p class="text-sm text-on-surface-variant mt-1">Manage lighting and contrast modes.</p>
+</header>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Option: Light -->
+<label class="cursor-pointer relative rounded-lg p-5 border-2 border-primary bg-surface-container-low transition-all">
+<input checked="" class="sr-only" name="theme" type="radio"/>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+<span class="font-headline font-medium text-on-surface">Library Light</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="h-16 rounded bg-surface-container-lowest border border-outline-variant/20 overflow-hidden flex flex-col p-2 space-y-2">
+<div class="h-3 w-1/3 bg-surface-variant rounded"></div>
+<div class="h-8 w-full bg-surface-container-low rounded"></div>
+</div>
+</label>
+<!-- Option: Dark -->
+<label class="cursor-pointer relative rounded-lg p-5 border-2 border-transparent bg-surface hover:bg-surface-container-low transition-all">
+<input class="sr-only" name="theme" type="radio"/>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+<span class="font-headline font-medium text-on-surface">Midnight Focus</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center">
+</div>
+</div>
+<div class="h-16 rounded bg-[#1a1b1e] border border-outline-variant/10 overflow-hidden flex flex-col p-2 space-y-2">
+<div class="h-3 w-1/3 bg-[#2f3033] rounded"></div>
+<div class="h-8 w-full bg-[#2f3033] rounded"></div>
+</div>
+</label>
+</div>
+</section>
+</div>
+<!-- Vertical Content Layout -->
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Focus & Reading Card -->
+<section class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] border border-outline-variant/15">
+<header class="mb-8">
+<h2 class="text-2xl font-headline font-medium text-on-primary-fixed">Reading Environment</h2>
+<p class="text-sm text-on-surface-variant mt-1">Adjust typography and scale for optimal comprehension.</p>
+</header>
+<div class="space-y-8">
+<!-- Font Scale Slider -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-on-surface font-medium">Text Scale</h3>
+<span class="text-sm text-on-surface-variant font-medium bg-surface-container-high px-2 py-1 rounded-md">Default (100%)</span>
+</div>
+<div class="flex items-center space-x-4">
+<span class="text-sm text-on-surface-variant font-headline">A</span>
+<input class="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer accent-secondary" max="100" min="1" type="range" value="50"/>
+<span class="text-xl text-on-surface-variant font-headline">A</span>
+</div>
+</div>
+<!-- Dyslexia Font Toggle -->
+<div class="flex items-start justify-between py-4 border-t border-outline-variant/15">
+<div class="pr-6">
+<h3 class="font-headline text-on-surface font-medium mb-1">OpenDyslexic Font</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Override default editorial typography with an accessibility-focused typeface designed to mitigate symptoms of dyslexia.</p>
+</div>
+<!-- Interactive Switch -->
+<button aria-checked="false" class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-surface-container-highest transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2" role="switch" type="button">
+<span class="translate-x-0 pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Localization Card -->
+<section class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] border border-outline-variant/15">
+<header class="mb-8">
+<h2 class="text-2xl font-headline font-medium text-on-primary-fixed">Language &amp; Region</h2>
+</header>
+<div class="space-y-6">
+<!-- Ghost Input Dropdown: Language -->
+<div class="relative group">
+<label class="block text-sm font-medium text-on-surface-variant mb-1">Primary Instruction Language</label>
+<select class="block w-full bg-transparent border-0 border-b border-outline-variant/50 pb-2 pl-0 pr-8 text-on-surface font-headline font-medium focus:border-b-2 focus:border-secondary focus:ring-0 appearance-none transition-all">
+<option>English (United States)</option>
+<option>Tiếng Việt</option>
+<option>Français (France)</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 bottom-2 text-on-surface-variant pointer-events-none transition-transform group-hover:translate-y-0.5">expand_more</span>
+</div>
+<!-- Ghost Input Dropdown: Region -->
+<div class="relative group">
+<label class="block text-sm font-medium text-on-surface-variant mb-1">Region</label>
+<select class="block w-full bg-transparent border-0 border-b border-outline-variant/50 pb-2 pl-0 pr-8 text-on-surface font-headline font-medium focus:border-b-2 focus:border-secondary focus:ring-0 appearance-none transition-all">
+<option>United States</option>
+<option>United Kingdom</option>
+<option>Europe</option>
+<option>Asia Pacific</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 bottom-2 text-on-surface-variant pointer-events-none transition-transform group-hover:translate-y-0.5">expand_more</span>
+</div>
+<!-- Ghost Input Dropdown: Date & Time -->
+<div class="relative group">
+<label class="block text-sm font-medium text-on-surface-variant mb-1">Date &amp; Time Format</label>
+<select class="block w-full bg-transparent border-0 border-b border-outline-variant/50 pb-2 pl-0 pr-8 text-on-surface font-headline font-medium focus:border-b-2 focus:border-secondary focus:ring-0 appearance-none transition-all">
+<option>System Default (MM/DD/YYYY)</option>
+<option>European (DD/MM/YYYY)</option>
+<option>ISO 8601 (YYYY-MM-DD)</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 bottom-2 text-on-surface-variant pointer-events-none transition-transform group-hover:translate-y-0.5">expand_more</span>
+</div>
+</div>
+</section>
+<!-- Accent Colors Card (Glassmorphism inspired) -->
+<section class="relative overflow-hidden rounded-xl p-8 shadow-[0_12px_32px_rgba(26,27,30,0.06)] border border-outline-variant/15 bg-gradient-to-br from-surface-container-lowest to-surface-container-low">
+<!-- Decorative bg element -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-tertiary-fixed-dim rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+<header class="mb-6 relative z-10">
+<h2 class="text-2xl font-headline font-medium text-on-primary-fixed">Academic Accent</h2>
+<p class="text-sm text-on-surface-variant mt-1">Select the highlight color for progress rings and milestones.</p>
+</header>
+<div class="flex items-center space-x-4 relative z-10">
+<!-- Active Color -->
+<button class="w-12 h-12 rounded-full bg-tertiary-fixed-dim ring-2 ring-offset-2 ring-offset-surface ring-tertiary-container shadow-sm flex items-center justify-center transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-tertiary-container text-sm font-bold">check</span>
+</button>
+<!-- Inactive Colors -->
+<button class="w-10 h-10 rounded-full bg-secondary hover:scale-110 transition-transform shadow-sm"></button>
+<button class="w-10 h-10 rounded-full bg-primary-fixed hover:scale-110 transition-transform shadow-sm"></button>
+<button class="w-10 h-10 rounded-full bg-[#8a5a44] hover:scale-110 transition-transform shadow-sm"></button>
+</div>
+</section>
+</div>
+<!-- Bottom padding for scroll clearance -->
+<div class="h-16"></div>
+</main>
+</div>
+</body></html>

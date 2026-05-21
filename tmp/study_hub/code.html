@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Sanctuary - Study Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#1b365d",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1b1e",
+                        "tertiary-container": "#4d3000",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#87a0cd",
+                        "secondary": "#006b5e",
+                        "on-surface-variant": "#44474e",
+                        "on-primary-fixed-variant": "#2e476f",
+                        "surface-container-high": "#e9e7eb",
+                        "secondary-fixed": "#97f3e2",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e3e2e6",
+                        "on-primary-fixed": "#001b3d",
+                        "surface-container": "#efedf1",
+                        "surface": "#faf9fd",
+                        "surface-dim": "#dad9dd",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3033",
+                        "inverse-primary": "#aec7f7",
+                        "primary-fixed-dim": "#aec7f7",
+                        "surface-tint": "#465f88",
+                        "tertiary": "#311d00",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f1f0f4",
+                        "surface-container-low": "#f4f3f7",
+                        "on-secondary-fixed-variant": "#005047",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-variant": "#e3e2e6",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1a1b1e",
+                        "on-tertiary-fixed": "#291800",
+                        "outline": "#74777f",
+                        "tertiary-fixed": "#ffddb4",
+                        "secondary-container": "#94f0df",
+                        "primary": "#002046",
+                        "tertiary-fixed-dim": "#ffb954",
+                        "on-secondary-container": "#006f62",
+                        "outline-variant": "#c4c6cf",
+                        "on-tertiary-container": "#d4922a",
+                        "surface-bright": "#faf9fd",
+                        "on-secondary-fixed": "#00201b",
+                        "background": "#faf9fd",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "secondary-fixed-dim": "#7ad7c6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Lexend"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-40 bg-[#faf9fd]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 shadow-[0_12px_32px_rgba(26,27,30,0.06)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-[#002046] tracking-tight font-['Lexend']">Scholarly Sanctuary</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-[#44474e] hover:bg-[#e3e2e6]/50 px-4 py-2 rounded-full transition-colors font-medium" href="#">Dashboard</a>
+<a class="text-[#002046] border-b-2 border-[#002046] px-4 py-2 font-medium" href="#">Study Hub</a>
+<a class="text-[#44474e] hover:bg-[#e3e2e6]/50 px-4 py-2 rounded-full transition-colors font-medium" href="#">Dictionary</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#e3e2e6]/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 hover:bg-[#e3e2e6]/50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Side Navigation Shell -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 bg-[#f4f3f7] flex-col py-8 rounded-r-[3rem] z-50 shadow-xl">
+<div class="px-8 mb-10">
+<p class="text-[#002046] font-bold text-xl font-['Lexend']">Scholar</p>
+<p class="text-[#44474e] text-xs">Level 12 Philosopher</p>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-4 mx-4 py-3 px-6 text-[#44474e] hover:bg-[#e3e2e6] rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 mx-4 py-3 px-6 text-[#44474e] hover:bg-[#e3e2e6] rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-sm font-medium">Dictionary</span>
+</a>
+<a class="flex items-center gap-4 bg-gradient-to-br from-[#002046] to-[#1b365d] text-white rounded-full mx-4 py-3 px-6 shadow-lg scale-105 duration-300" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="text-sm font-medium">Study Hub</span>
+</a>
+<a class="flex items-center gap-4 mx-4 py-3 px-6 text-[#44474e] hover:bg-[#e3e2e6] rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">style</span>
+<span class="text-sm font-medium">Flashcards</span>
+</a>
+<a class="flex items-center gap-4 mx-4 py-3 px-6 text-[#44474e] hover:bg-[#e3e2e6] rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-sm font-medium">Progress</span>
+</a>
+</div>
+<div class="mt-auto px-4 space-y-2">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-4 rounded-full font-bold shadow-lg flex items-center justify-center gap-2 mb-8 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+                New Session
+            </button>
+<a class="flex items-center gap-4 py-3 px-6 text-[#44474e] hover:bg-[#e3e2e6] rounded-full" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 min-h-screen px-6 lg:px-12 pb-12 bg-surface">
+<!-- Header Hero Section (Asymmetric) -->
+<header class="flex flex-col md:flex-row justify-between items-end gap-8 mb-16 max-w-7xl mx-auto pt-8">
+<div class="flex-1">
+<h1 class="text-5xl lg:text-6xl font-extrabold text-on-primary-fixed tracking-tight leading-tight mb-4">
+                    Easy English <br/><span class="text-on-primary-container font-light">Study Hub</span>
+</h1>
+<p class="text-on-surface-variant max-w-md text-lg leading-relaxed">
+                    Welcome back, Scholar. Your linguistic sanctuary is prepared for today's immersion.
+                </p>
+</div>
+<div class="w-full md:w-auto">
+<button class="group flex items-center gap-4 bg-surface-container-lowest p-2 pl-6 pr-2 rounded-full shadow-sm hover:shadow-md transition-all">
+<div class="flex flex-col items-start pr-8">
+<span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Current Status</span>
+<span class="text-primary font-semibold">Resume Last Session</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
+<span class="material-symbols-outlined">play_arrow</span>
+</div>
+</button>
+</div>
+</header>
+<!-- Prominent Due Section -->
+<section class="max-w-7xl mx-auto mb-16">
+<div class="relative bg-primary-container rounded-xl overflow-hidden p-8 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 group">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1alTkGiXrHDylQ2stg5mfOF5soma10bV8pOEcgKHry0LoTcSUOM64LU0hDILsk-8Cf8Hj9-ViMTYVgGJCYesp8fFZ6bIspMDI-K-mgPd0ZsbSDZADTZQjheuJt0L5qDR2vvBkFaKAAIhoXzM77mWX6hqcKiiRm3zLArbTvn_IiWDeg0w2YbtqJgQ9Jj7lZ-wAgBhUe6gfu5wr_tzXtXcqo5HiZFcGJUM8aQj-M2kEpAFJJTuiQr5Wmob059J8BHw_Yts9m2bSZKE');"></div>
+<div class="relative z-10">
+<h2 class="text-on-tertiary font-bold text-3xl mb-2">Words Due Today</h2>
+<p class="text-on-primary-container text-lg">Your memory is prime for reinforcement. Don't let the curve drop.</p>
+</div>
+<div class="relative z-10 flex items-center gap-6">
+<div class="text-center">
+<div class="text-6xl font-extrabold text-tertiary-fixed-dim">42</div>
+<div class="text-on-primary-container text-xs uppercase tracking-widest font-bold">Vocabulary</div>
+</div>
+<div class="h-16 w-[1px] bg-white/20"></div>
+<div class="text-center">
+<div class="text-6xl font-extrabold text-secondary-fixed">12</div>
+<div class="text-on-primary-container text-xs uppercase tracking-widest font-bold">Phrases</div>
+</div>
+<button class="ml-4 px-10 py-5 bg-tertiary-fixed-dim text-tertiary font-bold rounded-full hover:scale-105 transition-transform shadow-xl">
+                        Start Review
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Study Modes -->
+<section class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+<!-- Daily Review (Large Action Card) -->
+<div class="md:col-span-2 group relative h-96 bg-surface-container-low rounded-xl overflow-hidden flex flex-col justify-end p-8 border border-transparent hover:border-outline-variant/20 transition-all cursor-pointer">
+<div class="absolute top-0 left-0 w-full h-full opacity-40 group-hover:opacity-60 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="Close up of vintage typewriter with open book and soft morning light hitting parchment paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiS5bVMgKMbBJvGy5NFsM2VPdVMUp_Gax0HK4QmH71irJ1SD-THM-z74SKlmSwo4nzeclmm4R-IUJGG_npP0qWnCZ3WofcrUshOD7PBmjGma5mVd9WVU4SEmZ6kByyQXH7LbStf8ejSQeoaWUGcFrnzu8gIBTzqJKTrbIgFdr2wQ6dKTB4ZEd_cf8jhe1es56nGCV__Hou1ZL2_scrAyvxqWo7TKQTgc7vqurFAuF9yszN8VFolpGvizkggGFYlTYFNkrjOwKfuQQ"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 text-tertiary-fixed-dim mb-4">
+<span class="material-symbols-outlined" data-weight="fill">verified</span>
+<span class="text-sm font-bold uppercase tracking-widest">Spaced Repetition</span>
+</div>
+<h3 class="text-4xl font-bold text-white mb-2">Daily Review</h3>
+<p class="text-on-primary-container text-lg max-w-md mb-6">Scientific algorithms tailored to your individual learning pace. Maintain your streak.</p>
+<div class="flex gap-4">
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a diverse student learning" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC00vvjw0HHADlBt5jUyRchpLNmeOqug3z2bOhXzMjKdikLLvyq2Eghnnbs6xpKy0V65z3iwpKo3QocHEbj5ACa7hrTBlgjeO_M34m2C9rUdjl0Yj-9ivGPrra6KO3jGLazAWlbwj8lOZyBYQTXWXvLmejXpS5DpC1rSI-5s5m7AhJoAKzyAADYzAkHACGBlYQ5keo2Uq-992PzVSCnmUbq_YLysU8Oggyf6PM5twrMcs_PzHA9e4sGe-Zcf_Bu0GQZ743SNCNZ4Bk"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young man smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYry7CBKRQh11kZPVX7RXOPtgwU2yrP9X-DUmkaLnR7oGSdrHZWxU5gsGSmhKAj1rklZCj_wF3TMiIll7noS9pFJpriT0c4fh2e5MvzWiDVoBYOn3RziT20sD8jamfH3Ss-jlSJlufVMRBjpP8a3H8DrEsrlcbMP3WPN93rzXH163tgKaYHeRWd_ejR-3wv_ieZ4Kecrq6SDbTKFOB9gunkVZAJA8kWsd4caNB600TtlrhAqSHLLIsd4tsFuGP-OEGPu_bQT5exU4"/>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-white border-2 border-primary">+12k</div>
+</div>
+<span class="text-white/60 text-sm self-center">Currently studying</span>
+</div>
+</div>
+</div>
+<!-- Speed Quiz (Action Card) -->
+<div class="group relative bg-secondary-container rounded-xl overflow-hidden p-8 flex flex-col cursor-pointer hover:shadow-2xl transition-all">
+<div class="flex-1 flex justify-center items-center">
+<span class="material-symbols-outlined text-8xl text-on-secondary-container opacity-20 group-hover:scale-110 transition-transform">timer</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold text-on-secondary-container mb-2">Speed Quiz</h3>
+<p class="text-on-secondary-fixed-variant text-sm mb-6 leading-relaxed">Pressure-test your recall under time constraints. Level up your fluency speed.</p>
+<div class="w-full bg-white/30 h-1 rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-secondary"></div>
+</div>
+<div class="flex justify-between mt-2">
+<span class="text-xs font-bold text-on-secondary-container">Weekly Progress</span>
+<span class="text-xs font-bold text-on-secondary-container">75%</span>
+</div>
+</div>
+</div>
+<!-- Study by Topic (Bento Card) -->
+<div class="md:col-span-1 bg-surface-container-lowest rounded-xl p-8 flex flex-col gap-6 shadow-sm border border-transparent hover:border-outline-variant/15 transition-all">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined">category</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold text-on-surface mb-2">Study by Topic</h3>
+<p class="text-on-surface-variant text-sm mb-8">Deep dive into specific contexts from business meetings to casual dining.</p>
+<ul class="space-y-4">
+<li class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">business_center</span>
+<span class="font-medium text-sm">Professional</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</li>
+<li class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+<span class="font-medium text-sm">Gastronomy</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</li>
+<li class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">flight_takeoff</span>
+<span class="font-medium text-sm">Travel Logistics</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</li>
+</ul>
+</div>
+<button class="mt-auto py-3 border-b border-outline-variant/30 text-on-primary-fixed-variant text-sm font-bold flex justify-between items-center group">
+                        Explore all 24 topics
+                        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<!-- Recent Achievement (Asymmetric Design) -->
+<div class="md:col-span-2 relative bg-surface-container-highest rounded-xl p-8 overflow-hidden group">
+<div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+<div class="w-32 h-32 rounded-full bg-gradient-to-br from-tertiary-fixed to-tertiary-fixed-dim flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-5xl text-on-tertiary-fixed" data-weight="fill">trophy</span>
+</div>
+<div class="flex-1 text-center md:text-left">
+<h4 class="text-xl font-bold text-on-surface mb-1">New Milestone Unlocked</h4>
+<p class="text-on-surface-variant mb-4">You've mastered over 500 essential business verbs. You're ready for the "Executive" track.</p>
+<button class="px-6 py-2 bg-on-surface text-white rounded-full text-sm font-medium hover:bg-primary transition-colors">
+                                View Certificate
+                            </button>
+</div>
+</div>
+<!-- Decorative Background Element -->
+<div class="absolute -right-16 -bottom-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- Focused Call to Action -->
+<footer class="max-w-7xl mx-auto mt-24 text-center pb-12">
+<div class="inline-flex flex-col items-center gap-6">
+<div class="w-16 h-[1px] bg-outline-variant/30"></div>
+<p class="text-on-surface-variant font-medium max-w-sm italic">
+                    "Language is the roadmap of a culture. It tells you where its people come from and where they are going."
+                </p>
+<div class="flex gap-4">
+<button class="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all">
+                        Start Study Hub
+                    </button>
+<button class="px-8 py-4 bg-white border border-outline-variant/30 text-on-surface rounded-full font-bold hover:bg-surface-container-low transition-all">
+                        View Mastery Map
+                    </button>
+</div>
+</div>
+</footer>
+</main>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#faf9fd]/90 backdrop-blur-xl flex justify-around items-center py-3 z-50 shadow-[0_-8px_24px_rgba(0,0,0,0.05)] px-4">
+<a class="flex flex-col items-center gap-1 text-[#44474e]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#002046]" href="#">
+<span class="material-symbols-outlined" data-weight="fill">school</span>
+<span class="text-[10px] font-bold">Study</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#44474e]" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium">Dictionary</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#44474e]" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-medium">Progress</span>
+</a>
+</nav>
+</body></html>

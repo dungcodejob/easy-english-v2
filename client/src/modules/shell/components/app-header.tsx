@@ -1,45 +1,32 @@
 import { SidebarTrigger } from '@/shared/ui/shadcn/sidebar';
-import { ActivitySheet } from './activity-sheet';
-
 import { LanguageSwitcher } from './language-switcher';
 import { ModeSwitcher } from './mode-switcher';
-import { NotificationDropdown } from './notification-dropdown';
 import { SearchMenu } from './search-menu';
+import { cn } from '@/shared/utils/tailwind';
+import { UserMenu } from './user-menu';
 
 export function AppHeader() {
   return (
-    <header className="bg-card sticky top-0 z-50 flex items-center justify-between gap-6 border-b px-4 py-2 sm:px-6">
-      <div className="flex items-center gap-2 sm:gap-4">
+    <header
+      className={cn(
+        'sticky top-0 z-50 flex items-center justify-between gap-4 border-b px-8 py-4',
+        'bg-surface/80 backdrop-blur-xl',
+        'shadow-[0_12px_32px_rgba(26,27,30,0.06)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.3)]',
+        'dark:border-white/5',
+      )}
+    >
+      <div className="flex items-center gap-3">
         <SidebarTrigger className="-ml-2" />
-        <SearchMenu />
+        <span className="font-headline text-xl font-bold text-primary hidden sm:block">
+          Scholarly Sanctuary
+        </span>
       </div>
 
       <div className="flex items-center gap-1.5">
+        <SearchMenu />
         <ModeSwitcher />
-
-        {/* Language Switcher */}
         <LanguageSwitcher />
-
-        {/* Activity Log */}
-        <ActivitySheet />
-
-        {/* Notifications */}
-        <NotificationDropdown />
-
-        {/* User Profile */}
-        {/* <Button variant="ghost" className="pl-0 gap-2 h-9">
-          <div className="relative flex shrink-0 overflow-hidden size-9 rounded-md">
-            <img
-              className="aspect-square size-full"
-              src="https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png"
-              alt="User Avatar"
-            />
-          </div>
-          <div className="hidden flex-col items-start gap-0.5 sm:flex">
-            <span className="text-sm font-medium">John Doe</span>
-            <span className="text-muted-foreground text-xs">Admin</span>
-          </div>
-        </Button> */}
+        <UserMenu />
       </div>
     </header>
   );

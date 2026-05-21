@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import {
   ApiBearerAuth,
@@ -14,14 +14,19 @@ import { CurrentUser } from '@shared/decorators';
 
 import { JwtAuthGuard } from '@auth/infrastructure/guards/jwt-auth.guard';
 
-import { GetDueCardsQuery } from '../application/queries/get-due-cards.query';
+import {
+  GetDueCardsQuery,
+  type DueCardSource,
+} from '../application/queries/get-due-cards.query';
+import { GetStudyStatsQuery } from '../application/queries/get-study-stats.query';
 import { GetTopicCardsQuery } from '../application/queries/get-topic-cards.query';
 import {
   StudyCardsEnvelopeDto,
   TopicStudyCardsEnvelopeDto,
 } from '../dto/responses/study-card.response.dto';
+import { StudyStatsResponseDto } from '../dto/responses/study-stats.response.dto';
 
-import type { ITokenPayload } from '@auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '@auth/application/ports/token-generator.interface';
 
 @ApiTags('Learning Study')
 @ApiBearerAuth()
@@ -37,14 +42,38 @@ export class StudyController {
     description: 'Due study cards retrieved successfully',
     type: StudyCardsEnvelopeDto,
   })
-  async getDueCards(@CurrentUser() user: ITokenPayload) {
-    const query = new GetDueCardsQuery(user.userId, user.tenantId);
+  async getDueCards(
+    @CurrentUser() user: ITokenPayload,
+    @Query('source') source?: DueCardSource,
+  ) {
+    const query = new GetDueCardsQuery(
+      user.userId,
+      user.tenantId,
+      source ?? 'dictionary',
+    );
     const result = await this.queryBus.execute<
       GetDueCardsQuery,
       StudyCardsEnvelopeDto
     >(query);
 
     return ApiResponseBuilder.success(result);
+  }
+
+  @Get('stats')
+  @ApiOperation({ summary: 'Get study statistics for current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Study stats retrieved successfully',
+    type: StudyStatsResponseDto,
+  })
+  async getStats(@CurrentUser() user: ITokenPayload) {
+    const query = new GetStudyStatsQuery(user.userId, user.tenantId);
+    const stats = await this.queryBus.execute<
+      GetStudyStatsQuery,
+      StudyStatsResponseDto
+    >(query);
+
+    return ApiResponseBuilder.success(stats);
   }
 
   @Get('topic/:topicId')

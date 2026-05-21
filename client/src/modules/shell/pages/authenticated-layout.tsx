@@ -1,5 +1,4 @@
 import { refreshAccessToken } from '@/modules/auth/services/auth.api';
-import { APP_ROUTES } from '@/shared/constants';
 import { useAuthStore, useIsAuthenticated } from '@/shared/stores/auth-store';
 import { Spinner } from '@/shared/ui/shadcn/spinner';
 import {
@@ -11,9 +10,9 @@ import {
 } from '@tanstack/react-router';
 import { useEffect, useRef } from 'react';
 
-// Use direct import to avoid circular dependency issues if any, or just use aliased import
 import { useHasWorkspace } from '@/modules/workspace/hooks/use-has-workspace';
-import { SidebarInset, SidebarProvider } from '@/shared/ui/shadcn/sidebar';
+import { AuthRoutes, WorkspaceRoutes } from '@/shared/constants';
+import { SidebarProvider } from '@/shared/ui/shadcn/sidebar';
 import { AppHeader } from '../components/app-header';
 import { AppSidebar } from '../components/app-sidebar';
 
@@ -23,10 +22,8 @@ export const Route = createFileRoute('/_(authenticated)')({
     const { isAuthenticated } = useAuthStore.getState();
 
     if (!isAuthenticated) {
-      // Redirect to login with redirect param
       throw redirect({
-        to: APP_ROUTES.AUTH.LOGIN,
-        search: { redirect: location.pathname },
+        to: AuthRoutes.login(location.pathname),
         replace: true,
       });
     }
@@ -44,8 +41,6 @@ export default function AuthenticatedLayout() {
       hasRefreshed.current = true;
       const state = useAuthStore.getState();
       if (state.isAuthenticated && state.accessToken) {
-        // We could check token expiry here, but calling refresh right away
-        // ensures we get the latest session from backend safely.
         refreshAccessToken().catch(() => {
           // Silent catch, token-refresh handles the logout internally
         });
@@ -54,13 +49,7 @@ export default function AuthenticatedLayout() {
   }, []);
 
   if (!isAuthenticated) {
-    return (
-      <Navigate
-        to={APP_ROUTES.AUTH.LOGIN}
-        replace
-        search={{ redirect: location.pathname }}
-      />
-    );
+    return <Navigate to={AuthRoutes.login(location.pathname)} replace />;
   }
 
   if (isLoading) {
@@ -73,24 +62,21 @@ export default function AuthenticatedLayout() {
 
   const hasWorkspace = hasWorkspaceData?.hasWorkspace;
 
-  // If user has no workspace and is not on the onboarding page, redirect to onboarding
-  if (!hasWorkspace && location.pathname !== APP_ROUTES.WORKSPACE.NEW) {
-    return <Navigate to={APP_ROUTES.WORKSPACE.NEW} />;
+  if (!hasWorkspace && location.pathname !== WorkspaceRoutes.new()) {
+    return <Navigate to={WorkspaceRoutes.new()} />;
   }
 
   return (
     <SidebarProvider>
+      {/* Fixed sidebar — matches mockup: w-64, rounded-r-[3rem], full height */}
       <AppSidebar />
-      <SidebarInset>
+      {/* Main content area — offset by sidebar width, below header */}
+      <div className="ml-64 w-full pl-0">
         <AppHeader />
-        <div className="flex flex-1 flex-col h-full">
-          <div className="flex-1">
-            <div className="relative z-50 mx-auto flex w-full max-w-[1360px] flex-1 flex-col self-stretch p-4 md:p-6">
-              <Outlet />
-            </div>
-          </div>
-        </div>
-      </SidebarInset>
+        <main className="">
+          <Outlet />
+        </main>
+      </div>
     </SidebarProvider>
   );
 }

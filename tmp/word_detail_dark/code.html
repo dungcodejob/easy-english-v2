@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Sanctuary - Word Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#232e42",
+                        "on-tertiary": "#1e222a",
+                        "on-surface": "#e4e5e8",
+                        "tertiary-container": "#4d3000",
+                        "surface-container-lowest": "#16181d",
+                        "on-primary-container": "#a6bedb",
+                        "secondary": "#2ab7a2",
+                        "on-surface-variant": "#a3a7af",
+                        "on-primary-fixed-variant": "#2e476f",
+                        "surface-container-high": "#272a33",
+                        "secondary-fixed": "#97f3e2",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#16181d",
+                        "surface-container-highest": "#30343e",
+                        "on-primary-fixed": "#001b3d",
+                        "surface-container": "#1e2128",
+                        "surface": "#121418",
+                        "surface-dim": "#0e1013",
+                        "error-container": "#661f1a",
+                        "inverse-surface": "#e4e5e8",
+                        "inverse-primary": "#aec7f7",
+                        "primary-fixed-dim": "#aec7f7",
+                        "surface-tint": "#8ea6cc",
+                        "tertiary": "#e6ad65",
+                        "error": "#ffb4ab",
+                        "inverse-on-surface": "#121418",
+                        "surface-container-low": "#1a1c22",
+                        "on-secondary-fixed-variant": "#005047",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-variant": "#3f434d",
+                        "on-primary": "#16181d",
+                        "on-background": "#e4e5e8",
+                        "on-tertiary-fixed": "#291800",
+                        "outline": "#8f929a",
+                        "tertiary-fixed": "#ffddb4",
+                        "secondary-container": "#005047",
+                        "primary": "#d1e1fc",
+                        "tertiary-fixed-dim": "#ffb954",
+                        "on-secondary-container": "#94f0df",
+                        "outline-variant": "#44474e",
+                        "on-tertiary-container": "#ffddb4",
+                        "surface-bright": "#383c46",
+                        "on-secondary-fixed": "#00201b",
+                        "background": "#121418",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "secondary-fixed-dim": "#7ad7c6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Lexend"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"],
+                        "serif-accent": ["Lora", "serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .lexend {
+            font-family: 'Lexend', sans-serif;
+        }
+        .reading-lamp {
+            background: radial-gradient(circle at 30% 20%, rgba(255, 240, 200, 0.08) 0%, rgba(255, 240, 200, 0.02) 40%, transparent 70%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased relative">
+<!-- Reading Lamp Highlight -->
+<div class="reading-lamp absolute top-0 left-0 w-full h-[800px] z-0"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-40 bg-surface/80 backdrop-blur-xl shadow-[0_1px_0_rgba(255,255,255,0.05)] border-b border-white/5">
+<div class="flex justify-between items-center px-8 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container/80 p-2 rounded-full transition-colors active:scale-95 duration-200">arrow_back</button>
+<span class="font-['Lexend'] font-bold text-xl tracking-tight text-primary">Scholarly Sanctuary</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8 font-['Lexend'] font-medium text-sm">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Dictionary</a>
+<a class="text-primary border-b-2 border-primary" href="#">Study Hub</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Flashcards</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container/80 p-2 rounded-full transition-colors cursor-pointer">account_circle</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container/80 p-2 rounded-full transition-colors cursor-pointer">settings</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto relative z-10">
+<!-- Hero Section: The Word -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 relative">
+<div class="space-y-4">
+<div class="inline-flex items-center px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container border border-secondary-container text-xs font-semibold tracking-wide uppercase">
+                    Level: Advanced
+                </div>
+<div class="flex items-center gap-6">
+<h1 class="lexend text-6xl md:text-8xl font-extrabold text-on-surface tracking-tighter drop-shadow-sm">Serendipity</h1>
+<button class="w-16 h-16 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high border border-white/5 text-primary transition-all active:scale-90 shadow-md">
+<span class="material-symbols-outlined text-3xl">volume_up</span>
+</button>
+</div>
+<p class="text-xl text-on-surface-variant font-medium font-serif-accent tracking-wide">/ˌserənˈdipədē/ • <span class="italic font-light">noun</span></p>
+</div>
+<!-- Mastery Indicator Card -->
+<div class="bg-surface-container-lowest border border-white/5 p-6 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.2)] flex flex-col gap-4 min-w-[280px]">
+<div class="flex justify-between items-center">
+<span class="lexend font-semibold text-primary">Mastery Level</span>
+<span class="text-secondary-fixed-dim font-bold">78%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 78%"></div>
+</div>
+<p class="text-xs text-on-surface-variant">Last practiced 2 days ago. You're doing great!</p>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 relative">
+<!-- Primary Definition (Spans 8) -->
+<div class="md:col-span-8 bg-surface-container-low border border-white/5 shadow-lg rounded-xl p-8 space-y-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/[0.02] blur-3xl rounded-full pointer-events-none mix-blend-screen"></div>
+<div class="relative z-10">
+<h3 class="lexend text-2xl font-bold text-primary mb-4">Definition</h3>
+<p class="text-lg leading-relaxed text-on-surface">
+                        The occurrence and development of events by chance in a happy or beneficial way. It is the faculty or phenomenon of finding valuable or agreeable things not sought for.
+                    </p>
+</div>
+<div class="relative z-10">
+<h3 class="lexend text-xl font-semibold text-primary mb-4">Examples</h3>
+<ul class="space-y-4">
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant italic leading-relaxed font-serif-accent">"Nature has created many miracles by pure serendipity, such as the accidental discovery of penicillin."</span>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant italic leading-relaxed font-serif-accent">"Technical innovation is often the result of serendipity combined with sharp observation."</span>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant italic leading-relaxed font-serif-accent">"We found this charming little cafe by pure serendipity while wandering the backstreets of Florence."</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Action Sidebar (Spans 4) -->
+<div class="md:col-span-4 space-y-6">
+<!-- CTA Card -->
+<div class="bg-gradient-to-br from-primary-container to-surface border border-on-primary-fixed-variant/40 rounded-xl p-8 text-white shadow-xl flex flex-col items-center text-center gap-6">
+<div class="w-20 h-20 bg-white/5 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h4 class="lexend text-2xl font-bold text-on-surface">Ready to Learn?</h4>
+<p class="text-on-primary-container text-sm mt-2">Add this word to your personalized study hub and master it with AI-powered drills.</p>
+</div>
+<button class="w-full py-4 bg-tertiary-fixed-dim hover:bg-tertiary-fixed text-on-tertiary-fixed font-bold rounded-full transition-transform active:scale-95 shadow-lg">
+                        Study Now
+                    </button>
+<button class="w-full py-4 bg-transparent border border-white/20 hover:bg-white/5 text-on-surface font-medium rounded-full transition-colors">
+                        Add to List
+                    </button>
+</div>
+<!-- Word Etymology Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-white/5">
+<h4 class="lexend font-bold text-primary mb-2">Origins</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed font-serif-accent">
+                        Coined by Horace Walpole in 1754 from the Persian fairy tale <span class="italic text-on-surface">The Three Princes of Serendip</span>, whose heroes were always making discoveries.
+                    </p>
+</div>
+</div>
+<!-- Synonyms & Antonyms (Spans 6) -->
+<div class="md:col-span-6 bg-surface-container-lowest p-8 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.2)] border border-white/5">
+<h3 class="lexend text-2xl font-bold text-primary mb-6">Synonyms</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Fluke</span>
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Chance</span>
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Good Luck</span>
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Fortuity</span>
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Coincidence</span>
+<span class="px-5 py-2.5 bg-surface-container border border-white/5 rounded-full text-on-surface font-medium hover:bg-surface-container-high transition-all cursor-pointer">Blessing</span>
+</div>
+<h3 class="lexend text-2xl font-bold text-primary mt-10 mb-6">Antonyms</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-5 py-2.5 bg-error-container/50 border border-error-container text-error rounded-full font-medium hover:bg-error-container/70 transition-all cursor-pointer">Misfortune</span>
+<span class="px-5 py-2.5 bg-error-container/50 border border-error-container text-error rounded-full font-medium hover:bg-error-container/70 transition-all cursor-pointer">Bad Luck</span>
+<span class="px-5 py-2.5 bg-error-container/50 border border-error-container text-error rounded-full font-medium hover:bg-error-container/70 transition-all cursor-pointer">Design</span>
+</div>
+</div>
+<!-- Phrases & Idioms (Spans 6) -->
+<div class="md:col-span-6 bg-surface-container-low p-8 rounded-xl relative overflow-hidden group border border-white/5 shadow-lg">
+<div class="relative z-10">
+<h3 class="lexend text-2xl font-bold text-primary mb-6">Phrases &amp; Idioms</h3>
+<div class="space-y-6">
+<div class="p-4 bg-surface-container/80 backdrop-blur-sm rounded-lg border-l-4 border-tertiary-fixed-dim">
+<h5 class="font-bold text-on-surface mb-1">A stroke of serendipity</h5>
+<p class="text-sm text-on-surface-variant">A sudden and unexpected piece of good fortune.</p>
+</div>
+<div class="p-4 bg-surface-container/80 backdrop-blur-sm rounded-lg border-l-4 border-tertiary-fixed-dim">
+<h5 class="font-bold text-on-surface mb-1">Happy accident</h5>
+<p class="text-sm text-on-surface-variant">An unplanned event that has a positive outcome.</p>
+</div>
+<div class="p-4 bg-surface-container/80 backdrop-blur-sm rounded-lg border-l-4 border-tertiary-fixed-dim">
+<h5 class="font-bold text-on-surface mb-1">Pure serendipity</h5>
+<p class="text-sm text-on-surface-variant">Used to emphasize that something happened entirely by luck.</p>
+</div>
+</div>
+</div>
+<!-- Abstract visual element -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-tertiary-fixed-dim opacity-10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+</div>
+</div>
+<!-- Related Words Section -->
+<section class="mt-16">
+<h3 class="lexend text-2xl font-bold text-primary mb-8 text-center">Expand Your Vocabulary</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-white/5 text-center hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
+<p class="lexend font-bold text-lg text-on-surface">Ephemeral</p>
+<p class="text-xs text-on-surface-variant mt-1 italic font-serif-accent">adj. short-lived</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-white/5 text-center hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
+<p class="lexend font-bold text-lg text-on-surface">Melancholy</p>
+<p class="text-xs text-on-surface-variant mt-1 italic font-serif-accent">n. pensive sadness</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-white/5 text-center hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
+<p class="lexend font-bold text-lg text-on-surface">Resilience</p>
+<p class="text-xs text-on-surface-variant mt-1 italic font-serif-accent">n. capacity to recover</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-white/5 text-center hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
+<p class="lexend font-bold text-lg text-on-surface">Ethereal</p>
+<p class="text-xs text-on-surface-variant mt-1 italic font-serif-accent">adj. extremely delicate</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Visual Accent Element -->
+<div class="fixed bottom-0 right-0 w-96 h-96 -z-10 overflow-hidden pointer-events-none opacity-20">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-on-primary-fixed-variant to-on-tertiary-fixed-variant blur-3xl rounded-full opacity-30"></div>
+</div>
+</body></html>

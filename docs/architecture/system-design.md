@@ -93,25 +93,42 @@ Response
 
 ### Standard API Response
 
-All responses follow a consistent envelope:
+All responses follow a consistent envelope with `success`, `correlationId`, and `timestamp` fields:
 
 ```typescript
 // Success
 {
-  "data": T,        // payload
-  "meta": {         // optional pagination
-    "page": 1,
-    "limit": 20,
-    "total": 150
-  }
+  "success": true,
+  "data": T,               // payload
+  "meta": { ... },         // optional metadata
+  "pagination": {          // optional pagination
+    "top": 10,
+    "count": 25,
+    "hasMore": true,
+    "skip": 0,
+    "nextLink": "/api/users?skip=10&top=10"
+  },
+  "correlationId": "uuid",
+  "timestamp": "2026-04-12T10:30:00.000Z"
 }
 
 // Error
 {
-  "statusCode": 400,
-  "message": "Validation failed",
-  "error": "Bad Request",
-  "details": [...]   // field-level validation errors
+  "success": false,
+  "error": {
+    "code": "EMAIL_ALREADY_EXISTS",
+    "type": "domain",
+    "message": "Email already registered",
+    "details": [
+      {
+        "field": "email",
+        "message": "This email is already in use",
+        "code": "UNIQUE_VIOLATION"
+      }
+    ]
+  },
+  "correlationId": "uuid",
+  "timestamp": "2026-04-12T10:30:00.000Z"
 }
 ```
 
@@ -174,7 +191,7 @@ npm run migration:create       # Generate new migration
        │ Authorization: Bearer <accessToken>
        ▼
   JwtAuthGuard
-  ├── Verify signature (HS256/RS256)
+  ├── Verify signature (RS256 with PEM key pair)
   ├── Check expiry
   └── Extract payload:
         {
@@ -189,8 +206,8 @@ npm run migration:create       # Generate new migration
 
 | Token | TTL | Storage | Purpose |
 |-------|-----|---------|---------|
-| Access Token | 15 minutes | Memory (not localStorage) | API authorization |
-| Refresh Token | 7 days | HttpOnly cookie | Renew access token |
+| Access Token | 7 days | localStorage (via Zustand persist) | API authorization |
+| Refresh Token | 30 days | HttpOnly cookie | Renew access token |
 
 ### Workspace Context
 
@@ -334,7 +351,7 @@ Domain errors use `Result<T, E>` from `neverthrow` for explicit error propagatio
 | XSS | React's built-in escaping + CSP headers |
 | CSRF | HttpOnly cookie tokens + SameSite=Strict |
 | Rate Limiting | Redis-backed, 100 req/min per IP |
-| Password Storage | bcrypt with cost factor 12 |
+| Password Storage | Argon2 (primary) with bcrypt fallback |
 | Secrets | Environment variables (never committed) |
 | Input Validation | class-validator on all DTOs |
 | Tenant Isolation | workspaceId enforced at query level |

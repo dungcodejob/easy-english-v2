@@ -1,15 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
+  type CreateWorkspaceRequest,
+  Language,
   WorkspaceLearningGoal,
   WorkspaceLearningLevel,
   WorkspaceLearningMode,
   WorkspaceType,
-} from '../types';
-import {
-  type CreateWorkspaceRequest,
-  Language,
-} from '../types/workspace.types';
+} from '../services/workspace.types';
 
 export const defaultWizardPreferences = {
   dailyTarget: 30,
@@ -19,7 +17,7 @@ export const defaultWizardPreferences = {
 
 export interface WizardState {
   step: number;
-  data: Partial<CreateWorkspaceRequest>;
+  formData: Partial<CreateWorkspaceRequest>;
 }
 
 export interface WizardActions {
@@ -30,7 +28,7 @@ export interface WizardActions {
 
 const initialState: WizardState = {
   step: 1,
-  data: {
+  formData: {
     name: '',
     description: '',
     type: WorkspaceType.Personal,
@@ -48,7 +46,7 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       setStep: (step) => set({ step }),
       updateData: (data) =>
         set((state) => ({
-          data: { ...state.data, ...data },
+          formData: { ...state.formData, ...data },
         })),
       reset: () => set(initialState),
     }),
@@ -58,8 +56,12 @@ export const useWizardStore = create<WizardState & WizardActions>()(
   ),
 );
 
-export const useWizardStep = () => useWizardStore((state) => state.step);
-export const useWizardData = () => useWizardStore((state) => state.data);
+export const useWizardData = () => {
+  const step = useWizardStore((state) => state.step);
+  const formData = useWizardStore((state) => state.formData);
+  return { step, formData };
+};
+
 export const useWizardActions = () => {
   const setStep = useWizardStore((state) => state.setStep);
   const updateData = useWizardStore((state) => state.updateData);

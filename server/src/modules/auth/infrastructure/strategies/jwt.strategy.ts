@@ -8,7 +8,7 @@ import {
   type JwtConfig,
 } from '../../../../configs/jwt.config';
 
-import type { ITokenPayload } from '../../domain/ports/token-generator.interface';
+import type { ITokenPayload } from '../../application/ports/token-generator.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

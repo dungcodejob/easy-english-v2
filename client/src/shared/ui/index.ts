@@ -13,24 +13,31 @@
  */
 
 /* ─── Design Tokens ─────────────────────────────── */
-export { spacing, spacingPx, color, chartColors, typography, radius } from './design-tokens';
-export type { SpacingKey, RadiusKey } from './design-tokens';
+export {
+  chartColors,
+  color,
+  radius,
+  spacing,
+  spacingPx,
+  typography,
+} from './design-tokens';
+export type { RadiusKey, SpacingKey } from './design-tokens';
 
 /* ─── Base Components ───────────────────────────── */
-export type { DsButtonProps } from './base/ds-button';
 export { DsButton } from './base/ds-button';
+export type { DsButtonProps } from './base/ds-button';
 
-export type { DsInputProps } from './base/ds-input';
 export { DsInput } from './base/ds-input';
+export type { DsInputProps } from './base/ds-input';
 
-export type { DsSelectProps } from './base/ds-select';
 export { DsSelect, DsSelectItem } from './base/ds-select';
+export type { DsSelectProps } from './base/ds-select';
 
-export type { DsTextareaProps } from './base/ds-textarea';
 export { DsTextarea } from './base/ds-textarea';
+export type { DsTextareaProps } from './base/ds-textarea';
 
-export type { DsBadgeProps } from './base/ds-badge';
 export { DsBadge } from './base/ds-badge';
+export type { DsBadgeProps } from './base/ds-badge';
 
 export { DsCard } from './base/ds-card';
 
@@ -38,11 +45,20 @@ export { DsStatCard } from './base/ds-stat-card';
 
 export { DsEmptyState } from './base/ds-empty-state';
 
-export type { DsProgressProps } from './base/ds-progress';
-export { DsProgress } from './base/ds-progress';
+export { DsErrorState } from './base/ds-error-state';
+export type { DsErrorStateProps } from './base/ds-error-state';
 
-export type { DsSpinnerProps } from './base/ds-spinner';
+export { DsPagination } from './base/ds-pagination';
+
+export { ClarionProgress } from './base/clarion-progress';
+export type { ClarionProgressProps } from './base/clarion-progress';
+
 export { DsSpinner } from './base/ds-spinner';
+export type { DsSpinnerProps } from './base/ds-spinner';
+
+export { ClarionInput } from './base/clarion-input';
+export { ClarionLabel } from './base/clarion-label';
+export { ClarionTextarea } from './base/clarion-textarea';
 
 export {
   DsAlertDialog,
@@ -56,22 +72,36 @@ export {
   DsAlertDialogTrigger,
 } from './base/ds-alert-dialog';
 export type {
-  DsAlertDialogProps,
   DsAlertDialogActionProps,
   DsAlertDialogCancelProps,
   DsAlertDialogContentProps,
   DsAlertDialogDescriptionProps,
   DsAlertDialogFooterProps,
   DsAlertDialogHeaderProps,
+  DsAlertDialogProps,
   DsAlertDialogTitleProps,
   DsAlertDialogTriggerProps,
 } from './base/ds-alert-dialog';
 
+/* ─── Common Components ─────────────────────────── */
+export { FormField } from './common/form-field';
+export type { FormFieldProps, FormFieldRenderArgs } from './common/form-field';
+
+/* ─── Semantic Buttons (role-named) ─────────────── */
+export { CTAButton } from './semantic/cta-button';
+export { BackButton } from './semantic/back-button';
+export { InlineEditButton } from './semantic/inline-edit-button';
+export { SegmentedControlItem } from './semantic/segmented-control-item';
+
 /* ─── Pattern Components ────────────────────────── */
 export { FormWrapper } from './patterns/form-wrapper';
-export { PageHeader, PageLayout } from './patterns/page-layout';
-export { AnimatedStep, WizardLayout, WizardStepShell } from './patterns/wizard-layout';
 export { ModalWrapper } from './patterns/modal-wrapper';
+export { PageHeader, PageLayout } from './patterns/page-layout';
+export {
+  AnimatedStep,
+  WizardLayout,
+  WizardStepShell,
+} from './patterns/wizard-layout';
 
 /* ─── Raw shadcn (use sparingly — prefer patterns) ─── */
 export {
@@ -85,12 +115,9 @@ export {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from './shadcn/alert-dialog';
-export {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from './shadcn/avatar';
+export { Avatar, AvatarFallback, AvatarImage } from './shadcn/avatar';
 export { Badge } from './shadcn/badge';
+export { buttonVariants } from './shadcn/button';
 export {
   Card,
   CardAction,
@@ -100,7 +127,11 @@ export {
   CardHeader,
   CardTitle,
 } from './shadcn/card';
-export { Collapsible, CollapsibleContent, CollapsibleTrigger } from './shadcn/collapsible';
+export {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from './shadcn/collapsible';
 export {
   Command,
   CommandDialog,
@@ -144,9 +175,7 @@ export {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from './shadcn/dropdown-menu';
-export {
-  Empty,
-} from './shadcn/empty';
+export { Empty } from './shadcn/empty';
 export {
   Field,
   FieldContent,
@@ -172,13 +201,8 @@ export {
   PopoverContent,
   PopoverTrigger,
 } from './shadcn/popover';
-export {
-  Progress,
-} from './shadcn/progress';
-export {
-  RadioGroup,
-  RadioGroupItem,
-} from './shadcn/radio-group';
+export { Progress } from './shadcn/progress';
+export { RadioGroup, RadioGroupItem } from './shadcn/radio-group';
 export {
   Select,
   SelectContent,
@@ -199,14 +223,19 @@ export {
   SheetTrigger,
 } from './shadcn/sheet';
 export { Skeleton } from './shadcn/skeleton';
+export { Toaster } from './shadcn/sonner';
 export { Spinner } from './shadcn/spinner';
+export { Switch } from './shadcn/switch';
 export {
-  Switch,
-} from './shadcn/switch';
-export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './shadcn/table';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './shadcn/table';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './shadcn/tabs';
 export { Textarea } from './shadcn/textarea';
-export { Toaster } from './shadcn/sonner';
 export { Toggle } from './shadcn/toggle';
 export {
   Tooltip,
@@ -214,4 +243,3 @@ export {
   TooltipProvider,
   TooltipTrigger,
 } from './shadcn/tooltip';
-export { buttonVariants } from './shadcn/button';

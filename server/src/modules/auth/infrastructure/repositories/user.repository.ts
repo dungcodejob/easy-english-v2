@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 
+import { IUserRepository } from '../../application/repositories/user.repository.interface';
 import { User } from '../../domain/entities';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import { UserMapper } from '../mappers/user.mapper';
 import { UserOrmEntity } from '../persistence/user.orm-entity';
 

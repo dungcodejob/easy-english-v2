@@ -41,7 +41,13 @@ export class TopicRepository implements ITopicRepository {
     tenantId: string,
     userId: string,
   ): Promise<Topic | null> {
-    const orm = await this.em.findOne(TopicOrmEntity, { id, tenantId, userId });
+    const orm = await this.em.findOne(
+      TopicOrmEntity,
+      { id, tenantId, userId },
+      {
+        populate: ['words'],
+      },
+    );
 
     return orm ? this.mapper.toDomain(orm) : null;
   }
@@ -59,7 +65,12 @@ export class TopicRepository implements ITopicRepository {
     const [orms, count] = await this.em.findAndCount(
       TopicOrmEntity,
       { tenantId, userId },
-      { limit: top, offset: skip, orderBy: { createdAt: 'DESC' } },
+      {
+        limit: top,
+        offset: skip,
+        orderBy: { createdAt: 'DESC' },
+        populate: ['words'],
+      },
     );
 
     return {

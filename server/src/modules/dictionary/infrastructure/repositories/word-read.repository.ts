@@ -54,6 +54,7 @@ export class WordReadRepository implements IWordReadRepository {
     const qb = this.em
       .createQueryBuilder(WordSenseOrmEntity, 's')
       .leftJoinAndSelect('s.word', 'w')
+      .leftJoinAndSelect('w.pronunciations', 'p')
       .where({ 'w.normalizedText': { $ilike: `%${query}%` } })
       .limit(top)
       .offset(skip);
@@ -69,6 +70,11 @@ export class WordReadRepository implements IWordReadRepository {
       definition: s.definition,
       definitionVi: s.definitionVi,
       cefrLevel: s.cefrLevel || null,
+      pronunciations: s.word.pronunciations.getItems().map((p) => ({
+        ipa: p.ipa,
+        audioUrl: p.audioUrl,
+        region: p.region,
+      })),
     }));
 
     return { data, count };

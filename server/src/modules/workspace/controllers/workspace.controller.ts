@@ -12,7 +12,7 @@ import { CreateWorkspaceRequestDto } from '../dto/requests/create-workspace.requ
 import { HasWorkspaceResponseDto } from '../dto/responses/has-workspace.response.dto';
 import { WorkspaceResponseDto } from '../dto/responses/workspace.response.dto';
 
-import type { ITokenPayload } from '../../auth/domain/ports/token-generator.interface';
+import type { ITokenPayload } from '../../auth/application/ports/token-generator.interface';
 
 @Controller('workspaces')
 @UseGuards(JwtAuthGuard)

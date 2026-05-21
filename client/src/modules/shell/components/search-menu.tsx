@@ -1,5 +1,5 @@
-import { useSearchWordSenses } from '@/modules/learning/hooks/use-search-word-senses';
-import { APP_ROUTES } from '@/shared/constants';
+import { useSearchWordSensesSimple } from '@/modules/dictionary/features/word-sense-list/use-search-word-senses-simple';
+import { DictionaryRoutes } from '@/shared/constants';
 import {
   RiArrowDownLine,
   RiArrowUpLine,
@@ -83,7 +83,7 @@ export function SearchMenu() {
     data: result,
     isLoading,
     isFetching,
-  } = useSearchWordSenses({
+  } = useSearchWordSensesSimple({
     query: debouncedQuery,
     top: 5,
     skip: 0,
@@ -95,8 +95,7 @@ export function SearchMenu() {
   const handleSelectSense = (senseId: string) => {
     setSearchMenuOpen(false);
     navigate({
-      to: APP_ROUTES.DICTIONARY.SENSE_DETAIL,
-      params: { senseId },
+      to: DictionaryRoutes.senseDetail(senseId),
     });
   };
 
